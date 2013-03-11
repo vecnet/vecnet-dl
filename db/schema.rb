@@ -207,6 +207,7 @@ ActiveRecord::Schema.define(:version => 20130315200555) do
     t.datetime "updated_at",                                    :null => false
     t.boolean  "guest",                      :default => false
     t.string   "username",                   :default => "",    :null => false
+
     t.text     "group_list"
     t.datetime "groups_last_update"
     t.boolean  "agreed_to_terms_of_service", :default => false
