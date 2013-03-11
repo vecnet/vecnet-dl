@@ -15,7 +15,6 @@ CurateNd::Application.routes.draw do
     end
   end
   resources :downloads, only: [:show]
-
   resources 'role_dashboard', :only=>:index do
     collection do
       get 'page/:page', :action => :index

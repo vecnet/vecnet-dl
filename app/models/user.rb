@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
 
 
-
   #attr_accessor :password
 
   #def password_required?; false; end
@@ -58,6 +57,7 @@ class User < ActiveRecord::Base
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
+<<<<<<< HEAD
     email
   end
 
@@ -69,5 +69,8 @@ class User < ActiveRecord::Base
   def roles
     #Need to remove registered from roles since it is not a valid user role
     RoleMapper.roles(self)- ["registered"]
+=======
+    user_key
+>>>>>>> Initial Version to use curate_nd for vecnet
   end
 end
