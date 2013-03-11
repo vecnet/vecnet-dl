@@ -15,9 +15,9 @@ class User < ActiveRecord::Base
                     :strategy => true,
                     #:controller => :sessions,
                     :model => 'devise/models/http_header_authenticatable')
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
 
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :remember_me, :username#, :password

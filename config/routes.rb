@@ -35,6 +35,7 @@ CurateNd::Application.routes.draw do
   match 'users/:uid/edit' => 'users#edit', :as => :edit_profile, :via => :get
   match 'users/:uid/update' => 'users#update', :as => :update_profile, :via => :put
 
+
   namespace :curation_concern, path: :concern do
     resources :senior_theses, except: :index
     resources(
