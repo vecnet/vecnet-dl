@@ -214,11 +214,7 @@ ActiveRecord::Schema.define(:version => 20130318190723) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.boolean  "guest",                      :default => false
-<<<<<<< HEAD
     t.string   "username",                   :default => "",    :null => false
-
-=======
->>>>>>> Initial Version to use curate_nd for vecnet
     t.text     "group_list"
     t.datetime "groups_last_update"
     t.boolean  "agreed_to_terms_of_service", :default => false
