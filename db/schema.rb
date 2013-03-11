@@ -205,32 +205,13 @@ ActiveRecord::Schema.define(:version => 20130312145738) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.boolean  "guest",                      :default => false
-    t.string   "username",                                      :null => false
-    t.string   "facebook_handle"
-    t.string   "twitter_handle"
-    t.string   "googleplus_handle"
-    t.string   "display_name"
-    t.string   "address"
-    t.string   "admin_area"
-    t.string   "department"
-    t.string   "title"
-    t.string   "office"
-    t.string   "chat_id"
-    t.string   "website"
-    t.string   "affiliation"
-    t.string   "telephone"
-    t.string   "avatar_file_name"
-    t.string   "avatar_content_type"
-    t.integer  "avatar_file_size"
-    t.datetime "avatar_updated_at"
     t.text     "group_list"
     t.datetime "groups_last_update"
     t.boolean  "agreed_to_terms_of_service", :default => false
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-  add_index "users", ["username"], :name => "index_users_on_username"
 
   create_table "version_committers", :force => true do |t|
     t.string   "obj_id"

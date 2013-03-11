@@ -10,11 +10,15 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :cas_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :remember_me, :username#, :password
+  attr_accessible :email, :username, :password, :password_confirmation, :display_name
+
+
 
   attr_accessor :password
 
@@ -45,6 +49,6 @@ class User < ActiveRecord::Base
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
-    username
+    user_key
   end
 end

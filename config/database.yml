@@ -11,11 +11,11 @@ mysql_settings: &mysql_settings
 local_user: &local_user
   <<: *mysql_settings
   username: root
-  password:
+  password: jul@2012
 
 development: &development
   <<: *local_user
-  database: curate_nd_development
+  database: curate_vecnet_development
   host:     localhost
   timeout: 5000
 

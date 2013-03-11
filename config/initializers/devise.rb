@@ -1,11 +1,6 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  if Rails.env.development?
-    config.cas_base_url = "https://cas.library.nd.edu/cas"
-  else
-    config.cas_base_url = "https://login.nd.edu/cas"
-  end
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -13,7 +8,7 @@ Devise.setup do |config|
   config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = "Devise::Mailer"
+   config.mailer = "Devise::Mailer"
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
@@ -29,7 +24,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  config.authentication_keys = [ :username ]
+  config.authentication_keys = [ :email ]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the

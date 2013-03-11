@@ -16,6 +16,8 @@ CurateNd::Application.routes.draw do
   end
   resources :downloads, only: [:show]
 
+  resources :users
+
   namespace :curation_concern, path: :concern do
     resources :senior_theses, except: :index
     resources(
