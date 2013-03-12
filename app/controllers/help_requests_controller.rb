@@ -22,7 +22,6 @@ class HelpRequestsController < ApplicationController
   rescue ActiveRecord::RecordInvalid
     respond_with(help_request)
   end
-
   private
 
   def build_help_request
@@ -35,3 +34,4 @@ class HelpRequestsController < ApplicationController
     request.headers['HTTP_USER_AGENT']
   end
 end
+
