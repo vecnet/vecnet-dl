@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
   def password_required?; false; end
   def email_required?; false; end
 
+  def display_name
+    username
+  end
+
   def self.audituser
     User.find_by_user_key(audituser_key) || User.create!(Devise.authentication_keys.first => audituser_key)
   end
@@ -49,6 +53,6 @@ class User < ActiveRecord::Base
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
-    user_key
+    id
   end
 end

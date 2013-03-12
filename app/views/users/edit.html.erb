@@ -21,11 +21,11 @@ $("a[rel=popover]").popover();
 
 <h1>Edit Profile</h1>
 <div class="span45 well">
-  <%= form_for @user, :url => edit_user_path(current_user.id), :html => {:multipart => true, :class => 'form-horizontal' } do |f| %>
+  <%= form_for @user, :url => user_path(current_user.id), :html => {:multipart => true, :class => 'form-horizontal' } do |f| %>
     <div class="control-group">
-      <%= f.label :display_name, '<i class="icon-twitter"></i> User Name'.html_safe, :class => 'control-label' %>
+      <%= f.label :username, '<i class="icon-twitter"></i> User Name'.html_safe, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :display_name, :class =>"input-medium" %>
+        <%= f.text_field :username, :class =>"input-medium" %>
       </div>
     </div>
     <div class="form-actions">
