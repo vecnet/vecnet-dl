@@ -101,6 +101,21 @@ describe 'end to end behavior', describe_options do
 
   end
 
+  describe 'I am logged in and request help' do
+    let(:agreed_to_terms_of_service) { true }
+    it "request help is registered" do
+      login_as(user, scope: :user, run_callbacks: false)
+      visit '/'
+      click_link "Get Started"
+      click_link "Request Help"
+      within("#new_help_request") do
+        fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
+        click_on("Submit")
+      end
+      page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
+    end
+  end
+
   describe 'file uploaded via different paths' do
     let(:agreed_to_terms_of_service) { true }
     let(:contributors) { ["Goethe"]}

@@ -45,6 +45,7 @@ CurateNd::Application.routes.draw do
   resources :help_requests, only: [:new, :create]
   resources :classify_concerns, only: [:new, :create]
 
+
   match "show/:id" => "common_objects#show", via: :get, as: "common_object"
   match "show/stub/:id" => "common_objects#show_stub_information", via: :get, as: "common_object_stub_information"
   root to: 'welcome#index'
