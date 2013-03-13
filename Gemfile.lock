@@ -83,7 +83,6 @@ GEM
       activemodel (>= 3.0.2, < 4.1)
       activesupport (>= 3.0.2, < 4.1)
     active_model_serializers (0.7.0)
-      activemodel (>= 3.0)
     activemodel (3.2.11)
       activesupport (= 3.2.11)
       builder (~> 3.0.0)

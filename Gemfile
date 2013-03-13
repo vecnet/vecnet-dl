@@ -23,6 +23,7 @@ group :not_deploy do
   gem 'roboto'
   gem 'active_attr'
   gem 'browser'
+
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
