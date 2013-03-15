@@ -13,7 +13,6 @@
         <li class="pull-right">
           <a href="<%= profile_path(current_user) %>" class="btn btn-small " title="click for User Profile"><i class="icon-user">&nbsp;</i><%= current_user.name %></a>
         </li>
-
         <% if current_page? new_help_request_path %>
           <li class="pull-right disabled">
             <%= link_to 'Request Help', '#' %>
