@@ -68,7 +68,7 @@ CurateNd::Application.configure do
       domain: 'google.com',
       authentication: 'plain',
       user_name: "webhostingbanu@gmail.com",
-      password:"",
+      password:"shantivan",
   }
 
 end

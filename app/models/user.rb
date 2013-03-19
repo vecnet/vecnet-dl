@@ -57,8 +57,6 @@ class User < ActiveRecord::Base
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
-<<<<<<< HEAD
-<<<<<<< HEAD
     email
   end
 
@@ -70,11 +68,6 @@ class User < ActiveRecord::Base
   def roles
     #Need to remove registered from roles since it is not a valid user role
     RoleMapper.roles(self)- ["registered"]
-=======
-    user_key
->>>>>>> Initial Version to use curate_nd for vecnet
-=======
-    user_key
->>>>>>> Initial Version to use curate_nd for vecnet
   end
+
 end
