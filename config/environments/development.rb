@@ -42,6 +42,10 @@ CurateNd::Application.configure do
 
   config.application_url = "http://localhost:3000"
 
+  config.default_characterization_runner = lambda { |file_path|
+    Rails.root.join('spec/support/files/default_fits_output.xml').read
+  }
+
   if ENV['FULL_STACK']
     require 'clamav'
     ClamAV.instance.loaddb
@@ -61,7 +65,7 @@ CurateNd::Application.configure do
       domain: 'google.com',
       authentication: 'plain',
       user_name: "webhostingbanu@gmail.com",
-      password:"shantivan",
+      password:"",
   }
 
 end
