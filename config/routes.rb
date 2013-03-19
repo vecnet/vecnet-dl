@@ -16,7 +16,11 @@ CurateNd::Application.routes.draw do
   end
   resources :downloads, only: [:show]
 
-  resources :users
+  # User profile & follows
+  match 'users' => 'users#index', :as => :profiles, :via => :get
+  match 'users/:uid' => 'users#show', :as => :profile, :via => :get
+  match 'users/:uid/edit' => 'users#edit', :as => :edit_profile, :via => :get
+  match 'users/:uid/update' => 'users#update', :as => :update_profile, :via => :put
 
   namespace :curation_concern, path: :concern do
     resources :senior_theses, except: :index

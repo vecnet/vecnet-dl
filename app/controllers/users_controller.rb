@@ -14,8 +14,7 @@
 
 class UsersController < ApplicationController
   prepend_before_filter :find_user, :except => [:index, :search, :notifications_number]
-  before_filter :authenticate_user!, only: [:edit, :update, :follow, :unfollow, :toggle_trophy]
-  before_filter :user_is_current_user, only: [:edit, :update, :toggle_trophy]
+  before_filter :authenticate_user!, only: [:edit, :update]
   def index
     sort_val = get_sort
     query = params[:uq].blank? ? nil : "%"+params[:uq].downcase+"%"
@@ -40,17 +39,17 @@ class UsersController < ApplicationController
   def update
     find_user.update_attributes(params[:user])
     unless @user.save
-      redirect_to edit_user_path(find_user), alert: @user.errors.full_messages
+      redirect_to edit_profile_path(URI.escape(@user.to_s,'@.')), alert: @user.errors.full_messages
       return
     end
     Sufia.queue.push(UserEditProfileEventJob.new(find_user.user_key))
-    redirect_to user_path(@user.id), notice: "Your profile has been updated"
+    redirect_to profile_path(URI.escape(@user.to_s,'@.')), notice: "Your profile has been updated"
   end
 
   private
   def find_user
-    @user ||= User.find(params[:id])
-    redirect_to root_path, alert: "User '#{params[:id]}' does not exist" if @user.nil?
+    @user = User.from_url_component(params[:uid])
+    redirect_to root_path, alert: "User '#{params[:uid]}' does not exist" if @user.nil?
     @user
   end
 

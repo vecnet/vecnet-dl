@@ -21,7 +21,7 @@ limitations under the License.
 
     <span class="span20 offset20">
       <% if current_user%>
-        <a class="btn btn-primary" href="<%= sufia.edit_user_path(current_user.id) %>"><i class="icon-edit"></i> Edit Your Profile </a>
+        <%= link_to raw('<i class="icon-edit"></i> Edit Your Profile'), edit_profile_path(current_user), :class => "btn btn-primary"   %>
       <% end %>
     </span>
 </h1>

@@ -21,7 +21,7 @@ $("a[rel=popover]").popover();
 
 <h1>Edit Profile</h1>
 <div class="span45 well">
-  <%= form_for @user, :url => user_path(current_user.id), :html => {:multipart => true, :class => 'form-horizontal' } do |f| %>
+  <%= form_for @user, :url => update_profile_path(current_user), :html => {:multipart => true, :class => 'form-horizontal' } do |f| %>
     <div class="control-group">
       <%= f.label :username, '<i class="icon-twitter"></i> User Name'.html_safe, :class => 'control-label' %>
       <div class="controls">
