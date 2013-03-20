@@ -4,6 +4,7 @@ class SeniorThesis < ActiveFedora::Base
   include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMixins::RightsMetadata
   include Sufia::ModelMethods
+  include CurationConcern::ModelMethods
   include Sufia::Noid
   include Sufia::GenericFile::Permissions
 

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 require 'blacklight/catalog'
-class DashboardController < ApplicationController
+class RoleDashboardController < ApplicationController
   include Hydra::BatchEditBehavior
   include Blacklight::Catalog
   include Blacklight::Configurable # comply with BL 3.7
@@ -33,12 +33,10 @@ class DashboardController < ApplicationController
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
 
   # This applies appropriate access controls to all solr queries (the internal method of this is overidden bellow to only include edit files)
-  DashboardController.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  # This filters out objects that you want to exclude from search results, like FileAssets
-  DashboardController.solr_search_params_logic += [:exclude_unwanted_models]
+  RoleDashboardController.solr_search_params_logic += [:add_access_controls_to_solr_params]
+
   #Need to remove role permission from hydra access control
-  DashboardController.solr_access_filters_logic.delete(:apply_role_permissions)
-  DashboardController.solr_access_filters_logic.delete(:apply_superuser_permissions)
+  RoleDashboardController.solr_access_filters_logic += [:apply_role_permissions]
 
   def index
     extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
@@ -50,7 +48,7 @@ class DashboardController < ApplicationController
     @filters = params[:f] || []
 
     # adding a key to the session so that the history will be saved so that batch_edits select all will work
-    search_session[:dashboard] = true
+    search_session[:role_dashboard] = true
     respond_to do |format|
       format.html { save_current_search_params }
       format.rss  { render :layout => false }

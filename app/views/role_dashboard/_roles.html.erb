@@ -1,0 +1,4 @@
+
+<% current_user.roles.each do |role|%>
+  <%= bootstrap_navigation_element "#{role.titleize} Dashboard", role_dashboard_index_path -%>
+<% end %>

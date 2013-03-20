@@ -61,4 +61,13 @@ class User < ActiveRecord::Base
     email
   end
 
+  #delegating groups to roles since there is no difference between roles and groups yet
+  def groups
+    roles
+  end
+
+  def roles
+    #Need to remove registered from roles since it is not a valid user role
+    RoleMapper.roles(self)- ["registered"]
+  end
 end
