@@ -22,6 +22,13 @@ CurateNd::Application.routes.draw do
     end
   end
 
+  resources 'role_dashboard', :only=>:index do
+    collection do
+      get 'page/:page', :action => :index
+      get 'facet/:id',  :action => :facet, :as => :facet
+    end
+  end
+
   # User profile & follows
   match 'users' => 'users#index', :as => :profiles, :via => :get
   match 'users/:uid' => 'users#show', :as => :profile, :via => :get

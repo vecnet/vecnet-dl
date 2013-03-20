@@ -69,5 +69,4 @@ class User < ActiveRecord::Base
     #Need to remove registered from roles since it is not a valid user role
     RoleMapper.roles(self)- ["registered"]
   end
-
 end
