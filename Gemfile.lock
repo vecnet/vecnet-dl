@@ -479,7 +479,7 @@ DEPENDENCIES
   common_repository_model!
   compass-rails
   database_cleaner
-  debugger
+  debugger (>= 1.4)
   decent_exposure
   devise
   devise-guests (~> 0.3)
