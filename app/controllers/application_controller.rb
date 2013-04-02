@@ -6,14 +6,9 @@ class ApplicationController < ActionController::Base
   # Adds Sufia behaviors into the application controller
   include Sufia::Controller
 
-<<<<<<< HEAD
   rescue_from ActiveFedora::ObjectNotFoundError, ActiveFedora::ActiveObjectNotFoundError do |exception|
     render '/errors/not_found', status: :not_found
   end
-=======
-  # Please be sure to impelement current_user and user_session. Blacklight depends on
-  # these methods in order to perform user specific actions.
->>>>>>> Updating and consolidating error handling
 
   rescue_from StandardError, with: :exception_handler
   def exception_handler(exception)
@@ -40,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
   protected :render_response_for_error
 
-  layout 'hydra-head'
+  layout 'curate_nd/2_column'
 
   protect_from_forgery
 
