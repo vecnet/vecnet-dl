@@ -10,7 +10,17 @@ class ClassifyConcernsController < ApplicationController
   helper_method :classify_concern
 
   def new
-    respond_with(classify_concern)
+    if ClassifyConcern.curation_types.size ==1
+      respond_with(classify_concern) do |wants|
+        wants.html do
+          redirect_to new_polymorphic_path(
+                          [:curation_concern, classify_concern.single_curation]
+                      )
+        end
+      end
+    else
+      respond_with(classify_concern)
+    end
   end
 
   def create

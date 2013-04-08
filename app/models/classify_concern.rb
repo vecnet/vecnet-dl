@@ -1,6 +1,6 @@
 class ClassifyConcern
   VALID_CURATION_CONCERNS = {
-    'Senior Thesis' => 'SeniorThesis'
+    'Upload File' => 'Collection'
   }
   include ActiveAttr::Model
   attribute :curation_concern_type
@@ -13,6 +13,14 @@ class ClassifyConcern
 
   def possible_curation_concern_types
     VALID_CURATION_CONCERNS
+  end
+
+  def self.curation_types
+    VALID_CURATION_CONCERNS
+  end
+
+  def single_curation
+    VALID_CURATION_CONCERNS.values.first.constantize
   end
 
   def curation_concern_class
