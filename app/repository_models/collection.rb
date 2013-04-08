@@ -1,4 +1,4 @@
-class VecnetArticle < ActiveFedora::Base
+class Collection < ActiveFedora::Base
   include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMixins::RightsMetadata
   include Sufia::ModelMethods
