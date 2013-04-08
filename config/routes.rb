@@ -47,6 +47,7 @@ CurateNd::Application.routes.draw do
       :generic_files,
       only: [:show, :edit, :update, :destroy]
     )
+    resources :collections
   end
 
   resources :terms_of_service_agreements, only: [:new, :create]
