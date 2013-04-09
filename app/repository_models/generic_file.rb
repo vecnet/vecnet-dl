@@ -1,3 +1,4 @@
+require_relative '../repository_datastreams/generic_file_rdf_datastream'
 require Sufia::Engine.root.join('app/models/generic_file')
 class GenericFile
   include SpatialCoverage
@@ -9,23 +10,23 @@ class GenericFile
 
   attr_accessor :file, :version, :visibility
 
-  delegate_to :descMetadata, [:spatials, :temporals]
+  delegate_to :descMetadata, [:__spatials, :temporals]
 
-  def spatials
-    spatials= self.datastreams["descMetadata"].spatials.collect.each {|spatial| Spatial.decode(spatial)}
-    temp=[]
-    spatials.each{ |spatial_hash| temp<<Spatial.new(spatial_hash["north"],spatial_hash["east"])}
-    return temp
-  end
+  # def spatials
+  #   spatials= self.datastreams["descMetadata"].spatials.collect.each {|spatial| Spatial.decode(spatial)}
+  #   temp=[]
+  #   spatials.each{ |spatial_hash| temp<<Spatial.new(spatial_hash["north"],spatial_hash["east"])}
+  #   return temp
+  # end
 
-  def temporals
-    puts "get temporals decode them"
-    temporals= self.datastreams["descMetadata"].temporals.collect.each{ |temporal| Temporal.decode(temporal) }
-    puts "Temporals: #{temporals.inspect}"
-    temp=[]
-    temporals.each{ |temporal_hash| temp<<Temporal.new(temporal_hash["start"],temporal_hash["end"])}
-    return temp
-  end
+  # def temporals
+  #   puts "get temporals decode them"
+  #   temporals= self.datastreams["descMetadata"].temporals.collect.each{ |temporal| Temporal.decode(temporal) }
+  #   puts "Temporals: #{temporals.inspect}"
+  #   temp=[]
+  #   temporals.each{ |temporal_hash| temp<<Temporal.new(temporal_hash["start"],temporal_hash["end"])}
+  #   return temp
+  # end
 
   def filename
     content.label
@@ -47,3 +48,4 @@ class GenericFile
     self.class.to_s.demodulize.titleize
   end
 end
+
