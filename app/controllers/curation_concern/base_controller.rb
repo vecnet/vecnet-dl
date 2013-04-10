@@ -6,7 +6,7 @@ class CurationConcern::BaseController < ApplicationController
   before_filter :agreed_to_terms_of_service!
   prepend_before_filter :normalize_identifier, except: [:index, :new, :create]
   before_filter :curation_concern, except: [:index]
-  load_and_authorize_resource :curation_concern, except: [:index, :new, :create], class: "ActiveFedora::Base"
+  #load_and_authorize_resource :curation_concern, except: [:index, :new, :create], class: "ActiveFedora::Base"
 
   attr_reader :curation_concern
   helper_method :curation_concern

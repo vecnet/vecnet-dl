@@ -3,7 +3,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
   before_filter :parent
   before_filter :curation_concern
-  load_and_authorize_resource :parent, class: "ActiveFedora::Base"
+  load_resource :parent, class: "ActiveFedora::Base"
 
   def parent
     @parent ||=
