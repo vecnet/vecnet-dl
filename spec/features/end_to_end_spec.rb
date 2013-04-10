@@ -1,8 +1,5 @@
 require 'spec_helper'
 
-require 'casclient'
-require 'casclient/frameworks/rails/filter'
-
 describe_options = {type: :feature}
 if ENV['JS']
   describe_options[:js] = true
