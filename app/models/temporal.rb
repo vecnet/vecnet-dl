@@ -53,6 +53,11 @@ class Temporal
     result
   end
 
+  def self.parse_temporal(temporal_rdf)
+    temp=Temporal.decode(temporal_rdf)
+    return Temporal.new(temp[:start],temp[:end])
+  end
+
   def to_s
     if start_time.present? && end_time.present?
       return "#{start_time} - #{end_time}"
