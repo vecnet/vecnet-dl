@@ -5,20 +5,29 @@ module SpatialCoverage
   extend ActiveSupport::Concern
 
   included do
-    validate :spatial_data, :if => lambda{ |object| object.latitude.present? && object.longitude.present? }
-    validate :temporal_data,:if => lambda{ |object| object.start_time.present? && object.end_time.present? }
-    before_save :format_spatials_from_lat_long, :format_temporals_from_start_end_time
+    before_save :format_spatials_from_lat_long
     attr_accessor :longitude, :latitude, :start_time, :end_time
   end
 
   VALIDATIONS = [
-      {:key => :spatial, :message => 'Invalid Spatial data, Latitude and Longitude must be of same length', :condition => lambda { |obj| !obj.latitude.length.eql?(obj.longitude.length)}},
-      {:key => :temporal, :message => 'Invalid Temporal data, Start time and End time must be of same length', :condition => lambda { |obj| !obj.start_time.length.eql?(obj.end_time.length)}}
+      { :key => :spatial,
+        :message => 'Invalid Spatial data, Latitude and Longitude must be of same length',
+        :condition => lambda{ |gf| if (gf.longitude.present? && gf.latitude.present?)
+                                     gf.latitude.length.eql?(gf.longitude.length)
+                                   end
+                            }
+      },
+      {:key => :temporal,
+       :message => 'Invalid Temporal data, Start time and End time must be of same length',
+       :condition => lambda{ |gf| if (gf.start_time.present? && gf.end_time.present?)
+                                    gf.start_time.length.eql?(gf.end_time.length)
+                                  end
+       }}
   ]
 
   def data_validation(validation_hash)
     valid = true
-    if validation_hash[:condition].call(self)
+    if !validation_hash[:condition].call(self)
       self.errors[validation_hash[:key]] ||= []
       self.errors[validation_hash[:key]] << validation_hash[:message]
       valid = false
@@ -26,7 +35,7 @@ module SpatialCoverage
     return valid
   end
 
-  def spatial_data
+  def valid_spatial_data?
     return data_validation(VALIDATIONS.first)
   end
 
@@ -36,14 +45,13 @@ module SpatialCoverage
   end
 
   def format_spatials_from_lat_long
-    if latitude.present? && longitude.present?
-      temp=[]
+    temp=[]
+    if valid_spatial_data?
       latitude.each_with_index do |lat, i|
         temp<< Spatial.new(lat, longitude[i]).encode_dcsv
       end
-      self.spatials=temp
-      return temp
     end
+    self.spatials=temp
   end
 
   def format_temporals_from_start_end_time
