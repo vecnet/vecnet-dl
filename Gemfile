@@ -56,9 +56,15 @@ end
 group :test, :development do
   gem 'debugger', ">= 1.4"
   gem 'rails_best_practices'
+  gem 'guard', :require => false
+  gem 'guard-rails_best_practices'
+  gem 'guard-rspec', :require => false
+  gem 'guard-spork'
   gem 'sextant'
   gem 'simplecov'
   gem 'method_locator'
+  gem 'spork', '~> 1.0rc'
+  gem 'ruby_gntp'
 end
 
 group :deploy do
