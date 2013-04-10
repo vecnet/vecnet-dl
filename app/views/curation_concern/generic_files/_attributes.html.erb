@@ -25,9 +25,21 @@
       </td>
     </tr>
     <tr>
+      <th>Spatials Details</th>
+      <td>
+        <% curation_concern.spatials.each do |spatial| %>
+          <div>
+            <%= "Latitude: #{spatial.latitude};" %>
+            <%= "Longitude: #{spatial.longitude}" %>
+            <%= "<br />".html_safe %>
+          </div>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
       <th>Audit Status</th>
-      <%- stat= curation_concern.audit_stat(false)  %>
-      <td> <%= (stat == 1 ? 'passing' : (stat == 0 ? 'failing' : stat)) %></td>
+      <%- #stat= curation_concern.audit_stat(false)  %>
+      <td> <%# (stat == 1 ? 'passing' : (stat == 0 ? 'failing' : stat)) %></td>
     </tr>
     <tr>
       <th>Characterization</th>

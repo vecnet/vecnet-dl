@@ -6,7 +6,7 @@
           <legend>
             Attach Your File
           </legend>
-          <%= f.input :thesis_file,
+          <%= f.input :file,
                       as: :file,
                       label: 'Upload your thesis'
           %>
@@ -42,11 +42,8 @@
         <%= f.input :language,               as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= f.input :subject,                as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <div class="row">
-          <div class="span12">
-            <%= f.input :latitude,            input_html: { class: 'input-small' } %>
-          </div>
-          <div class="span12">
-            <%= f.input :longitude,           input_html: { class: 'input-small' } %>
+          <div class="span6">
+            <%= render "spatial", curation_concern: curation_concern, f: f %>
           </div>
         </div>
       </fieldset>
@@ -65,7 +62,6 @@
   <div class="row">
     <div class="span12 form-actions">
       <%= f.submit class: 'btn btn-primary' %>
-      <%# f.submit value: create_and_add_related_files_submit_value.html_safe, class: 'btn btn-primary' %>
       <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
     </div>
   </div>

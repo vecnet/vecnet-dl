@@ -1,0 +1,19 @@
+<% unless curation_concern.spatials.empty?  %>
+  <% curation_concern.spatials.each do |spatial| %>
+  <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
+                   :id => "generic_file_latitude", :value=>spatial.latitude, :class => "input-small",
+                   :placeholder=>"latitude" %>
+
+  <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
+                   :id => "generic_file_longitude", :value=>spatial.longitude,
+                   :class => "input-small", :placeholder=>"longitude" %>
+  <% end %>
+<% else %>
+  <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
+                   :id => "generic_file_latitude", :value=>"", :class => "input-small",
+                   :placeholder=>"latitude" %>
+
+  <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
+                   :id => "generic_file_longitude", :value=>"",
+                   :class => "input-small", :placeholder=>"longitude" %>
+<% end %>
