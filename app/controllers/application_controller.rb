@@ -6,11 +6,11 @@ class ApplicationController < ActionController::Base
   # Adds Sufia behaviors into the application controller
   include Sufia::Controller
 
-  rescue_from ActiveFedora::ObjectNotFoundError, ActiveFedora::ActiveObjectNotFoundError do |exception|
-    render '/errors/not_found', status: :not_found
-  end
+  #rescue_from ActiveFedora::ObjectNotFoundError, ActiveFedora::ActiveObjectNotFoundError do |exception|
+  #  render '/errors/not_found', status: :not_found
+  #end
 
-  rescue_from StandardError, with: :exception_handler
+  #rescue_from StandardError, with: :exception_handler
   def exception_handler(exception)
     if ActionDispatch::ExceptionWrapper.rescue_responses[exception.class.name]
       wrapper = ActionDispatch::ExceptionWrapper.new(env, exception)
