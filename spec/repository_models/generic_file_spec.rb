@@ -55,11 +55,16 @@ describe GenericFile do
         generic_file.longitude = [longitude]
         generic_file.format_spatials_from_lat_long==[]
       end
+      it 'should be error on spatials' do
+        generic_file=GenericFile.new
+        generic_file.longitude = [longitude]
+        generic_file.valid?
+        generic_file.errors[:spatials].should == ['Invalid Spatial data, Latitude and Longitude must be of same length']
+      end
       it 'should save encoded latitude and longitude to spatials' do
         generic_file.latitude = [latitude]
         generic_file.longitude = [longitude]
         generic_file.save
-        puts "Find:#{GenericFile.find(generic_file.pid).spatials}"
         GenericFile.find(generic_file.pid).spatials.should_not be_empty
         GenericFile.find(generic_file.pid).spatials.first.should be_instance_of(Spatial)
       end

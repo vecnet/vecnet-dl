@@ -7,17 +7,18 @@ module SpatialCoverage
   included do
     before_save :format_spatials_from_lat_long
     attr_accessor :longitude, :latitude, :start_time, :end_time
+    validate :valid_spatial_data?
   end
 
   VALIDATIONS = [
-      { :key => :spatial,
-        :message => 'Invalid Spatial data, Latitude and Longitude must be of same length',
+      { :key => :spatials,
+        :message => 'Invalid Spatial data, Latitude and Longitude must be of same',
         :condition => lambda{ |gf| if (gf.longitude.present? && gf.latitude.present?)
                                      gf.latitude.length.eql?(gf.longitude.length)
                                    end
                             }
       },
-      {:key => :temporal,
+      {:key => :temporals,
        :message => 'Invalid Temporal data, Start time and End time must be of same length',
        :condition => lambda{ |gf| if (gf.start_time.present? && gf.end_time.present?)
                                     gf.start_time.length.eql?(gf.end_time.length)
