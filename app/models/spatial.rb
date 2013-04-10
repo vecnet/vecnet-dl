@@ -1,17 +1,15 @@
 
 class Spatial
   attr_reader :latitude, :longitude
-  def initialize(lat, long)
-    @latitude=lat
-    @longitude=long
+  def initialize(latitude, longitude)
+    @latitude=latitude
+    @longitude=longitude
   end
 
   def encode(input)
     input.to_s.gsub(/([=;])/) { "\\#{$1}" }
   end
 
-  # takes an input hash or string and converts it
-  # into the DCSV format. Returns a string.
   def encode_dcsv
     result = []
     hash={}
@@ -54,6 +52,12 @@ class Spatial
     end
     result
   end
+
+  def self.parse_spatial(spatial_rdf)
+    temp=Spatial.decode(spatial_rdf)
+    return Spatial.new(temp['north'],temp['east'])
+  end
+
 
   def to_s
     if latitude.present? && longitude.present?
