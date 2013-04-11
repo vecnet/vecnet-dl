@@ -3,17 +3,18 @@ class MultiValueInput < SimpleForm::Inputs::CollectionInput
     input_html_classes.unshift("string")
     input_html_options[:type] ||= 'text'
     input_html_options[:name] ||= "#{object_name}[#{attribute_name}][]"
+    input_html_options[:id] ||= "#{attribute_name}"
     markup = <<-HTML
 
 
         <ul class="listing">
     HTML
-
+    puts("Attribute: #{attribute_name}, Collection:#{collection.inspect}, #{collection.size}")
     collection.each do |value|
       unless value.to_s.strip.blank?
         markup << <<-HTML
           <li class="field-wrapper">
-            #{build_text_field(value)}
+            #{build_text_field(value,'')}
           </li>
         HTML
       end
@@ -21,7 +22,7 @@ class MultiValueInput < SimpleForm::Inputs::CollectionInput
 
     markup << <<-HTML
           <li class="field-wrapper">
-            #{build_text_field('')}
+            #{build_text_field('', 'add')}
           </li>
         </ul>
 
@@ -52,9 +53,9 @@ class MultiValueInput < SimpleForm::Inputs::CollectionInput
     label_html_options[:class].map{|c| c.to_s}.join(' ')
   end
 
-  def build_text_field(value)
+  def build_text_field(value,append_to_id)
     input_html_options[:value] = value
-    input_html_options[:id] = nil
+    input_html_options[:id] = append_to_id.blank? ? "#{attribute_name}" : "#{attribute_name}_#{append_to_id}"
     input_html_options[:class] = "#{object_name}_#{attribute_name}"
     input_html_options[:'aria-labelledby'] = label_id
     @builder.text_field(attribute_name, input_html_options)
