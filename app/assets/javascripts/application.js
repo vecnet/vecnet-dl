@@ -13,7 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //
+//= require jquery-ui-1.9.2/jquery.ui.core
 //= require jquery-ui-1.9.2/jquery.ui.widget
+//= require jquery-ui-1.9.2/jquery.ui.menu
+//= require jquery-ui-1.9.2/jquery.ui.autocomplete
 //
 //= require blacklight/blacklight
 //
@@ -26,9 +29,51 @@
 //= require manage_repeating_fields
 //= require toggle_details
 //= require help_modal
+//= require auto_complete
 
 $(function(){
+
   $('abbr').tooltip();
 
   $('.multi_value.control-group').manage_fields();
+
+  $('#based_near').autocomplete(get_autocomplete_opts("location"))
+  $('#based_near_add').autocomplete(get_autocomplete_opts("location"))
+
+  $("#subject")
+    // don't navigate away from the field on tab when selecting an item
+    .bind( "keydown", function( event ) {
+      if ( event.keyCode === $.ui.keyCode.TAB &&
+        $( this ).data( "autocomplete" ).menu.active ) {
+        event.preventDefault();
+    }
+  }).autocomplete(get_autocomplete_opts("subject") );
+
+    $("#subject_add")
+        // don't navigate away from the field on tab when selecting an item
+        .bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        }).autocomplete(get_autocomplete_opts("subject") );
+
+  function get_autocomplete_opts(field) {
+    var autocomplete_opts = {
+      minLength: 2,
+      source: function( request, response ) {
+        $.getJSON( "/authorities/generic_files/" + field, {
+            q: request.term
+        }, response );
+      },
+      focus: function() {
+        // prevent value inserted on focus
+        return false;
+      },
+      complete: function(event) {
+        $('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
+      }
+    };
+    return autocomplete_opts;
+  }
 });
