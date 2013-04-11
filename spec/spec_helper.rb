@@ -16,8 +16,8 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'database_cleaner'
-  require 'capybara/rspec'
-  require 'webmock/rspec'
+  #require 'capybara/rspec'
+  #require 'webmock/rspec'
 
 
   # Requires supporting ruby files with custom matchers and macros, etc,
@@ -71,5 +71,11 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  require 'factory_girl_rails'
    load "#{Rails.root}/config/routes.rb"
+    # Hack to ensure models get reloaded by Spork - remove as soon as this is fixed in Spork.
+   # Silence warnings to avoid all the 'warning: already initialized constant' messages that
+   # appear for constants defined in the models.
+     Dir["#{Rails.root}/app/models/**/*.rb"].each {|model| load  model}
+     Dir["#{Rails.root}/app/repository_models/**/*.rb"].each {|model| load  model}
 end
