@@ -50,6 +50,9 @@ CurateNd::Application.routes.draw do
     resources :collections
   end
 
+  # Authority vocabulary queries route
+  match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
+
   resources :terms_of_service_agreements, only: [:new, :create]
   resources :help_requests, only: [:new, :create]
   resources :classify_concerns, only: [:new, :create]
