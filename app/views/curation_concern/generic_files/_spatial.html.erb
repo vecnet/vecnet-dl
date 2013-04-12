@@ -1,19 +1,35 @@
-<% unless curation_concern.spatials.empty?  %>
-  <% curation_concern.spatials.each do |spatial| %>
-  <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                   :id => "generic_file_latitude", :value=>spatial.latitude, :class => "input-small",
-                   :placeholder=>"latitude" %>
 
-  <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                   :id => "generic_file_longitude", :value=>spatial.longitude,
-                   :class => "input-small", :placeholder=>"longitude" %>
-  <% end %>
-<% else %>
-  <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                   :id => "generic_file_latitude", :value=>"", :class => "input-small",
-                   :placeholder=>"latitude" %>
+<div class="row">
+  <div class="span6">
+    <div class="control-group multi_value optional generic_file_spatials managed">
+      <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
+      <div class="controls">
+        <ul class="listing">
+          <% unless curation_concern.spatials.empty?  %>
+            <% curation_concern.spatials.each do |spatial| %>
+              <li class="field-wrapper input-append">
+                <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
+                                 :id => "generic_file_latitude", :value=>spatial.latitude, :class => "input-small",
+                                 :placeholder=>"latitude" %>
 
-  <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                   :id => "generic_file_longitude", :value=>"",
-                   :class => "input-small", :placeholder=>"longitude" %>
-<% end %>
+                <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
+                                 :id => "generic_file_longitude", :value=>spatial.longitude,
+                                 :class => "input-small", :placeholder=>"longitude" %>
+              </li>
+            <% end %>
+          <% end %>
+          <li class="field-wrapper input-append">
+            <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
+                             :id => "generic_file_latitude", :value=>"", :class => "input-small",
+                             :placeholder=>"latitude" %>
+
+            <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
+                             :id => "generic_file_longitude", :value=>"",
+                             :class => "input-small", :placeholder=>"longitude" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
