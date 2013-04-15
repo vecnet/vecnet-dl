@@ -1,9 +1,9 @@
 en:
   sufia:
-    product_name:        "CurateND"
-    account_name:        "Notre Dame NetID"
-    institution_name:    "University of Notre Dame"
-    deposit_agreement:   "CurateND's Deposit Agreement"
+    product_name:        "Vecnet"
+    account_name:        "vecnet_user"
+    institution_name:    "Vecnet Users"
+    deposit_agreement:   "Vecnet's Deposit Agreement"
     upload_tooltip:      "Please accept Deposit Agreement before you can upload."
     google_analytics_id: "UA-2118378-28"
     directory:
@@ -11,8 +11,8 @@ en:
     search:
       form:
         q:
-          label:         "Search CurateND"
-          placeholder:   "Search CurateND"
+          label:         "Search Vecnet"
+          placeholder:   "Search Vecnet"
 
     field_label:
       based_near:        "Location"
