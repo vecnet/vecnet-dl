@@ -5,8 +5,13 @@
 
 <%= render "attributes", curation_concern: curation_concern %>
 
+<% unless curation_concern.related_files.empty? %>
+  <%= render "related_files", curation_concern: curation_concern %>
+<% end %>
+
 <% if can? :edit, curation_concern %>
   <div class="form-actions">
     <%= link_to "Edit This File", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
+    <%= link_to "Add file to this collection", new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn btn-primary' %>
   </div>
 <% end %>
