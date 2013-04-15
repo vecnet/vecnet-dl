@@ -26,3 +26,6 @@ coverage/
 .rvmrc
 rails_best_practice*
 jetty/
+
+#Ignore mesh file
+mesh*
