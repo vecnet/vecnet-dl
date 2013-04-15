@@ -38,6 +38,8 @@ class RoleDashboardController < ApplicationController
   #Need to remove role permission from hydra access control
   RoleDashboardController.solr_access_filters_logic += [:apply_role_permissions]
 
+  RoleDashboardController.solr_access_filters_logic.delete(:apply_individual_permissions)
+
   def index
     extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
     extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => "Atom for results")
