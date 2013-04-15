@@ -24,8 +24,16 @@
         <%= f.input :title,
                     input_html: { class: 'input-xlarge' }
         %>
-        <%= f.input :subject,as: :multi_value, input_html: { class: 'input-xlarge' }%>
-        <%= f.input :based_near,as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :resource_type do %>
+          <%= f.select "resource_type", options_for_select(Sufia::Engine.config.resource_types.keys, curation_concern.resource_type.to_a),
+                                        {}, {:multiple=>true, :size=>7} %>
+        <% end %>
+        <%= f.input :creator,        as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :tag,            label:'Keyword', as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :rights do %>
+          <%= f.select "rights", options_for_select(Sufia::Engine::config.cc_licenses, Sufia::Engine::config.cc_licenses.values.last),
+                                 {}, {:multiple=>true, :size=>7, :required => true} %>
+        <% end %>
 
         </fieldset>
     </div>
@@ -33,6 +41,8 @@
     <div class="span6">
       <fieldset class="optional prompt">
         <legend>Additional Information</legend>
+        <%= f.input :subject,                as: :multi_value, input_html: { class: 'input-xlarge' }%>
+        <%= f.input :based_near,             as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= f.input :contributor,            as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= f.input :publisher,              as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= f.input :language,               as: :multi_value, input_html: { class: 'input-xlarge' } %>
@@ -54,7 +64,6 @@
     <div class="span12 form-actions">
       <%= f.submit class: 'btn btn-primary' %>
       <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
-      <%= link_to 'View this file', polymorphic_path([:curation_concern, curation_concern]), class:'btn btn-link' %>
     </div>
   </div>
 
