@@ -36,7 +36,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   def create
     curation_concern.batch = parent
     actor.create!
-    respond_with([:curation_concern, parent])
+    redirect_to dashboard_index_path
   rescue ActiveFedora::RecordInvalid
     respond_with([:curation_concern, curation_concern]) { |wants|
       wants.html { render 'new', status: :unprocessable_entity }
