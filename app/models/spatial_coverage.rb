@@ -5,7 +5,7 @@ module SpatialCoverage
   extend ActiveSupport::Concern
 
   included do
-    before_save :format_spatials_from_lat_long
+    before_save :format_spatials_from_lat_long , :if => lambda{ |object| object.latitude.present? && object.longitude.present? }
     attr_accessor :longitude, :latitude, :start_time, :end_time
     validate :valid_spatial_data?
   end
@@ -28,7 +28,7 @@ module SpatialCoverage
 
   def data_validation(validation_hash)
     valid = true
-    if !validation_hash[:condition].call(self)
+    if validation_hash[:condition].call(self)
       self.errors[validation_hash[:key]] ||= []
       self.errors[validation_hash[:key]] << validation_hash[:message]
       valid = false
