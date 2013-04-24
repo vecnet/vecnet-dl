@@ -1,5 +1,5 @@
 class CurationConcern::BaseController < ApplicationController
-  layout 'curate_nd'
+  layout 'vecnet'
   include Sufia::Noid # for normalize_identifier method
 
   before_filter :authenticate_user!, :except => [:show]
