@@ -1,0 +1,71 @@
+.navbar {
+  background-color: #1B1B1B;
+  background-image: linear-gradient(center top , #222222, #111111);
+  background-repeat: repeat-x;
+
+  .nav-inner {
+    border-color: #252525;
+  }
+
+  .brand{
+    background: no-repeat scroll left top transparent;
+    display: inline-block;
+    margin-right: 20px;
+    overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    width: 150px
+  }
+}
+
+jumbotron:after {
+  background: url(bs-docs-masthead-pattern.png) repeat scroll center center transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  opacity: 0.4;
+  position: absolute;
+  top: 20;
+  right: 0;
+}
+.subhead {
+  border-bottom: 1px solid #DDDDDD;
+  text-align: left;
+}
+.jumbotron {
+  background: rgb(0,147,173); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgb(1,72,95) 0%, rgb(0,147,173) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(1,72,95)), color-stop(100%,rgb(0,147,173))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgb(1,72,95) 0%, rgb(0,147,173)); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgb(1,72,95) 0%, rgb(0,147,173)); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgb(1,72,95) 0%, rgb(0,147,173)); /* IE10+ */
+  background: linear-gradient(to bottom,  rgb(1,72,95) 0%, rgb(0,147,173)); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgb(192,87,0)', endColorstr='rgb(0,147,173)',GradientType=0 ); /* IE6-9 */
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  position: relative;
+  top:40px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
+
+  h1 {
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #E5E5E5;
+  }
+
+  p{
+    color: #E5E5E5;
+  }
+}
+#main {
+  padding-top: 2em
+}
+.flash-message {
+  padding-top: 2em
+}

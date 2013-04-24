@@ -1,0 +1,38 @@
+<% content_for :layout_name, 'vecnet, ' %>
+<% content_for :body do %>
+
+  <header class="jumbotron subhead row-fluid">
+    <div class="container ">
+      <h1>VECNet Digital Library Metadata Catalog</h1>
+      <p class="lead">Curate Metadata</p>
+    </div>
+  </header>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="nav-inner">
+      <div class="container">
+        <a class="brand" href="/">&nbsp;&nbsp;VECNet</a>
+        <%= render :partial => 'shared/user_util_links', :formats => [:html] %>
+      </div>
+    </div>
+  </div>
+
+
+  <%= render 'shared/flash_message' %>
+
+  <div id="main" role="main" class="container <%= yield(:page_class) if content_for?(:page_class)%>">
+    <% if content_for?(:page_header) %>
+      <div class="row">
+        <div class="span12 main-header">
+          <%= yield(:page_header) %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= content_for?(:main) ? yield(:main) : yield %>
+  </div>
+
+  <%= render '/footer' %>
+
+<% end %>
+
+<%= render :template => 'layouts/boilerplate' %>
