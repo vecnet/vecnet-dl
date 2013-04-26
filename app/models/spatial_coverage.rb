@@ -5,45 +5,17 @@ module SpatialCoverage
   extend ActiveSupport::Concern
 
   included do
-    before_save :format_spatials_from_lat_long , :if => lambda{ |object| object.latitude.present? && object.longitude.present? }
+    before_save :format_spatials_from_lat_long
     attr_accessor :longitude, :latitude, :start_time, :end_time
-    #validate :valid_spatial_data?
-  end
-
-  VALIDATIONS = [
-      { :key => :spatials,
-        :message => 'Invalid Spatial data, Latitude and Longitude must be of same',
-        :condition => lambda{ |gf| if (gf.longitude.present? && gf.latitude.present?)
-                                     gf.latitude.length.eql?(gf.longitude.length)
-                                   end
-                            }
-      },
-      {:key => :temporals,
-       :message => 'Invalid Temporal data, Start time and End time must be of same length',
-       :condition => lambda{ |gf| if (gf.start_time.present? && gf.end_time.present?)
-                                    gf.start_time.length.eql?(gf.end_time.length)
-                                  end
-       }}
-  ]
-
-  def data_validation(validation_hash)
-    valid = true
-    if !validation_hash[:condition].call(self)
-      self.errors[validation_hash[:key]] ||= []
-      self.errors[validation_hash[:key]] << validation_hash[:message]
-      valid = false
-    end
-    return valid
+    validates_with SpatialValidator
   end
 
   def valid_spatial_data?
-    #return data_validation(VALIDATIONS.first)
-    return true
+    return !latitude.blank? && !longitude.blank? && self.valid?
   end
 
-
-  def temporal_data
-    return data_validation(VALIDATIONS.last)
+  def valid_temporal_data?
+    return !start_time.blank? && !end_time.blank? && self.valid?
   end
 
   def format_spatials_from_lat_long
@@ -57,7 +29,7 @@ module SpatialCoverage
   end
 
   def format_temporals_from_start_end_time
-    if start_time.present? && end_time.present?
+    if valid_temporal_data?
       temp=[]
       start_time.each_with_index do |start_time, i|
         temp<< Temporal.new(start_time, end_time[i]).encode_dcsv
