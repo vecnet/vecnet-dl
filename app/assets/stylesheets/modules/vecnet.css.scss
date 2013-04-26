@@ -69,3 +69,18 @@ jumbotron:after {
 .flash-message {
   padding-top: 2em
 }
+
+.spatial_value {
+  .field-wrapper {
+    list-style-type:none;
+  }
+
+  .listing {
+    margin-left:0;
+  }
+
+  .field-controls span {
+    margin-left:.2em;
+  }
+}
+

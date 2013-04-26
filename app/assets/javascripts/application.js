@@ -36,6 +36,7 @@ $(function(){
   $('abbr').tooltip();
 
   $('.multi_value.control-group').manage_fields();
+  $('.spatial_value.control-group').manage_fields();
 
   $('#based_near').autocomplete(get_autocomplete_opts("location"))
   $('#based_near_add').autocomplete(get_autocomplete_opts("location"))
