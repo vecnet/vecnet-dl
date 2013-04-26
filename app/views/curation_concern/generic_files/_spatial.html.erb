@@ -1,35 +1,35 @@
+<%existing_latitude=[]%>
+<% existing_longitude=[]  %>
+<% unless curation_concern.spatials.empty?  %>
+  <% curation_concern.spatials.each do |spatial| %>
+    <% existing_latitude << spatial.latitude %>
+    <% existing_longitude << spatial.longitude %>
+  <% end %>
+<% end %>
+<%latitude= (curation_concern.latitude.blank? ? [] : curation_concern.latitude)|existing_latitude%>
+<%longitude= (curation_concern.longitude.blank? ? []:curation_concern.longitude) | existing_longitude%>
 
-<div class="row">
-  <div class="span6">
-    <div class="control-group multi_value optional generic_file_spatials managed">
-      <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
-      <div class="controls">
-        <ul class="listing">
-          <% unless curation_concern.spatials.empty?  %>
-            <% curation_concern.spatials.each do |spatial| %>
-              <li class="field-wrapper input-append">
-                <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                                 :id => "generic_file_latitude", :value=>spatial.latitude, :class => "input-small",
-                                 :placeholder=>"latitude" %>
+<div class="control-group multi_value optional generic_file_spatials managed">
+  <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
+  <div class="controls">
+    <ul class="listing">
+      <% latitude.each_with_index do |lat,index| %>
+        <li class="field-wrapper input-append">
+          <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
+                           :id => "generic_file_latitude",  :class => "input-small input", :value=>lat,
+                           :placeholder=>"latitude"%>
+          <%= f.error :latitude, :id => "latitude_error" %>
 
-                <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                                 :id => "generic_file_longitude", :value=>spatial.longitude,
-                                 :class => "input-small", :placeholder=>"longitude" %>
-              </li>
-            <% end %>
-          <% end %>
-          <li class="field-wrapper input-append">
-            <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                             :id => "generic_file_latitude", :value=>"", :class => "input-small",
-                             :placeholder=>"latitude" %>
+          <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
+                           :id => "generic_file_longitude",:value=>longitude[index],
+                           :class => "input-small", :placeholder=>"longitude"%>
+          <%= f.error :longitude, :id => "longitude_error" %>
 
-            <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                             :id => "generic_file_longitude", :value=>"",
-                             :class => "input-small", :placeholder=>"longitude" %>
-          </li>
-        </ul>
-      </div>
-    </div>
+        </li>
+      <% end %>
+    </ul>
+    <%= f.error :spatials, :id => "spatials_error", :class=>"help-inline", :style=>"color:#B94A48" %>
   </div>
 </div>
+
 
