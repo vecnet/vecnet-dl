@@ -10,6 +10,9 @@ class GenericFile
   validates :batch, presence: true
   validates :file, presence: true, on: :create
 
+  validates :title, presence: true
+  validates :tag, presence: true
+
   attr_accessor :file, :version, :visibility
 
   def spatials
