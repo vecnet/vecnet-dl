@@ -1,14 +1,6 @@
-<%existing_latitude=[]%>
-<% existing_longitude=[]  %>
-<% unless curation_concern.spatials.empty?  %>
-  <% curation_concern.spatials.each do |spatial| %>
-    <% existing_latitude << spatial.latitude %>
-    <% existing_longitude << spatial.longitude %>
-  <% end %>
-<% end %>
-<%latitude= (curation_concern.latitude.blank? ? [] : curation_concern.latitude)|existing_latitude%>
-<%longitude= (curation_concern.longitude.blank? ? []:curation_concern.longitude) | existing_longitude%>
-
+<%spatial_data=get_spatial_data(curation_concern)%>
+<%latitude= spatial_data[:latitude]%>
+<%longitude= spatial_data[:longitude]%>
 <div class="control-group multi_value optional generic_file_spatials managed">
   <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
   <div class="controls">
