@@ -35,6 +35,8 @@ CurateNd::Application.routes.draw do
   match 'users/:uid/edit' => 'users#edit', :as => :edit_profile, :via => :get
   match 'users/:uid/update' => 'users#update', :as => :update_profile, :via => :put
 
+  match "catalog/recent" => "catalog#recent", :as => :catalog_recent
+
 
   namespace :curation_concern, path: :concern do
     resources :senior_theses, except: :index
@@ -58,6 +60,6 @@ CurateNd::Application.routes.draw do
   resources :classify_concerns, only: [:new, :create]
   match "show/:id" => "common_objects#show", via: :get, as: "common_object"
   match "show/stub/:id" => "common_objects#show_stub_information", via: :get, as: "common_object_stub_information"
-  root to: 'welcome#index'
+  root to: 'catalog#index'
 
 end
