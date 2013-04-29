@@ -27,30 +27,33 @@
       <fieldset class="required">
         <legend>Required Information</legend>
 
-        <%= f.input :title,
+        <%= f.input :title, hint: help_icon('title'),
                     input_html: { class: 'input-xlarge' }
         %>
-        <%= f.input :resource_type do %>
-          <%= f.select "resource_type", options_for_select(Sufia::Engine.config.resource_types.keys, curation_concern.resource_type.to_a),
-                                        {}, {:multiple=>true, :size=>7} %>
-        <% end %>
-        <%= f.input :creator,        label:'Creator', as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :tag,            label:'Keyword', as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :rights do %>
-          <%= f.select "rights", options_for_select(Sufia::Engine::config.cc_licenses, Sufia::Engine::config.cc_licenses.values.last),
-                                 {}, {:multiple=>true, :size=>7, :required => true} %>
-        <% end %>
-
-        </fieldset>
+        <%= f.input :resource_type, :collection => Sufia::Engine.config.resource_types.keys, :input_html => { :size=>7, :multiple => true }%>
+        <%= f.input :creator,        label:'Creator',  hint: help_icon('creator'), as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :tag,            label:'Keyword',  hint: help_icon('tag'),  as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :rights,         collection: Sufia::Engine.config.cc_licenses, hint: help_icon('rights'), :input_html => { :size=>7, :multiple => true }%>
+      </fieldset>
     </div>
 
     <div class="span6">
       <fieldset class="optional prompt">
         <legend>Additional Information</legend>
-        <%= f.input :subject,              label:'Subject',  as: :multi_value, input_html: { class: 'input-xlarge' }%>
-        <%= f.input :based_near,           label:'Location Name',  as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :contributor,          label:'Contributor', as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :language,             label:'Language', as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :description,
+                    as: :text,
+                    hint: 'Place help text in here',
+                    input_html: {
+                            class: 'input-xxxlarge',
+                            rows: '14'
+                    },
+                    label: 'Abstract/Summary',
+                    hint: help_icon('description')
+        %>
+        <%= f.input :subject,              hint: help_icon('subject'), label:'Subject',  as: :multi_value, input_html: { class: 'input-xlarge' }%>
+        <%= f.input :based_near,           hint: help_icon('based_near'), label:'Location Name',  as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :contributor,          hint: help_icon('contributor'), label:'Contributor', as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :language,             hint: help_icon('language'), label:'Language', as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= render "spatial", curation_concern: curation_concern, f: f %>
       </fieldset>
     </div>
