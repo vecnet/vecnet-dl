@@ -1,0 +1,4 @@
+<%- height = 42 if height.blank? -%>
+<%- width = 36 if width.blank? -%>
+<% gf = ActiveFedora::Base.find(document.id, cast: true) %>
+<%= link_to image_tag("/assets/default.png", {:width=>width,:height=>height}), polymorphic_path([:curation_concern, gf]) %>
