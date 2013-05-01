@@ -4,7 +4,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.wrapper :tag => 'label', :class => 'string control-label' do |bb|
-      bb.use :label_text
+      bb.use :label
       bb.use :hint,  :wrap_with => { :tag => 'span', :class => 'help-inline' }
     end
     b.wrapper :tag => 'div', :class => 'controls' do |ba|
