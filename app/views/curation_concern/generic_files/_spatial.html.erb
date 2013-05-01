@@ -2,20 +2,20 @@
 <%latitude= spatial_data[:latitude]%>
 <%longitude= spatial_data[:longitude]%>
 <div class="control-group multi_value optional generic_file_spatials managed">
-  <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
+  <%= f.label :spatials%>
+  <%= f.hint help_icon(:spatials)%>
   <div class="controls">
     <ul class="listing">
       <% latitude.each_with_index do |lat,index| %>
         <li class="field-wrapper input-append">
-          <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                           :id => "generic_file_latitude",  :class => "input-small input", :value=>lat,
-                           :placeholder=>"latitude"%>
-          <%= f.error :latitude, :id => "latitude_error" %>
+          <%= f.text_field :latitude, name:"generic_file[latitude][]", class:"input-small input", value:lat,
+                           placeholder:"latitude"%>
+          <%= f.error :latitude %>
 
-          <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                           :id => "generic_file_longitude",:value=>longitude[index],
-                           :class => "input-small", :placeholder=>"longitude"%>
-          <%= f.error :longitude, :id => "longitude_error" %>
+          <%= f.text_field :longitude, name:"generic_file[longitude][]",
+                           id:"generic_file_longitude",value:longitude[index],
+                           class:"input-small", placeholder:"longitude"%>
+          <%= f.error :longitude%>
 
         </li>
       <% end %>
