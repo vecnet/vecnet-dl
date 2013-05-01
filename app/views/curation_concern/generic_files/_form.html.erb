@@ -41,19 +41,19 @@
       <fieldset class="optional prompt">
         <legend>Additional Information</legend>
         <%= f.input :description,
-                    as: :text,
-                    hint: 'Place help text in here',
                     input_html: {
                             class: 'input-xxxlarge',
-                            rows: '14'
+                            rows: '9'
                     },
-                    label: 'Abstract/Summary',
+                    as: :multi_value,
+                    input_type: :textarea,
+                    label: get_label('description'),
                     hint: help_icon('description')
         %>
-        <%= f.input :subject,              hint: help_icon('subject'), label:'Subject',  as: :multi_value, input_html: { class: 'input-xlarge' }%>
-        <%= f.input :based_near,           hint: help_icon('based_near'), label:'Location Name',  as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :contributor,          hint: help_icon('contributor'), label:'Contributor', as: :multi_value, input_html: { class: 'input-xlarge' } %>
-        <%= f.input :language,             hint: help_icon('language'), label:'Language', as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :subject,              hint: help_icon('subject'), label:get_label(:subject),  as: :multi_value, input_html: { class: 'input-xlarge' }%>
+        <%= f.input :based_near,           hint: help_icon('based_near'), label:get_label(:based_near),  as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :contributor,          hint: help_icon('contributor'), labe:get_label(:contributor), as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :language,             hint: help_icon('language'), label:get_label(:language), as: :multi_value, input_html: { class: 'input-xlarge' } %>
         <%= render "spatial", curation_concern: curation_concern, f: f %>
       </fieldset>
     </div>

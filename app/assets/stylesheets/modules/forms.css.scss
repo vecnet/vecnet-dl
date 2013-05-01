@@ -37,3 +37,22 @@ legend small {
 .form-actions .btn-link {
   color: $blue;
 }
+
+.control-label {
+  display: inline;
+  label { display: inline; }
+}
+
+.control-label.required {
+  abbr {
+    font-size: 1.25em;
+    font-weight: bold;
+  }
+}
+
+.control-group input.inline {
+  display: inline-block;
+}
+.icon-large {
+  font-size: 1.3333em;
+}
