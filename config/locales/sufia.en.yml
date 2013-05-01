@@ -20,6 +20,8 @@ en:
       tag:               "Keyword"
       date_created:      "Date Created"
       related_url:       "Related URL"
+      spatials:          "Location coordinate"
+      temporals:         "Time Period"
 
     metadata_help:
       resource_type: "Pre-defined categories to describe the type of file content being uploaded, such as \"article\" or \"dataset.\"  More than one type may be selected."
@@ -36,4 +38,5 @@ en:
       language: " The language of the file content."
       publisher: "The person or group making the file available. Generally this is the University of Notre Dame or the Notre Dame Libraries."
       rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list. <em>This is a required field</em>."
-      spatials: "help text"
+      spatials: "spatial help text"
+      temporals: "temporal help text"
