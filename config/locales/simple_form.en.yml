@@ -1,4 +1,6 @@
 en:
+
+
   simple_form:
     "yes": 'Yes'
     "no": 'No'
@@ -23,4 +25,11 @@ en:
     #   defaults:
     #     username: 'User name to sign in.'
     #     password: 'No special characters, please.'
+  helpers:
+      submit:
+        generic_file:
+          create: "Add %{model}"
+          update: "Save Description"
+
+
 
