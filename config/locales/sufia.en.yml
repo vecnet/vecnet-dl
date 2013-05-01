@@ -36,3 +36,4 @@ en:
       language: " The language of the file content."
       publisher: "The person or group making the file available. Generally this is the University of Notre Dame or the Notre Dame Libraries."
       rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list. <em>This is a required field</em>."
+      spatials: "help text"
