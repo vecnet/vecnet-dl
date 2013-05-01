@@ -1,37 +1,37 @@
-    <div class="control-group multi_value optional generic_file_spatials managed">
-      <label id="generic_file_spaitials_label" class="string multi_value optional control-label">Spatials</label>
-      <div class="controls">
-        <ul class="listing">
-          <% unless curation_concern.spatials.empty?  %>
-            <% curation_concern.spatials.each do |spatial| %>
-              <li class="field-wrapper input-append">
-                <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                                 :id => "generic_file_latitude", :value=>spatial.latitude, :class => "input-small input",
-                                 :placeholder=>"latitude" %>
+<%temporal_data=get_temporal_data(curation_concern)%>
+<%start_time= temporal_data[:start_time]%>
+<%end_time= temporal_data[:end_time]%>
+<div class="control-group multi_value optional generic_file_temporals managed">
+  <%= f.label get_label(:temporals) %>
+  <%= f.hint help_icon(:temporals)%>
+  <div class="controls">
+    <ul class="listing">
+      <% start_time.each_with_index do |start,index| %>
+        <li class="field-wrapper input-append">
+          <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input", value:start,
+                           placeholder:"start_time"%>
+          <%= f.error :start_time %>
 
-                <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                                 :id => "generic_file_longitude", :value=>spatial.longitude,
-                                 :class => "input-small input", :placeholder=>"longitude" %>
-              </li>
-            <% end %>
-          <% end %>
-          <li class="field-wrapper input-append">
-            <%latitude= curation_concern.latitude.blank? ? "" : curation_concern.latitude[curation_concern.spatials.size]%>
-            <%longitude= curation_concern.longitude.blank? ? "":curation_concern.longitude[curation_concern.spatials.size]%>
-            <%= f.text_field :latitude, :name=>"generic_file[latitude][]",
-                             :id => "generic_file_latitude",  :class => "input-small input", :value=>latitude,
-                             :placeholder=>"latitude"%>
-            <%= f.error :latitude, :id => "latitude_error" %>
+          <%= f.text_field :end_time, name:"generic_file[end_time][]",
+                           id:"generic_file_end_time",value:end_time[index],
+                           class:"input-small", placeholder:"end_time"%>
+          <%= f.error :end_time%>
 
-            <%= f.text_field :longitude, :name=>"generic_file[longitude][]",
-                             :id => "generic_file_longitude",:value=>longitude,
-                             :class => "input-small", :placeholder=>"longitude"%>
-            <%= f.error :longitude, :id => "longitude_error" %>
+        </li>
+      <% end %>
+      <li class="field-wrapper input-append">
+        <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input", value:"",
+                       placeholder:"start_time"%>
+        <%= f.error :start_time %>
 
-          </li>
-        </ul>
-        <%= f.error :spatials, :id => "spatials_error", :class=>"help-inline", :style=>"color:#B94A48" %>
-      </div>
-    </div>
+        <%= f.text_field :end_time, name:"generic_file[end_time][]",
+                         id:"generic_file_end_time",value:"",
+                         class:"input-small", placeholder:"end_time"%>
+        <%= f.error :end_time%>
+      </li>
+    </ul>
+    <%= f.error :temporals, :id => "temporals_error", :class=>"help-inline", :style=>"color:#B94A48" %>
+  </div>
+</div>
 
 

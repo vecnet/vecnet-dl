@@ -55,7 +55,7 @@ class Temporal
 
   def self.parse_temporal(temporal_rdf)
     temp=Temporal.decode(temporal_rdf)
-    return Temporal.new(temp[:start],temp[:end])
+    return Temporal.new(temp['start'],temp['end'])
   end
 
   def to_s

@@ -1,31 +1,25 @@
 class TemporalValidator < ActiveModel::Validator
 
   def validate(record)
-
-    if nothing_present?(record.start_time,record.end_time)
-      puts "no coordinates and everything good"
-    elsif both_present?(record.start_time,record.end_time)
-      puts "Both present Lat:#{record.start_time.inspect} long:#{record.end_time.inspect}"
+    if both_present?(record.start_time,record.end_time)
       begin
-        unless record.start_time.length.eql?(record.end_time.length)
-          record.errors[:base] << "Invalid Spatial Data, Latitude and Longitude must be of same length"
+        start_time=record.start_time.is_a?(Array) ? record.start_time : record.start_time.to_s.split()
+        end_time=record.end_time.is_a?(Array) ? record.end_time : record.end_time.to_s.split()
+        unless start_time.length.eql?(end_time.length)
+          record.errors[:temporal] << "Invalid Time period Data, start_time and end time must be of same length"
         end
       rescue NoMethodError
-        record.errors[:base] << "Invalid Spatial Data"
+        record.errors[:temporal] << "Invalid Time period Data"
       end
-    else
-      puts "Only one available: Long- #{record.end_time}, Lat- #{record.start_time}"
-      record.errors[:start_time] << "Invalid Spatial Data. start_time is blank" if record.start_time.blank?
-      record.errors[:end_time] << "Invalid Spatial Data. end_time is blank" if record.end_time.blank?
     end
   end
 
   def both_present?(start_time, end_time)
-    !start_time.blank? && !end_time.blank?
+    !start_time.nil? && !end_time.nil?
   end
 
   def nothing_present?(start_time, end_time)
-    (start_time.blank?) && (end_time.blank?)
+    (start_time.nil?) && (end_time.nil?)
   end
 
 end

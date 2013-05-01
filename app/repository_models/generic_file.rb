@@ -10,8 +10,8 @@ class GenericFile
   validates :batch, presence: true
   validates :file, presence: true, on: :create
 
-  validates :title, presence: true
-  validates :tag, presence: true
+  #validates :title, presence: true
+  #validates :tag, presence: true
 
   attr_accessor :file, :version, :visibility
 
@@ -20,16 +20,15 @@ class GenericFile
   end
 
   def temporals
-     puts "get temporals decode them"
-     temporals= self.datastreams["descMetadata"].temporals.collect.each{ |temporal| Temporal.decode(temporal) }
-     puts "Temporals: #{temporals.inspect}"
-     temp=[]
-     temporals.each{ |temporal_hash| temp<<Temporal.new(temporal_hash["start"],temporal_hash["end"])}
-     return temp
+    return Array(self.datastreams["descMetadata"].temporals).collect{|temporal| Temporal.parse_temporal(temporal)}
   end
 
   def spatials=(formated_str)
       self.datastreams["descMetadata"].spatials=formated_str
+  end
+
+  def temporals=(formated_str)
+    self.datastreams["descMetadata"].temporals=formated_str
   end
 
   def filename

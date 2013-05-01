@@ -5,9 +5,10 @@ module SpatialCoverage
   extend ActiveSupport::Concern
 
   included do
-    before_save :format_spatials_from_lat_long
+    before_save :format_spatials_from_lat_long, :format_temporals_from_start_end_time
     attr_accessor :longitude, :latitude, :start_time, :end_time
     validates_with SpatialValidator
+    validates_with TemporalValidator
   end
 
   def valid_spatial_data?
@@ -15,7 +16,7 @@ module SpatialCoverage
   end
 
   def valid_temporal_data?
-    return !start_time.blank? && !end_time.blank? && self.valid?
+    return !start_time.nil? && !end_time.nil? && self.valid?
   end
 
   def format_spatials_from_lat_long
@@ -29,14 +30,13 @@ module SpatialCoverage
   end
 
   def format_temporals_from_start_end_time
+    temp=[]
     if valid_temporal_data?
-      temp=[]
       start_time.each_with_index do |start_time, i|
         temp<< Temporal.new(start_time, end_time[i]).encode_dcsv
       end
-      self.temporals=temp
-      return temp
     end
+    self.temporals=temp
   end
 
 end
