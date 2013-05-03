@@ -1,5 +1,5 @@
 class CurationConcern::GenericFilesController < CurationConcern::BaseController
-  respond_to(:html)
+  respond_to(:html, :json)
 
   before_filter :parent
   before_filter :curation_concern
@@ -30,7 +30,9 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   end
 
   def new
-    respond_with(curation_concern)
+    respond_with(curation_concern){ |wants|
+      wants.html {}
+    }
   end
 
   def create

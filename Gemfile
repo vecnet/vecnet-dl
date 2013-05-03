@@ -28,6 +28,7 @@ group :default do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
   gem 'method_decorators'
+  gem 'rabl'
 end
 
 group :headless do
