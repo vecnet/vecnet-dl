@@ -24,6 +24,11 @@ limitations under the License.
 <% end %>
 
 <div id="permissions_display">
+  <p class="pull-right">
+    <!-- Button to trigger modal -->
+    <a href="#myModal" role="button" class="btn btn-warning" data-toggle="modal">What's this <i class="icon-question-sign icon-large"></i></a>
+  </p>
+  <%= render :partial => "permission_modal"%>
   <fieldset class="control-group">
     <legend>
       Access Rights
