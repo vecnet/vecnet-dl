@@ -15,6 +15,9 @@
 class UsersController < ApplicationController
   prepend_before_filter :find_user, :except => [:index, :search, :notifications_number]
   before_filter :authenticate_user!, only: [:edit, :update]
+
+  with_themed_layout '1_column'
+
   def index
     sort_val = get_sort
     query = params[:uq].blank? ? nil : "%"+params[:uq].downcase+"%"
