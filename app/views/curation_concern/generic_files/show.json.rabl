@@ -25,15 +25,3 @@ node(:charactization) do
   result
 
 end
-
-node(:user_name) do
-  if current_user?
-    current_user.to_s
-  end
-end
-
-#node(:charactization) do
-#  data= [:mime_type, :format_label,:file_size,:original_checksum, :filename].map.each {|term|
-#          {term=> curation_concern.send(term)}}
-#  data.keep_if{|term| term.values.first.present?}
-#end
