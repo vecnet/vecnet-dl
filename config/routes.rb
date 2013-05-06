@@ -9,6 +9,10 @@ CurateNd::Application.routes.draw do
     end
   end
 
+  namespace :curation_concern, path: :concern do
+    resources :collections
+  end
+
   # User profile & follows
   match 'users' => 'users#index', :as => :profiles, :via => :get
   match 'users/:uid' => 'users#show', :as => :profile, :via => :get
