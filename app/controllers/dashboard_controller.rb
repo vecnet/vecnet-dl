@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
   include BlacklightAdvancedSearch::ParseBasicQ
   include BlacklightAdvancedSearch::Controller
 
-  layout 'curate_nd/dashboard'
+  with_themed_layout 'dashboard'
 
   # This is needed as of BL 3.7
   self.copy_blacklight_config_from(CatalogController)

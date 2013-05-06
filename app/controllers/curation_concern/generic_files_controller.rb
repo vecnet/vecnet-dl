@@ -1,4 +1,5 @@
 class CurationConcern::GenericFilesController < CurationConcern::BaseController
+
   respond_to(:html, :json)
 
   before_filter :parent

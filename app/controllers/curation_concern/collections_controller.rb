@@ -1,6 +1,5 @@
 class CurationConcern::CollectionsController < CurationConcern::BaseController
   respond_to(:html)
-  layout 'curate_nd/1_column'
 
   def curation_concern
     @curation_concern ||=
