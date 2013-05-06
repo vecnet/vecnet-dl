@@ -1,19 +1,8 @@
-require_relative '../repository_datastreams/generic_file_rdf_datastream'
-require_relative '../repository_datastreams/file_content_datastream.rb'
-require Sufia::Engine.root.join('app/models/generic_file')
+require File.expand_path("../../repository_datastreams/generic_file_rdf_datastream", __FILE__)
+require Curate::Engine.root.join('app/repository_models/generic_file')
 class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
-
-  belongs_to :batch, property: :is_part_of, class_name: 'ActiveFedora::Base'
-
-  validates :batch, presence: true
-  validates :file, presence: true, on: :create
-
-  #validates :title, presence: true
-  #validates :tag, presence: true
-
-  attr_accessor :file, :version, :visibility
 
   def spatials
      return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
