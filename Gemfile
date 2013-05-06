@@ -8,6 +8,7 @@ group :default do
   gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   #gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'sufia', path: '../../sufia'
+  gem 'curate', path: '../../curate'
   gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
   gem 'jettywrapper'
