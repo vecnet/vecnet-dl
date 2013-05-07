@@ -14,12 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 %>
 
+<h1 class="span110">
+    <span class="span60">
+    <%= @user.name %> (<%= @user.user_key %>)
+    </span>
 
-<% content_for :page_header do %>
-  <h1><%= @user.name %> (<%= @user.user_key %>)</h1>
-<% end %>
-
-
+    <span class="span20 offset20">
+      <% if current_user%>
+        <%= link_to raw('<i class="icon-edit"></i> Edit Your Profile'), edit_profile_path(current_user), :class => "btn btn-primary"   %>
+      <% end %>
+    </span>
+</h1>
 <dl>
   <dt><i class="icon-calendar"></i> Active Since</dt>
   <dd><%= @user.created_at.to_date.to_formatted_s(:long_ordinal) %></dd>
@@ -27,14 +32,10 @@ limitations under the License.
   <dd><%= link_to_field('depositor', @user.to_s, GenericFile.find(:depositor_t => @user.to_s).count) %></dd>
 </dl>
 
+<hr />
 
-<h4>User Info</h4>
+<h2>User Info</h2>
+<div class="span44">
   <%= render :partial => 'user_info', :locals => {:user => @user} %>
-
-
-<% if current_user %>
-  <div class="form-actions">
-    <%= link_to raw('<i class="icon-edit"></i> Edit Your Profile'), edit_profile_path(current_user), :class => "btn btn-primary"   %>
-  </div>
-<% end %>
+</div><!-- close span44 -->
 
