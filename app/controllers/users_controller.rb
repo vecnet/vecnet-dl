@@ -24,12 +24,17 @@ class UsersController < ApplicationController
     if query.blank?
       @users = User.order(sort_val).page(params[:page]).per(10) if query.blank? 
     else
-      @users = User.where("(login like lower(?) OR display_name like lower(?))",query,query).order(sort_val).page(params[:page]).per(10)
+      @users = User.where("(email like lower(?) OR username like lower(?))",query,query).order(sort_val).page(params[:page]).per(10)
     end
   end
 
   # Display user profile
   def show
+    if @user.respond_to? :profile_events
+      @events = @user.profile_events(100)
+    else
+      @events = []
+    end
 
   end
 
@@ -59,8 +64,8 @@ class UsersController < ApplicationController
   def get_sort
     sort = params[:sort].blank? ? "name" : params[:sort]
     sort_val = case sort
-           when "name"  then "display_name"
-           when "name desc"   then "display_name DESC"
+           when "name"  then "username"
+           when "name desc"   then "username DESC"
            else sort
            end
     return sort_val
