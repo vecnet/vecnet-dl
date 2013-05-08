@@ -1,47 +1,6 @@
 <table class="table table-striped <%= dom_class(curation_concern) %> attributes">
   <tbody>
     <tr>
-      <th>Title</th>
-      <td><%= curation_concern %></td>
-    </tr>
-    <tr>
-      <th>Filename</th>
-      <td><%= curation_concern.filename %></td>
-    </tr>
-    <tr>
-      <th>Depositor</th>
-      <td><%= curation_concern.depositor %></td>
-    </tr>
-    <tr>
-      <th>Date Uploaded</th>
-      <td>
-        <%= curation_concern.date_uploaded %>
-      </td>
-    </tr>
-    <tr>
-      <th>Date Modified</th>
-      <td>
-        <%= curation_concern.date_modified %>
-      </td>
-    </tr>
-    <tr>
-      <th>Spatials Details</th>
-      <td>
-        <% curation_concern.spatials.each do |spatial| %>
-          <div>
-            <%= "Latitude: #{spatial.latitude};" %>
-            <%= "Longitude: #{spatial.longitude}" %>
-            <%= "<br />".html_safe %>
-          </div>
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <th>Audit Status</th>
-      <%- #stat= curation_concern.audit_stat(false)  %>
-      <td> <%# (stat == 1 ? 'passing' : (stat == 0 ? 'failing' : stat)) %></td>
-    </tr>
-    <tr>
       <th>Characterization</th>
       <td>
         <%= "not yet characterized" if curation_concern.characterization_terms.values.flatten.map(&:empty?).reduce(true) { |sum, value| sum && value } %>

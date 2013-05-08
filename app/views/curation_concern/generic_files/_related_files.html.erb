@@ -1,6 +1,4 @@
-<%- generic_files_are_editable = can?(:edit, curation_concern) -%>
 <table class="table table-striped <%= dom_class(curation_concern) %> related_files">
-  <caption><h2>Related Files</h2></caption>
   <thead>
   <tr>
     <th>Related File</th>
@@ -18,9 +16,8 @@
       <td class="attribute date_uploaded"><%= generic_file.date_uploaded %></td>
       <td class="attribute permission"><%= link_to_edit_permissions(generic_file) %></td>
       <td>
-        <%- if generic_files_are_editable -%>
-          <%= link_to 'Edit This File', edit_polymorphic_path([:curation_concern, generic_file]), class: 'btn' %>
-        <%- end -%>
+        <%= link_to 'Edit This File', edit_polymorphic_path([:curation_concern, generic_file]), class: 'btn' if can?(:edit, generic_file) %>
+        <%= render '/curation_concern/media_display', generic_file: generic_file if can?(:read, curation_concern)%>
       </td>
     </tr>
   <% end %>

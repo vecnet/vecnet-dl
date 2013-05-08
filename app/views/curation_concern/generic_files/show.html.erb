@@ -1,17 +1,44 @@
 <% content_for :page_title, curation_concern_page_title(curation_concern) %>
 <% content_for :page_header do %>
-  <h1>File Details</h1>
+  <h1><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h1>
 <% end %>
+
+<caption class="table-heading">
+  <h2>Description</h2>
+</caption>
+<dl class="<%= dom_class(curation_concern) %> attributes">
+  <%= curation_concern_attribute_to_html(curation_concern, :title, "Title") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :depositor, "Depositor") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :latitude, "Latitude") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :longitude, "Longitude") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :temporals, "Temporals") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :description, 'Abstract') %>
+  <%= curation_concern_attribute_to_html(curation_concern, :contributor, "Contributor") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Subject") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :publisher, "Publisher") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :language, "Language") %>
+  <dt>Access Rights</dt>
+  <dd class="attribute permission"><%= link_to_edit_permissions(curation_concern) %></dd>
+</dl>
+<caption class="table-heading">
+  <h2>Files Details</h2>
+</caption>
 
 <%= render "attributes", curation_concern: curation_concern %>
 
 <% unless curation_concern.related_files.empty? %>
+  <caption class="table-heading">
+    <h2>Related Files</h2>
+  </caption>
   <%= render "related_files", curation_concern: curation_concern %>
 <% end %>
 
-<% if can? :edit, curation_concern %>
-  <div class="form-actions">
-    <%= link_to "Edit This File", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
-    <%= link_to "Add file to this collection", new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn btn-primary' %>
-  </div>
-<% end %>
+
+<div class="form-actions">
+  <% if can? :edit, curation_concern %>
+    <%= link_to "Edit #{curation_concern}", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
+    <%= link_to "Add file to this collection", new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn' %>
+  <% end %>
+  <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
+</div>
+
