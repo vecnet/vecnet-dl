@@ -5,21 +5,21 @@
       <a class="close" data-dismiss="alert" href="#">&times;</a>
     </div>
   <% end -%>
-  <% if !curation_concern.persisted? %>
-    <div class="row">
-      <div class="span6">
-        <fieldset class="required">
-          <legend>
-            Attach Your Work
-          </legend>
-          <%= f.input :file,
-                      as: :file,
-                      label: 'Upload your work'
-          %>
-        </fieldset>
-      </div>
+
+  <div class="row">
+    <div class="span6">
+      <fieldset class="required">
+        <legend>
+         Upload a File
+        </legend>
+        <%= f.input :file,
+                    as: :file,
+                    label: 'Upload a file'
+        %>
+      </fieldset>
     </div>
-  <% end %>
+  </div>
+
 
   <div class="row">
 
@@ -71,7 +71,7 @@
 
   <div class="row">
     <div class="span12 form-actions">
-      <%= f.submit class: 'btn btn-primary' %>
+      <%= f.submit ('Save', class: 'btn btn-primary') %>
       <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
     </div>
   </div>
