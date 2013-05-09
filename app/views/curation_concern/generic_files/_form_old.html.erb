@@ -1,0 +1,79 @@
+<%= simple_form_for [:curation_concern, curation_concern], as: :generic_file do |f| %>
+  <% if f.error_notification -%>
+    <div class="alert alert-error fade in">
+      <strong>Wait don't go!</strong> There was a problem with your submission. Please review the errors below:
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+    </div>
+  <% end -%>
+
+  <div class="row">
+    <div class="span6">
+      <fieldset class="required">
+        <legend>
+         Upload a File
+        </legend>
+        <%= f.input :file,
+                    as: :file,
+                    label: 'Upload a file'
+        %>
+      </fieldset>
+    </div>
+  </div>
+
+
+  <div class="row">
+
+    <div class="span6">
+      <fieldset class="required">
+        <legend>Required Information</legend>
+
+        <%= f.input :title, hint: help_icon('title'),
+                    input_html: { class: 'input-xlarge' }
+        %>
+        <%= f.input :resource_type, :collection => Sufia::Engine.config.resource_types.keys, :input_html => { :size=>7, :multiple => true }%>
+        <%= f.input :creator,        label:'Creator',  hint: help_icon('creator'), as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :tag,            label:'Keyword',  hint: help_icon('tag'),  as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :rights,         collection: Sufia::Engine.config.cc_licenses, hint: help_icon('rights'), :input_html => { :size=>7, :multiple => true }%>
+      </fieldset>
+    </div>
+
+    <div class="span6">
+      <fieldset class="optional prompt">
+        <legend>Additional Information</legend>
+        <%= f.input :description,
+                    input_html: {
+                            class: 'input-xxxlarge',
+                            rows: '9'
+                    },
+                    as: :multi_value,
+                    input_type: :textarea,
+                    label: get_label('description'),
+                    hint: help_icon('description')
+        %>
+        <%= f.input :subject,              hint: help_icon('subject'), label:get_label(:subject),  as: :multi_value, input_html: { class: 'input-xlarge' }%>
+        <%= f.input :based_near,           hint: help_icon('based_near'), label:get_label(:based_near),  as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :contributor,          hint: help_icon('contributor'), labe:get_label(:contributor), as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= f.input :language,             hint: help_icon('language'), label:get_label(:language), as: :multi_value, input_html: { class: 'input-xlarge' } %>
+        <%= render "spatial", curation_concern: curation_concern, f: f %>
+        <%= render "temporal", curation_concern: curation_concern, f: f %>
+      </fieldset>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+    <div class="span6">
+      <%= render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="span12 form-actions">
+      <%= f.submit ('Save', class: 'btn btn-primary') %>
+      <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
+    </div>
+  </div>
+
+<% end %>

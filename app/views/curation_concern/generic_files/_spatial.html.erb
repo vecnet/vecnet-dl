@@ -3,7 +3,7 @@
 <%longitude= spatial_data[:longitude]%>
 <div class="control-group multi_value optional generic_file_spatials managed">
   <%= f.label get_label(:spatials)%>
-  <%= f.hint help_icon(:spatials)%>
+  <%= f.hint metadata_help(:spatials)%>
   <div class="controls">
     <ul class="listing">
       <% latitude.each_with_index do |lat,index| %>
