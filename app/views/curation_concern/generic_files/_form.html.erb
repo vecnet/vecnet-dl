@@ -10,14 +10,18 @@
 
     <%= container.pane("Files") do %>
       <fieldset>
-        <legend>
-          Manage your <%= curation_concern.human_readable_type %> files
-          <small>A PDF copy is preferred.</small>
-        </legend>
+        <% if curation_concern.persisted? %>
+          <legend>
+            Upload New Version
+            <small>Upload a new version from your computer.</small>
+          </legend>
+        <% else %>
+        <% end %>
+
         <%= f.input :files,
                     as: :file,
                     label: "Upload Files",
-                    hint: "CTRL-Click (Windows) or CMD-Click (Mac) to select multiple files.",
+                    hint: "You can roll back to different version in show page",
                     input_html: { multiple: 'multiple'}
         %>
       </fieldset>
@@ -25,16 +29,16 @@
 
     <%= container.pane("Required Information", class: 'required') do %>
       <fieldset class="required">
-        <legend>This is </legend>
+        <legend>These are the required information </legend>
         <%= f.input :title,
-                    label: "Title of your #{curation_concern.human_readable_type}",
+                    label: get_label(:title),
                     hint:metadata_help('title'),
                     input_html: { class: 'input-xxlarge'}
         %>
         <%= f.input :resource_type,
                     :collection => Sufia::Engine.config.resource_types.keys,
                     label:get_label(:resource_type),
-                    hint:metadata_help('title'),
+                    hint:metadata_help('resource_type'),
                     :input_html => { :size=>7, :multiple => true }%>
         <%= f.input :creator,
                     label:get_label(:creator),

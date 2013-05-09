@@ -1,6 +1,6 @@
 <% content_for :page_title, curation_concern_page_title(curation_concern) %>
 <% content_for :page_header do %>
   <%= link_to 'View this file', polymorphic_path([:curation_concern, curation_concern]), class:'btn btn-link' %>
-  <h1>Updating <%= curation_concern %></h1>
+  <h1>Edit <%= curation_concern %></h1>
 <% end %>
 <%= render 'form' %>
