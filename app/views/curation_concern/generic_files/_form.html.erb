@@ -55,11 +55,12 @@
       <fieldset class="optional prompt">
         <legend>Any additional information is optional, but helpful for others looking to find your work.</legend>
         <%= f.input :description,
-                    as: :text,
                     input_html: {
                             class: 'input-xxxlarge',
                             rows: '9'
                     },
+                    as: :multi_value,
+                    input_type: :textarea,
                     label: get_label(:description),
                     hint: metadata_help('description')
         %>
