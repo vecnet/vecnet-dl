@@ -20,6 +20,7 @@ $gray:                  #555 !default;
 $grayLight:             #999 !default;
 $grayLighter:           #eee !default;
 $white:                 #fff !default;
+$grayDarkest:       #666 !default;
 
 
 // Accent colors
@@ -32,6 +33,8 @@ $yellow:                $official-gold;
 $orange:                #f89406 !default;
 $pink:                  #c3325f !default;
 $purple:                #7a43b6 !default;
+$teal:                    #00859C !default;
+$tealDark:             #015E7C !default;
 
 
 // Scaffolding
@@ -42,8 +45,8 @@ $textColor:             $grayDark !default;
 
 // Links
 // -------------------------
-$linkColor:             lighten($blue, 20%);
-$linkColorHover:        darken($linkColor, 15%) !default;
+$linkColor:             $teal !default;
+$linkColorHover:    $tealDark !default;
 
 
 // Typography
@@ -93,8 +96,8 @@ $btnBackground:                     $white !default;
 $btnBackgroundHighlight:            darken($white, 10%) !default;
 $btnBorder:                         #bbb !default;
 
-$btnPrimaryBackground:              #0074CC; // Trying to match brand bar
-$btnPrimaryBackgroundHighlight:     adjust-hue($btnPrimaryBackground, 20%) !default;
+$btnPrimaryBackground:              #5bc0de; // Trying to match brand bar
+$btnPrimaryBackgroundHighlight:     #2f96b4 !default;
 
 $btnInfoBackground:                 #5bc0de !default;
 $btnInfoBackgroundHighlight:        #2f96b4 !default;

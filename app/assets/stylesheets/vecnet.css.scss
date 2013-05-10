@@ -53,14 +53,22 @@ jumbotron:after {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
 
   h1 {
-    font-weight: bold;
-    letter-spacing: -1px;
-    line-height: 1;
-    color: #E5E5E5;
+      font-size: 60px;
+      line-height: 50px;
+      font-weight: 700;
+      margin: 10px 0;
+      letter-spacing: -1px;
+      lcolor: #E5E5E5;
   }
 
   p{
     color: #E5E5E5;
+    .lead{
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 30px;
+        margin-bottom: 20px;
+    }
   }
 }
 #main {
