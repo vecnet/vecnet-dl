@@ -4,6 +4,11 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
 
+  validates :title, presence: { message: 'Your must have a title.' }
+  validates :rights, presence: { message: 'You must select a license for your work.' }
+  validates :creator, presence: { message: "You must have an author."}
+  validates :tag, presence: { message: "You must have a keyword."}
+
   def spatials
      return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
   end

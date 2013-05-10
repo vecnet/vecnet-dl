@@ -9,15 +9,39 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require 'style/fonts'
+ *= require 'global-variables'
+ *= require 'curate'
+ *= require 'vecnet'
  *= require_self
  */
 
-@import 'compass';
-@import 'global-variables';
-@import 'bootstrap';
-@import 'bootstrap-responsive';
-@import 'blacklight/blacklight';
-@import 'layout/positioning';
-@import 'modules';
-@import 'style/theme';
-@import 'style/typography';
+/* Accordion Overrides */
+.accordion-heading {
+  background-color:#f9f9f9; /* $tableBackgroundAccent */
+}
+
+.accordion-heading h3 {
+  margin:0;
+}
+
+/* Inline form fields */
+.control-group.inline input {
+  padding-bottom:.1em;
+  padding-top:.1em;
+  margin-bottom:0;
+}
+
+/* Required field indicator */
+.control-group {
+  margin-left:.7em;
+  position:relative;
+}
+
+.control-label .required-indicator {
+  border-bottom:none;
+  color: #9d261d; /* $red */
+  left:-1.3em;
+  position:absolute;
+  top:0;
+}
+
