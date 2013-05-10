@@ -20,6 +20,9 @@
   <%= render 'shared/flash_message' %>
 
   <div id="main" role="main" class="container <%= yield(:page_class) if content_for?(:page_class)%>">
+    <div id="site-search" class="span4 pull-right">
+      <%= render 'shared/site_search' if show_site_search? %>
+  </div>
     <% if content_for?(:page_header) %>
       <div class="row">
         <div class="span12 main-header">
