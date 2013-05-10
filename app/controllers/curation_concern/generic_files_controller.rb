@@ -76,4 +76,8 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   register :actor do
     CurationConcern.actor(curation_concern, current_user, params[:generic_file])
   end
+  private
+    def show_breadcrumbs?
+      true
+    end
 end
