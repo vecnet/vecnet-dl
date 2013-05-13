@@ -1,0 +1,23 @@
+<% if document.has_key?(:noid_s) %>
+<li>
+  <div class="with-thumbnail">
+    <h5>
+      <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), solr_document_path(document[:noid_s].first) %>
+      <small>[<%= link_to 'Download', download_path(document[:noid_s].first), :target => '_new' %>]</small>
+    </h5>
+    <hr>
+    <div class="thumbnail-container">
+      <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>document, :height=>200, :width=>150} %>
+    </div>
+      <dl class="thumbnail-content list">
+        <% index_fields.each do |solr_fname, field| -%>
+          <% if should_render_index_field? document, field %>
+            <dt class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_label :field => solr_fname %></dt>
+            <dd class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_value :document => document, :field => solr_fname %></dd>
+          <% end -%>
+        <% end -%>
+      </dl>
+  </div>
+
+</li>
+<% end %>

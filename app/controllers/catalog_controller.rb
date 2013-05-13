@@ -102,7 +102,6 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field "desc_metadata__title_display", :label => "Title"
-    config.add_index_field "desc_metadata__description_display", :label => "Description"
     config.add_index_field "desc_metadata__tag_display", :label => "Keyword"
     config.add_index_field "desc_metadata__subject_display", :label => "Subject"
     config.add_index_field "desc_metadata__creator_display", :label => "Creator"
