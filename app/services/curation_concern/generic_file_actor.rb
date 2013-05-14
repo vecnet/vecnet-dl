@@ -2,6 +2,7 @@ module CurationConcern
   class GenericFileActor < CurationConcern::BaseActor
     def create!
       super
+      add_user_roles
       update_file
     end
 
@@ -12,6 +13,11 @@ module CurationConcern
     end
 
     protected
+    def add_user_roles
+      curation_concern.apply_depositor_roles(user)
+      curation_concern.save
+    end
+
     def update_file
       file = attributes.delete(:file)
       title = attributes[:title]
