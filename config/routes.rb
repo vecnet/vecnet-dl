@@ -21,6 +21,8 @@ CurateNd::Application.routes.draw do
 
   match "catalog/recent" => "catalog#recent", :as => :catalog_recent
 
+  match "files/:id" => "curation_concern/generic_files#show", via: :get, as: "files"
+
   # Authority vocabulary queries route
   match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
   root to: 'catalog#index'
