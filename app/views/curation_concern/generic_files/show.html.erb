@@ -1,6 +1,8 @@
 <% content_for :page_title, curation_concern_page_title(curation_concern) %>
 <% content_for :page_header do %>
   <h1><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h1>
+  <%= render :partial => 'thumbnail_display' %>
+
 <% end %>
 <caption class="table-heading">
   <h2>Actions</h2>
@@ -14,7 +16,7 @@
 </p>
 
 <%= render "attributes", curation_concern: curation_concern %>
-
+<%= render "characterize_details", curation_concern: curation_concern %>
 
 <% unless curation_concern.related_files.empty? %>
   <caption class="table-heading">

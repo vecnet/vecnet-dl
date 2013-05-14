@@ -1,3 +1,6 @@
+<table class="table table-striped <%= dom_class(curation_concern) %> attributes">
+  <caption class="table-heading"><h2>File Details</h2></caption>
+  <tbody>
     <%= curation_concern_attribute_to_html(curation_concern, :depositor, "Depositor") %>
     <tr>
       <th>Date Uploaded</th>
@@ -46,3 +49,5 @@
         <% end %>
       </td>
     </tr>
+  </tbody>
+ </table>

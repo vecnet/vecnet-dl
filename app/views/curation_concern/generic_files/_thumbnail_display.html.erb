@@ -1,0 +1,7 @@
+<% if curation_concern.image? %>
+  <a href="<%= download_path(curation_concern) %>" target="_new"><img src="<%= download_path(curation_concern) %>" width="200" /></a>
+<% elsif curation_concern.pdf?%>
+  <a href="<%= download_path(curation_concern) %>" target="_new"><img src="<%= download_path(curation_concern, {:datastream_id => 'thumbnail'}) %>" width="200" /></a>
+<% else %>
+  <a href="<%= download_path(curation_concern) %>" target="_new"><img src="/assets/default.png" alt="No preview available" width="200" /></a>
+<% end %>
