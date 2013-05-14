@@ -2,7 +2,7 @@
 <li>
   <div class="with-thumbnail">
     <h5>
-      <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), solr_document_path(document[:noid_s].first) %>
+      <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), files_path(document[:noid_s].first) %>
       <small>[<%= link_to 'Download', download_path(document[:noid_s].first), :target => '_new' %>]</small>
     </h5>
     <hr>

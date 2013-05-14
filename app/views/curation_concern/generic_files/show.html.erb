@@ -13,37 +13,8 @@
   <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
 </p>
 
-<p>Export to:
-  <%= link_to 'EndNote',  polymorphic_path([:curation_concern, curation_concern], :format => 'endnote') %>
-  &nbsp;|&nbsp;
-  <%= link_to 'Zotero', '#', {:id => 'zoteroLink', :name =>    'zotero', :class => 'lightboxLink'} %>
-  &nbsp;|&nbsp;
-  <%= link_to 'Mendeley', '#', {:id => 'mendeleyLink', :name =>    'mendeley', :class => 'lightboxLink'} %>
-
-</p>
-
-<caption class="table-heading">
-  <h2>Description</h2>
-</caption>
-<dl class="<%= dom_class(curation_concern) %> attributes">
-  <%= curation_concern_attribute_to_html(curation_concern, :title, "Title") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :depositor, "Depositor") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :latitude, "Latitude") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :longitude, "Longitude") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :temporals, "Temporals") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :description, 'Abstract') %>
-  <%= curation_concern_attribute_to_html(curation_concern, :contributor, "Contributor") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Subject") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :publisher, "Publisher") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :language, "Language") %>
-  <dt>Access Rights</dt>
-  <dd class="attribute permission"><%= link_to_edit_permissions(curation_concern) %></dd>
-</dl>
-<caption class="table-heading">
-  <h2>Files Details</h2>
-</caption>
-
 <%= render "attributes", curation_concern: curation_concern %>
+
 
 <% unless curation_concern.related_files.empty? %>
   <caption class="table-heading">

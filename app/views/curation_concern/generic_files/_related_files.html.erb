@@ -2,7 +2,6 @@
   <thead>
   <tr>
     <th>Related File</th>
-    <th>Filename</th>
     <th>Date Uploaded</th>
     <th>Visibility</th>
     <th>Actions</th>
@@ -12,7 +11,6 @@
   <% curation_concern.related_files.each do |generic_file| %>
     <tr class="<%= dom_class(generic_file) %> attributes">
       <td class="attribute title"><%= generic_file %></td>
-      <td class="attribute filename"><%= generic_file.filename %></td>
       <td class="attribute date_uploaded"><%= generic_file.date_uploaded %></td>
       <td class="attribute permission"><%= link_to_edit_permissions(generic_file) %></td>
       <td>
