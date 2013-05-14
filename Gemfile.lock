@@ -319,7 +319,6 @@ GEM
       subexec (~> 0.2.1)
     morphine (0.1.1)
     multi_json (1.7.1)
-    mysql2 (0.3.11)
     nest (1.1.1)
       redis
     net-scp (1.1.0)
@@ -351,6 +350,7 @@ GEM
       mime-types
     parslet (1.5.0)
       blankslate (~> 2.0)
+    pg (0.15.1)
     polyglot (0.3.3)
     pry (0.9.12)
       coderay (~> 1.0.5)
@@ -556,7 +556,7 @@ DEPENDENCIES
   method_decorators
   method_locator
   morphine
-  mysql2
+  pg
   rabl
   rails (= 3.2.11)
   rails_best_practices

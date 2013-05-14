@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 # the environments that are not used to execute the deploy scripts
 group :default do
   gem 'rails', '3.2.11'
-  gem 'mysql2'
+  gem 'pg'
   gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'curate', git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
