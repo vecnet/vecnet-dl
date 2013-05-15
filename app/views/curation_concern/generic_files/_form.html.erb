@@ -18,11 +18,10 @@
         <% else %>
         <% end %>
 
-        <%= f.input :files,
+        <%= f.input :file,
                     as: :file,
                     label: "Upload Files",
                     hint: "You can roll back to different version in show page",
-                    input_html: { multiple: 'multiple'}
         %>
       </fieldset>
     <% end %>
