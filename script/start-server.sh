@@ -5,5 +5,5 @@
 
 #LISTEN_PORTS="-l 127.0.0.1:3001"
 export RAILS_ROOT=/home/app/vecnet
-
+chruby 1.9.3-p392
 RAILS_ENV=qa bundle exec unicorn -D -E deployment -c $RAILS_ROOT/config/unicorn.rb

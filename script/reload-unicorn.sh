@@ -1,8 +1,10 @@
 #!/bin/bash
 
+app_root=$(cd $(dirname $0)/.. && pwd)
+
 function start_unicorn {
     echo "Starting unicorn"
-    ./script/start-server.sh
+    $app_root/script/start-server.sh
 }
 
 if [ ! -e unicorn.pid ]; then
@@ -10,7 +12,7 @@ if [ ! -e unicorn.pid ]; then
     start_unicorn
 fi
 
-PID=$(cat unicorn.pid)
+PID=$(cat $app_root/tmp/pids/unicorn.pid)
 
 # does process exist?
 if kill -0 $PID; then
