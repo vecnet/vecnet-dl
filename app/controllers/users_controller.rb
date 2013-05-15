@@ -47,11 +47,11 @@ class UsersController < ApplicationController
   def update
     find_user.update_attributes(params[:user])
     unless @user.save
-      redirect_to edit_profile_path(URI.escape(@user.to_s,'@.')), alert: @user.errors.full_messages
+      redirect_to edit_profile_path(@user), alert: @user.errors.full_messages
       return
     end
     Sufia.queue.push(UserEditProfileEventJob.new(find_user.user_key))
-    redirect_to profile_path(URI.escape(@user.to_s,'@.')), notice: "Your profile has been updated"
+    redirect_to profile_path(@user), notice: "Your profile has been updated"
   end
 
   private
