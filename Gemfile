@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 group :default do
   gem 'rails', '3.2.11'
   gem 'pg'
+  gem 'unicorn'
   gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'curate', git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
