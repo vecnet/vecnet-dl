@@ -80,7 +80,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   end
 
   def rollback
-    retrieve_version
+    actor.rollback
     respond_with([:curation_concern, curation_concern])
   end
 
@@ -99,12 +99,5 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   private
     def show_breadcrumbs?
       true
-    end
-
-    def retrieve_version
-      revision = curation_concern.content.get_version(params["generic_file"]["version"])
-      curation_concern.add_file_datastream(revision.content, :label => revision.label, :dsid => 'content')
-      curation_concern.record_version_committer(current_user)
-      curation_concern.save!
     end
 end
