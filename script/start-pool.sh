@@ -1,6 +1,8 @@
 #!/bin/bash
 
+source /etc/profile.d/chruby.sh
 chruby 1.9.3-p392
+
 RAILS_ENV=dlvecnet bundle exec resque-pool --daemon \
  --pidfile tmp/pids/resque-pool.pid \
  --stdout log/resque-pool.stdout.log \

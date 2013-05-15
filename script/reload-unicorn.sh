@@ -10,19 +10,19 @@ function start_unicorn {
 if [ ! -e unicorn.pid ]; then
 	echo "Cannot find unicorn.pid"
     start_unicorn
-fi
-
-PID=$(cat $app_root/tmp/pids/unicorn.pid)
-
-# does process exist?
-if kill -0 $PID; then
-	echo "Signaling server at pid=$PID"
-	kill -USR2 $PID
-	sleep 10
-	echo "Killing old server"
-	kill -QUIT $PID
 else
-	echo "Process ID in unicorn.pid does not exist"
-    start_unicorn
+    PID=$(cat $app_root/tmp/pids/unicorn.pid)
+
+    # does process exist?
+    if kill -0 $PID; then
+        echo "Signaling server at pid=$PID"
+        kill -USR2 $PID
+        sleep 10
+        echo "Killing old server"
+        kill -QUIT $PID
+    else
+        echo "Process ID in unicorn.pid does not exist"
+        start_unicorn
+    fi
 fi
 
