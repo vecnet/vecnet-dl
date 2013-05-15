@@ -1,18 +1,18 @@
 <table class="table table-striped <%= dom_class(curation_concern) %> attributes">
   <caption class="table-heading"><h2>Description</h2></caption>
   <tbody>
-  <%= curation_concern_attribute_to_html(curation_concern, :title, 'Title') %>
-  <%= curation_concern_attribute_to_html(curation_concern, :creator, 'Creator(s)') %>
-  <%= curation_concern_attribute_to_html(curation_concern, :related_url, 'Related URL') %>
-  <%= curation_concern_attribute_to_html(curation_concern, :based_near, 'Location Name') %>
+  <%= curation_concern_attribute_to_html(curation_concern, :title, 'Title', include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :creator, 'Creator(s)', include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :related_url, 'Related URL', include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :based_near, 'Location Name', include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :description, 'Abstract or Summary') %>
-  <%= curation_concern_attribute_to_html(curation_concern, :language, "Language") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :resource_type, "Resource Type") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :publisher, "Publisher") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :rights, "Rights") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Eubject") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :tag, "Keyword(s) or phrase(s)") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :identifier, "Identifier") %>
-  <%= curation_concern_attribute_to_html(curation_concern, :date_created, "Date Created") %>
+  <%= curation_concern_attribute_to_html(curation_concern, :language, "Language", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :resource_type, "Resource Type", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :publisher, "Publisher", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :rights, "Rights", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Eubject", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :tag, "Keyword(s) or phrase(s)", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :identifier, "Identifier", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :date_created, "Date Created", include_empty: true) %>
   </tbody>
 </table>
