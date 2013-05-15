@@ -1,21 +1,24 @@
+<% content_for :page_title, curation_concern_page_title(curation_concern) %>
+<% content_for :page_header do %>
+  <h1>Versions of <%= curation_concern %></h1>
+<% end %>
 <%= simple_form_for curation_concern, :url => rollback_curation_concern_generic_file_path(curation_concern) do |f| %>
-      <% if curation_concern.persisted? %>
-        <fieldset>
-          <legend> Versioning</legend>
-          <%#
-            TODO - Cleanup up this violation of Law of Demeter
-            curation_concern.versions should yield a version object
-            * version#created_on
-            * version#committer
-            * version#number
-          %>
-          <%= "Current version uploaded on #{curation_concern.content.latest_version.dsCreateDate.localtime.to_formatted_s(:long_ordinal)} [by #{curation_concern.content.version_committer(curation_concern.content.latest_version)}]"%>
-          <%= f.input :version , label: "Restore Previous Version from" do %>
-            <%= f.select :version, curation_concern.versions.map { |version| ["Restore from #{version.dsCreateDate.localtime.to_formatted_s(:long_ordinal)} [ by #{curation_concern.content.version_committer(version)}]", version.versionID, { class: curation_concern.content.version_committer(version) }] }, include_blank: true %>
-          <% end %>
-        </fieldset>
-      <%- end -%>
-
+  <%= "Current version uploaded on #{curation_concern.content.latest_version.dsCreateDate.localtime.to_formatted_s(:long_ordinal)} [by #{curation_concern.content.version_committer(curation_concern.content.latest_version)}]"%>
+  <fieldset>
+    <legend>Restore Previous Version </legend>
+    <% if curation_concern.persisted? %>
+      <%#
+        TODO - Cleanup up this violation of Law of Demeter
+        curation_concern.versions should yield a version object
+        * version#created_on
+        * version#committer
+        * version#number
+      %>
+      <%= f.input :version do %>
+        <%= f.select :version, curation_concern.versions.map { |version| ["Restore from #{version.dsCreateDate.localtime.to_formatted_s(:long_ordinal)} [ by #{curation_concern.content.version_committer(version)}]", version.versionID, { class: curation_concern.content.version_committer(version) }] }, include_blank: true %>
+      <% end %>
+    <%- end -%>
+  </fieldset>
   <div class="row">
     <div class="span12 form-actions">
       <%= f.submit(
