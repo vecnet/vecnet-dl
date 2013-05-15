@@ -7,7 +7,7 @@ function start_unicorn {
 
 if [ ! -e unicorn.pid ]; then
 	echo "Cannot find unicorn.pid"
-    start_unicorn()
+    start_unicorn
 fi
 
 PID=$(cat unicorn.pid)
@@ -21,6 +21,6 @@ if kill -0 $PID; then
 	kill -QUIT $PID
 else
 	echo "Process ID in unicorn.pid does not exist"
-    start_unicorn()
+    start_unicorn
 fi
 
