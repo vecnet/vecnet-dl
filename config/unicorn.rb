@@ -9,10 +9,10 @@ listen "/tmp/unicorn.sock.0", backlog: 1024
 listen "/tmp/unicorn.sock.1", backlog: 1024
 timeout 30
 
-pid rails_root + "tmp/pids/unicorn.pid"
+pid "#{rails_root}/tmp/pids/unicorn.pid"
 
-stderr_path rails_root + "/log/unicorn.stderr.log"
-stdout_path rails_root + "/log/unicorn.stdout.log"
+stderr_path "#{rails_root}/log/unicorn.stderr.log"
+stdout_path "#{rails_root}/log/unicorn.stdout.log"
 
 Configurator::DEFAULTS[:logger].formatter = Logger::Formatter.new
 
