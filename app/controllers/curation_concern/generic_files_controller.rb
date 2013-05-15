@@ -2,6 +2,11 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
   respond_to(:html, :json)
 
+  def attach_action_breadcrumb
+    add_breadcrumb "#{parent.human_readable_type}", polymorphic_path([:curation_concern, parent])
+    super
+  end
+
   before_filter :parent
   before_filter :curation_concern
   load_resource :parent, class: "ActiveFedora::Base"
@@ -30,6 +35,11 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
     end
   end
 
+  def action_name_for_authorization
+    (action_name == 'versions' || action_name == 'rollback') ? :edit : super
+  end
+  protected :action_name_for_authorization
+
   def new
     respond_with(curation_concern){ |wants|
       wants.html {}
@@ -40,6 +50,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
     curation_concern.batch = parent
     actor.create!
     redirect_to dashboard_index_path
+    flash[:curation_concern_pid] = curation_concern.pid
   rescue ActiveFedora::RecordInvalid
     respond_with([:curation_concern, curation_concern]) { |wants|
       wants.html { render 'new', status: :unprocessable_entity }
@@ -64,6 +75,15 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
     }
   end
 
+  def versions
+    respond_with(curation_concern)
+  end
+
+  def rollback
+    retrieve_version
+    respond_with([:curation_concern, curation_concern])
+  end
+
   def destroy
     parent = curation_concern.batch
     title = curation_concern.to_s
@@ -79,5 +99,12 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   private
     def show_breadcrumbs?
       true
+    end
+
+    def retrieve_version
+      revision = curation_concern.content.get_version(params["generic_file"]["version"])
+      curation_concern.add_file_datastream(revision.content, :label => revision.label, :dsid => 'content')
+      curation_concern.record_version_committer(current_user)
+      curation_concern.save!
     end
 end
