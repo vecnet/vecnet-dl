@@ -66,6 +66,7 @@ group :test, :development do
   gem 'method_locator'
   gem 'spork', '~> 1.0rc'
   gem 'ruby_gntp'
+  gem 'sqlite3'
 end
 
 group :deploy do
