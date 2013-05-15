@@ -2,35 +2,32 @@
 # FYI: This file is replaced by a copy for deploys
 # to ci, pre_production, and production.
 #
-mysql_settings: &mysql_settings
-  adapter:   mysql2
-  encoding:  utf8
-  reconnect: false
-  pool:      5
-
-local_user: &local_user
-  <<: *mysql_settings
-  username: root
-  password:
+pg_settings: &pg_settings
+  adapter:  postgresql
+  encoding: unicode
+  database: vecnet
+  pool:     5
+  timeout:  5000
+  username: vecnet
+  password: vecnet
 
 development: &development
-  <<: *local_user
-  database: curate_vecnet_development
-  host:     localhost
-  timeout: 5000
+  adapter:  sqlite3
+  database: db/development.sqlite3
+  pool:     5
+  timeout:  5000
 
 development_remote_purl_database:
   <<: *development
 
 test: &test
   <<: *development
-  database: curate_nd_test
+  database: db/test.sqlite3
 
-test_remote_purl_database:
-  <<: *test
+qa:
+  <<: *pg_settings
+  database: vecnet_qa
 
-ci: &ci
-  <<: *test
-
-ci_remote_purl_database:
-  <<: *ci
+production:
+  <<: *pg_settings
+  database: vecnet_dlvecnet
