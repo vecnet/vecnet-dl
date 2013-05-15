@@ -3,8 +3,10 @@
 source /etc/profile.d/chruby.sh
 chruby 1.9.3-p392
 
+RAILS_ROOT=/home/app/vecnet/current
+
 RAILS_ENV=dlvecnet bundle exec resque-pool --daemon \
- --pidfile tmp/pids/resque-pool.pid \
- --stdout log/resque-pool.stdout.log \
- --stderr log/resque-pool.stderr.log \
+ --pidfile $RAILS_ROOT/tmp/pids/resque-pool.pid \
+ --stdout $RAILS_ROOT/log/resque-pool.stdout.log \
+ --stderr $RAILS_ROOT/log/resque-pool.stderr.log \
  --environment dlvecnet
