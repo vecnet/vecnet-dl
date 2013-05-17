@@ -1,0 +1,178 @@
+###
+# Setup base VM to functioning vecnet VM
+#
+# date: 2013-5-10
+#
+###
+# as root user
+useradd dbrower
+useradd blakshmi
+useradd app
+passwd dbrower
+passwd blakshmi
+usermod -a -G wheel dbrower
+usermod -a -G wheel blakshmi
+usermod -a -G wheel dladmin
+visudo
+# enable sudo access to wheel group in above step
+# now as normal user
+wget http://mirrors.nebo.edu/public/epel/6/i386/epel-release-6-8.noarch.rpm
+sudo rpm -i epel-release-6-8.noarch.rpm
+sudo rpm -i epel-release-6-8.noarch.rpm
+sudo yum update
+sudo yum install htop
+sudo yum install tmux
+
+# postgres
+sudo yum install postgresql postgresql-devel
+sudo yum install postgresql-server
+sudo service postgresql initdb
+sudo chkconfig postgresql on
+sudo service postgresql start
+sudo su - -c psql postgres
+# at prompt type the following: << EOF
+create user vecnet with password 'vecnet';
+create database vecnet_qa;
+grant all privileges on database vecnet_qa to vecnet;
+alter database vecnet_qa owner to vecnet;
+create database fedora;
+create user fedora with password 'fedora';
+grant all privileges on database fedora to fedora;
+alter database fedora owner to fedora;
+\q
+EOF
+sudo vim /var/lib/pgsql/data/pg_hba.conf
+# change the end of the file to read << EOF
+# "local" is for Unix domain socket connections only
+local   all         postgres                          ident
+local   all         all                               md5
+# IPv4 local connections:
+host    all         all         127.0.0.1/32          md5
+# IPv6 local connections:
+host    all         all         ::1/128               md5
+EOF
+sudo su - -c 'pg_ctl reload' postgres
+
+# redis
+sudo yum install redis
+sudo chkconfig redis on
+sudo service redis start
+
+# tomcat
+sudo yum install tomcat6
+sudo vim /etc/tomcat6/server.xml
+# change line 69: 8080 -> 8081
+sudo vim /etc/tomcat6/tomcat6.conf
+# add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
+# uncomment line 51, change 8080 -> 8081
+sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
+
+# fedora
+sudo mkdir -p /opt/fedora
+wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar/download?use_mirror=superb-dca3
+sudo java -jar fcrepo-installer-3.6.2.jar
+# enter at the prompts:
+# custom
+# /opt/fedora
+# fedoraAdmin
+# [localhost]
+# [fedora]
+# [false] (authentication for apia)
+# false (ssl)
+# existingTomcat
+# /usr/share/tomcat6
+# 8081 (tomcat port)
+# [8005] default
+# postgresql (database to use)
+# fedora (user)
+# fedora (pass)
+# jbdc:postgresql://localhost/fedora   (jdbc url)
+# [org.postgresql.Driver] (driver class)
+# [false] (use upstream http auth)
+# [false] (enable fesl)
+# [true] (xacml enabled)
+# [akubra-fs] (low level storage)
+# [false] (enable RI)
+# [false] (enable messaging)
+# [false] (deploy local services)
+##### XXX: this overwrote the /etc/tomcat6/Catalina/localhost/fedora.xml file
+sudo chown tomcat:tomcat -R /opt/fedora
+
+# solr
+sudo yum install log4j
+wget http://mirrors.gigenet.com/apache/lucene/solr/4.3.0/solr-4.3.0.zip
+unzip solr-4.3.0.zip
+# this step doesn't quite do it.
+#
+#sudo cp solr-4.3.0/dist/ /opt/solr-4.3.0
+sudo cp -r solr-4.3.0/example/solr /opt/solr-4.3.0
+sudo mv /opt/solr-4.3.0/collection1 /opt/solr-4.3.0/vecnet
+sudo cp /opt/solr-4.3.0/vecnet/conf/stopwords.txt /opt/solr-4.3.0/vecnet/conf/stopwords_en.txt
+sudo cp solr-4.3.0/dist/solr-4.3.0.war /opt/solr-4.3.0
+sudo mkdir /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/dist/*.jar /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/dist/solrj-lib/*.jar /opt/solr-4.3.0/lib
+sudo chown tomcat:tomcat -R /opt/solr-4.3.0
+
+# fits
+wget https://fits.googlecode.com/files/fits-0.6.2.zip
+unzip fits-0.6.2.zip
+sudo mv fits-0.6.2 /opt
+# XXX sudo chown ?:? -R /opt/fits-0.6.2/
+
+
+# ruby
+# trying chruby as the ruby manager....
+git clone https://github.com/sstephenson/ruby-build.git
+cd ruby-build
+sudo ./install.sh
+sudo mkdir -p /opt/rubies
+wget -O chruby-0.3.4.tar.gz https://github.com/postmodern/chruby/archive/v0.3.4.tar.gz
+tar -xzvf chruby-0.3.4.tar.gz
+cd chruby-0.3.4/
+sudo make install
+sudo /usr/local/bin/ruby-build 1.9.3-p392 /opt/rubies/1.9.3-p392
+# execute next command as root
+sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
+
+# don't do the following. this is just here in case we need to go back to rvm
+##### use RVM for the ruby management since that is how the produciton machine is doing it :(
+####sudo su - app
+####wget https://get.rvm.io
+####cat rvm-installer | bash -s stable --rails --autolibs=enabled --ruby=1.9.3
+####exit
+
+# nginx
+sudo yum install nginx
+sudo usermod -a -G app nginx
+sudo chmod g+r /home/app
+sudo cp devops/etc/nginx/conf.d/vecnet.conf /etc/nginx/conf.d
+sudo rm /etc/nginx/conf.d/default
+
+# image magick
+sudo yum install ImageMagick ImageMagick-devel
+
+# logrotate
+# run as root
+sudo cp devops/etc/logrotate.d/vecnet /etc/logrotate.d
+
+# init.d
+# run as root
+sudo cp devops/etc/init.d/* /etc/init.d
+
+# setup iptables
+sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+sudo /sbin/service iptables save
+
+# clamav
+sudo yum install clamav clamav-devel clamav-db
+
+
+# setup application
+sudo su - app
+git clone git://github.com/banurekha/vecnet.git
+chruby 1.9.3-p392
+gem install bundler
+cd vecnet
+bundle install
+

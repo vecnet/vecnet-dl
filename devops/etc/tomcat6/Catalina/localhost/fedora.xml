@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="/opt/fedora/tomcat/webapps/fedora.war" debug="0" crossContext="true">
+  <Parameter name="fedora/home" type="java.lang.String" value="/opt/fedora" override="true"/>
+</Context>
