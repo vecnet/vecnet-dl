@@ -45,8 +45,8 @@ $textColor:             $grayDark !default;
 
 // Links
 // -------------------------
-$linkColor:             $teal !default;
-$linkColorHover:    $tealDark !default;
+//$linkColor:             $teal !default;
+//$linkColorHover:    $tealDark !default;
 
 
 // Typography
@@ -136,7 +136,7 @@ $dropdownLinkColor:             $grayDark !default;
 $dropdownLinkColorHover:        $white !default;
 $dropdownLinkColorActive:       $dropdownLinkColor !default;
 
-$dropdownLinkBackgroundActive:  $linkColor !default;
+$dropdownLinkBackgroundActive:  $grayDark !default;
 $dropdownLinkBackgroundHover:   $dropdownLinkBackgroundActive !default;
 
 
