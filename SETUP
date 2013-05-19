@@ -68,6 +68,9 @@ sudo vim /etc/tomcat6/tomcat6.conf
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
+# make hole in firewall (optional)
+sudo iptables -I INPUT -p tcp --dport 8081 -j ACCEPT
+sudo /sbin/service iptables save
 
 # fedora
 sudo mkdir -p /opt/fedora
