@@ -66,6 +66,8 @@ sudo vim /etc/tomcat6/tomcat6.conf
 # add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
 # uncomment line 51, change 8080 -> 8081
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
+sudo chkconfig tomcat6 on
+sudo service tomcat6 start
 
 # fedora
 sudo mkdir -p /opt/fedora
@@ -148,6 +150,8 @@ sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
 sudo cp devops/etc/nginx/conf.d/vecnet.conf /etc/nginx/conf.d
 sudo rm /etc/nginx/conf.d/default
+sudo chkconfig nginx on
+sudo service nginx start
 
 # image magick
 sudo yum install ImageMagick ImageMagick-devel
@@ -159,6 +163,10 @@ sudo cp devops/etc/logrotate.d/vecnet /etc/logrotate.d
 # init.d
 # run as root
 sudo cp devops/etc/init.d/* /etc/init.d
+sudo chkconfig --add vecnet-server
+sudo chkconfig --add vecnet-worker-pool
+sudo chkconfig vecnet-server on
+sudo chkconfig vecnet-worker-pool on
 
 # setup iptables
 sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
@@ -169,6 +177,7 @@ sudo yum install clamav clamav-devel clamav-db
 
 
 # setup application
+# I think running 'cap ENV deploy:setup' on your dev machine will take care of the following...
 sudo su - app
 git clone git://github.com/banurekha/vecnet.git
 chruby 1.9.3-p392
