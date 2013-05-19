@@ -1,10 +1,10 @@
 # Returns an array containing the vhost 'CoSign service' value and URL
 Sufia.config do |config|
-  config.id_namespace = "und"
+  config.id_namespace = "vecnet"
   config.fits_path = begin
     Rails.configuration.fits_path
   rescue NoMethodError
-    "fits.sh"
+   "fits.sh"
   end
   config.fits_to_desc_mapping = begin
     Rails.configuration.fits_to_desc_mapping
@@ -12,7 +12,7 @@ Sufia.config do |config|
     { file_title: :title, file_author: :creator }
   end
 
-  config.noid_template = '.reeddeeddedk'
+  config.noid_template = '.reeddeeddk'
 
   config.max_days_between_audits = 7
 
