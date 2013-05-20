@@ -2,20 +2,14 @@
 # FYI: This file is replaced by a copy for deploys
 # to ci, pre_production, and production.
 #
-pg_settings: &pg_settings
-  adapter:  postgresql
-  encoding: unicode
-  database: vecnet
-  pool:     5
-  timeout:  5000
-  username: vecnet
-  password: vecnet
+sqlite_settings: &sqlite_settings
+  adapter: sqlite3
+  pool:    5
+  timeout: 5000
 
 development: &development
-  adapter:  sqlite3
+  <<: *sqlite_settings
   database: db/development.sqlite3
-  pool:     5
-  timeout:  5000
 
 development_remote_purl_database:
   <<: *development
@@ -24,10 +18,11 @@ test: &test
   <<: *development
   database: db/test.sqlite3
 
-qa:
-  <<: *pg_settings
-  database: vecnet_qa
+test_remote_purl_database:
+  <<: *test
 
-production:
-  <<: *pg_settings
-  database: vecnet_dlvecnet
+ci: &ci
+  <<: *test
+
+ci_remote_purl_database:
+  <<: *ci
