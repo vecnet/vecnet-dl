@@ -28,10 +28,6 @@ class AdminDashboardController < ApplicationController
   self.copy_blacklight_config_from(CatalogController)
 
   before_filter :authenticate_user!
-  before_filter :add_action, :only => 'index'
-  def add_action
-    logger.debug("Get Params: #{params.inspect}")
-  end
 
  def index
     extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
