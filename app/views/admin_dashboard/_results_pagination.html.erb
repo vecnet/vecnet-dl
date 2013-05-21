@@ -15,12 +15,8 @@ limitations under the License.
 %>
 
 <% if paginate_params(@response).num_pages > 1 %>
-  <%= debug paginate_params(@response).num_pages.inspect %>
     <div class="pager">
-      <% params[:action]='index' %>
-      <%= debug "#{params.inspect}" %>
-      <%= puts "testing params: #{params.inspect}" %>
-      <%= paginate_rsolr_response @response, :outer_window => 2, :theme => 'blacklight', :params=>{:action=>'index'} %>
+       <%= paginate_rsolr_response @response, :outer_window => 2, :theme => 'blacklight' %>
       <div class="clearfix"></div>
     </div><!-- /pager -->
 <% end %>
