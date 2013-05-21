@@ -3,8 +3,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   respond_to(:html, :json)
 
   def attach_action_breadcrumb
-    #add_breadcrumb "#{parent.human_readable_type}", polymorphic_path([:curation_concern, parent])
-    #super
+
   end
 
   before_filter :parent
