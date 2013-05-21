@@ -69,4 +69,12 @@ class User < ActiveRecord::Base
     #Need to remove registered from roles since it is not a valid user role
     RoleMapper.roles(self)- ["registered"]
   end
+
+  def admin?
+    self.admin
+  end
+
+  def admin!
+    update_column(:admin, true)
+  end
 end

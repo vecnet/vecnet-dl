@@ -5,7 +5,14 @@ CurateNd::Application.routes.draw do
   resources 'role_dashboard', :only=>:index do
     collection do
       get 'page/:page', :action => :index
-      get 'facet/:id',  :action => :facet, :as => :facet
+      get 'facet/:id',  :action => :facet, :as => :roles_facet
+    end
+  end
+
+  resources 'admin_dashboard', :only=>:index do
+    collection do
+      get 'page/:page', :action => :index
+      get 'facet/:id',  :action => :facet, :as => :admin_facet
     end
   end
 
