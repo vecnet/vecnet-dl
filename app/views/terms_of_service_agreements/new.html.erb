@@ -1,0 +1,20 @@
+<% content_for :main_column_class, 'span8 offset2' %>
+<% content_for :page_header do %>
+
+<h2><%= I18n.t('sufia.product_name') %> Terms of Use</h2>
+
+<% end %>
+
+<%= form_tag terms_of_service_agreements_path, method: :post, id: "terms_of_service" do %>
+
+<article class="terms-of-service">
+  <p>
+    The Site is maintained by the VecNET Digital Library Developers. Need More text here!
+    If any of these Terms of Use are unacceptable to you, do not use the Site.
+  </p>
+</article>
+
+<div class="form-actions centered">
+  <%= submit_tag controller.i_agree_text, :class=> 'btn btn-primary' %> <%= submit_tag controller.i_do_not_agree_text, :class=> 'btn btn-link'  %>
+</div>
+<% end %>
