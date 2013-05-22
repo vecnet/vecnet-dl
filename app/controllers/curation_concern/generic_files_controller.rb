@@ -3,7 +3,14 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   respond_to(:html, :json)
 
   def attach_action_breadcrumb
-
+    add_breadcrumb 'Home', root_path
+    case request.referer
+      when /dashboard/
+        add_breadcrumb 'Dashboard', dashboard_index_path
+      when /catalog/
+        add_breadcrumb 'Back to Search results', request.referer
+    end
+    super
   end
 
   before_filter :parent
