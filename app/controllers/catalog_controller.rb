@@ -102,20 +102,14 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field "desc_metadata__title_display", :label => "Title"
-    config.add_index_field "desc_metadata__tag_display", :label => "Keyword"
     config.add_index_field "desc_metadata__subject_display", :label => "Subject"
     config.add_index_field "desc_metadata__creator_display", :label => "Creator"
-    config.add_index_field "desc_metadata__contributor_display", :label => "Contributor"
     config.add_index_field "desc_metadata__publisher_display", :label => "Publisher"
     config.add_index_field "desc_metadata__based_near_display", :label => "Location"
     config.add_index_field "desc_metadata__language_display", :label => "Language"
-    config.add_index_field "desc_metadata__date_uploaded_display", :label => "Date Uploaded"
+    config.add_index_field "desc_metadata__contributor_display", :label => "Contributor"
+    config.add_index_field "desc_metadata__tag_display", :label => "Keyword"
     config.add_index_field "desc_metadata__date_modified_display", :label => "Date Modified"
-    config.add_index_field "desc_metadata__date_created_display", :label => "Date Created"
-    config.add_index_field "desc_metadata__rights_display", :label => "Rights"
-    config.add_index_field "desc_metadata__resource_type_display", :label => "Resource Type"
-    config.add_index_field "desc_metadata__format_display", :label => "File Format"
-    config.add_index_field "desc_metadata__identifier_display", :label => "Identifier"
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
