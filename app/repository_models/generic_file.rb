@@ -4,6 +4,8 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
 
+  delegate_to :descMetadata, [:description], :unique => true
+
   validates :title, presence: { message: 'Your must have a title.' }
   validates :rights, presence: { message: 'You must select a license for your work.' }
   validates :creator, presence: { message: "You must have an author."}
