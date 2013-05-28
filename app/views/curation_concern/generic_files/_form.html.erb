@@ -8,24 +8,6 @@
 
   <%= accordion(accordion_id: 'accordion') do |container| %>
 
-    <%= container.pane("Files") do %>
-      <fieldset>
-        <% if curation_concern.persisted? %>
-          <legend>
-            Upload New Version
-            <small>Upload a new version from your computer.</small>
-          </legend>
-        <% else %>
-        <% end %>
-
-        <%= f.input :file,
-                    as: :file,
-                    label: "Upload Files",
-                    hint: "You can roll back to different version in show page"
-        %>
-      </fieldset>
-    <% end %>
-
     <%= container.pane("Required Information", class: 'required') do %>
       <fieldset class="required">
         <legend>These are the required information </legend>
@@ -51,7 +33,7 @@
                     input_html: { class: 'input-xlarge' } %>
       </fieldset>
       <%= render '/curation_concern/content_license', f: f %>
-      <%= render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
+      <%=render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
     <% end %>
 
     <%= container.pane("Additional Information and Metadata", class: 'optional prompt') do %>
@@ -59,11 +41,10 @@
         <legend>Any additional information is optional, but helpful for others looking to find your work.</legend>
         <%= f.input :description,
                     input_html: {
-                            class: 'input-xxxlarge',
+                            class: 'input-xxlarge',
                             rows: '9'
                     },
-                    as: :multi_value,
-                    input_type: :textarea,
+                    as: :text,
                     label: get_label(:description),
                     hint: metadata_help('description')
         %>
@@ -101,7 +82,23 @@
       </fieldset>
     <% end %>
 
+    <%= container.pane("Files") do %>
+      <fieldset>
+        <% if curation_concern.persisted? %>
+          <legend>
+            Upload New Version
+            <small>Upload a new version from your computer.</small>
+          </legend>
+        <% else %>
+        <% end %>
 
+        <%= f.input :file,
+                    as: :file,
+                    label: "Upload Files",
+                    hint: "You can roll back to different version in show page"
+        %>
+      </fieldset>
+    <% end %>
 
   <% end %>
 
