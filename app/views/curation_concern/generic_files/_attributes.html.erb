@@ -10,9 +10,11 @@
   <%= curation_concern_attribute_to_html(curation_concern, :resource_type, "Resource Type", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :publisher, "Publisher", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :rights, "Rights", include_empty: true) %>
-  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Eubject", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :subject, "Subject", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :tag, "Keyword(s) or phrase(s)", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :identifier, "Identifier", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :date_created, "Date Created", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :spatials , "Lat Long(x,y dd)", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :temporals , "Time period(s) of Content", include_empty: true) %>
   </tbody>
 </table>
