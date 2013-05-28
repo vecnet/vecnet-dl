@@ -252,7 +252,7 @@ GEM
       spork (>= 0.8.4)
     highline (1.6.19)
     hike (1.2.2)
-    hooks (0.3.0)
+    hooks (0.2.2)
     hydra-access-controls (5.4.0)
       active-fedora
       activesupport
@@ -451,13 +451,13 @@ GEM
       rspec-mocks (~> 2.13.0)
     ruby-progressbar (1.0.2)
     ruby_gntp (0.3.4)
-    rubydora (1.6.3)
+    rubydora (1.6.4)
       activemodel
       activesupport
       deprecation
       equivalent-xml
       fastercsv
-      hooks
+      hooks (~> 0.2.2)
       mime-types
       nokogiri
       rest-client
@@ -575,6 +575,7 @@ DEPENDENCIES
   rspec-html-matchers
   rspec-rails
   ruby_gntp
+  rubydora (~> 1.6.4)
   sass-rails (~> 3.2.3)
   sextant
   simple_form
