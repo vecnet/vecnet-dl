@@ -46,5 +46,11 @@ class GenericFile
   def human_readable_type
     self.class.to_s.demodulize.titleize
   end
+
+  def endnote_export
+    EndNote.new(self).to_endnote
+  end
+
+
 end
 

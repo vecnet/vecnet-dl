@@ -1,6 +1,6 @@
 class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
-  respond_to(:html, :json)
+  respond_to(:html, :json, :endnote)
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path
@@ -65,7 +65,9 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
 
   def show
-    respond_with(curation_concern)
+    respond_with(curation_concern){|format|
+      format.endnote { render :text => curation_concern.endnote_export }
+    }
   end
 
   def edit

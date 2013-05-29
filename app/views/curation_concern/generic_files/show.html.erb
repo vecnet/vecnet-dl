@@ -18,6 +18,7 @@
     <%= link_to "Add file to this collection", new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn' %>
   <% end %>
   <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
+  <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
 </p>
 
 <%= render "attributes", curation_concern: curation_concern %>

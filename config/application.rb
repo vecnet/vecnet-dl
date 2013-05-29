@@ -17,6 +17,9 @@ end
 
 module Vecnet
   class Application < Rails::Application
+    config.vecnet_version = "v0.0.1"
+    config.vecnet_release_date = "TBD"
+    config.persistent_hostpath = "http://dl-vecnet.crc.nd.edufiles/"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

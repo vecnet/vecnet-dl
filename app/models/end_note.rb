@@ -4,7 +4,7 @@ class EndNote
   end
 
   def to_s
-    @object.to_s
+    to_endnote
   end
 
   def to_endnote
@@ -27,8 +27,8 @@ class EndNote
         '%G' => [:language],
         '%[' => [:date_modified],
         '%9' => [:resource_type],
-        '%~' =>  Vecnet::Application::config.application_name,
-        '%W' => 'TBD'
+        '%~' =>  I18n.t('sufia.product_name'),
+        '%W' => 'TBD'   #University name
     }
     text = []
     text << "%0 #{type}"
@@ -49,11 +49,6 @@ class EndNote
       text << "#{endnote_key} #{spaced_values}"
     end
     return text.join("\n")
-  end
-  
-  def get_title
-    puts @object.title
-    @object.title
   end
   
 end
