@@ -15,7 +15,7 @@ if defined?(Bundler)
   Bundler.require(*bundle_environment_aliases)
 end
 
-module CurateNd
+module Vecnet
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

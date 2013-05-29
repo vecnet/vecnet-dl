@@ -1,8 +1,8 @@
 #
-# Tasks specific to CurateND
+# Tasks copied from to CurateND
 #
 
-namespace :curatend do
+namespace :vecnet do
   # don't define the ci stuff in production...since rspec is not available
   if defined?(RSpec)
     namespace :jetty do
@@ -55,16 +55,16 @@ namespace :curatend do
       ENV['RAILS_ENV'] = 'ci'
       Rails.env = 'ci'
       Rake::Task['environment'].invoke
-      Rake::Task['curatend:jetty:download'].invoke
-      Rake::Task['curatend:jetty:clean'].invoke
-      Rake::Task['curatend:jetty:unzip'].invoke
-      Rake::Task['curatend:jetty:configure_solr'].invoke
-      Rake::Task['curatend:jetty:configure_fedora'].invoke
+      Rake::Task['vecnet:jetty:download'].invoke
+      Rake::Task['vecnet:jetty:clean'].invoke
+      Rake::Task['vecnet:jetty:unzip'].invoke
+      Rake::Task['vecnet:jetty:configure_solr'].invoke
+      Rake::Task['vecnet:jetty:configure_fedora'].invoke
 
       jetty_params = Jettywrapper.load_config
       error = Jettywrapper.wrap(jetty_params) do
         ENV['COVERAGE'] = 'true'
-        Rake::Task['curatend:ci'].invoke
+        Rake::Task['vecnet:ci'].invoke
       end
       raise "test failures: #{error}" if error
     end
@@ -81,7 +81,7 @@ namespace :curatend do
       #Rake::Task["db:create"].invoke
       Rake::Task['db:schema:load'].invoke
 
-      Rake::Task['curatend:ci_spec'].invoke
+      Rake::Task['vecnet:ci_spec'].invoke
       # I don't think we have any cucumber tests ATM
       #Rake::Task['cucumber'].invoke
     end

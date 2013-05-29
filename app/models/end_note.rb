@@ -27,7 +27,7 @@ class EndNote
         '%G' => [:language],
         '%[' => [:date_modified],
         '%9' => [:resource_type],
-        '%~' =>  CurateNd::Application::config.application_name,
+        '%~' =>  Vecnet::Application::config.application_name,
         '%W' => 'TBD'
     }
     text = []

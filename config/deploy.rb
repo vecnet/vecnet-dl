@@ -166,7 +166,7 @@ end
 
 #namespace :worker do
 #  task :start, :roles => :work do
-#    target_file = "/home/curatend/resque-pool-info"
+#    target_file = "/home/Vecnet/resque-pool-info"
 #    run [
 #      "echo \"RESQUE_POOL_ROOT=$(pwd)/current\" > #{target_file}",
 #      "echo \"RESQUE_POOL_ENV=#{fetch(:rails_env)}\" >> #{target_file}",
@@ -269,7 +269,7 @@ def common_worker_things
       #[ '/vendor/bundle', '/vendor/bundle', '/vendor/bundle'],
     ]
   end
-  set :deploy_to,   '/home/curatend'
+  set :deploy_to,   '/home/Vecnet'
   set :ruby_bin,    '/usr/local/ruby/bin'
   set :without_bundle_environments, 'development test'
   set :group_writable, false
@@ -283,7 +283,7 @@ end
 desc "Setup for the Preproduction Worker environment"
 task :pre_production_worker do
   set :rails_env,   'pre_production'
-  set :user,        'curatend'
+  set :user,        'Vecnet'
   set :domain,      'curatepprdw1.library.nd.edu'
   set :branch, "master"
   common_worker_things
@@ -292,7 +292,7 @@ end
 desc "Setup for the Production Worker environment"
 task :production_worker do
   set :rails_env,   'production'
-  set :user,        'curatend'
+  set :user,        'Vecnet'
   set :domain,      'curateprodw1.library.nd.edu'
   set :branch,      'release'
   common_worker_things

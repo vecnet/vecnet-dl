@@ -1,4 +1,4 @@
-CurateNd::Application.routes.draw do
+Vecnet::Application.routes.draw do
 
   devise_for :users
 

@@ -7,13 +7,13 @@ describe ApplicationHelper do
 
   it 'has #default_page_title' do
     expect(helper.default_page_title).to(
-      eq("#{controller_name.titleize} // CurateND")
+      eq("#{controller_name.titleize} // Vecnet")
     )
   end
 
   it 'has #curation_concern_page_title' do
     expect(helper.curation_concern_page_title(SeniorThesis.new)).to(
-      eq("New Senior Thesis // CurateND")
+      eq("New Senior Thesis // Vecnet")
     )
   end
 
