@@ -1,12 +1,7 @@
 <% content_for :page_title, curation_concern_page_title(curation_concern) %>
 <% content_for :page_header do %>
   <h1><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h1>
-  <%= render :partial => 'thumbnail_display' %>
-
 <% end %>
-<caption class="table-heading">
-  <h2>Actions</h2>
-</caption>
 <p>
   <% if can? :edit, curation_concern %>
     <%= link_to "Edit", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
@@ -20,9 +15,15 @@
   <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
   <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
 </p>
-
-<%= render "attributes", curation_concern: curation_concern %>
-<%= render "characterize_details", curation_concern: curation_concern %>
+<div class="row">
+  <div class="span3">
+    <%= render :partial => 'thumbnail_display' %>
+  </div>
+  <div class="span9">
+    <%= render "attributes", curation_concern: curation_concern %>
+    <%= render "characterize_details", curation_concern: curation_concern %>
+  </div>
+</div>
 
 <% unless curation_concern.related_files.empty? %>
   <caption class="table-heading">
