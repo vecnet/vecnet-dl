@@ -1,29 +1,37 @@
 <% content_for :layout_name, 'vecnet, ' %>
 <% content_for :body do %>
-
-  <header class="jumbotron subhead row-fluid">
-    <div class="container ">
-      <h1>Metadata Repository</h1>
-      <p class="lead">Curate Metadata in the VECNet Digital Library</p>
-    </div>
-  </header>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="nav-inner">
       <div class="container">
         <div class="row">
-          <a class="brand" href="/">VECNet</a>
+          <div class="span8"> <a class="brand" href="/">VECNet</a> </div>
           <%= render :partial => 'shared/user_util_links', :formats => [:html] %>
         </div>
       </div>
     </div>
   </div>
 
+  <header class="jumbotron subhead row-fluid">
+    <hgroup>
+        <div class="container">
+          <div id="title-bar" class="row">
+            <div id="site-title" class="span8">
+              <h1>Metadata Repository</h1>
+              <p class="lead">Curate Metadata in the VECNet Digital Library</p>
+            </div>
+            <div id="site-search" class="span4">
+              <%= render 'shared/site_search' if show_site_search?%>
+              <%= yield(:search_bar) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </hgroup>
+  </header>
+
   <%= render 'shared/flash_message' %>
 
   <div id="main" role="main" class="container <%= yield(:page_class) if content_for?(:page_class)%>">
-     <div id="site-search" class="span4 pull-right">
-        <%= render 'shared/site_search' if show_site_search? %>
-    </div>
     <%= render 'shared/breadcrumbs.html.erb'  if show_breadcrumbs?%>
     <% if content_for?(:page_header) %>
       <div class="row">
