@@ -46,6 +46,7 @@ group :assets do
   gem 'compass-rails'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'uglifier', '>= 1.0.3'
+  gem 'font-awesome-sass-rails', '~> 2.0.0.0'
 end
 
 group :test do

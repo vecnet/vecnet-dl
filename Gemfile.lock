@@ -555,6 +555,7 @@ DEPENDENCIES
   devise
   devise-guests (~> 0.3)
   factory_girl_rails
+  font-awesome-sass-rails (~> 2.0.0.0)
   guard
   guard-rails_best_practices
   guard-rspec
