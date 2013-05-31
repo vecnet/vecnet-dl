@@ -30,6 +30,7 @@
 //= require toggle_details
 //= require help_modal
 //= require auto_complete
+//= require icon_toggle
 
 $(function(){
 
