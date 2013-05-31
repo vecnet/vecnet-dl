@@ -11,9 +11,10 @@
 
   .brand{
     background-image: none;
+    float: left;
     display: inline-block;
-    overflow: hidden;
-    padding: 10px, 20px;
+    margin-left: -20px;
+    padding: 10px 20px 10px;
     white-space: nowrap;
     width: 150px;
     text-indent:0;
@@ -164,6 +165,19 @@ jumbotron:after {
     font-size: 24px;
     padding-bottom:10px;
     border-bottom:1px solid $dropdownDividerTop;
+  }
+}
+
+#facets {
+  li {
+    margin-right: 0;
+    padding-right: 0;
+    .count {
+      margin-right: 0;
+    }
+    &.more_facets_link {
+      margin-right: 0;
+    }
   }
 }
 
