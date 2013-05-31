@@ -11,8 +11,8 @@ en:
     search:
       form:
         q:
-          label:         "Search Vecnet"
-          placeholder:   "Search Vecnet"
+          label:         "Search Metadata Repository"
+          placeholder:   "Search Metadata Repository"
 
     field_label:
       based_near:        "Location"
