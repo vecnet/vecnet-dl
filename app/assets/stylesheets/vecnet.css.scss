@@ -8,7 +8,6 @@
   .nav-inner {
     border-color: #252525;
   }
-
   .brand{
     background-image: none;
     float: left;
@@ -43,51 +42,10 @@
 
   }
 }
-
-jumbotron:after {
-  background: url(bs-docs-masthead-pattern.png) repeat scroll center center transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  left: 0;
-  opacity: 0.4;
-  position: absolute;
-  top: 20;
-  right: 0;
+.navbar-fixed-top {
+  margin-bottom: 0;
 }
-.subhead {
-  border-bottom: 1px solid #DDDDDD;
-  text-align: left;
-}
-.jumbotron {
-  @include background(linear-gradient(top, rgb(1,72,95), rgb(0,147,173)));
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  padding: 15px 0;
-  position: relative;
-  top:40px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
 
-  h1 {
-      font-size: 60px;
-      line-height: 50px;
-      font-weight: 700;
-      margin: 10px 0;
-      letter-spacing: -1px;
-      lcolor: #E5E5E5;
-  }
-
-  p{
-    color: #E5E5E5;
-    .lead{
-        font-size: 30px;
-        font-weight: 300;
-        line-height: 30px;
-        margin-bottom: 20px;
-    }
-  }
-}
 #main {
   padding-top: 2em
 }
