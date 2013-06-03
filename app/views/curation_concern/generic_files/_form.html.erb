@@ -104,13 +104,8 @@
 
   <div class="row">
     <div class="span12 form-actions">
-      <% if curation_concern.persisted? %>
-        <%= f.submit(class: 'btn btn-primary') %>
-      <% else %>
-        <%= f.submit(
-                    title: "Save",
-                    class: 'btn btn-primary'
-            ) %>
+      <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
+        <i class="icon-save"></i> Save
       <% end %>
       <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
     </div>

@@ -4,13 +4,13 @@
 <% end %>
 <p>
   <% if can? :edit, curation_concern %>
-    <%= link_to "Edit", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
+    <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
     <%= link_to(
-                'Rollback',
+                raw('<i class="icon-undo"></i> Rollback'),
                 versions_curation_concern_generic_file_path(curation_concern),
                 { class: 'btn', title: "Rollback to previous version" }
         ) %>
-    <%= link_to "Add file to this collection", new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn' %>
+    <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this collection'), new_curation_concern_generic_file_path(curation_concern.batch.id), class: 'btn' %>
   <% end %>
   <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
   <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
