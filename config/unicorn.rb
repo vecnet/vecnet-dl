@@ -29,6 +29,7 @@ end
 after_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.establish_connection
+  Resque.redis.client.reconnect if Resque.redis
 end
 
 before_exec do |server|
