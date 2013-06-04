@@ -184,12 +184,14 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
   end
 
   create_table "subject_local_authority_entries", :force => true do |t|
-    t.string "label"
-    t.string "lowerLabel"
-    t.string "url"
+    t.string   "label"
+    t.string   "lower_label"
+    t.string   "url"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
-  add_index "subject_local_authority_entries", ["lowerLabel"], :name => "entries_by_lower_label"
+  add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
   create_table "trophies", :force => true do |t|
     t.integer  "user_id"
