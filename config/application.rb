@@ -88,5 +88,8 @@ module Vecnet
       g.test_framework :rspec, :spec => true, :fixture => false
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
+
+    # We are not using Antivirus, even though we require the ClamAV gem.
+    config.default_antivirus_instance = lambda { |file_path| true }
   end
 end
