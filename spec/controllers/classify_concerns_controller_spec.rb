@@ -20,16 +20,16 @@ describe ClassifyConcernsController do
   describe '#create' do
     let(:user) { FactoryGirl.create(:user) }
     it 'redirect to login page if user is not logged in' do
-      post :create, classify: { curation_concern_type: 'SeniorThesis' }
+      post :create, classify: { curation_concern_type: 'GenericFile' }
       response.status.should == 302
       expect(response).to redirect_to(user_session_path)
     end
 
     it 'requires authentication' do
       sign_in(user)
-      post :create, classify_concern: { curation_concern_type: 'SeniorThesis' }
+      post :create, classify_concern: { curation_concern_type: 'GenericFile' }
       response.status.should == 302
-      expect(response).to redirect_to(new_curation_concern_senior_thesis_path)
+      expect(response).to redirect_to(new_curation_concern_generic_file_path)
     end
 
   end

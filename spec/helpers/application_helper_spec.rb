@@ -7,13 +7,7 @@ describe ApplicationHelper do
 
   it 'has #default_page_title' do
     expect(helper.default_page_title).to(
-      eq("#{controller_name.titleize} // CurateND")
-    )
-  end
-
-  it 'has #curation_concern_page_title' do
-    expect(helper.curation_concern_page_title(SeniorThesis.new)).to(
-      eq("New Senior Thesis // CurateND")
+      eq("#{controller_name.titleize} // VecNet Metadata Repository")
     )
   end
 
@@ -50,10 +44,6 @@ describe ApplicationHelper do
         eq("")
       )
     end
-  end
-
-  it 'has #classify_for_display' do
-    expect(helper.classify_for_display(SeniorThesis.new)).to eq('senior thesis')
   end
 
   describe '#bootstrap_navigation_element' do

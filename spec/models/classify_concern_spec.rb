@@ -16,15 +16,4 @@ describe ClassifyConcern do
     end
   end
 
-  describe 'with curation_concern_type: "SeniorThesis"' do
-    let(:curation_concern_type) { "SeniorThesis" }
-
-    it 'is valid if curation_concern_type is from the right list' do
-      expect(subject).to be_valid
-    end
-
-    it 'has a <SeniorThesis> class for curation_concern_class' do
-      expect(subject.curation_concern_class).to eq(SeniorThesis)
-    end
-  end
 end
