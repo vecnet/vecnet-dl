@@ -11,6 +11,19 @@ development: &development
   <<: *sqlite_settings
   database: db/development.sqlite3
 
+dlvecnet:
+  ssh_user: username # <-- add username for ssh
+  ssh_host: hostname # <-- add hostname for ssh
+  adapter: postgresql
+  host: localhost  #if the server runs in same server
+  port: 5432
+  encoding: unicode
+  database: dbname
+  pool: 5
+  username: dbuser
+  password: dbpwd
+
+
 development_remote_purl_database:
   <<: *development
 
