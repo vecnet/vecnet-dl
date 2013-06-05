@@ -108,12 +108,12 @@ namespace :deploy do
     run "bundle --version"
   end
 
-  desc "Start application in Passenger"
+  desc "Start application"
   task :start, :roles => :app do
     restart_unicorn
   end
 
-  desc "Restart application in Passenger"
+  desc "Restart application"
   task :restart, :roles => :app do
     restart_unicorn
   end
@@ -175,6 +175,16 @@ end
 #  end
 #end
 
+namespace :vecnet do
+  desc "Restart the workers on the target machine"
+  task :restart_workers, :roles => :work do
+    run [
+      "#{current_path}/script/stop-pool.sh",
+      "#{current_path}/script/start-pool.sh"
+    ].join(" && ")
+  end
+end
+
 namespace :und do
   task :update_secrets do
     #run "cd #{release_path} && ./script/update_secrets.sh #{secret_repo_name}"
@@ -230,6 +240,7 @@ task :qa do
   after 'deploy:update_code', 'und:write_build_identifier', 'und:update_secrets', 'deploy:symlink_shared', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy', 'deploy:cleanup'
   after 'deploy', 'deploy:restart'
+  after 'deploy', 'vecnet:restart_workers'
 end
 
 desc "Setup for the Production environment"
