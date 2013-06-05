@@ -97,7 +97,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
     title = curation_concern.to_s
     curation_concern.destroy
     flash[:notice] = "Deleted #{title}"
-    respond_with([:curation_concern, parent])
+    redirect_to dashboard_index_path
   end
 
   include Morphine
