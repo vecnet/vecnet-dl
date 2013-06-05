@@ -123,7 +123,8 @@ sudo chown tomcat:tomcat -R /opt/solr-4.3.0
 wget https://fits.googlecode.com/files/fits-0.6.2.zip
 unzip fits-0.6.2.zip
 sudo mv fits-0.6.2 /opt
-# XXX sudo chown ?:? -R /opt/fits-0.6.2/
+sudo chown app:app -R /opt/fits-0.6.2/
+sudo chmod +x /opt/fits-0.6.2/fits.sh
 
 
 # ruby
