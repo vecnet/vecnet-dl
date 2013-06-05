@@ -90,6 +90,8 @@ module Vecnet
     end
 
     # We are not using Antivirus, even though we require the ClamAV gem.
-    config.default_antivirus_instance = lambda { |file_path| true }
+    config.default_antivirus_instance = lambda { |file_path|
+      AntiVirusScanner::NO_VIRUS_FOUND_RETURN_VALUE
+    }
   end
 end

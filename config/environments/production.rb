@@ -68,11 +68,4 @@ Vecnet::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  if defined? ClamAV
-    ClamAV.instance.loaddb
-    config.default_antivirus_instance = lambda {|file_path|
-      ClamAV.instance.scanfile(file_path)
-    }
-  end
-
 end
