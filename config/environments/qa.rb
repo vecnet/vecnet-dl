@@ -75,4 +75,6 @@ Vecnet::Application.configure do
   #     ClamAV.instance.scanfile(file_path)
   #   }
   # end
+
+  config.fits_path = '/opt/fits-0.6.2/fits.sh'
 end
