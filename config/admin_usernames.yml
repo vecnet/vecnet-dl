@@ -1,0 +1,10 @@
+development: &usernames
+  admin_usernames:
+    - dbrower
+    - banurekha.l
+
+qa:
+  <<: *usernames
+
+production:
+  <<: *usernames
