@@ -22,6 +22,7 @@ sudo rpm -i epel-release-6-8.noarch.rpm
 sudo yum update
 sudo yum install htop
 sudo yum install tmux
+sudo yum install tree
 
 # postgres
 sudo yum install postgresql postgresql-devel
