@@ -17,7 +17,10 @@
 <% end %>
 
 <% if has_search_parameters? %>
-  <h3>Search Results</h3>
+  <div class="row">
+    <div class="span6"> <h3>Search Results</h3> </div>
+    <div class="span3"> <%= link_to "New Search", catalog_index_path, :id=>"startOverLink", :class=>"btn btn-primary" %> </div>
+  </div>
   <div class="alert alert-info search-constraints">
     <i class="icon-search icon-large"></i>
     You searched for:
