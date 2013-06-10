@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130520215815) do
+ActiveRecord::Schema.define(:version => 20130610145056) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -99,6 +99,17 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
 
   add_index "local_authority_entries", ["local_authority_id", "label"], :name => "entries_by_term_and_label"
   add_index "local_authority_entries", ["local_authority_id", "uri"], :name => "entries_by_term_and_uri"
+
+  create_table "mesh_tree_structures", :id => false, :force => true do |t|
+    t.string   "subject_mesh_term_id"
+    t.string   "tree_structure"
+    t.string   "eval_tree_path"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "mesh_tree_structures", ["subject_mesh_term_id", "tree_structure"], :name => "entries_by_term_id_and_tree_structure"
+  add_index "mesh_tree_structures", ["tree_structure"], :name => "entries_by_tree_structure"
 
   create_table "notifications", :force => true do |t|
     t.string   "type"
@@ -192,6 +203,19 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
   end
 
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
+
+  create_table "subject_mesh_term_entries", :force => true do |t|
+    t.string   "term"
+    t.string   "lower_term"
+    t.string   "subject_mesh_term_id"
+    t.text     "subject_synonyms"
+    t.text     "subject_description"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "subject_mesh_term_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term"
+  add_index "subject_mesh_term_entries", ["subject_mesh_term_id"], :name => "entries_by_subject_mesh_term_id"
 
   create_table "trophies", :force => true do |t|
     t.integer  "user_id"

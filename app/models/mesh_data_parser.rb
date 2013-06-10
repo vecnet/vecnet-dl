@@ -33,4 +33,48 @@ class MeshDataParser
     return result
   end
 
+  def self.get_synonyms(record)
+    puts record.inspect
+    synonymns=[]
+    record['ENTRY'].each do |synonym|
+      synonymns<<synonym.split(/|/).first
+    end
+    synonymns
+  end
+
+  def self.get_description(record)
+    puts record.inspect
+    descriptions=[]
+    record['MS'].each do |desc|
+      descriptions<<desc
+    end
+    descriptions
+  end
+
+  def self.get_tree(record)
+    puts record.inspect
+    tree=[]
+    record['MN'].each do |tree_id|
+      tree<<tree_id
+    end
+    tree
+  end
+
+  def self.get_label(record)
+    puts record.inspect
+    labels=[]
+    record['MH'].each do |label|
+      labels<<label
+    end
+    labels
+  end
+  def self.get_label_downcase(record)
+    puts record.inspect
+    labels=[]
+    record['MH'].each do |label|
+      labels<<label.downcase
+    end
+    labels
+  end
+
 end
