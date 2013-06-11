@@ -15,9 +15,9 @@ class MeshDataParser
         yield(current_data) if in_record
         in_record = true
         current_data = {}
-      when /\A(?<label>\w+) = (?<value>.*)/
-        current_data[Regexp.last_match(:label)] ||= []
-        current_data[Regexp.last_match(:label)] << Regexp.last_match(:value)
+      when /\A(?<term>\w+) = (?<value>.*)/
+        current_data[Regexp.last_match(:term)] ||= []
+        current_data[Regexp.last_match(:term)] << Regexp.last_match(:value)
       when /\A\n/
         yield(current_data) if in_record
         in_record = false
@@ -34,47 +34,41 @@ class MeshDataParser
   end
 
   def self.get_synonyms(record)
-    puts record.inspect
+    puts record['ENTRY'].inspect
     synonymns=[]
-    record['ENTRY'].each do |synonym|
-      synonymns<<synonym.split(/|/).first
+    unless record['ENTRY'].blank?
+      record['ENTRY'].each do |synonym|
+        synonymns<<synonym.split('|').first
+      end
     end
     synonymns
   end
 
   def self.get_description(record)
-    puts record.inspect
+    puts record['MS'].inspect
     descriptions=[]
-    record['MS'].each do |desc|
-      descriptions<<desc
+    unless record['MS'].blank?
+      record['MS'].each do |desc|
+        descriptions<<desc
+      end
     end
     descriptions
   end
 
   def self.get_tree(record)
-    puts record.inspect
+    puts record['MN'].inspect
     tree=[]
-    record['MN'].each do |tree_id|
-      tree<<tree_id
+    unless record['MN'].blank?
+      record['MN'].each do |tree_id|
+        tree<<tree_id
+      end
     end
     tree
   end
 
-  def self.get_label(record)
-    puts record.inspect
-    labels=[]
-    record['MH'].each do |label|
-      labels<<label
-    end
-    labels
-  end
-  def self.get_label_downcase(record)
-    puts record.inspect
-    labels=[]
-    record['MH'].each do |label|
-      labels<<label.downcase
-    end
-    labels
+  def self.get_term(record)
+    puts record['MH']
+    record['MH'].first
   end
 
 end
