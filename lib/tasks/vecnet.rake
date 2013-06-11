@@ -15,6 +15,27 @@ namespace :vecnet do
     end
   end
 
+  namespace :import do
+    def mesh_files
+      files=[]
+      files<< File.expand_path("#{Rails.root}/mesh-d2013.txt")
+    end
+    desc "Raise an error unless the RAILS_ENV is development"
+    task :mesh_subjects => :environment do
+      start_time=time.now
+      puts "Starting to harvest at #{start_time}"
+      LocalAuthority.harvest_mesh_ascii("mesh_subject_harvest",mesh_files)
+      end_time=time.now
+      time_taken=end_time-start_time
+      puts "Completed to harvest at #{end_time}"
+    end
+    task :eval_mesh_tree do
+      pending
+    end
+
+  end
+
+
   namespace :db do
     def pg_dump_file_path
       File.expand_path("#{Rails.root}/tmp/production_data.sql")
