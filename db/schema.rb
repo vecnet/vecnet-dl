@@ -204,18 +204,25 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
 
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
-  create_table "subject_mesh_term_entries", :force => true do |t|
-    t.string   "term"
-    t.string   "lower_term"
+  create_table "subject_mesh_entries", :force => true do |t|
     t.string   "subject_mesh_term_id"
-    t.text     "subject_synonyms"
+    t.string   "term"
     t.text     "subject_description"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end
 
-  add_index "subject_mesh_term_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term"
-  add_index "subject_mesh_term_entries", ["subject_mesh_term_id"], :name => "entries_by_subject_mesh_term_id"
+  add_index "subject_mesh_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term"
+  add_index "subject_mesh_entries", ["subject_mesh_term_id"], :name => "entries_by_subject_mesh_term_id"
+
+  create_table "subject_mesh_synonyms", :force => true do |t|
+    t.string   "subject_mesh_term_id"
+    t.string   "subject_synonym"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "subject_mesh_synonyms", ["subject_mesh_term_id", "subject_synonym"], :name => "entries_by_id_and_synonyms"
 
   create_table "trophies", :force => true do |t|
     t.integer  "user_id"
