@@ -81,7 +81,7 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # custom
 # /opt/fedora
 # fedoraAdmin
-# [localhost]
+# [localhost] (use machine hostname??)
 # [fedora]
 # [false] (authentication for apia)
 # false (ssl)
