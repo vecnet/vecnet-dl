@@ -30,6 +30,7 @@ class LocalAuthority
           mesh.each_mesh_record do |record|
             record_id= record['UI'].first
             begin
+              puts "Begin transaction"
               SubjectMeshEntry.create!(:subject_mesh_term_id => record_id,
                                      :term => MeshDataParser.get_term(record),
                                      :subject_description=>MeshDataParser.get_description(record)
@@ -37,6 +38,7 @@ class LocalAuthority
               import_synonyms(record,record_id)
               import_trees(record,record_id)
             rescue Exception => e
+              puts e.inspect
               raise ActiveRecord::Rollback
             end
           end
@@ -63,5 +65,34 @@ class LocalAuthority
                                )
 
     end
+  end
+
+  def self.entries_by_term(model, term, query)
+    return if query.empty?
+    lowQuery = query.downcase
+    hits = []
+    logger.debug("Find by term: #{term.inspect}, model:#{model.inspect}")
+    puts"Find by term: #{term.inspect}, model:#{model.inspect}"
+# move lc_subject into it's own table since being part of the usual structure caused it to be too slow.
+# When/if we move to having multiple dictionaries for subject we will need to also do a check for the appropriate dictionary.
+    if (term == 'subject' && model == 'generic_files') # and local_authoritiy = lc_subject
+      logger.debug("Matched subject")
+      sql = SubjectMeshEntry.where("term like ?", "#{lowQuery}%").select("term, subject_mesh_term_id").limit(25).to_sql
+      SubjectMeshEntry.find_by_sql(sql).each do |hit|
+        hits << {:uri => hit.subject_mesh_term_id, :label => hit.term}
+      end
+    else
+      logger.debug("Else part --------- Find by term: #{term.inspect}, model:#{model.inspect}")
+      puts "---------EROOR-------"
+      dterm = DomainTerm.where(:model => model, :term => term).first
+      if dterm
+        authorities = dterm.local_authorities.collect(&:id).uniq
+        sql = LocalAuthorityEntry.where("local_authority_id in (?)", authorities).where("lower(label) like ?", "#{lowQuery}%").select("label, uri").limit(25).to_sql
+        LocalAuthorityEntry.find_by_sql(sql).each do |hit|
+          hits << {:uri => hit.uri, :label => hit.label}
+        end
+      end
+    end
+    return hits
   end
 end
