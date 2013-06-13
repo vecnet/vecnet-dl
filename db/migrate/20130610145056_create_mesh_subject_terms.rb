@@ -1,22 +1,25 @@
 class CreateMeshSubjectTerms < ActiveRecord::Migration
   def up
-    create_table :subject_mesh_entries, :force => true  do |t|
-      t.string :subject_mesh_term_id, :unique=>true
+    create_table :subject_mesh_entries, {:id => false, :force => true}  do |t|
+      t.string :subject_mesh_term_id, :unique=>true, :primary=>true
       t.string :term
       t.text :subject_description
       t.datetime "created_at",  :null => false
       t.datetime "updated_at",  :null => false
     end
+
+    #execute "ALTER TABLE subject_mesh_entries ADD PRIMARY KEY (subject_mesh_term_id);"
+
     create_table :subject_mesh_synonyms, :force => true  do |t|
       t.string :subject_mesh_term_id, :foreign_key=>true
       t.string :subject_synonym
       t.datetime "created_at",  :null => false
       t.datetime "updated_at",  :null => false
     end
-    create_table :mesh_tree_structures, :id => false do |t|
+    create_table :mesh_tree_structures, :force=> true do |t|
       t.string :subject_mesh_term_id, :foreign_key => true
       t.string :tree_structure
-      t.string :eval_tree_path
+      t.text :eval_tree_path
       t.datetime "created_at",  :null => false
       t.datetime "updated_at",  :null => false
     end

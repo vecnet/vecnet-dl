@@ -1,6 +1,14 @@
 class MeshTreeStructure < ActiveRecord::Base
-  belongs_to :subject_mesh_entry
+  belongs_to :subject_mesh_entry , :foreign_key => "subject_mesh_term_id"
   attr_accessible :subject_mesh_term_id, :tree_structure, :eval_tree_path
+
+  serialize :eval_tree_path
+  
+  def self.get_term(mesh_tree)
+    SubjectMeshEntry.where(:subject_mesh_term_id=> 
+                                            MeshTreeStructure.where('mesh_tree_structures.tree_structure' => mesh_tree).map(&:subject_mesh_term_id)
+                                          )
+  end
 
   def self.classify_all_trees
     MeshTreeStructure.find_each do |mts|
@@ -9,25 +17,45 @@ class MeshTreeStructure < ActiveRecord::Base
   end
 
   def eval_tree_path
-    read_attribute(:length).split('|')
+    puts "Return path corrected"
+    trees = read_attribute(:eval_tree_path) || write_attribute(:eval_tree_path, "")
+
+    if trees 
+      trees.split("|")
+    else
+      []
+    end
+    
   end
 
   # path should be an array.
-  def eval_tree_path=(path)
-    write_attribute(:eval_tree_path, path.join('|'))
-  end
+  # def eval_tree_path=(path)
+  #   raise "Path to Join #{path.inspect}"
+  #   unless path.empty?
+  #     tree_path=path.join('|')
+  #     puts "After Join #{tree_path.inspect}"
+  #     write_attribute(:eval_tree_path, tree_path)
+  #   else
+  #     write_attribute(:eval_tree_path, "")
+  #   end
+  # end
 
   def classify_tree
     tree_levels = initial_segements_of(tree_structure)
-    tree_levels.map &method(:lookup_tree_term)
+    tree_array=tree_levels.map &method(:lookup_tree_term)
+    #eval_tree_path=(tree_array)
+    return tree_array
   end
 
   def classify_tree!
-    eval_tree_path = classify_tree
-    save!
+    unless classify_tree.empty?
+      tree_path=classify_tree.join('|')
+      puts "After Join #{tree_path.inspect}"
+      update_attribute(:eval_tree_path, tree_path)
+    end
   end
 
-  private
+  #private
   # Return all of the intial segements of our tree number,
   # from most general to most specific
   # e.g. 'D03.456.23.789' returns ['D03', 'D03.456', 'D03.456.23', 'D03.456.23.789']
@@ -44,8 +72,6 @@ class MeshTreeStructure < ActiveRecord::Base
   # given a tree id, return the main subject term
   # e.g. 'C03.752.530' returns 'Malaria'
   def lookup_tree_term(tree_id)
-    mts = MeshTreeStructure.find_by_tree_structure(tree_id).subject_mesh_entry
-    term = mts.subject_mesh_entry
-
+    return self.class.get_term(tree_id).first.term
   end
 end

@@ -100,15 +100,15 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
   add_index "local_authority_entries", ["local_authority_id", "label"], :name => "entries_by_term_and_label"
   add_index "local_authority_entries", ["local_authority_id", "uri"], :name => "entries_by_term_and_uri"
 
-  create_table "mesh_tree_structures", :id => false, :force => true do |t|
+  create_table "mesh_tree_structures", :force => true do |t|
     t.string   "subject_mesh_term_id"
     t.string   "tree_structure"
-    t.string   "eval_tree_path"
+    t.text     "eval_tree_path"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
   end
 
-  add_index "mesh_tree_structures", ["subject_mesh_term_id", "tree_structure"], :name => "entries_by_term_id_and_tree_structure"
+  add_index "mesh_tree_structures", ["subject_mesh_term_id", "tree_structure"], :name => "entries_by_term_id_and_tree_structure", :unique => true
   add_index "mesh_tree_structures", ["tree_structure"], :name => "entries_by_tree_structure"
 
   create_table "notifications", :force => true do |t|
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
 
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
-  create_table "subject_mesh_entries", :force => true do |t|
+  create_table "subject_mesh_entries", :id => false, :force => true do |t|
     t.string   "subject_mesh_term_id"
     t.string   "term"
     t.text     "subject_description"
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
     t.datetime "updated_at",           :null => false
   end
 
-  add_index "subject_mesh_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term"
+  add_index "subject_mesh_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term", :unique => true
   add_index "subject_mesh_entries", ["subject_mesh_term_id"], :name => "entries_by_subject_mesh_term_id"
 
   create_table "subject_mesh_synonyms", :force => true do |t|
@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
     t.datetime "updated_at",           :null => false
   end
 
-  add_index "subject_mesh_synonyms", ["subject_mesh_term_id", "subject_synonym"], :name => "entries_by_id_and_synonyms"
+  add_index "subject_mesh_synonyms", ["subject_mesh_term_id", "subject_synonym"], :name => "entries_by_id_and_synonyms", :unique => true
 
   create_table "trophies", :force => true do |t|
     t.integer  "user_id"
