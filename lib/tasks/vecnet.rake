@@ -1,7 +1,7 @@
 #
 # Tasks copied from to CurateND
 #
-
+require 'rake'
 namespace :vecnet do
   namespace :app do
     desc "Raise an error unless the RAILS_ENV is development"
@@ -20,19 +20,24 @@ namespace :vecnet do
       files=[]
       files<< File.expand_path("#{Rails.root}/mesh-d2013.txt")
     end
-    desc "Raise an error unless the RAILS_ENV is development"
+    desc "Import Mesh Subjects from text file mesh-d2013.txt"
     task :mesh_subjects => :environment do
-      start_time=time.now
+      start_time=Time.now
       puts "Starting to harvest at #{start_time}"
-      LocalAuthority.harvest_mesh_ascii("mesh_subject_harvest",mesh_files)
-      end_time=time.now
+      LocalAuthority.harvest_more_mesh_ascii("mesh_subject_harvest",mesh_files)
+      end_time=Time.now
       time_taken=end_time-start_time
       puts "Completed to harvest at #{end_time}"
     end
-    task :eval_mesh_tree do
-      pending
+    desc "Resolve Mesh Tree Structure"
+    task :eval_mesh_trees  => :environment do
+      start_time=Time.now
+      puts "Starting to eval tree at #{start_time}"
+      MeshTreeStructure.classify_all_trees
+      end_time=Time.now
+      time_taken=end_time-start_time
+      puts "Completed to evaluation at #{end_time}"
     end
-
   end
 
 
