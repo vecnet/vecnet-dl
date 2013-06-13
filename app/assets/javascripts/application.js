@@ -39,12 +39,12 @@ $(function(){
   $('.multi_value.control-group').manage_fields();
   $('.spatial_value.control-group').manage_fields();
 
-  $('#based_near').autocomplete(get_autocomplete_opts("location"))
+  $('#generic_file_based_near').autocomplete(get_autocomplete_opts("location"))
   $('#based_near_add').autocomplete(get_autocomplete_opts("location"))
 
   $("a[rel=popover]").click(function() { return false;});
 
-  $("#subject")
+  $("#generic_file_subject")
     // don't navigate away from the field on tab when selecting an item
     .bind( "keydown", function( event ) {
       if ( event.keyCode === $.ui.keyCode.TAB &&
