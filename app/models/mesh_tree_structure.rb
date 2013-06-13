@@ -17,15 +17,12 @@ class MeshTreeStructure < ActiveRecord::Base
   end
 
   def eval_tree_path
-    puts "Return path corrected"
     trees = read_attribute(:eval_tree_path) || write_attribute(:eval_tree_path, "")
-
     if trees 
       trees.split("|")
     else
       []
     end
-    
   end
 
   # path should be an array.
@@ -53,6 +50,20 @@ class MeshTreeStructure < ActiveRecord::Base
       puts "After Join #{tree_path.inspect}"
       update_attribute(:eval_tree_path, tree_path)
     end
+  end
+
+  def get_solr_hierarchy_from_tree
+    hierarchies = [];
+    depth = eval_tree_path.count-1
+    currentHierarchy = eval_tree_path.join(':');
+    loop do
+      puts "Depth: #{depth.inspect}, Push: #{currentHierarchy.inspect}"
+      hierarchies << "#{depth}/#{currentHierarchy}"
+      currentHierarchy = currentHierarchy.rpartition(':').first
+      depth= depth.to_i-1
+      break if currentHierarchy.empty?
+    end
+    return hierarchies.reverse;
   end
 
   #private

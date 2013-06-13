@@ -93,6 +93,7 @@ class CatalogController < ApplicationController
     config.add_facet_field "desc_metadata__based_near_facet", :label => "Location", :limit => 5
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5
     config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
+    config.add_facet_field "subject_hierarchy_facet", :label => "Hierarchy", :limit => 5
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request

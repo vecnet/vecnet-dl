@@ -51,6 +51,22 @@ class GenericFile
     EndNote.new(self).to_endnote
   end
 
+  def to_solr(solr_doc={}, opts={})
+    super(solr_doc, opts)
+    solr_doc["subject_hierarchy_facet"] = get_hierarchical_faceting_on_subject
+    return solr_doc
+  end
+
+  def get_hierarchical_faceting_on_subject
+    subjects=self.subject
+    all_trees=[]
+    subjects.each do |sub|
+      all_trees=SubjectMeshEntry.find_by_term(sub).mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+    end
+    puts "get_solr_hierarchy_from_tree Index to :#{all_trees.inspect}"
+    return all_trees
+  end
+
 
 end
 
