@@ -5,10 +5,10 @@ chruby 1.9.3-p392
 
 echo "Starting Resque pool"
 
-RAILS_ROOT=/home/app/vecnet/current
+source /home/app/vecnet/current/script/get-env.sh
 cd $RAILS_ROOT
-RAILS_ENV=qa bundle exec resque-pool --daemon \
+bundle exec resque-pool --daemon \
  --pidfile $RAILS_ROOT/tmp/pids/resque-pool.pid \
  --stdout $RAILS_ROOT/log/resque-pool.stdout.log \
  --stderr $RAILS_ROOT/log/resque-pool.stderr.log \
- --environment qa
+ --environment $RAILS_ENV
