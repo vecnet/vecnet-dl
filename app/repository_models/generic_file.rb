@@ -53,7 +53,7 @@ class GenericFile
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["subject_hierarchy_facet"] = get_hierarchical_faceting_on_subject
+    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
     return solr_doc
   end
 

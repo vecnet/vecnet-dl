@@ -58,7 +58,7 @@ class MeshTreeStructure < ActiveRecord::Base
     currentHierarchy = eval_tree_path.join(':');
     loop do
       puts "Depth: #{depth.inspect}, Push: #{currentHierarchy.inspect}"
-      hierarchies << "#{depth}/#{currentHierarchy}"
+      hierarchies << "#{currentHierarchy}"
       currentHierarchy = currentHierarchy.rpartition(':').first
       depth= depth.to_i-1
       break if currentHierarchy.empty?
