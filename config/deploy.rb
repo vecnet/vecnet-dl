@@ -179,8 +179,8 @@ namespace :vecnet do
   desc "Write the current environment values to file on targets"
   task :write_env_vars do
     run [
-      "echo RAILS_ENV=#{rails_env} > #{current_path}/env-vars",
-      "echo RAILS_ROOT=#{current_path} >> #{current_path}/env-vars"
+      "echo RAILS_ENV=#{rails_env} > #{release_path}/env-vars",
+      "echo RAILS_ROOT=#{current_path} >> #{release_path}/env-vars"
     ].join(" && ")
   end
 end
