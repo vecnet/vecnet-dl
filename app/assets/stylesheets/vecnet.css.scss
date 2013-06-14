@@ -140,8 +140,16 @@
   li {
     margin-right: 0;
     padding-right: 0;
+    position: relative;
     .count {
       margin-right: 0;
+      position: absolute;
+      top:0;
+      right:0;
+    }
+    a{
+      display: block;
+      width: 90%;
     }
     &.more_facets_link {
       margin-right: 0;
