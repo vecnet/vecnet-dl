@@ -87,13 +87,19 @@ class CatalogController < ApplicationController
     #config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
     config.add_facet_field "desc_metadata__creator_facet", :label => "Creator", :limit => 5
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5
-    config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5
+    #config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5
     config.add_facet_field "desc_metadata__archived_object_type_facet", :label => "Type", :limit => 5
     config.add_facet_field "desc_metadata__language_facet", :label => "Language", :limit => 5
     config.add_facet_field "desc_metadata__based_near_facet", :label => "Location", :limit => 5
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5
-    config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
-    config.add_facet_field "subject_hierarchy_facet", :label => "Hierarchy", :limit => 5
+    #config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
+    #config.add_facet_field "subject_hierarchy_facet", :label => "Hierarchy", :limit => 5
+    config.add_facet_field 'hierarchy_facet', :label => 'Subject Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 20
+    config.facet_display = {
+        :hierarchy => {
+            'hierarchy' => [nil]
+        }
+    }
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
