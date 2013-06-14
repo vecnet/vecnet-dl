@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
   create_table "subject_mesh_entries", :id => false, :force => true do |t|
-    t.string   "subject_mesh_term_id"
+    t.string   "subject_mesh_term_id", :null => false
     t.string   "term"
     t.text     "subject_description"
     t.datetime "created_at",           :null => false
@@ -266,5 +266,9 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
+
+  add_foreign_key "receipts", "notifications", :name => "receipts_on_notification_id"
 
 end

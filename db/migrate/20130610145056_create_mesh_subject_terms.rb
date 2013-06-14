@@ -8,7 +8,7 @@ class CreateMeshSubjectTerms < ActiveRecord::Migration
       t.datetime "updated_at",  :null => false
     end
 
-    #execute "ALTER TABLE subject_mesh_entries ADD PRIMARY KEY (subject_mesh_term_id);"
+    execute "ALTER TABLE subject_mesh_entries ADD PRIMARY KEY (subject_mesh_term_id);"
 
     create_table :subject_mesh_synonyms, :force => true  do |t|
       t.string :subject_mesh_term_id, :foreign_key=>true
