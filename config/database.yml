@@ -7,9 +7,20 @@ sqlite_settings: &sqlite_settings
   pool:    5
   timeout: 5000
 
+postgres_settings: &postgres_settings
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
 development: &development
-  <<: *sqlite_settings
-  database: db/development.sqlite3
+  <<: *postgres_settings
+  host: localhost  #if the server runs in same server
+  port: 5432
+  encoding: unicode
+  database: vecnet_development
+  username: rails_user
+  password:
 
 dlvecnet:
   ssh_user: username # <-- add username for ssh
@@ -29,7 +40,7 @@ development_remote_purl_database:
 
 test: &test
   <<: *development
-  database: db/test.sqlite3
+  database: vecnet_test
 
 test_remote_purl_database:
   <<: *test
