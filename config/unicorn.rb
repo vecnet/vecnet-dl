@@ -5,8 +5,12 @@
 rails_root = ENV["RAILS_ROOT"]
 working_directory rails_root
 worker_processes 2
-listen "/tmp/unicorn.sock.0", backlog: 1024
-listen "/tmp/unicorn.sock.1", backlog: 1024
+if ENV['RAILS_ENV'] == 'production'
+  listen "/tmp/new-vecnet.sock.0", backlog: 1024
+else
+  listen "/tmp/unicorn.sock.0", backlog: 1024
+  listen "/tmp/unicorn.sock.1", backlog: 1024
+end
 timeout 30
 
 pid "#{rails_root}/tmp/pids/unicorn.pid"
@@ -21,6 +25,7 @@ GC.respond_to?(:copy_on_write_friendly=) and
   GC.copy_on_write_friendly = true
 
 # TODO: add in redis reconnection.
+# [don] I think this is done in config/initializers/redis_config.rb
 before_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
