@@ -67,7 +67,7 @@ class LocalAuthority
     end
   end
 
-  def self.entries_by_term(model, term, query)
+  def self.entries_by_subject_mesh_term(model, term, query)
     return if query.empty?
     lowQuery = query.downcase
     hits = []
@@ -77,13 +77,13 @@ class LocalAuthority
 # When/if we move to having multiple dictionaries for subject we will need to also do a check for the appropriate dictionary.
     if (term == 'subject' && model == 'generic_files') # and local_authoritiy = lc_subject
       logger.debug("Matched subject")
-      sql = SubjectMeshEntry.where("term like ?", "#{lowQuery}%").select("term, subject_mesh_term_id").limit(25).to_sql
+      sql = SubjectMeshEntry.where("lower(term) like ?", "#{lowQuery}%").select("term, subject_mesh_term_id").limit(25).to_sql
       SubjectMeshEntry.find_by_sql(sql).each do |hit|
         hits << {:uri => hit.subject_mesh_term_id, :label => hit.term}
       end
     else
       logger.debug("Else part --------- Find by term: #{term.inspect}, model:#{model.inspect}")
-      puts "---------EROOR-------"
+      puts "---------ERROR-------"
       dterm = DomainTerm.where(:model => model, :term => term).first
       if dterm
         authorities = dterm.local_authorities.collect(&:id).uniq
