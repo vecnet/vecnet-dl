@@ -1,4 +1,15 @@
 GIT
+  remote: git://github.com/banurekha/blacklight-hierarchy.git
+  revision: 690a80a96bc6c0cf4ec84498aec7c246bfe4f6ef
+  specs:
+    blacklight-hierarchy (0.0.3)
+      blacklight (~> 4.0.0)
+      jquery-rails
+      rails (~> 3.2.0)
+      rsolr
+      rsolr-ext
+
+GIT
   remote: git://github.com/banurekha/curate.git
   revision: 9058897a32c2456f10e517fb465cee732006fc8c
   branch: vecnet
@@ -74,16 +85,6 @@ GIT
       sitemap (= 0.3.2)
       yaml_db (= 0.2.3)
       zipruby (= 0.3.6)
-
-PATH
-  remote: ../blacklight-hierarchy
-  specs:
-    blacklight-hierarchy (0.0.3)
-      blacklight (~> 4.0.0)
-      jquery-rails
-      rails (~> 3.2.0)
-      rsolr
-      rsolr-ext
 
 GEM
   remote: https://rubygems.org/

@@ -9,7 +9,7 @@ group :default do
   gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'curate', git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
-  gem 'blacklight-hierarchy', path: '../blacklight-hierarchy'
+  gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
   gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
   gem 'solrizer-fedora' # just to get resolrizer task
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
