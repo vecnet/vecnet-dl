@@ -71,7 +71,7 @@
                   hint: metadata_help('based_near'),
                   label: get_label(:based_near),
                   as: :multi_value,
-                  input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
       <%= render "spatial", curation_concern: curation_concern, f: f %>
       <%= render "temporal", curation_concern: curation_concern, f: f %>
     </fieldset>

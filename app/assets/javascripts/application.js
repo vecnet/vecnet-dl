@@ -16,6 +16,7 @@
 //= require jquery-ui-1.9.2/jquery.ui.core
 //= require jquery-ui-1.9.2/jquery.ui.widget
 //= require jquery-ui-1.9.2/jquery.ui.menu
+//= require jquery-ui-1.9.2/jquery.ui.position
 //= require jquery-ui-1.9.2/jquery.ui.autocomplete
 //
 //= require blacklight/blacklight
@@ -25,6 +26,7 @@
 //= require bootstrap-collapse
 //= require bootstrap-tooltip
 //= require bootstrap-popover
+//= require bootstrap-typeahead
 //
 //= require manage_repeating_fields
 //= require toggle_details
