@@ -117,7 +117,9 @@ sudo cp /opt/solr-4.3.0/vecnet/conf/stopwords.txt /opt/solr-4.3.0/vecnet/conf/st
 sudo cp solr-4.3.0/dist/solr-4.3.0.war /opt/solr-4.3.0
 sudo mkdir /opt/solr-4.3.0/lib
 sudo cp solr-4.3.0/dist/*.jar /opt/solr-4.3.0/lib
-sudo cp solr-4.3.0/dist/solrj-lib/*.jar /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/contrib /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/contrib /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/example/lib/ext /opt/solr-4.3.0/lib
 sudo chown tomcat:tomcat -R /opt/solr-4.3.0
 
 # fits
