@@ -32,4 +32,10 @@ To rebuild the Fedora object store:
 
 To resolarize everything...it will take a LONG time to complete.
 
+    chruby 1.9.3-p392
     RAILS_ENV=qa bundle exec rake solrizer:fedora:solrize_objects
+
+To load and build the MeSH trees run. This will run for a while (~0.5--1 hours)
+
+    chruby 1.9.3-p392
+    RAILS_ENV=qa bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees
