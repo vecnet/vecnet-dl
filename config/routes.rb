@@ -28,6 +28,8 @@ Vecnet::Application.routes.draw do
 
   match "catalog/recent" => "catalog#recent", :as => :catalog_recent
 
+  match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
+
   match "files/:id" => "curation_concern/generic_files#show", via: :get, as: "files"
 
   # Authority vocabulary queries route
