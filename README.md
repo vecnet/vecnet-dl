@@ -39,3 +39,15 @@ To load and build the MeSH trees run. This will run for a while (~0.5--1 hours)
 
     chruby 1.9.3-p392
     RAILS_ENV=qa bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees
+
+Initializing new production environment
+
+ 1. Do system setup as in `SETUP` file
+ 2. Get capistrano deploy working to new site
+ 3. on production machine:
+  * setup ruby: `chruby 1.9.3-p392`
+  * Setup mesh terms: `RAILS_ENV=production bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees`
+  * Migrate user table: See below
+  * Resolrize: `RAILS_ENV=production bundle exec rake solrizer:fedora:solrize_objects`
+  * Migrate fedora objects: `RAILS_ENV=production bundle exec rake vecnet:migrate:batch_to_collection`
+ 7. Done!

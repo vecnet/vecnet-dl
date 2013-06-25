@@ -40,6 +40,19 @@ namespace :vecnet do
     end
   end
 
+  namespace :migrate do
+    desc "Convert Batch objects to Collection objects"
+    task :batch_to_collection => :environment do
+      start_time = Time.now
+      puts "Starting batch to collection migration at #{start_time}"
+      a = BatchToCollection.new
+      a.migrate
+      end_time = Time.now
+      time_taken = end_time - start_time
+      puts "Completed migration at #{end_time}, Duration: #{time_taken.inspect}"
+    end
+  end
+
 
   namespace :db do
     def pg_dump_file_path
