@@ -80,7 +80,6 @@ $(function(){
       minLength:1,
       select: function( event, ui ) {
         Vecnet.list_filter($('ul.facet-hierarchy'))
-        return false
       },
       close: function( event, ui ) {
         if($('.filterinput').val().length == 0) {
