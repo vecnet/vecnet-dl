@@ -50,8 +50,10 @@ To resolrize with mesh synonyms...it will take a LONG time to complete.
     #copy schema and solrconfig
     sudo  cp solr_conf/conf/schema.xml /opt/solr-4.3.0/vecnet/conf/schema.xml
     sudo  cp solr_conf/conf/solrconfig.xml /opt/solr-4.3.0/vecnet/conf/solrconfig.xml
+    #change owner to be tomcat
+    sudo chown tomcat:tomcat -R /opt/solr-4.3.0
     #restart solr
-    sudo service restart tomcat6
+    sudo service tomcat6 restart
     #resolrize all objects
     RAILS_ENV=qa bundle exec rake solrizer:fedora:solrize_objects
 
