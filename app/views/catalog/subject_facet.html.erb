@@ -1,0 +1,9 @@
+<form class="filterform" action="#">
+  <input class="filterinput autocomplete" type="text">
+</form>
+<ul class="facet-hierarchy">
+ <% facet_field = facet_configuration_for_field(params[:id]||'hierarchy_facet') %>
+ <%# facet_field %>
+  <%# render_facet_partials %>
+ <%= render_hierarchy(facet_field) %>
+</ul>

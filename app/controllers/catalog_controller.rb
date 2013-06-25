@@ -45,6 +45,15 @@ class CatalogController < ApplicationController
     recent_me
   end
 
+  def subject_facet
+    @pagination = get_facet_pagination(params[:id], params)
+    (@response, @document_list) = get_search_results
+    respond_to do |format|
+      format.html
+      format.js { render :layout => false }
+    end
+  end
+
   def recent
     if user_signed_in?
       # grab other people's documents
@@ -87,14 +96,13 @@ class CatalogController < ApplicationController
     #config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
     config.add_facet_field "desc_metadata__creator_facet", :label => "Creator", :limit => 5
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5
-    #config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5
+    config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5
     config.add_facet_field "desc_metadata__archived_object_type_facet", :label => "Type", :limit => 5
     config.add_facet_field "desc_metadata__language_facet", :label => "Language", :limit => 5
     config.add_facet_field "desc_metadata__based_near_facet", :label => "Location", :limit => 5
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5
     #config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
-    #config.add_facet_field "subject_hierarchy_facet", :label => "Hierarchy", :limit => 5
-    config.add_facet_field 'hierarchy_facet', :label => 'Subject Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 20
+    config.add_facet_field 'hierarchy_facet', :label => 'Subject Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false
     config.facet_display = {
         :hierarchy => {
             'hierarchy' => [nil]
@@ -329,6 +337,16 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+  end
+
+  protected
+
+  def exclude_unwanted_models(solr_parameters, user_parameters)
+    super
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Batch\""
+    return solr_parameters
   end
 
   private

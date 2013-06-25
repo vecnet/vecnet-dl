@@ -613,16 +613,16 @@
    <!-- Copy Fields -->
         
    <!-- unstemmed fields -->
-   <copyField source="title_t" dest="title_unstem_search"/>
-   <copyField source="subtitle_t" dest="subtitle_unstem_search"/>
-   <copyField source="title_addl_t" dest="title_addl_unstem_search"/>
-   <copyField source="title_added_entry_t" dest="title_added_entry_unstem_search"/>
-   <copyField source="title_series_t" dest="title_series_unstem_search"/>
-   <copyField source="author_t" dest="author_unstem_search"/>
-   <copyField source="author_addl_t" dest="author_addl_unstem_search"/>
-   <copyField source="subject_t" dest="subject_unstem_search"/>
-   <copyField source="subject_addl_t" dest="subject_addl_unstem_search"/>
-   <copyField source="subject_topic_facet" dest="subject_topic_unstem_search"/>
+   <copyField source="desc_metadata__title_t" dest="title_unstem_search"/>
+   <copyField source="desc_metadata__subtitle_t" dest="subtitle_unstem_search"/>
+   <copyField source="desc_metadata__title_addl_t" dest="title_addl_unstem_search"/>
+   <copyField source="desc_metadata__title_added_entry_t" dest="title_added_entry_unstem_search"/>
+   <copyField source="desc_metadata__title_series_t" dest="title_series_unstem_search"/>
+   <copyField source="desc_metadata__author_t" dest="author_unstem_search"/>
+   <copyField source="desc_metadata__author_addl_t" dest="author_addl_unstem_search"/>
+   <copyField source="desc_metadata__subject_t" dest="subject_unstem_search"/>
+   <copyField source="desc_metadata__subject_addl_t" dest="subject_addl_unstem_search"/>
+   <copyField source="desc_metadata__subject_topic_facet" dest="subject_topic_unstem_search"/>
    
    <!-- sort fields -->
    <copyField source="pub_date" dest="pub_date_sort"/>

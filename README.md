@@ -40,6 +40,21 @@ To load and build the MeSH trees run. This will run for a while (~0.5--1 hours)
     chruby 1.9.3-p392
     RAILS_ENV=qa bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees
 
+To resolrize with mesh synonyms...it will take a LONG time to complete.
+
+    chruby 1.9.3-p392
+    #you could skip this if synonyms did not change
+    RAILS_ENV=qa bundle exec rake vecnet:solrize_synonym:get_synonyms FILE=solr_conf/conf/synonyms.txt
+    #copy this file to solr core
+    sudo  cp solr_conf/conf/synonyms.txt /opt/solr-4.3.0/vecnet/conf/synonyms.txt
+    #copy schema and solrconfig
+    sudo  cp solr_conf/conf/schema.xml /opt/solr-4.3.0/vecnet/conf/schema.xml
+    sudo  cp solr_conf/conf/solrconfig.xml /opt/solr-4.3.0/vecnet/conf/solrconfig.xml
+    #restart solr
+    sudo service restart tomcat6
+    #resolrize all objects
+    RAILS_ENV=qa bundle exec rake solrizer:fedora:solrize_objects
+
 Initializing new production environment
 
  1. Do system setup as in `SETUP` file

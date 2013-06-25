@@ -39,6 +39,29 @@ namespace :vecnet do
       puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
     end
   end
+  namespace :solrize_synonym do
+  desc "get all synonym and create a synonym file to sent to solr"
+    task :get_synonyms  => :environment do
+      start_time=Time.now
+      puts "Starting to get tree at #{start_time}"
+      FILE = ENV["FILE"]
+      subjects = SubjectMeshEntry.all
+      sym_file = File.new(File.join(Rails.root, FILE), "w")
+        subjects.each do |subject|
+          tmp_arr= []
+          tmp_arr << subject.term
+          subject.subject_mesh_synonyms.each {|syn|
+            tmp_arr << syn.subject_synonym.gsub(/,/, '\,')
+          }
+          sym_file.write(tmp_arr.join(','))
+          sym_file.write("\n")
+        end
+      sym_file.close
+      end_time=Time.now
+      time_taken=end_time-start_time
+      puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
+    end
+  end
 
   namespace :migrate do
     desc "Convert Batch objects to Collection objects"

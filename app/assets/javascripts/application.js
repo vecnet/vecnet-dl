@@ -34,7 +34,63 @@
 //= require auto_complete
 //= require icon_toggle
 
+Vecnet={}
+Vecnet.setup_autocomplete = function(form_selector) {
+  terms = $("li").map(function(){
+    return $(this).data('term');
+  }).get()
+}
+
+Vecnet.unique = function(list) {
+  var result = [];
+  $.each(list, function(i, e) {
+    if ($.inArray(e, result) == -1) result.push(e);
+  });
+  return result;
+}
+
+Vecnet.list_filter= function(list){
+  var filter = $('.filterinput').val();
+  if(filter) {
+    // this finds all links in a list that contain the input,
+    // and hide the ones not containing the input while showing the ones that do
+    $(list).find("a:not(:Contains(" + filter + "))").parents('li').slideUp();
+    $(list).find("a:Contains(" + filter + ")").parents('li').slideDown();
+  } else {
+    $(list).find('li').slideDown();
+  }
+  return false;
+}
+
 $(function(){
+  $(".ajax_modal_launch").on( 'click', function( e ){
+    Vecnet.setup_autocomplete('#ajax_modal');
+  });
+
+  // custom css expression for a case-insensitive contains()
+  jQuery.expr[':'].Contains = function(a,i,m){
+    return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+  };
+
+  $('#ajax-modal').on('focus', '.autocomplete',function() {
+    Vecnet.setup_autocomplete('#ajax_modal');
+    var sorted_terms= Vecnet.unique(terms)
+    $(this).autocomplete({
+      source :  sorted_terms,
+      minLength:1,
+      select: function( event, ui ) {
+        Vecnet.list_filter($('ul.facet-hierarchy'))
+        return false
+      },
+      close: function( event, ui ) {
+        if($('.filterinput').val().length == 0) {
+          $('ul.facet-hierarchy').find('li').slideDown();
+        }
+      }
+    });
+  });
+
+  //$('#ajax-modal').on('keyDown',".filterinput", Vecnet.list_filter($('ul.facet-hierarchy')));
 
   $('abbr').tooltip();
   $("a[rel=popover]").popover({ trigger: "hover" });
@@ -81,5 +137,5 @@ $(function(){
       }
     };
     return autocomplete_opts;
-  }
+  };
 });
