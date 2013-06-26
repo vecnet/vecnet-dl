@@ -91,16 +91,15 @@
                   hint: "You can roll back to different version in show page"
       %>
     </fieldset>
+
+    <div class="row">
+      <div class="span12 form-actions">
+        <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
+            <i class="icon-save"></i> Save
+        <% end %>
+        <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
+      </div>
+    </div>
 <% end %>
-
-
-<div class="row">
-  <div class="span12 form-actions">
-    <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
-        <i class="icon-save"></i> Save
-    <% end %>
-    <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
-  </div>
-</div>
 
 
