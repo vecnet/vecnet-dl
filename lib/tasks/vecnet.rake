@@ -50,9 +50,11 @@ namespace :vecnet do
         subjects.each do |subject|
           tmp_arr= []
           tmp_arr << subject.term
-          subject.subject_mesh_synonyms.each {|syn|
-            tmp_arr << syn.subject_synonym.gsub(/,/, '\,')
+          tmp_arr += subject.subject_mesh_synonyms.map {|syn|
+            syn.subject_synonym
           }
+          # escape all the commas!
+          tmp_arr.map! { |syn| syn.gsub(/,/, '\,') }
           sym_file.write(tmp_arr.join(','))
           sym_file.write("\n")
         end
