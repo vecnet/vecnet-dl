@@ -2,7 +2,8 @@
 
 <ul class="nav nav-list slide-list" id="facets">
  <%= render_facet_partials %>
- <%= link_to facet_field_labels['hierarchy_facet'], url_for(params.merge(:id => 'hierarchy_facet', :action=>"subject_facet", :path_only=>true)), :class => "ajax_modal_launch" %>
- <%# debug extract_solr_facet_by_field_name('hierarchy_facet').to_s %>
+  <% if(@response.total>0)  %>
+    <%= link_to facet_field_labels['hierarchy_facet'], url_for(params.merge(:id => 'hierarchy_facet', :action=>"subject_facet", :path_only=>true)), :class => "ajax_modal_launch" %>
+ <% end %>
 </ul>
 
