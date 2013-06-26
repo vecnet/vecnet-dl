@@ -43,7 +43,8 @@ To load and build the MeSH trees run. This will run for a while (~0.5--1 hours)
 To resolrize with mesh synonyms...it will take a LONG time to complete.
 
     chruby 1.9.3-p392
-    #you could skip this if synonyms did not change
+    # This builds the synonyms.txt file if needed.
+    # you could skip this if synonyms did not change
     RAILS_ENV=qa bundle exec rake vecnet:solrize_synonym:get_synonyms FILE=solr_conf/conf/synonyms.txt
     #copy this file to solr core
     sudo  cp solr_conf/conf/synonyms.txt /opt/solr-4.3.0/vecnet/conf/synonyms.txt
