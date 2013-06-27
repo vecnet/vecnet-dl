@@ -53,8 +53,19 @@ class GenericFile
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
+    solr_doc["hierarchy_t"] = get_hierarchical_faceting_on_subject
+    solr_doc["subject_parents_t"] = get_subject_parents
     return solr_doc
+  end
+
+  def get_subject_parents
+    subjects=self.subject
+    all_trees_arr=[]
+    subjects.each do |sub|
+      all_trees_arr<<SubjectMeshEntry.find_by_term(sub).mesh_tree_structures.collect{|tree| tree.eval_tree_path}.flatten
+    end
+
+    return all_trees_arr.uniq
   end
 
   def get_hierarchical_faceting_on_subject
