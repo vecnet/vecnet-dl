@@ -23,6 +23,7 @@ B = a = b = c = d
 
 *NEWRECORD
 A = another field
+print entry = test
 
 EOS
     mesh = MeshDataParser.new(StringIO.new(data))

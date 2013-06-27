@@ -1,5 +1,49 @@
 *NEWRECORD
 RECTYPE = D
+MH = Malaria
+AQ = BL CF CI CL CN CO DH DI DT EC EH EM EN EP ET GE HI IM ME MI MO NU PA PC PP PS PX RA RH RI RT SU TH TM UR US VE VI
+PRINT ENTRY = Marsh Fever|T047|NON|EQV|NLM (2006)|050114|abcdef
+PRINT ENTRY = Plasmodium Infections|T047|NON|EQV|UNK (19XX)|740330|PLASMODIUM INFECT|abcdefv
+PRINT ENTRY = Remittent Fever|T047|NON|EQV|NLM (2006)|050114|abcdef
+ENTRY = Infections, Plasmodium|T047|NON|EQV|NLM (1992)|911126|INFECT PLASMODIUM|abcdefv
+ENTRY = Paludism|T047|NON|EQV|NLM (2005)|040220|abcdef
+ENTRY = Fever, Marsh
+ENTRY = Fever, Remittent
+ENTRY = Infection, Plasmodium
+ENTRY = Plasmodium Infection
+MN = C03.752.530
+MN = C23.996.660
+FX = Antimalarials
+MH_TH = NLM (1986)
+MH_TH = ORD (2010)
+ST = T047
+AN = GEN or unspecified; specify Plasmodium species IM if possible but note P. falciparum malaria = MALARIA, FALCIPARUM; P. vivax malaria = MALARIA, VIVAX; tertian malaria = MALARIA, VIVAX, quartan malaria: coord IM with PLASMODIUM MALARIAE (IM); malariotherapy = HYPERTHERMIA, INDUCED: do not confuse with MALARIA /ther; /drug ther: consider also ANTIMALARIALS
+MS = A protozoan disease caused in humans by four species of the PLASMODIUM genus: PLASMODIUM FALCIPARUM; PLASMODIUM VIVAX; PLASMODIUM OVALE; and PLASMODIUM MALARIAE; and transmitted by the bite of an infected female mosquito of the genus ANOPHELES. Malaria is endemic in parts of Asia, Africa, Central and South America, Oceania, and certain Caribbean islands. It is characterized by extreme exhaustion associated with paroxysms of high FEVER; SWEATING; shaking CHILLS; and ANEMIA. Malaria in ANIMALS is caused by other species of plasmodia.
+OL = use MALARIA to search MALARIA CONTROL 1966
+PM = MALARIA CONTROL was heading 1963-66
+HN = MALARIA CONTROL was heading 1963-66
+MED = *1141
+MED = 1541
+M90 = *2010
+M90 = 2428
+M85 = *2929
+M85 = 3509
+M80 = *2008
+M80 = 2567
+M75 = *1414
+M75 = 1928
+M66 = *2561
+M66 = 3568
+M94 = *1272
+M94 = 1646
+CATSH = CAT LIST
+MR = 20120703
+DA = 19990101
+DC = 1
+UI = D008288
+
+*NEWRECORD
+RECTYPE = D
 MH = Calcimycin
 AQ = AA AD AE AG AI AN BI BL CF CH CL CS CT DU EC HI IM IP ME PD PK PO RE SD ST TO TU UR
 ENTRY = A-23187|T109|T195|LAB|NRW|NLM (1991)|900308|abbcdef
