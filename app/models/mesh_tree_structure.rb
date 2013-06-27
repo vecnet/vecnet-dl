@@ -55,7 +55,7 @@ class MeshTreeStructure < ActiveRecord::Base
   def get_solr_hierarchy_from_tree
     hierarchies = [];
     depth = eval_tree_path.count-1
-    tree_to_solrize = eval_tree_path.count>2 ? eval_tree_path[2..-1] : eval_tree_path
+    tree_to_solrize = eval_tree_path.count>3 ? eval_tree_path[2..-1] : eval_tree_path
     current_hierarchy = tree_to_solrize.join(':');
     loop do
       #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
