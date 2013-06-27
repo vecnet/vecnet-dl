@@ -29,6 +29,14 @@ namespace :vecnet do
       time_taken=end_time-start_time
       puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
     end
+    task :one_time_mesh_print_entry_import => :environment do
+      start_time=Time.now
+      puts "Starting to harvest print entry at #{start_time}"
+      LocalAuthority.harvest_more_mesh_print_synonyms("mesh_subject_harvest",mesh_files)
+      end_time=Time.now
+      time_taken=end_time-start_time
+      puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
+    end
     desc "Resolve Mesh Tree Structure"
     task :eval_mesh_trees  => :environment do
       start_time=Time.now
