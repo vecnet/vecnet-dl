@@ -74,8 +74,8 @@ class GenericFile
     subjects.each do |sub|
       all_trees<<SubjectMeshEntry.find_by_term(sub).mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
     end
-    puts "get_solr_hierarchy_from_tree Index to :#{all_trees.inspect}"
-    return all_trees
+    puts "get_solr_hierarchy_from_tree Index to :#{all_trees.flatten.inspect}"
+    return all_trees.flatten
   end
 
 
