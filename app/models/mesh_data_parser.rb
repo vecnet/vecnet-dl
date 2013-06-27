@@ -15,7 +15,7 @@ class MeshDataParser
         yield(current_data) if in_record
         in_record = true
         current_data = {}
-      when /\A(?<term>\w+) = (?<value>.*)/
+      when /\A(?<term>[^=]+) = (?<value>.*)/
         current_data[Regexp.last_match(:term)] ||= []
         current_data[Regexp.last_match(:term)] << Regexp.last_match(:value)
       when /\A\n/
@@ -34,10 +34,19 @@ class MeshDataParser
   end
 
   def self.get_synonyms(record)
-    puts record['ENTRY'].inspect
     synonymns=[]
     unless record['ENTRY'].blank?
       record['ENTRY'].each do |synonym|
+        synonymns<<synonym.split('|').first
+      end
+    end
+    synonymns
+  end
+
+  def self.get_print_synonyms(record)
+    synonymns=[]
+    unless record['PRINT ENTRY'].blank?
+      record['PRINT ENTRY'].each do |synonym|
         synonymns<<synonym.split('|').first
       end
     end
