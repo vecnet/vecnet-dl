@@ -76,8 +76,14 @@ body { padding-top: 40px; }
   }
 }
 
-.with-thumbnail {
-  margin: 20px 20px 0 0;
+#search-results{
+  li{
+    clear:both;
+    float: left;
+    width: 100%;
+    color:#0088cc;
+    font-size: 24px;
+  }
 }
 
 .thumbnail-container {
@@ -95,6 +101,8 @@ body { padding-top: 40px; }
   overflow: auto;
   padding: 0.5em 0 0;
   clear: none;
+  font-size: 14px;
+  color:#333333;
   dt{
     float: left;
     text-align: right;
@@ -192,6 +200,13 @@ body { padding-top: 40px; }
     height:80%;
     padding-top:4px;
     padding-bottom:4px;
+  }
+}
+.filterform{
+  .search-query{
+    height: 80%;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 }
 
