@@ -58,8 +58,14 @@ limitations under the License.
     <div class="nav-inner">
       <div class="container">
         <div class="row">
-          <div class="span8"> <a class="brand" href="/">VECNet</a> </div>
-          <%= render :partial => 'shared/user_util_links', :formats => [:html] %>
+          <div class="span6">
+            <% if Rails.env=='production' %>
+                <a class="brand" href="http://vecnet-web.crc.nd.edu/">VECNet</a>
+            <% else %>
+                <a class="brand" href="http://vecnet-qa.crc.nd.edu/">VECNet</a>
+            <% end %>
+          </div>
+          <div class="span6"> <%= render :partial => 'shared/user_util_links', :formats => [:html] %> </div>
         </div>
       </div>
     </div>
@@ -70,7 +76,7 @@ limitations under the License.
       <div class="container">
         <div id="title-bar" class="row">
           <div id="site-title" class="span8">
-            <h1>Metadata Repository</h1>
+            <h1>Digital Library</h1>
             <p class="lead">Curate Metadata in the VECNet Digital Library</p>
           </div>
           <div id="site-search" class="span4">

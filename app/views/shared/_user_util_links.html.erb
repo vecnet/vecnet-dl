@@ -1,19 +1,36 @@
 
     <ul class="nav pull-right">
-      <li><a href="http://dl-vecnet.crc.nd.edu">Home</a></li>
-      <li><a href="http://vecnet.org/index.php/about-us">About</a></li>
-      <li><a href="http://vecnet.org/index.php/contact-vecnet">Contact</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="http://vecnet-web.crc.nd.edu/expert_emod/">EMOD Expert Interface</a></li>
-          <li><a href="http://vecnet-web.crc.nd.edu/expert_openmalaria/">OpenMalaria Expert Interface</a></li>
-          <li><a href="http://vecnet-web.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
-          <li><a href="http://vecnet-web.crc.nd.edu/ts/">Transmission Simulator</a></li>
-          <li><a href="http://vecnet-web.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
-          <li><a href="http://dl-vecnet.crc.nd.edu">Meta-data repository</a></li>
-        </ul>
+      <% if Rails.env=='production' %>
+        <li><a href="http://vecnet-web.crc.nd.edu">Home</a></li>
+        <li><a href="http://vecnet-web.crc.nd.edu/#about">About</a></li>
+        <li><a href="http://vecnet-web.crc.nd.edu/#contact">Contact</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://vecnet-web.crc.nd.edu/expert_emod/">EMOD Expert Interface</a></li>
+            <li><a href="http://vecnet-web.crc.nd.edu/expert_openmalaria/">OpenMalaria Expert Interface</a></li>
+            <li><a href="http://vecnet-web.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
+            <li><a href="http://vecnet-web.crc.nd.edu/ts/">Transmission Simulator</a></li>
+            <li><a href="http://vecnet-web.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
+            <li><a href="http://dl-vecnet.crc.nd.edu">Digital Library</a></li>
+          </ul>
+          </li>
+      <% else %>
+        <li><a href="http://vecnet-qa.crc.nd.edu">Home</a></li>
+        <li><a href="http://vecnet-qa.crc.nd.edu/#about">About</a></li>
+        <li><a href="http://vecnet-qa.crc.nd.edu/#contact">Contact</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://vecnet-qa.crc.nd.edu/expert_emod/">EMOD Expert Interface</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/expert_openmalaria/">OpenMalaria Expert Interface</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/ts/">Transmission Simulator</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
+            <li><a href="http://dl-vecnet-qa.crc.nd.edu">Digital Library</a></li>
+          </ul>
       </li>
+      <% end %>
         <% if current_user %>
           <li class="dropdown">
             <a href=# class="dropdown-toggle" data-toggle="dropdown">

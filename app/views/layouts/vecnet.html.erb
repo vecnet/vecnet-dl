@@ -4,7 +4,13 @@
     <div class="nav-inner">
       <div class="container">
         <div class="row">
-          <div class="span6"> <a class="brand" href="http://vecnet.org/">VECNet</a> </div>
+          <div class="span6">
+            <% if Rails.env=='production' %>
+              <a class="brand" href="http://vecnet-web.crc.nd.edu/">VECNet</a>
+            <% else %>
+              <a class="brand" href="http://vecnet-qa.crc.nd.edu/">VECNet</a>
+            <% end %>
+          </div>
           <div class="span6"> <%= render :partial => 'shared/user_util_links', :formats => [:html] %> </div>
         </div>
       </div>
@@ -16,7 +22,7 @@
         <div class="container">
           <div id="title-bar" class="row">
             <div id="site-title" class="span8">
-              <h1><%= link_to 'Metadata Repository', root_path%></h1>
+              <h1><%= link_to 'Digital Library', root_path%></h1>
               <p class="lead">Curate Metadata in the VECNet Digital Library</p>
             </div>
             <div id="site-search" class="span4">
