@@ -1,6 +1,6 @@
 
     <ul class="nav pull-right">
-      <% if Rails.env=='production' %>
+      <% if Rails.env=='qa' %>
         <li><a href="http://vecnet-web.crc.nd.edu">Home</a></li>
         <li><a href="http://vecnet-web.crc.nd.edu/#about">About</a></li>
         <li><a href="http://vecnet-web.crc.nd.edu/#contact">Contact</a></li>
@@ -12,7 +12,7 @@
             <li><a href="http://vecnet-web.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
             <li><a href="http://vecnet-web.crc.nd.edu/ts/">Transmission Simulator</a></li>
             <li><a href="http://vecnet-web.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
-            <li><a href="http://dl-vecnet.crc.nd.edu">Digital Library</a></li>
+            <li><a href="http://dl-vecnet-qa.crc.nd.edu">Digital Library</a></li>
           </ul>
           </li>
       <% else %>
@@ -24,10 +24,12 @@
           <ul class="dropdown-menu">
             <li><a href="http://vecnet-qa.crc.nd.edu/expert_emod/">EMOD Expert Interface</a></li>
             <li><a href="http://vecnet-qa.crc.nd.edu/expert_openmalaria/">OpenMalaria Expert Interface</a></li>
-            <li><a href="http://vecnet-qa.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
             <li><a href="http://vecnet-qa.crc.nd.edu/ts/">Transmission Simulator</a></li>
             <li><a href="http://vecnet-qa.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
-            <li><a href="http://dl-vecnet-qa.crc.nd.edu">Digital Library</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/expert_openmalaria/">Product Impact Evaluator</a></li>
+            <li><a href="https://ci.dev.vecnet.org/cifer/">CIFER</a></li>
+            <li><a href="http://dl-vecnet.crc.nd.edu">Digital Library</a></li>
+            <li><a href="http://vecnet-qa.crc.nd.edu/datawarehouse/">Datawarehouse</a></li>
           </ul>
       </li>
       <% end %>
