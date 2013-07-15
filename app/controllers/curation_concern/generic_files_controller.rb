@@ -93,11 +93,10 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   end
 
   def destroy
-    parent = curation_concern.batch
     title = curation_concern.to_s
     curation_concern.destroy
     flash[:notice] = "Deleted #{title}"
-    redirect_to dashboard_index_path
+    redirect_to redirect_to_dashboard
   end
 
   include Morphine
@@ -107,5 +106,17 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   private
     def show_breadcrumbs?
       true
+    end
+
+    def redirect_to_dashboard
+      query_params = session[:search] ? session[:search].dup : {}
+      query_params.delete :counter
+      query_params.delete :total
+      controller=query_params.delete :controller
+      if controller.eql?("admin_dashboard")
+        return admin_dashboard_index_path(query_params)
+      else
+        return dashboard_index_path(query_params)
+      end
     end
 end
