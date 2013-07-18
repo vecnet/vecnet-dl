@@ -5,12 +5,7 @@
 rails_root = ENV["RAILS_ROOT"]
 working_directory rails_root
 worker_processes 2
-if ENV['RAILS_ENV'] == 'production'
-  listen "/tmp/new-vecnet.sock.0", backlog: 1024
-else
-  listen "/tmp/unicorn.sock.0", backlog: 1024
-  listen "/tmp/unicorn.sock.1", backlog: 1024
-end
+listen "/tmp/vecnet.sock.0", backlog: 1024
 timeout 30
 
 pid "#{rails_root}/tmp/pids/unicorn.pid"
