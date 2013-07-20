@@ -38,15 +38,15 @@ class User < ActiveRecord::Base
   end
 
   def self.audituser_key
-    'curate_nd_audituser'
+    'vecnet_audituser'
   end
 
   def self.batchuser
-    User.find_by_user_key(batchuser_key) || User.create!(Devise.authentication_keys.first => batchuser_key)
+    User.find_by_user_key(batchuser_key) || User.create!(Devise.authentication_keys.first => batchuser_key, password: Devise.friendly_token[0,20])
   end
 
   def self.batchuser_key
-    'curate_nd_batchuser'
+    'vecnet_batchuser@example.com'
   end
 
   def agree_to_terms_of_service!
