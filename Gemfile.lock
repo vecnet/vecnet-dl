@@ -291,6 +291,7 @@ GEM
     hydra-mods (0.0.6)
       active-fedora (> 4.1)
     i18n (0.6.4)
+    iso-639 (0.1.0)
     jettywrapper (1.4.1)
       activesupport (>= 3.0.0)
       childprocess
@@ -331,6 +332,10 @@ GEM
     mime-types (1.23)
     mini_magick (3.6.0)
       subexec (~> 0.2.1)
+    mods (0.0.22)
+      iso-639
+      nokogiri
+      nom-xml
     morphine (0.1.1)
     multi_json (1.7.4)
     nest (1.1.1)
@@ -578,6 +583,7 @@ DEPENDENCIES
   jquery-rails
   method_decorators
   method_locator
+  mods
   morphine
   pg
   rabl
