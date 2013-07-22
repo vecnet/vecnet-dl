@@ -3,17 +3,17 @@ class CitationIngestService
 
   attr_accessor :metadata_file, :parsed_mods, :curation_concern, :pdf_path
 
-  def initialize(mods_input_file, path_to_files)
+  def initialize(mods_input_file, path_to_files='/Users/blakshmi/projects/endnote')
     @metadata_file = mods_input_file
-    @pdf_file= path_to_files
+    @pdf_path= path_to_files
   end
 
   def ingest_citation
     actor.create!
     puts "Created Citation with id: #{@curation_concern.pid}"
     puts "Citation created as: #{Citation.find(@curation_concern.pid)}"
-  rescue ActiveFedora::RecordInvalid
-    puts "Error occured during creation: #{@curation_concern.errors.inspect}"
+  rescue ActiveFedora::RecordInvalid=>e
+    puts "Error occured during creation: #{e.inspect}"
   end
 
   def citation
@@ -31,7 +31,7 @@ class CitationIngestService
     end
     metadata=
     {
-      files:find_files_to_attach.map{|file|File.read(file)},
+      files:find_files_to_attach,
       title:"add title",
       creator: self.parsed_mods.plain_name.display_value,
       identifier: get_identifiers, #identifier
@@ -68,21 +68,15 @@ class CitationIngestService
   end
 
   def get_subjects
-    subject=[]
-    self.parse_mods.subject.each{|sub| subject << sub.text.gsub("\n","").strip}
-    return subject
+    self.parse_mods.subject.map{|sub| sub.text.gsub("\n","").strip}
   end
 
   def get_languages
-    language=[]
-    self.parse_mods.language.each{|lang| language << lang.text.gsub("\n","").strip}
-    return language
+    self.parse_mods.language.map{|lang| lang.text.gsub("\n","").strip}
   end
 
   def get_urls
-    url=[]
-    self.parse_mods.location.text.each {|loc| url << loc.gsub("\n","").strip}
-    return url
+    self.parse_mods.location.url.map {|loc| loc.text.gsub("\n","").strip}
   end
 
   def find_files_to_attach
@@ -90,7 +84,7 @@ class CitationIngestService
     files=[]
     related_url.each do |url|
       if (url =~ /internal-pdf(.*)/)
-       files<< url.gsub("internal-pdf://", self.pdf_path)
+       files<< url.gsub("internal-pdf://", "#{self.pdf_path}/")
       end
     end
     files
