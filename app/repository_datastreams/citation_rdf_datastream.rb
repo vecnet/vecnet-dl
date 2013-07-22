@@ -1,4 +1,3 @@
-require File.expand_path('../../../lib/rdf/qualified_dc', __FILE__)
 class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
   map_predicates do |map|
     map.part_of(:to => "isPartOf", :in => RDF::DC)
@@ -54,7 +53,7 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
 
     map.bibliographic_citation({in: RDF::DC, to: 'bibliographicCitation'})
 
-    map.archived_object_type({in: RDF::QualifiedDC, to: 'contributor#advisor'}) do |index|
+    map.archived_object_type({in: RDF::RDFS, to: 'domain'}) do |index|
       index.as :searchable, :displayable, :facetable
     end
   end
