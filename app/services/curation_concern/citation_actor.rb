@@ -6,8 +6,8 @@ module CurationConcern
       curation_concern.apply_depositor_metadata(user.user_key)
       curation_concern.date_created = Date.today
       add_user_roles
-      create_files
       save
+      create_files
     end
 
     def save
@@ -22,13 +22,13 @@ module CurationConcern
 
     def update!
       super
-      update_contained_generic_file_visibility
+      update_contained_citation_file_visibility
     end
 
     protected
     def add_user_roles
       curation_concern.apply_depositor_roles(user)
-      curation_concern.save
+      curation_concern.save!
     end
 
     def files
@@ -43,20 +43,33 @@ module CurationConcern
     end
 
     def create_citation_file(file)
-      generic_file = GenericFile.new
-      generic_file.type="endnote_citation"
-      generic_file.file = file
-      generic_file.batch = curation_concern
+      raise "#{file} file does not exist" unless ::File.exist?(file)
+      temp_file=File.new(file)
+      citation_file = CitationFile.new
+      citation_file.file = temp_file
+      citation_file.batch = curation_concern
+      citation_file.resource_type = "Endnote Citation"
       Sufia::GenericFile::Actions.create_metadata(
-          generic_file, user, curation_concern.pid
+          citation_file, user, curation_concern.pid
       )
-      generic_file.set_visibility(visibility)
-      CurationConcern.attach_file(generic_file, user, file)
+      citation_file.set_visibility(visibility)
+      attach_citation_file(citation_file, user, temp_file, ::File.basename(file))
     end
 
-    def update_contained_generic_file_visibility
+
+    def attach_citation_file(citation_file, user, file_to_attach,label)
+      Sufia::GenericFile::Actions.create_content(
+          citation_file,
+          file_to_attach,
+          label,
+          'content',
+          user
+      )
+    end
+
+    def update_contained_citation_file_visibility
       if visibility_may_have_changed?
-        curation_concern.generic_files.each do |f|
+        curation_concern.citation_files.each do |f|
           f.set_visibility(visibility)
           f.save!
         end
