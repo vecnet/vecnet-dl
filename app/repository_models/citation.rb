@@ -1,7 +1,7 @@
 require 'curation_concern/model'
 class Citation < ActiveFedora::Base
   include CurationConcern::Model
-  include CurationConcern::WithGenericFiles
+  include CurationConcern::WithCitationFiles
   include CurationConcern::WithAccessRight
   include CurationConcern::ModelMethods
   self.human_readable_short_description = "Citation from Endnote"
@@ -14,5 +14,7 @@ class Citation < ActiveFedora::Base
                               :contributor, :tag, :description, :rights,
                               :publisher, :date_created, :subject,
                               :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type]
+
+  attr_accessor :files
 
 end
