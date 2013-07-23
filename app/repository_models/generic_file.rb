@@ -62,8 +62,12 @@ class GenericFile
     subjects=self.subject
     all_trees_arr=[]
     subjects.each do |sub|
-      all_trees_arr<<SubjectMeshEntry.find_by_term(sub).mesh_tree_structures.collect{|tree| tree.eval_tree_path}.flatten
+      mesh_subject= SubjectMeshEntry.find_by_term(sub)
+      if mesh_subject
+        all_trees_arr<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      end
     end
+
 
     return all_trees_arr.uniq
   end
@@ -72,7 +76,10 @@ class GenericFile
     subjects=self.subject
     all_trees=[]
     subjects.each do |sub|
-      all_trees<<SubjectMeshEntry.find_by_term(sub).mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      mesh_subject= SubjectMeshEntry.find_by_term(sub)
+      if mesh_subject
+        all_trees<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      end
     end
     return all_trees.flatten
   end
