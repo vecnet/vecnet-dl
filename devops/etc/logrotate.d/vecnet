@@ -1,4 +1,4 @@
-/home/app/vecnet/current/log/*.log {
+/home/app/vecnet/shared/log/*.log {
     daily
     rotate 400
     missingok
@@ -6,6 +6,7 @@
     compress
     sharedscripts
     postrotate
-        /bin/kill -USR1 $(cat /home/app/vecnet/tmp/pids/unicorn.pid 2>/dev/null) 2>/dev/null || :
+        /bin/kill -USR1 $(cat /home/app/vecnet/shared/pids/unicorn.pid 2>/dev/null) 2>/dev/null || :
     endscript
 }
+
