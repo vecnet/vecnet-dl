@@ -32,34 +32,36 @@ on element ids -->
     <%= link_to_edit_permissions(gf, document) %>
   </td>
   <% if current_user -%>
-  <td width="23%" class="inline-item-actions">
-    <%= link_to(
-      raw('<i class="icon-pencil icon-large"></i>'),
-      edit_polymorphic_path([:curation_concern, gf]),
-      :class=> 'itemicon itemedit',
-      :title => 'Edit File'
-    ) if can? :edit, gf %>
-    <%= link_to(
-                raw('<i class="icon-download-alt icon-large"></i>'),
-                download_path(gf.id),
-                :class=> 'itemicon itemdownload',
-                :title => %(Download #{gf.to_s.inspect})
-        )%>
-    <%# link_to(
-                raw('<i class="icon-link icon-large"></i>'),
-                polymorphic_path([:curation_concern, gf]),
-                :class=> 'itemicon itemcode',
-                :title => %(Link to File #{gf.to_s.inspect})
-                )%>
-    <%= link_to(
-      raw('<i class="icon-trash icon-large"></i>'),
-      polymorphic_path([:curation_concern, gf]),
-      :class=> 'itemicon itemtrash',
-      :title => %(Delete #{gf.to_s.inspect}),
-      :method => :delete,
-      :confirm => "Deleting #{gf.to_s.inspect} from #{t('sufia.product_name')} is permanent. Click OK to delete this from #{t('sufia.product_name')}, or Cancel to cancel this operation"
-    ) if can? :destroy, gf %>
-  </td>
+    <td width="23%" class="inline-item-actions">
+      <ul class="nav nav-pills pull-right">
+        <li>
+          <%= link_to(
+                      raw('<i class="icon-pencil icon-large"></i>'),
+                      edit_polymorphic_path([:curation_concern, gf]),
+                      :class=> 'itemicon itemedit',
+                      :title => 'Edit File'
+              ) if can? :edit, gf %>
+        </li>
+        <li>
+          <%= link_to(
+                      raw('<i class="icon-download-alt icon-large"></i>'),
+                      download_path(gf.id),
+                      :class=> 'itemicon itemdownload',
+                      :title => %(Download #{gf.to_s.inspect})
+              )%>
+        </li>
+        <li>
+          <%= link_to(
+                      raw('<i class="icon-trash icon-large"></i>'),
+                      polymorphic_path([:curation_concern, gf]),
+                      :class=> 'itemicon itemtrash',
+                      :title => %(Delete #{gf.to_s.inspect}),
+                      :method => :delete,
+                      :confirm => "Deleting #{gf.to_s.inspect} from #{t('sufia.product_name')} is permanent. Click OK to delete this from #{t('sufia.product_name')}, or Cancel to cancel this operation"
+              ) if can? :destroy, gf %>
+        </li>
+      </ul>
+    </td>
   <% end %>
 </tr>
 <tr class="hide" id="detail_<%= noid.gsub(":", "_") %>"> <!--  document detail"> -->

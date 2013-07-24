@@ -5,8 +5,7 @@
 rails_root = ENV["RAILS_ROOT"]
 working_directory rails_root
 worker_processes 2
-listen "/tmp/unicorn.sock.0", backlog: 1024
-listen "/tmp/unicorn.sock.1", backlog: 1024
+listen "/tmp/vecnet.sock.0", backlog: 1024
 timeout 30
 
 pid "#{rails_root}/tmp/pids/unicorn.pid"
@@ -21,7 +20,7 @@ GC.respond_to?(:copy_on_write_friendly=) and
   GC.copy_on_write_friendly = true
 
 # TODO: add in redis reconnection.
-
+# [don] I think this is done in config/initializers/redis_config.rb
 before_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.connection.disconnect!
@@ -30,4 +29,9 @@ end
 after_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.establish_connection
+  Resque.redis.client.reconnect if Resque.redis
+end
+
+before_exec do |server|
+  ENV["BUNDLE_GEMFILE"] = "#{rails_root}/Gemfile"
 end

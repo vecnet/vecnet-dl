@@ -15,8 +15,11 @@ if defined?(Bundler)
   Bundler.require(*bundle_environment_aliases)
 end
 
-module CurateNd
+module Vecnet
   class Application < Rails::Application
+    config.vecnet_version = "v0.0.1"
+    config.vecnet_release_date = "TBD"
+    config.persistent_hostpath = "http://dl-vecnet.crc.nd.edu/files/"
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -85,5 +88,10 @@ module CurateNd
       g.test_framework :rspec, :spec => true, :fixture => false
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
+
+    # We are not using Antivirus, even though we require the ClamAV gem.
+    config.default_antivirus_instance = lambda { |file_path|
+      AntiVirusScanner::NO_VIRUS_FOUND_RETURN_VALUE
+    }
   end
 end

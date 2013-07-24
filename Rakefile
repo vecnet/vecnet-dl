@@ -4,7 +4,7 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-CurateNd::Application.load_tasks
+Vecnet::Application.load_tasks
 
 task :test_setup do
   ENV['RAILS_ENV'] = 'test'

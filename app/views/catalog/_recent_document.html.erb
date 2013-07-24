@@ -16,11 +16,11 @@
       <%= link_to short_title, polymorphic_path([:curation_concern, gf]), :title => title  %>
       <% if display_access %>
         <% if !recent_document[:read_access_group_t].blank? and recent_document[:read_access_group_t].include?('registered') %>
-          <span class="label label-info" title="<%=t('sufia.institution_name') %>"><%=t('sufia.institution_name') %></span>
+          <span class="label label-info" title="<%=t('sufia.institution_name') %>"><%=t('sufia.access_label.registered') %></span>
         <% elsif recent_document[:read_access_group_t].nil? or (recent_document[:read_access_group_t] & ['public']).empty? %>
-          <span class="label label-important">Private</span>
+          <span class="label label-important"><%= t('sufia.access_label.private') %></span>
         <% else %>
-          <span class="label label-success">Open Access</span>
+          <span class="label label-success"><%= t('sufia.access_label.public') %></span>
         <% end %>
       <% end %>
     </h3>

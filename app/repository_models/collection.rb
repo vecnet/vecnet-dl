@@ -1,3 +1,4 @@
+require File.expand_path("../../repository_datastreams/batch_rdf_datastream", __FILE__)
 class Collection < ActiveFedora::Base
   include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMixins::RightsMetadata

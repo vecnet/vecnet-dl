@@ -1,4 +1,4 @@
-CurateNd::Application.configure do
+Vecnet::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
@@ -75,4 +75,6 @@ CurateNd::Application.configure do
   #     ClamAV.instance.scanfile(file_path)
   #   }
   # end
+
+  config.fits_path = '/opt/fits-0.6.2/fits.sh'
 end

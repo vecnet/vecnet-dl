@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130520215815) do
+ActiveRecord::Schema.define(:version => 20130610145056) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -100,6 +100,17 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
   add_index "local_authority_entries", ["local_authority_id", "label"], :name => "entries_by_term_and_label"
   add_index "local_authority_entries", ["local_authority_id", "uri"], :name => "entries_by_term_and_uri"
 
+  create_table "mesh_tree_structures", :force => true do |t|
+    t.string   "subject_mesh_term_id"
+    t.string   "tree_structure"
+    t.text     "eval_tree_path"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "mesh_tree_structures", ["subject_mesh_term_id", "tree_structure"], :name => "entries_by_term_id_and_tree_structure", :unique => true
+  add_index "mesh_tree_structures", ["tree_structure"], :name => "entries_by_tree_structure"
+
   create_table "notifications", :force => true do |t|
     t.string   "type"
     t.text     "body"
@@ -184,12 +195,34 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
   end
 
   create_table "subject_local_authority_entries", :force => true do |t|
-    t.string "label"
-    t.string "lowerLabel"
-    t.string "url"
+    t.string   "label"
+    t.string   "lower_label"
+    t.string   "url"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
-  add_index "subject_local_authority_entries", ["lowerLabel"], :name => "entries_by_lower_label"
+  add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
+
+  create_table "subject_mesh_entries", :id => false, :force => true do |t|
+    t.string   "subject_mesh_term_id", :null => false
+    t.string   "term"
+    t.text     "subject_description"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "subject_mesh_entries", ["subject_mesh_term_id", "term"], :name => "entries_by_id_and_term", :unique => true
+  add_index "subject_mesh_entries", ["subject_mesh_term_id"], :name => "entries_by_subject_mesh_term_id"
+
+  create_table "subject_mesh_synonyms", :force => true do |t|
+    t.string   "subject_mesh_term_id"
+    t.string   "subject_synonym"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "subject_mesh_synonyms", ["subject_mesh_term_id", "subject_synonym"], :name => "entries_by_id_and_synonyms", :unique => true
 
   create_table "trophies", :force => true do |t|
     t.integer  "user_id"
@@ -233,5 +266,9 @@ ActiveRecord::Schema.define(:version => 20130520215815) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
+
+  add_foreign_key "receipts", "notifications", :name => "receipts_on_notification_id"
 
 end

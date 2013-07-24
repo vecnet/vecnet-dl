@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-CurateNd::Application.config.secret_token = 'fcca7d86f9d3bf82fd5e324f708a4111'
+Vecnet::Application.config.secret_token = 'fcca7d86f9d3bf82fd5e324f708a4111'

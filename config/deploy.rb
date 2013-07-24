@@ -3,7 +3,7 @@
 # NOTE: The SCM command expects to be at the same path on both the local and
 # remote machines. The default git path is: '/shared/git/bin/git'.
 
-set :bundle_roles, [:app]
+set :bundle_roles, [:app, :work]
 set :bundle_flags, "--deployment"
 require 'bundler/capistrano'
 # see http://gembundler.com/v1.3/deploying.html
@@ -108,12 +108,12 @@ namespace :deploy do
     run "bundle --version"
   end
 
-  desc "Start application in Passenger"
+  desc "Start application"
   task :start, :roles => :app do
     restart_unicorn
   end
 
-  desc "Restart application in Passenger"
+  desc "Restart application"
   task :restart, :roles => :app do
     restart_unicorn
   end
@@ -125,14 +125,6 @@ namespace :deploy do
   desc "Run the migrate rake task."
   task :migrate, :roles => :app do
     run "cd #{release_path}; #{rake} RAILS_ENV=#{rails_env} db:migrate"
-  end
-
-  desc "Symlink shared configs and folders on each release."
-  task :symlink_shared do
-    symlink_targets.each do | source, destination, shared_directory_to_create |
-      run "mkdir -p #{File.join( shared_path, shared_directory_to_create)}"
-      run "ln -nfs #{File.join( shared_path, source)} #{File.join( release_path, destination)}"
-    end
   end
 
   desc "Precompile assets"
@@ -166,7 +158,7 @@ end
 
 #namespace :worker do
 #  task :start, :roles => :work do
-#    target_file = "/home/curatend/resque-pool-info"
+#    target_file = "/home/Vecnet/resque-pool-info"
 #    run [
 #      "echo \"RESQUE_POOL_ROOT=$(pwd)/current\" > #{target_file}",
 #      "echo \"RESQUE_POOL_ENV=#{fetch(:rails_env)}\" >> #{target_file}",
@@ -175,11 +167,25 @@ end
 #  end
 #end
 
-namespace :und do
-  task :update_secrets do
-    #run "cd #{release_path} && ./script/update_secrets.sh #{secret_repo_name}"
+namespace :vecnet do
+  desc "Restart the workers on the target machine"
+  task :restart_workers, :roles => :work do
+    run [
+      "#{current_path}/script/stop-pool.sh",
+      "#{current_path}/script/start-pool.sh"
+    ].join(" && ")
   end
 
+  desc "Write the current environment values to file on targets"
+  task :write_env_vars do
+    run [
+      "echo RAILS_ENV=#{rails_env} > #{release_path}/env-vars",
+      "echo RAILS_ROOT=#{current_path} >> #{release_path}/env-vars"
+    ].join(" && ")
+  end
+end
+
+namespace :und do
   task :write_build_identifier, :roles => :app do
     run "cd #{release_path} && echo '#{build_identifier}' > config/bundle-identifier.txt"
   end
@@ -225,38 +231,36 @@ task :qa do
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :db, :primary => true
+  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
 
-  after 'deploy:update_code', 'und:write_build_identifier', 'und:update_secrets', 'deploy:symlink_shared', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
+  after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
+  after 'deploy:update_code', 'vecnet:write_env_vars'
   after 'deploy', 'deploy:cleanup'
   after 'deploy', 'deploy:restart'
+  after 'deploy', 'vecnet:restart_workers'
 end
 
 desc "Setup for the Production environment"
-task :production_cluster do
-  set :symlink_targets do
-    [
-      #['/bundle/config','/.bundle/config', '/.bundle'],
-      ['/log','/log','/log'],
-      #['/vendor/bundle','/vendor/bundle','/vendor'],
-      #["/config/role_map_#{rails_env}.yml","/config/role_map_#{rails_env}.yml",'/config'],
-    ]
-  end
-  set :branch,      'release'
+task :production do
+  set :shared_directories, %w(log)
+  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml )
+  set :branch,      'master'
   set :rails_env,   'production'
-  set :deploy_to,   '/shared/ruby_prod/data/app_home/curate'
-  set :ruby_bin,    '/shared/ruby_prod/ruby/1.9.3/bin'
+  set :deploy_to,   '/home/app/vecnet'
+  set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
 
-  set :user,        'rbprod'
-  set :domain,      'curateprod.library.nd.edu'
+  set :user,        'app'
+  set :domain,      'dl-vecnet.crc.nd.edu'
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :db, :primary => true
+  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
 
-  after 'deploy:update_code', 'und:write_build_identifier', 'und:update_secrets', 'deploy:symlink_shared', 'deploy:migrate', 'deploy:precompile'
+  after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
+  after 'deploy:update_code', 'vecnet:write_env_vars'
   after 'deploy', 'deploy:cleanup'
   after 'deploy', 'deploy:restart'
+  after 'deploy', 'vecnet:restart_workers'
 end
 
 
@@ -269,7 +273,7 @@ def common_worker_things
       #[ '/vendor/bundle', '/vendor/bundle', '/vendor/bundle'],
     ]
   end
-  set :deploy_to,   '/home/curatend'
+  set :deploy_to,   '/home/Vecnet'
   set :ruby_bin,    '/usr/local/ruby/bin'
   set :without_bundle_environments, 'development test'
   set :group_writable, false
@@ -277,13 +281,13 @@ def common_worker_things
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
   server "#{user}@#{domain}", :work
   after 'deploy', 'worker:start'
-  after 'deploy:update_code', 'und:update_secrets', 'deploy:symlink_shared'
+  after 'deploy:update_code'
 end
 
 desc "Setup for the Preproduction Worker environment"
 task :pre_production_worker do
   set :rails_env,   'pre_production'
-  set :user,        'curatend'
+  set :user,        'Vecnet'
   set :domain,      'curatepprdw1.library.nd.edu'
   set :branch, "master"
   common_worker_things
@@ -292,7 +296,7 @@ end
 desc "Setup for the Production Worker environment"
 task :production_worker do
   set :rails_env,   'production'
-  set :user,        'curatend'
+  set :user,        'Vecnet'
   set :domain,      'curateprodw1.library.nd.edu'
   set :branch,      'release'
   common_worker_things

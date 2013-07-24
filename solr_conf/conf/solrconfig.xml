@@ -104,6 +104,7 @@
         <str name="qf">
           id
           title_t^25000
+          subject_unstem_search^15000
           text
           active_fedora_model_s
           object_type_facet

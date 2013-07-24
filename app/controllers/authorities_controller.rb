@@ -14,6 +14,7 @@
 
 require 'rdf'
 require 'cgi'
+require File.expand_path('../../models/local_authority', __FILE__)
 
 class AuthoritiesController < ApplicationController
   def query
@@ -21,7 +22,7 @@ class AuthoritiesController < ApplicationController
     if (params[:term]=="location")
       hits = GeoNamesResource.find_location(s)
     else
-      hits = LocalAuthority.entries_by_term(params[:model], params[:term], s) rescue []
+      hits = LocalAuthority.entries_by_subject_mesh_term(params[:model], params[:term], s) #rescue []
     end
     render :json=>hits
   end

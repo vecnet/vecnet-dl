@@ -1,6 +1,6 @@
 class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
-  respond_to(:html, :json)
+  respond_to(:html, :json, :endnote)
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path
@@ -65,7 +65,9 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
 
   def show
-    respond_with(curation_concern)
+    respond_with(curation_concern){|format|
+      format.endnote { render :text => curation_concern.endnote_export }
+    }
   end
 
   def edit
@@ -91,11 +93,10 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   end
 
   def destroy
-    parent = curation_concern.batch
     title = curation_concern.to_s
     curation_concern.destroy
     flash[:notice] = "Deleted #{title}"
-    respond_with([:curation_concern, parent])
+    redirect_to redirect_to_dashboard
   end
 
   include Morphine
@@ -105,5 +106,17 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   private
     def show_breadcrumbs?
       true
+    end
+
+    def redirect_to_dashboard
+      query_params = session[:search] ? session[:search].dup : {}
+      query_params.delete :counter
+      query_params.delete :total
+      controller=query_params.delete :controller
+      if controller.eql?("admin_dashboard")
+        return admin_dashboard_index_path(query_params)
+      else
+        return dashboard_index_path(query_params)
+      end
     end
 end

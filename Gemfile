@@ -9,6 +9,7 @@ group :default do
   gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'curate', git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
+  gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
   gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
   gem 'solrizer-fedora' # just to get resolrizer task
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
@@ -25,6 +26,7 @@ group :default do
   gem 'roboto'
   gem 'active_attr'
   gem 'browser'
+  gem 'rubydora', "~>1.6.4"
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -45,6 +47,7 @@ group :assets do
   gem 'compass-rails'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'uglifier', '>= 1.0.3'
+  gem 'font-awesome-sass-rails', '~> 2.0.0.0'
 end
 
 group :test do

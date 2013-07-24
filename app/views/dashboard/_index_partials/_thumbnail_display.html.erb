@@ -18,9 +18,9 @@ limitations under the License.
 <%- width = 36 if width.blank? -%>
 <% if (document['mime_type_t']) %>
   <% if !(document['mime_type_t'] & ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/jpg']).empty? %>
-    <%= link_to image_tag(download_path(document["id"], {:datastream_id => 'thumbnail'}), {:width=>width, :height=>height}), solr_document_path(document[:noid_s].first) %>
+    <%= link_to image_tag(download_path(document["id"], {:datastream_id => 'thumbnail'}), {:width=>width, :height=>height, alt: "thumbnail"}), files_path(document[:noid_s].first) %>
   <% elsif !(document['mime_type_t'] & ['application/pdf']).empty? %>
-    <%= link_to image_tag(download_path(document["id"], {:datastream_id => 'thumbnail'}), {:width=>width,:height=>height}),solr_document_path(document[:noid_s].first) %>
+    <%= link_to image_tag(download_path(document["id"], {:datastream_id => 'thumbnail'}), {:width=>width,:height=>height, alt: "thumbnail"}),files_path(document[:noid_s].first) %>
   <% elsif !(document['mime_type_t'] & ['video/mp4']).empty? %>
       <video controls="controls" height="80" width="140"
 	      class="video-js vjs-default-skin" data-setup="{}"
@@ -34,9 +34,9 @@ limitations under the License.
       <audio src="<%= download_path(document["id"], format:'audio')
 						  %>" > </audio>
   <% else %>
-    <%= link_to image_tag("/assets/default.png", {:width=>width,:height=>height}), solr_document_path(document[:noid_s].first) %>
+    <%= link_to image_tag("/assets/default.png", {:width=>width,:height=>height, alt: "no_image"}), files_path(document[:noid_s].first) %>
     
   <% end %>
 <% else %>
- <%= link_to image_tag("/assets/default.png", {:width=>width,:height=>height}), solr_document_path(document[:noid_s].first) %> 
+ <%= link_to image_tag("/assets/default.png", {:width=>width,:height=>height, alt: "no_image"}), files_path(document[:noid_s].first) %>
 <% end %>

@@ -1,18 +1,18 @@
 en:
   sufia:
-    product_name:        "VecNet Metadata Repository"
+    product_name:        "VecNET Digital Library"
     account_name:        "vecnet_user"
     institution_name:    "Vecnet Users"
     deposit_agreement:   "Vecnet's Deposit Agreement"
     upload_tooltip:      "Please accept Deposit Agreement before you can upload."
-    google_analytics_id: "UA-2118378-28"
+#    google_analytics_id: "UA-2118378-28"
     directory:
       suffix:            "TBD"
     search:
       form:
         q:
-          label:         "Search Vecnet"
-          placeholder:   "Search Vecnet"
+          label:         "Search Digital Library"
+          placeholder:   "Search Digital Library"
 
     field_label:
       based_near:        "Location"
@@ -40,3 +40,9 @@ en:
       rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list. <em>This is a required field</em>."
       spatials: "A point location specified by geographic coordinates in decimal degrees."
       temporals: "Time period(s) for which the data set corresponds. Use the YYYY-MM-DD format.If the full date is unknown, month and year (YYYY-MM) or just year (YYYY) may be used"
+    access_label:
+      public: "Global Access"
+      public_embargo: "Global Access with embargo"
+      registered: "Vecnet Users"
+      private: "Private"
+

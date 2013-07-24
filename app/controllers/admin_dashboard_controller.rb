@@ -29,6 +29,9 @@ class AdminDashboardController < ApplicationController
 
   before_filter :authenticate_user!
 
+  # This filters out objects that you want to exclude from search results, like FileAssets
+  AdminDashboardController.solr_search_params_logic += [:exclude_unwanted_models]
+
  def index
     extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => "RSS for results")
     extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => "Atom for results")
@@ -77,8 +80,8 @@ class AdminDashboardController < ApplicationController
 
   def exclude_unwanted_models(solr_parameters, user_parameters)
     super
-    #solr_parameters[:fq] ||= []
-    #solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:GenericFile\""
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
     return solr_parameters
   end
 end

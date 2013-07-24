@@ -36,8 +36,10 @@ class CreateLocalAuthorities < ActiveRecord::Migration
 
     create_table :subject_local_authority_entries, :force => true  do |t|
       t.string :label
-      t.string :lowerLabel
+      t.string :lower_label
       t.string :url
+      t.datetime "created_at",  :null => false
+      t.datetime "updated_at",  :null => false
     end
 
     add_index :local_authority_entries, [:local_authority_id, :label], :name => 'entries_by_term_and_label'
@@ -45,7 +47,7 @@ class CreateLocalAuthorities < ActiveRecord::Migration
     add_index :domain_terms, [:model, :term], :name => 'terms_by_model_and_term'
     add_index :domain_terms_local_authorities, [:local_authority_id, :domain_term_id], :name => 'dtla_by_ids1'
     add_index :domain_terms_local_authorities, [:domain_term_id, :local_authority_id], :name => 'dtla_by_ids2'
-    add_index :subject_local_authority_entries, [:lowerLabel], :name => 'entries_by_lower_label'
+    add_index :subject_local_authority_entries, [:lower_label], :name => 'entries_by_lower_label'
   end
 
   def self.down

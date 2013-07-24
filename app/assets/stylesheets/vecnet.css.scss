@@ -1,5 +1,10 @@
 @import 'compass';
 @import 'global-variables';
+body { padding-top: 40px; }
+@media screen and (max-width: 768px) {
+  body { padding-top: 0px; }
+}
+
 .navbar {
   background-color: #1B1B1B;
   background-image: linear-gradient(center top , #222222, #111111);
@@ -8,12 +13,12 @@
   .nav-inner {
     border-color: #252525;
   }
-
   .brand{
     background-image: none;
+    float: left;
     display: inline-block;
-    overflow: hidden;
-    padding: 10px, 20px;
+    margin-left: -20px;
+    padding: 10px 20px 10px;
     white-space: nowrap;
     width: 150px;
     text-indent:0;
@@ -24,11 +29,12 @@
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 14px;
       line-height: 20px;
-      padding: 10px 15px;
+      padding: 3px 20px;
       .caret {
         border-top-color: #777 !important;
         border-bottom-color: #777 !important;
       }
+      zoom: 1;
     }
     .btn{
       @include background(linear-gradient(bottom, rgb(51, 51, 51), rgb(28, 28, 28)));
@@ -42,51 +48,10 @@
 
   }
 }
-
-jumbotron:after {
-  background: url(bs-docs-masthead-pattern.png) repeat scroll center center transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  left: 0;
-  opacity: 0.4;
-  position: absolute;
-  top: 20;
-  right: 0;
+.navbar-fixed-top {
+  margin-bottom: 0;
 }
-.subhead {
-  border-bottom: 1px solid #DDDDDD;
-  text-align: left;
-}
-.jumbotron {
-  @include background(linear-gradient(top, rgb(1,72,95), rgb(0,147,173)));
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
-  color: #FFFFFF;
-  margin-bottom: 20px;
-  padding: 15px 0;
-  position: relative;
-  top:40px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
 
-  h1 {
-      font-size: 60px;
-      line-height: 50px;
-      font-weight: 700;
-      margin: 10px 0;
-      letter-spacing: -1px;
-      lcolor: #E5E5E5;
-  }
-
-  p{
-    color: #E5E5E5;
-    .lead{
-        font-size: 30px;
-        font-weight: 300;
-        line-height: 30px;
-        margin-bottom: 20px;
-    }
-  }
-}
 #main {
   padding-top: 2em
 }
@@ -111,8 +76,14 @@ jumbotron:after {
   }
 }
 
-.with-thumbnail {
-  margin: 20px 20px 0 0;
+#search-results{
+  li{
+    clear:both;
+    float: left;
+    width: 100%;
+    color:#0088cc;
+    font-size: 24px;
+  }
 }
 
 .thumbnail-container {
@@ -130,6 +101,8 @@ jumbotron:after {
   overflow: auto;
   padding: 0.5em 0 0;
   clear: none;
+  font-size: 14px;
+  color:#333333;
   dt{
     float: left;
     text-align: right;
@@ -159,11 +132,81 @@ jumbotron:after {
 
 }
 
+.breadcrumb {
+  background-color:white;
+}
+
+.thumbnail {
+  border: none;
+  background-color: #ffffff;
+  box-shadow: none;
+}
+
 #search-results{
   h2{
     font-size: 24px;
     padding-bottom:10px;
     border-bottom:1px solid $dropdownDividerTop;
+  }
+}
+
+#facets {
+  ul ul{
+    padding-bottom: 0;
+  }
+  li {
+    margin-right: 0;
+    padding-right: 0;
+    position: relative;
+    .count {
+      margin-right: 0;
+      position: absolute;
+      top:0;
+      right:0;
+    }
+    a{
+      display: block;
+      width: 90%;
+    }
+    &.more_facets_link {
+      margin-right: 0;
+    }
+  }
+}
+.inline-item-actions {
+  white-space: nowrap;
+}
+
+.zebra {
+  background-color: rgb(245,245,245);
+}
+
+.main-header {
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+
+/* Link styles (used on .masthead-links as well) */
+.jumbotron a {
+  color: #fff;
+}
+.jumbotron a:hover {
+  text-decoration: none;
+}
+
+.search-form {
+  .search-query {
+    height:80%;
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+}
+.filterform{
+  .search-query{
+    height: 80%;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 }
 

@@ -22,6 +22,7 @@ sudo rpm -i epel-release-6-8.noarch.rpm
 sudo yum update
 sudo yum install htop
 sudo yum install tmux
+sudo yum install tree
 
 # postgres
 sudo yum install postgresql postgresql-devel
@@ -80,7 +81,7 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # custom
 # /opt/fedora
 # fedoraAdmin
-# [localhost]
+# [localhost] (use machine hostname??)
 # [fedora]
 # [false] (authentication for apia)
 # false (ssl)
@@ -116,14 +117,16 @@ sudo cp /opt/solr-4.3.0/vecnet/conf/stopwords.txt /opt/solr-4.3.0/vecnet/conf/st
 sudo cp solr-4.3.0/dist/solr-4.3.0.war /opt/solr-4.3.0
 sudo mkdir /opt/solr-4.3.0/lib
 sudo cp solr-4.3.0/dist/*.jar /opt/solr-4.3.0/lib
-sudo cp solr-4.3.0/dist/solrj-lib/*.jar /opt/solr-4.3.0/lib
+sudo cp solr-4.3.0/contrib /opt/solr-4.3.0/lib
+sudo cp -r solr-4.3.0/example/lib/ext/* /usr/share/tomcat6/lib
 sudo chown tomcat:tomcat -R /opt/solr-4.3.0
 
 # fits
 wget https://fits.googlecode.com/files/fits-0.6.2.zip
 unzip fits-0.6.2.zip
 sudo mv fits-0.6.2 /opt
-# XXX sudo chown ?:? -R /opt/fits-0.6.2/
+sudo chown app:app -R /opt/fits-0.6.2/
+sudo chmod +x /opt/fits-0.6.2/fits.sh
 
 
 # ruby
