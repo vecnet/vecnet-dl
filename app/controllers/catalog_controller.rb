@@ -346,6 +346,8 @@ class CatalogController < ApplicationController
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Batch\""
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Citation\""
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
     return solr_parameters
   end
 
