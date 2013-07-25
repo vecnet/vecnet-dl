@@ -44,16 +44,14 @@ module CurationConcern
 
     def create_citation_file(file)
       raise "#{file} file does not exist" unless ::File.exist?(file)
-      temp_file=File.new(file)
       citation_file = CitationFile.new
-      citation_file.file = temp_file
       citation_file.batch = curation_concern
       citation_file.resource_type = "Endnote Citation"
       Sufia::GenericFile::Actions.create_metadata(
           citation_file, user, curation_concern.pid
       )
       citation_file.set_visibility(visibility)
-      attach_citation_file(citation_file, user, temp_file, ::File.basename(file))
+      attach_citation_file(citation_file, user, File.read(file), ::File.basename(file))
     end
 
 
