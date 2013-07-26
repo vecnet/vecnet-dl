@@ -11,18 +11,23 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, :to => :ability
 
-  Devise.add_module(:http_header_authenticatable,
-                    :strategy => true,
-                    #:controller => :sessions,
-                    :model => 'devise/models/http_header_authenticatable')
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+#  Devise.add_module(:http_header_authenticatable,
+#                    :strategy => true,
+#                    #:controller => :sessions,
+#                    :model => 'devise/models/http_header_authenticatable')
+#  devise :database_authenticatable, :registerable,
+#         :recoverable, :rememberable, :trackable, :validatable
+  #devise :omniauthable, :omniauth_providers => [:pubtkt]
 
 
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :remember_me, :username#, :password
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
+  attr_accessible :uid
 
+  def self.find_by_uid(uid)
+    User.where(uid: uid).limit(1)
+  end
 
   #attr_accessor :password
 
@@ -52,6 +57,16 @@ class User < ActiveRecord::Base
   def agree_to_terms_of_service!
     update_column(:agreed_to_terms_of_service, true)
   end
+
+  # Override Hydra methods that assume Devise is present
+  def user_key
+    uid
+  end
+
+  def self.find_by_user_key(key)
+    find_by_uid(key)
+  end
+
 
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for

@@ -1,6 +1,6 @@
 Vecnet::Application.routes.draw do
 
-  devise_for :users
+  #devise_for :users
 
   resources 'role_dashboard', :only=>:index do
     collection do

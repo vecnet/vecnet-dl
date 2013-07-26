@@ -23,9 +23,6 @@ class PubTicket
     @fields ||= decode(self.text)
   end
 
-  def self.ticket_field(accessname, fieldname)
-  end
-
   # fields in the ticket
   def self.data_field(access_name, hash_name, transform="")
     self.class_eval %Q{
@@ -57,6 +54,13 @@ class PubTicket
                    end
   rescue OpenSSL::PKey::PKeyError
     @sig_valid = false
+  end
+
+  def check_correctness(resquest_ip, current_time)
+    if clientip == resquest_ip && current_time < valid_until
+      return :correct
+    end
+    :incorrect
   end
 
   # This methoid is useful...but should it be exposed to the public?

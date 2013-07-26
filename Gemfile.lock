@@ -566,8 +566,6 @@ DEPENDENCIES
   database_cleaner
   debugger (>= 1.4)
   decent_exposure
-  devise
-  devise-guests (~> 0.3)
   factory_girl_rails
   font-awesome-sass-rails (~> 2.0.0.0)
   guard

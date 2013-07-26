@@ -20,8 +20,10 @@ group :default do
   gem 'resque-pool'
   gem 'morphine'
   gem "unicode", :platforms => [:mri_18, :mri_19]
-  gem "devise"
-  gem "devise-guests", "~> 0.3"
+#  gem "devise"
+#  gem "devise-guests", "~> 0.3"
+#  gem 'omniauth'
+#  gem 'omniauth-pubtkt', git: 'git://github.com/dbrower/omniauth-pubtkt', branch: 'master'
   gem 'simple_form'
   gem 'roboto'
   gem 'active_attr'

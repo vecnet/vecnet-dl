@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130610145056) do
+ActiveRecord::Schema.define(:version => 20130724212309) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
   create_table "subject_mesh_entries", :id => false, :force => true do |t|
-    t.string   "subject_mesh_term_id", :null => false
+    t.string   "subject_mesh_term_id"
     t.string   "term"
     t.text     "subject_description"
     t.datetime "created_at",           :null => false
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
     t.datetime "groups_last_update"
     t.boolean  "agreed_to_terms_of_service", :default => false
     t.boolean  "admin",                      :default => false
+    t.string   "uid"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
@@ -266,9 +267,5 @@ ActiveRecord::Schema.define(:version => 20130610145056) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
-
-  add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
-
-  add_foreign_key "receipts", "notifications", :name => "receipts_on_notification_id"
 
 end
