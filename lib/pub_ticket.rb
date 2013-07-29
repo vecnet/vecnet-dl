@@ -20,7 +20,7 @@ class PubTicket
   end
 
   def fields
-    @fields ||= decode(self.text)
+    @fields ||= decode(self.text ? self.text : '')
   end
 
   # fields in the ticket
@@ -31,7 +31,7 @@ class PubTicket
         #{transform}(v)
       end
       def #{access_name}=(v)
-        fields[#{hash_name}] = v
+        fields["#{hash_name}"] = v
       end
     }
   end
@@ -39,8 +39,8 @@ class PubTicket
   data_field :uid,         "uid"
   data_field :clientip,    "cip"
   data_field :valid_until, "validuntil", "lambda {|v| Time.at(v.to_i)}.call"
-  data_field :grace_period,"graceperiod"
-  data_field :bauth,       "tokens"
+  data_field :grace_period,"graceperiod", "lambda {|v| Time.at(v.to_i)}.call"
+  data_field :bauth,       "bauth"
   data_field :tokens,      "tokens"
   data_field :user_data,   "udata"
 
@@ -57,29 +57,29 @@ class PubTicket
   end
 
   def check_correctness(resquest_ip, current_time)
-    if clientip == resquest_ip && current_time < valid_until
-      return :correct
+    if clientip && clientip != resquest_ip
+      return :incorrect
+    elsif current_time > valid_until
+      return :incorrect
     end
-    :incorrect
+    :correct
   end
 
-  # This methoid is useful...but should it be exposed to the public?
-  private
   def generate_signature(private_key)
-    fields = {}
-    fields["uid"] = self.uid[0..31] if self.uid
-    fields["cip"] = self.clientip if self.clientip
-    fields["validuntil"] = self.valid_until if self.valid_until
-    fields["graceperiod"] = self.grace_period if self.grace_period
-    fields["tokens"] = self.tokens[0..254] if self.tokens
-    fields["udata"] = self.user_data[0..254] if self.user_data
-    fields["bauth"] = self.bauth if self.bauth
-    self.text = encode(fields)
+    payload = {}
+    payload["uid"] = self.uid[0..31] if self.uid
+    payload["cip"] = self.clientip if self.clientip
+    payload["validuntil"] = self.valid_until.to_i if self.valid_until > Time.at(0)
+    payload["graceperiod"] = self.grace_period.to_i if self.grace_period > Time.at(0)
+    payload["tokens"] = self.tokens[0..254] if self.tokens
+    payload["udata"] = self.user_data[0..254] if self.user_data
+    payload["bauth"] = self.bauth if self.bauth
+    self.text = encode(payload)
 
     digest = digest_class(private_key).new
-    signature = key.sign(digest, self.text)
+    signature = private_key.sign(digest, self.text)
     self.signature = Base64.strict_encode64(signature)
-    self.ticket = "#{self.text};sig=#{self.sig}"
+    self.ticket = "#{self.text};sig=#{self.signature}"
   end
 
   private
