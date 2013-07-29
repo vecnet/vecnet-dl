@@ -1,12 +1,9 @@
+require Curate::Engine.root.join('app/repository_models/curation_concern/with_full_text.rb')
 class CitationFile < ActiveFedora::Base
 
-  include Hydra::ModelMixins::CommonMetadata
-  include Hydra::ModelMixins::RightsMetadata
-  include Sufia::ModelMethods
-  include CurationConcern::ModelMethods
-  include Sufia::Noid
   include Sufia::GenericFile
   include CurationConcern::WithAccessRight
+  include CurationConcern::WithFullText
 
   belongs_to :batch, property: :is_part_of, class_name: 'ActiveFedora::Base'
 
@@ -38,7 +35,10 @@ class CitationFile < ActiveFedora::Base
     self.class.to_s.demodulize.titleize
   end
 
-
+  def to_solr(solr_doc={}, opts={})
+    super(solr_doc, opts)
+    solr_doc["all_text_unstem_search"] = full_text.content if self.respond_to?(:full_text)
+  end
 
 end
 
