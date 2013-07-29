@@ -13,4 +13,9 @@ class EndnoteConversionService
     `#{self.bibutils_exec} #{self.file} > #{self.mods_xml}`
   end
 
+  def get_mods_file
+    raise "#{mods_xml} file does not exist" unless ::File.exist?(mods_xml)
+    return mods_xml
+  end
+
 end
