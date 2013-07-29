@@ -74,3 +74,31 @@ Initializing new production environment
   * Resolrize: `RAILS_ENV=production bundle exec rake solrizer:fedora:solrize_objects`
   * Migrate fedora objects: `RAILS_ENV=production bundle exec rake vecnet:migrate:batch_to_collection`
  7. Done!
+
+## Pubtkt Authentication
+
+The site uses the pubtkt authentication scheme, which uses a signed cookie for every request.
+For development, we do not have a dummy server to create these tickets, so for the moment, we
+create them on the command line and then add the cookie to the session by hand (which can be done in Firefox).
+
+First step is to generate a public/private keypair:
+
+    rake pubtkt:generate_keys
+    mv pubtkt.pem config/pubtkt-development.pem
+
+Then create a ticket:
+
+    $ P_KEY=pubtkt-private.pem P_UID=dbrower P_VALIDUNTIL=3456789012 P_TOKENS='dl_librarian,dl_write' rake pubtkt:create
+    uid=dbrower;validuntil=3456789012;tokens=dl_librarian,dl_write;sig=MCwCFHiaErA+7lHoHxbSUIZaSnmTovIPAhRf4RxtrmArBMD8CBnZaUM/yWI+Cw==
+    $
+
+The valid until date above has the date July 16, 2079 in the Unix epoch, so the ticket should not expire while you are using it.
+Should you be curoius, you can also validate tickets from the command line
+
+    $ P_KEY=pubtkt-private.pem P_TICKET='uid=dbrower;validuntil=3456789012;tokens=dl_librarian,dl_write;sig=MCwCFF1/aaSbtrxN9PLrZE1XvLH5SIWQAhRXN8AHevzPMFbMuIIlOwuCLTZDPw==' rake pubtkt:verify
+    Ticket text: uid=dbrower;validuntil=3456789012;tokens=dl_librarian,dl_write
+    Ticket sig : MCwCFF1/aaSbtrxN9PLrZE1XvLH5SIWQAhRXN8AHevzPMFbMuIIlOwuCLTZDPw==
+    Sig Valid? : true
+    Expired?   : true
+    $
+
