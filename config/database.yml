@@ -39,8 +39,13 @@ development_remote_purl_database:
   <<: *development
 
 test: &test
-  <<: *development
+  <<: *sqlite_settings
+  host: localhost  #if the server runs in same server
+  port: 5432
+  encoding: unicode
   database: vecnet_test
+  username: rails_user
+  password:
 
 test_remote_purl_database:
   <<: *test
