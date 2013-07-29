@@ -17,6 +17,24 @@ class User < ActiveRecord::Base
     User.where(uid: uid).limit(1).first
   end
 
+  def self.find_or_create_from_pubtkt(pubtkt)
+    user = User.find_by_uid(pt.uid)
+    user = User.create_from_pubtkt(pubtkt) if user.nil?
+    user.group_list = pt.tokens.split(',') if pt.tokens.present?
+    user.update_from_ldap
+    user
+  end
+
+  def self.create_from_pubtkt(pubtkt)
+    user = User.new(uid: pt.uid,
+                    email: "#{pt.uid}@nd.edu",
+                    display_name: pt.uid)
+    # just until the user table gets migrated
+    user.reset_password_token = pt.signature
+    user.save!
+    user
+  end
+
   #attr_accessor :password
 
   #def password_required?; false; end
@@ -63,9 +81,9 @@ class User < ActiveRecord::Base
     email
   end
 
-  #delegating groups to roles since there is no difference between roles and groups yet
+  # What is difference between groups and roles?
   def groups
-    roles
+    self.group_list
   end
 
   def roles
@@ -79,5 +97,8 @@ class User < ActiveRecord::Base
 
   def admin!
     update_column(:admin, true)
+  end
+
+  def update_from_ldap
   end
 end

@@ -20,22 +20,10 @@ class ApplicationController < ActionController::Base
       pt = ::PubTicket.new(CGI.unescape(ticket))
       if pt.signature_valid?(Rails.configuration.pubtkt_public_key)
         logger.debug "Pubtkt: Signature valid"
-        if pt.check_correctness(request.ip, Time.now) == :correct
-          logger.debug "Pubtkt: is correct"
-          logger.debug "Pubtkt = #{pt.inspect}"
-          @current_user = User.find_by_uid(pt.uid)
-          if @current_user.nil?
-            @current_user = User.new(uid: pt.uid, email: "#{pt.uid}@nd.edu")
-            # just until the user table gets migrated
-            @current_user.reset_password_token = pt.signature
-            @current_user.save!
-          end
-          logger.debug "Current user: #{@current_user.inspect}"
-          #@current_user.groups = pt.tokens.split(',')
+        if pt.ticket_valid?(request.ip, Time.now)
+          @current_user = User.find_or_create_from_pubtkt(pt)
         end
       end
-    else
-      logger.debug "No Pub Ticket"
     end
   end
 
