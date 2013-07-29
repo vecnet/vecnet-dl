@@ -6,19 +6,7 @@ class User < ActiveRecord::Base
   # Connects this user object to Sufia behaviors.
   include Sufia::User
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, :to => :ability
-
-#  Devise.add_module(:http_header_authenticatable,
-#                    :strategy => true,
-#                    #:controller => :sessions,
-#                    :model => 'devise/models/http_header_authenticatable')
-#  devise :database_authenticatable, :registerable,
-#         :recoverable, :rememberable, :trackable, :validatable
-  #devise :omniauthable, :omniauth_providers => [:pubtkt]
-
 
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :remember_me, :username#, :password
@@ -26,7 +14,7 @@ class User < ActiveRecord::Base
   attr_accessible :uid
 
   def self.find_by_uid(uid)
-    User.where(uid: uid).limit(1)
+    User.where(uid: uid).limit(1).first
   end
 
   #attr_accessor :password

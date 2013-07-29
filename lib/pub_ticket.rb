@@ -16,7 +16,7 @@ class PubTicket
   end
 
   def to_s
-    "<Pubticket #{self.ticket}>"
+    "<Pubticket #{self.text}>"
   end
 
   def fields
@@ -56,13 +56,13 @@ class PubTicket
     @sig_valid = false
   end
 
-  def check_correctness(resquest_ip, current_time)
-    if clientip && clientip != resquest_ip
-      return :incorrect
+  def ticket_valid?(request_ip, current_time)
+    if clientip && clientip != request_ip
+      return false
     elsif current_time > valid_until
-      return :incorrect
+      return false
     end
-    :correct
+    true
   end
 
   def generate_signature(private_key)
@@ -85,11 +85,7 @@ class PubTicket
   private
   def get_parameter(data, field_name, xform=nil)
     v = data.fetch(field_name, nil)
-    if xform && v
-      xform.call(v)
-    else
-      v
-    end
+    xform && v ? xform.call(v) : v
   end
 
   def digest_class(key)

@@ -1,3 +1,4 @@
+require 'OpenSSL'
 Resque.inline = true
 Vecnet::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
@@ -73,17 +74,6 @@ Vecnet::Application.configure do
       password:"shantivan",
   }
 
-  config.pubtkt_public_key = %q{-----BEGIN PUBLIC KEY-----
-MIIBtjCCASsGByqGSM44BAEwggEeAoGBAJTtmMTD+UnUUKu/tBPmIJhnPgFuFA6R
-QjdZeyPozgL5Ob1usa2jW4lgQpx86zG6H7fCIacNem8cS0HwdizGXNX83hSJWoeA
-DmlFH2+w11eRz2/+I0ugeeGjF19bJODt992jJ8SJoVsweCMgySmIK5UQlazfG0ed
-w/5BrK3cKP3fAhUA4X3IpeWeK50mmSGCZhRFmokhnU8CgYBxbgkk7nMloLf+IiZo
-kkCoIwlQ1u2hhMaj+7Ne/AXwWo97xcMHAqVAoLNZjI2VwUDmQOGxiUKpT//m97iZ
-F8irH9aF4tw7ioHkbz53ApfNPRJGi4c/rNGoFVl9jmqKAaoP9HERYkqrvRuyBTVg
-GeCwizPieorhbmLVYtAjaDLuAAOBhAACgYBM5gZ8oP/w5nf4080Wd0JcZOJYLtvo
-/eeljOyIxtSpwoMGj0TNAq4ZcsG0Z4Yew/HCFvPfae62avUahan/GvMnrHeoD1Ko
-iVGe5mWqSYduDIGs2aPvMMMfFQp8ZsODKu+YBPUf6M3g6CroOg32O88Efc5j4Ev9
-Cgh/jB9nBWmVdA==
------END PUBLIC KEY-----}
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(File.join(Rails.root, 'config', 'pubtkt-development.pem')))
   config.pubtkt_login_url = 'http://localhost:3000/login'
 end
