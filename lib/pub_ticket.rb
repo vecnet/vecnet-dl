@@ -98,11 +98,7 @@ class PubTicket
 
   def encode(input)
     if input.is_a?(Hash)
-      result = []
-      input.each_pair do |k,v|
-        result << "#{k}=#{v}"
-      end
-      result.join(";")
+      input.collect { |k,v| "#{k}=#{v}" }.join(";")
     else
       "#{input}"
     end
@@ -112,12 +108,7 @@ class PubTicket
   # seperated by semicolons.
   # The characters '=' and ';' cannot be escaped. sorry.
   def decode(str)
-    result = {}
-    str.split(';').each do |value|
-      label, rest = value.split('=',2)
-      result[label] = rest
-    end
-    return result
+    Hash[str.split(';').map { |value| value.split('=',2) }]
   end
 end
 
