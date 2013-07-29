@@ -46,6 +46,24 @@ namespace :vecnet do
       time_taken=end_time-start_time
       puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
     end
+    desc "import endnote file into repository"
+    task :endnote_conversion => :environment do
+      start_time=Time.now
+      puts "Starting to eval tree at #{start_time}"
+      if ENV['ENDNOTE_FILE']
+        puts "indexing #{ENV['PID'].inspect}"
+        endnote_conversion=EndnoteConversionService.new(ENV['ENDNOTE_FILE'])
+        endnote_conversion.convert_to_mods
+        puts "Finished converting #{ENV['ENDNOTE_FILE']}"
+        service = CitationIngestService.new(endnote_conversion.get_mods_file)
+        service.ingest_citation
+      else
+        puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=absoulte_path_for_endnote_file'."
+      end
+      end_time=Time.now
+      time_taken=end_time-start_time
+      puts "Completed endnote conversion at #{end_time}, Duration: #{time_taken.inspect}"
+    end
   end
   namespace :solrize_synonym do
   desc "get all synonym and create a synonym file to sent to solr"
