@@ -1,4 +1,3 @@
-require 'CGI'
 require 'time'
 require 'pub_ticket'
 require Curate::Engine.root.join('app/controllers/application_controller')
