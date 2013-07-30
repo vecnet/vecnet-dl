@@ -18,6 +18,7 @@ Vecnet::Application.routes.draw do
 
   namespace :curation_concern, path: :concern do
     resources :collections
+    resources :citations, except: :edit
   end
 
   # User profile & follows
@@ -31,6 +32,8 @@ Vecnet::Application.routes.draw do
   match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
 
   match "files/:id" => "curation_concern/generic_files#show", via: :get, as: "files"
+
+  match "citations/:id" => "curation_concern/citations#show", via: :get, as: "citations"
 
   # Authority vocabulary queries route
   match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
