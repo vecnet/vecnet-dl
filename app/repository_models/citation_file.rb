@@ -35,9 +35,19 @@ class CitationFile < ActiveFedora::Base
     self.class.to_s.demodulize.titleize
   end
 
+  def get_full_text
+    #Sometime full text content is not available when saving (during characterization and pdf creation, so need to relaod object just to make sure it is available always)
+    if self.full_text.content.nil?
+      CitationFile.find(self.pid).full_text.content
+    else
+      return self.full_text.content
+    end
+  end
+
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["all_text_unstem_search"] = full_text.content if self.respond_to?(:full_text)
+    solr_doc["all_text_unstem_search"] = get_full_text unless get_full_text.blank?
+    return solr_doc
   end
 
 end
