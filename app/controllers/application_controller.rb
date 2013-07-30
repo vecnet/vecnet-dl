@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
       pt = ::PubTicket.new(ticket)  # Rails has already URL unescaped `ticket`
       if pt.signature_valid?(Rails.configuration.pubtkt_public_key)
         logger.debug "Pubtkt: Signature valid"
-        if pt.ticket_valid?(request.ip, Time.now)
+        if pt.ticket_valid?(request.remote_ip, Time.now)
           @current_user = User.find_or_create_from_pubtkt(pt)
         end
       end
