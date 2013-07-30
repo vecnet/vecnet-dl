@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     if ticket.present?
       # cache pubticket? to reduce parsing and crypto checking
       logger.debug "Found Pub Ticket: #{ticket}"
-      pt = ::PubTicket.new(CGI.unescape(ticket))
+      pt = ::PubTicket.new(ticket)  # Rails has already URL unescaped `ticket`
       if pt.signature_valid?(Rails.configuration.pubtkt_public_key)
         logger.debug "Pubtkt: Signature valid"
         if pt.ticket_valid?(request.ip, Time.now)
@@ -27,6 +27,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # provide the "devise API" for 'user'
+
   def current_user
     @current_user
   end
@@ -34,6 +36,16 @@ class ApplicationController < ActionController::Base
   def user_signed_in?
     current_user != nil
   end
+
+  def authenticate_user!(opts={})
+    throw(:warden, opts) unless user_signed_in?
+  end
+
+  def user_session
+    current_user && session
+  end
+
+  # path helpers, since pubtkt passes the return url as a parameter
 
   def user_login_url(back=nil)
     back = root_path unless back

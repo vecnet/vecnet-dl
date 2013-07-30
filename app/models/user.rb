@@ -18,30 +18,25 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_from_pubtkt(pubtkt)
-    user = User.find_by_uid(pt.uid)
+    user = User.find_by_uid(pubtkt.uid)
     user = User.create_from_pubtkt(pubtkt) if user.nil?
-    user.group_list = pt.tokens.split(',') if pt.tokens.present?
+    user.group_list = pubtkt.tokens.split(',') if pubtkt.tokens.present?
     user.update_from_ldap
     user
   end
 
   def self.create_from_pubtkt(pubtkt)
-    user = User.new(uid: pt.uid,
-                    email: "#{pt.uid}@nd.edu",
-                    display_name: pt.uid)
+    user = User.new(uid: pubtkt.uid,
+                    email: "#{pubtkt.uid}@nd.edu")
     # just until the user table gets migrated
-    user.reset_password_token = pt.signature
+    user.reset_password_token = pubtkt.signature
     user.save!
     user
   end
 
-  #attr_accessor :password
-
-  #def password_required?; false; end
-  #def email_required?; false; end
-
   def display_name
-    username
+    # only here until LDAP is working
+    uid
   end
 
   def self.audituser
@@ -78,11 +73,12 @@ class User < ActiveRecord::Base
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
-    email
+    uid
   end
 
   # What is difference between groups and roles?
   def groups
+    return [] if self.group_list.nil?
     self.group_list
   end
 
@@ -92,7 +88,7 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    self.admin
+    self.group_list.include?('dl_librarian')
   end
 
   def admin!

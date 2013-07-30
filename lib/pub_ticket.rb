@@ -8,7 +8,7 @@ class PubTicket
     :text,      # the part of the ticket which is not a signature
     :signature  # the signature
 
-  def initialize(ticket)
+  def initialize(ticket='')
     self.ticket = ticket
     if ticket.rindex(';sig=')
       self.text, _, self.signature = ticket.rpartition(';sig=')
@@ -85,7 +85,7 @@ class PubTicket
   private
   def get_parameter(data, field_name, xform=nil)
     v = data.fetch(field_name, nil)
-    xform && v ? xform.call(v) : v
+    if xform.respond_to?(:call) && !v.nil? then xform.call(v) else v end
   end
 
   def digest_class(key)

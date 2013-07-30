@@ -39,6 +39,6 @@ namespace :pubtkt do
     puts "Ticket text: #{ticket.text}"
     puts "Ticket sig : #{ticket.signature}"
     puts "Sig Valid? : #{ticket.signature_valid?(public_key)}"
-    puts "Expired?   : #{Time.now <= ticket.valid_until}"
+    puts "Expired?   : #{Time.now > ticket.valid_until}"
   end
 end
