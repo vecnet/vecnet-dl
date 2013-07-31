@@ -213,15 +213,9 @@ set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 desc "Setup for the QA environment"
 task :qa do
   set :shared_directories, %w(log)
-  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml )
-  set :symlink_targets do
-    [
-      #['/bundle/config','/.bundle/config', '/.bundle'],
-      ['/log','/log','/log'],
-      #['/vendor/bundle','/vendor/bundle','/vendor'],
-    ]
-  end
-  set :branch,      'master'
+  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
+
+  set :branch,      'pubtkt'
   set :rails_env,   'qa'
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
@@ -261,44 +255,5 @@ task :production do
   after 'deploy', 'deploy:cleanup'
   after 'deploy', 'deploy:restart'
   after 'deploy', 'vecnet:restart_workers'
-end
-
-
-# Trying to keep the worker environments as similar as possible
-def common_worker_things
-  set :symlink_targets do
-    [
-      #[ '/bundle/config', '/.bundle/config', '/bundle'],
-      [ '/log', '/log', '/log'],
-      #[ '/vendor/bundle', '/vendor/bundle', '/vendor/bundle'],
-    ]
-  end
-  set :deploy_to,   '/home/Vecnet'
-  set :ruby_bin,    '/usr/local/ruby/bin'
-  set :without_bundle_environments, 'development test'
-  set :group_writable, false
-
-  default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :work
-  after 'deploy', 'worker:start'
-  after 'deploy:update_code'
-end
-
-desc "Setup for the Preproduction Worker environment"
-task :pre_production_worker do
-  set :rails_env,   'pre_production'
-  set :user,        'Vecnet'
-  set :domain,      'curatepprdw1.library.nd.edu'
-  set :branch, "master"
-  common_worker_things
-end
-
-desc "Setup for the Production Worker environment"
-task :production_worker do
-  set :rails_env,   'production'
-  set :user,        'Vecnet'
-  set :domain,      'curateprodw1.library.nd.edu'
-  set :branch,      'release'
-  common_worker_things
 end
 
