@@ -26,6 +26,7 @@ class CatalogController < ApplicationController
   # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
   include Hydra::Controller::ControllerBehavior
   include BlacklightAdvancedSearch::ParseBasicQ
+  include BlacklightAdvancedSearch::Controller
 
   with_themed_layout 'catalog'
 
@@ -35,14 +36,13 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   # This filters out objects that you want to exclude from search results, like FileAssets
   CatalogController.solr_search_params_logic += [:exclude_unwanted_models]
+  CatalogController.solr_search_params_logic += [:add_join_query_to_solr]
 
   skip_before_filter :default_html_head
 
   def index
+    #require 'debugger'; debugger; true;
     super
-    recent
-    #also grab my recent docs too
-    recent_me
   end
 
   def subject_facet
@@ -80,6 +80,11 @@ class CatalogController < ApplicationController
       :qt => "search",
       :rows => 10
     }
+
+    # name of Solr request handler, leave unset to use the same one as your Blacklight.config[:default_qt]
+    #config.advanced_search= {
+    #    :qt => 'search'
+    #}
 
     # solr field configuration for search results/index views
     config.index.show_link = "desc_metadata__title_display"
@@ -171,6 +176,7 @@ class CatalogController < ApplicationController
     # creator, title, description, publisher, date_created,
     # subject, language, resource_type, format, identifier, based_near,
     config.add_search_field('contributor') do |field|
+      field.include_in_advanced_search = false
       # solr_parameters hash are sent to Solr as ordinary url query params.
       field.solr_parameters = { :"spellcheck.dictionary" => "contributor" }
 
@@ -186,6 +192,7 @@ class CatalogController < ApplicationController
 
     config.add_search_field('creator') do |field|
       field.solr_parameters = { :"spellcheck.dictionary" => "creator" }
+      field.include_in_advanced_search = false
       field.solr_local_parameters = {
         :qf => "desc_metadata__creator_t",
         :pf => "desc_metadata__creator_t"
@@ -196,13 +203,15 @@ class CatalogController < ApplicationController
       field.solr_parameters = {
         :"spellcheck.dictionary" => "title"
       }
+      field.include_in_advanced_search = false
       field.solr_local_parameters = {
-        :qf => "desc_metadata__title_t",
-        :pf => "desc_metadata__title_t"
+        :qf => "$title_qf",
+        :pf => "$title_pf"
       }
     end
 
     config.add_search_field('description') do |field|
+      field.include_in_advanced_search = false
       field.label = "Abstract or Summary"
       field.solr_parameters = {
         :"spellcheck.dictionary" => "description"
@@ -214,6 +223,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('publisher') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "publisher"
       }
@@ -224,6 +234,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('date_created') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "date_created"
       }
@@ -234,6 +245,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('subject') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "subject"
       }
@@ -244,6 +256,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('language') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "language"
       }
@@ -254,12 +267,30 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('resource_type') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "resource_type"
       }
       field.solr_local_parameters = {
         :qf => "desc_metadata__resource_type_t",
         :pf => "desc_metadata__resource_type_t"
+      }
+    end
+
+    config.add_search_field('citation') do |field|
+      field.include_in_simple_select = false
+      field.solr_local_parameters = {
+          :qf => "$qf_citation",
+          :pf => "$pf_citation"
+      }
+    end
+
+    config.add_search_field('full_text_citation') do |field|
+      field.include_in_simple_select = false
+      field.qt = 'fulltext'
+      field.solr_local_parameters = {
+          :qf => "$qf_full_text_citation",
+          :pf => "$pf_full_text_citation"
       }
     end
 
@@ -286,6 +317,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('based_near') do |field|
+      field.include_in_advanced_search = false
       field.label = "Location"
       field.solr_parameters = {
         :"spellcheck.dictionary" => "based_near"
@@ -297,6 +329,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('tag') do |field|
+      field.include_in_advanced_search = false
       field.solr_parameters = {
         :"spellcheck.dictionary" => "tag"
       }
@@ -307,6 +340,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('depositor') do |field|
+      field.include_in_advanced_search = false
       field.solr_local_parameters = {
         :qf => "depositor_t",
         :pf => "depositor_t"
@@ -314,6 +348,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('rights') do |field|
+      field.include_in_advanced_search = false
       field.solr_local_parameters = {
         :qf => "desc_metadata__rights_t",
         :pf => "desc_metadata__rights_t"
@@ -346,8 +381,18 @@ class CatalogController < ApplicationController
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Batch\""
-    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Citation\""
+    unless params["search_field"] == 'advanced'
+      solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Citation\""
+    end
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
+    return solr_parameters
+  end
+
+  def add_join_query_to_solr(solr_parameters, user_parameters = params)
+    if (user_parameters.respond_to?("full_text_citation"))
+      solr_parameters[:q] ||= []
+      solr_parameters[:q] <<" OR _query_:\"{!join from=parent_id to=id}*\""
+    end
     return solr_parameters
   end
 
