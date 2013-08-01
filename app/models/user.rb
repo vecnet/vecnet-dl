@@ -88,6 +88,7 @@ class User < ActiveRecord::Base
   end
 
   def admin?
+    return false if self.group_list.nil?
     self.group_list.include?('dl_librarian')
   end
 
