@@ -53,7 +53,7 @@
           </li>
         <% else %>
         <li>
-          <%= link_to raw('<i class="icon-signin"></i> Login'), user_login_url(request.url), :class => "btn btn-small" %>
+          <%= link_to raw('<i class="icon-signin"></i> Login'), user_login_url(request.original_url), :class => "btn btn-small" %>
         </li>
         <% end %>
     </ul><!-- /.nav /.pull-right -->
