@@ -94,6 +94,7 @@ class DashboardController < ApplicationController
     super
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
     return solr_parameters
   end
 end
