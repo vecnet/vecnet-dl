@@ -62,10 +62,11 @@ Vecnet::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.application_url = "http://curate.nd.edu"
+  config.application_url = "http://dl.vecnet.org"
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
+  config.fits_path = '/opt/fits-0.6.1/fits.sh'
 end
