@@ -20,6 +20,7 @@ require 'blacklight_advanced_search'
 # bl_advanced_search 1.2.4 is doing unitialized constant on these because we're calling ParseBasicQ directly
 require 'parslet'
 require 'parsing_nesting/tree'
+require 'blacklight/join_solr_params'
 
 class CatalogController < ApplicationController
   include Blacklight::Catalog
@@ -27,6 +28,7 @@ class CatalogController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include BlacklightAdvancedSearch::ParseBasicQ
   include BlacklightAdvancedSearch::Controller
+  include JoinSolrParams
 
   with_themed_layout 'catalog'
 
@@ -36,7 +38,6 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   # This filters out objects that you want to exclude from search results, like FileAssets
   CatalogController.solr_search_params_logic += [:exclude_unwanted_models]
-  CatalogController.solr_search_params_logic += [:add_join_query_to_solr]
 
   skip_before_filter :default_html_head
 
@@ -388,13 +389,7 @@ class CatalogController < ApplicationController
     return solr_parameters
   end
 
-  def add_join_query_to_solr(solr_parameters, user_parameters = params)
-    if (user_parameters.respond_to?("full_text_citation"))
-      solr_parameters[:q] ||= []
-      solr_parameters[:q] <<" OR _query_:\"{!join from=parent_id to=id}*\""
-    end
-    return solr_parameters
-  end
+
 
   private
 

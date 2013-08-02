@@ -22,3 +22,6 @@ limitations under the License.
     </div>
   </div>
 <%- end -%>
+<div class="checkbox pull-right">
+    <%= check_box_tag "include_full_text", "1", params[:fulltext] %> <%= label_tag "full_text", "include citation fulltext" %>
+</div>

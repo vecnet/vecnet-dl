@@ -15,6 +15,7 @@ limitations under the License.
 %>
 
 <%= form_tag catalog_index_path, :class => 'form-horizontal', :method => :get do  %>
+    <% advanced_search_context.tap{|h| h.delete(:include_full_text)} %>
 
   <%= search_as_hidden_fields(:params => advanced_search_context ) %>  
 
@@ -24,24 +25,15 @@ limitations under the License.
         <div class="control-group">
           <label class="control-label">Find items that match</label>
           <div class="controls">
-            <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all'), :class => "span10") %> of the fields below:
+            <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %> of the fields below:
           </div>
         </div>
         
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
-        </div>        
+        </div>
     </div>
-    <!-- 
-    <div class="limit_column column">      
-      <div class="alert alert-info"><strong>AND</strong> have these attributes:</div>
-      <div> 
-          <%# render 'advanced_search_facets' %>
-      </div>
-    </div>
-    -->
-  </div>
-  
+
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
     <div>
       <p>Within search:</p>
