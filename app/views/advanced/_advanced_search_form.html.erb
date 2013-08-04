@@ -28,10 +28,11 @@ limitations under the License.
             <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %> of the fields below:
           </div>
         </div>
-        
+      <fieldset>
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
         </div>
+      </fieldset>
     </div>
 
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>

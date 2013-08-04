@@ -12,17 +12,6 @@
   <%= render 'facets' %>
 <% end %>
 
-<div class="span8">
-  <div id="simple-search-form" class="expand">
-    <%=render 'shared/site_search' %>
-  </div>
-    <div class="btn-group" data-toggle="buttons-checkbox">
-      <a class="advanced btn btn-primary" data-toggle="collapse" href="#advanced-search-form">Advanced Search</a>
-    </div>
-    <div id="advanced-search-form" class="collapse-notnow">
-      <%=render 'advanced/advanced_search_form' %>
-    </div>
-</div>
 <% if has_search_parameters? %>
   <div class="row">
     <div class="span6"> <h3>Search Results</h3> </div>
@@ -46,6 +35,6 @@
 
 <% else %>
 
-  <%# render 'home' %>
+  <%= render 'home' %>
 
 <% end %>

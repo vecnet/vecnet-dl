@@ -288,6 +288,7 @@ class CatalogController < ApplicationController
 
     config.add_search_field('full_text_citation') do |field|
       field.include_in_simple_select = false
+      field.include_in_advanced_search = false
       field.qt = 'fulltext'
       field.solr_local_parameters = {
           :qf => "$qf_full_text_citation",
