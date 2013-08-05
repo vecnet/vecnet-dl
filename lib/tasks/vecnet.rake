@@ -15,6 +15,15 @@ namespace :vecnet do
     end
   end
 
+  def timed_action(action_name, &block)
+    start_time = Time.now
+    puts "Starting #{action_name} at #{start_time}"
+    yield
+    end_time = Time.now
+    time_taken = end_time - start_time
+    puts "Completed #{action_name} at #{end_time},  Duration: #{time_taken.inspect}"
+  end
+
   namespace :import do
     def mesh_files
       files=[]
@@ -22,85 +31,67 @@ namespace :vecnet do
     end
     desc "Import Mesh Subjects from text file mesh-d2013.txt"
     task :mesh_subjects => :environment do
-      start_time=Time.now
-      puts "Starting to harvest at #{start_time}"
-      LocalAuthority.harvest_more_mesh_ascii("mesh_subject_harvest",mesh_files)
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
+      timed_action "harvest" do
+        LocalAuthority.harvest_more_mesh_ascii("mesh_subject_harvest",mesh_files)
+      end
     end
     task :one_time_mesh_print_entry_import => :environment do
-      start_time=Time.now
-      puts "Starting to harvest print entry at #{start_time}"
-      LocalAuthority.harvest_more_mesh_print_synonyms("mesh_subject_harvest",mesh_files)
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
+      timed_action "harvest print entry" do
+        LocalAuthority.harvest_more_mesh_print_synonyms("mesh_subject_harvest",mesh_files)
+      end
     end
     desc "Resolve Mesh Tree Structure"
     task :eval_mesh_trees  => :environment do
-      start_time=Time.now
-      puts "Starting to eval tree at #{start_time}"
-      MeshTreeStructure.classify_all_trees
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
+      timed_action "eval tree" do
+        MeshTreeStructure.classify_all_trees
+      end
     end
     desc "import endnote file into repository"
     task :endnote_conversion => :environment do
-      start_time=Time.now
-      puts "Starting to eval tree at #{start_time}"
-      if ENV['ENDNOTE_FILE']
+      if ENV['ENDNOTE_FILE'].nil?
+        puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=absoulte_path_for_endnote_file'."
+        return
+      end
+      timed_action "eval tree" do
         puts "indexing #{ENV['PID'].inspect}"
         endnote_conversion=EndnoteConversionService.new(ENV['ENDNOTE_FILE'])
         endnote_conversion.convert_to_mods
         puts "Finished converting #{ENV['ENDNOTE_FILE']}"
         service = CitationIngestService.new(endnote_conversion.get_mods_file)
         service.ingest_citation
-      else
-        puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=absoulte_path_for_endnote_file'."
       end
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed endnote conversion at #{end_time}, Duration: #{time_taken.inspect}"
     end
   end
   namespace :solrize_synonym do
   desc "get all synonym and create a synonym file to sent to solr"
     task :get_synonyms  => :environment do
-      start_time=Time.now
-      puts "Starting to get tree at #{start_time}"
-      FILE = ENV["FILE"]
-      subjects = SubjectMeshEntry.all
-      sym_file = File.new(File.join(Rails.root, FILE), "w")
-        subjects.each do |subject|
-          tmp_arr= []
-          tmp_arr << subject.term
-          tmp_arr += subject.subject_mesh_synonyms.map {|syn|
-            syn.subject_synonym
-          }
-          # escape all the commas!
-          tmp_arr.map! { |syn| syn.gsub(/,/, '\,') }
-          sym_file.write(tmp_arr.join(','))
-          sym_file.write("\n")
+      timed_action "get tree" do
+        FILE = ENV["FILE"]
+        subjects = SubjectMeshEntry.all
+        File.new(File.join(Rails.root, FILE), "w") do |sym_file|
+          subjects.each do |subject|
+            tmp_arr= []
+            tmp_arr << subject.term
+            tmp_arr += subject.subject_mesh_synonyms.map {|syn|
+              syn.subject_synonym
+            }
+            # escape all the commas!
+            tmp_arr.map! { |syn| syn.gsub(/,/, '\,') }
+            sym_file.write(tmp_arr.join(','))
+            sym_file.write("\n")
+          end
         end
-      sym_file.close
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
+      end
     end
   end
 
   namespace :migrate do
     desc "Convert Batch objects to Collection objects"
     task :batch_to_collection => :environment do
-      start_time = Time.now
-      puts "Starting batch to collection migration at #{start_time}"
-      a = BatchToCollection.new
-      a.migrate
-      end_time = Time.now
-      time_taken = end_time - start_time
-      puts "Completed migration at #{end_time}, Duration: #{time_taken.inspect}"
+      timed_action "batch to collection migration" do
+        a = BatchToCollection.new
+        a.migrate
+      end
     end
   end
 
