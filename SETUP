@@ -181,6 +181,12 @@ sudo /sbin/service iptables save
 # clamav
 sudo yum install clamav clamav-devel clamav-db
 
+# bibutils >= 5.0
+wget http://sourceforge.net/projects/bibutils/files/bibutils_5.0_src.tgz/download
+tar xvfz bibutils_5.0_src.tgz
+cd bibutils_5.0
+./configure && make
+sudo make install
 
 # setup application
 # I think running 'cap ENV deploy:setup' on your dev machine will take care of the following...
