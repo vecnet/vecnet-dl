@@ -46,21 +46,26 @@ namespace :vecnet do
         MeshTreeStructure.classify_all_trees
       end
     end
-    desc "import endnote file into repository"
+
+    desc %q{import endnote file into repository. Environment vars:
+    ENDNOTE_FILE - the endnote file to ingest
+    ENDNOTE_PDF_PATH - colon seperated list of paths to search for pdf files}
     task :endnote_conversion => :environment do
       if ENV['ENDNOTE_FILE'].nil?
         puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=absoulte_path_for_endnote_file'."
         return
       end
+      pdf_path = ENV['ENDNOTE_PDF_PATH'] ? ENV['ENDNOTE_PDF_PATH'].split(':') : []
       timed_action "eval tree" do
         puts "indexing #{ENV['PID'].inspect}"
         endnote_conversion=EndnoteConversionService.new(ENV['ENDNOTE_FILE'])
         endnote_conversion.convert_to_mods
         puts "Finished converting #{ENV['ENDNOTE_FILE']}"
-        service = CitationIngestService.new(endnote_conversion.get_mods_file)
+        service = CitationIngestService.new(endnote_conversion.get_mods_file, pdf_path)
         service.ingest_citation
       end
     end
+
   end
   namespace :solrize_synonym do
   desc "get all synonym and create a synonym file to sent to solr"

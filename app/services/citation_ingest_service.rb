@@ -1,11 +1,11 @@
 require 'mods'
 class CitationIngestService
 
-  attr_accessor :metadata_file, :parsed_mods, :curation_concern, :pdf_path
+  attr_accessor :metadata_file, :parsed_mods, :curation_concern, :pdf_paths
 
-  def initialize(mods_input_file, path_to_files='/Users/blakshmi/projects/endnote')
+  def initialize(mods_input_file, pdf_paths = [])
     @metadata_file = mods_input_file
-    @pdf_path= path_to_files
+    @pdf_paths = pdf_paths
   end
 
   def ingest_citation
@@ -21,8 +21,7 @@ class CitationIngestService
   end
 
   def parse_mods
-    @parsed_mods = Mods::Record.new
-    @parsed_mods.from_str(File.read(self.metadata_file))
+    @parsed_mods ||= Mods::Record.new.from_str(File.read(self.metadata_file))
   end
 
   def extract_metadata
@@ -80,14 +79,12 @@ class CitationIngestService
   end
 
   def find_files_to_attach
-    related_url=get_urls
-    files=[]
-    related_url.each do |url|
-      if (url =~ /internal-pdf(.*)/)
-       files<< url.gsub("internal-pdf://", "#{self.pdf_path}/")
+    related_url = get_urls
+    related_url.map do |url|
+      if url.start_with?('internal-pdf:', 'C:/')
+        resolve_pdf_path(url.sub(/internal-pdf:\/\/|C:\//, ''))
       end
-    end
-    files
+    end.compact
   end
 
   def get_bibliographic_citation
@@ -107,5 +104,17 @@ class CitationIngestService
     citation="#{title} #{part_detail[:volume]}, #{part_detail[:issue]} (#{dt}): #{unit} #{start_page}-#{end_page}"
   end
 
+  private
+  def resolve_pdf_path(fname)
+    pdf_paths.each do |path|
+      s = File.join(path, fname)
+      return s if ::File.exists?(s)
+    end
+    puts "Could not locate file #{fname}"
+    nil
+  end
 
+  def remove_newlines(s)
+    s.gsub("\n","").strip
+  end
 end
