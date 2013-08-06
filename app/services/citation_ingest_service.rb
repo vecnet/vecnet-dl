@@ -9,6 +9,10 @@ class CitationIngestService
   end
 
   def ingest_citation
+    unless citation.new?
+      puts "Citation is already in Fedora with id #{citation.noid}. Not ingested."
+      return
+    end
     actor.create!
     puts "Created Citation with id: #{@curation_concern.pid}"
     puts "Citation created as: #{Citation.find(@curation_concern.pid)}"
@@ -17,6 +21,7 @@ class CitationIngestService
   end
 
   def citation
+    # TODO: this is place to check if citation already exists in fedora
     @curation_concern ||= Citation.new(pid: CurationConcern.mint_a_pid)
   end
 

@@ -2,6 +2,7 @@
 # Tasks copied from to CurateND
 #
 require 'rake'
+require 'fileutils'
 namespace :vecnet do
   namespace :app do
     desc "Raise an error unless the RAILS_ENV is development"
@@ -55,15 +56,28 @@ namespace :vecnet do
         puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=absoulte_path_for_endnote_file'."
         return
       end
+      temp_path = "#{Rails.root}/tmp/citations"
+      FileUtils.mkdir_p temp_path
       pdf_path = ENV['ENDNOTE_PDF_PATH'] ? ENV['ENDNOTE_PDF_PATH'].split(':') : []
       timed_action "eval tree" do
-        puts "indexing #{ENV['PID'].inspect}"
-        endnote_conversion=EndnoteConversionService.new(ENV['ENDNOTE_FILE'])
-        endnote_conversion.convert_to_mods
-        puts "Finished converting #{ENV['ENDNOTE_FILE']}"
-        service = CitationIngestService.new(endnote_conversion.get_mods_file, pdf_path)
-        service.ingest_citation
+        current_number = 1
+        error_list = []
+        EndnoteConversionService.each_record(ENV['ENDNOTE_FILE']) do |record|
+          puts "#{current_number}) Ingesting"
+          end_filename = "#{temp_path}/#{current_number}.end"
+          mods_filename = "#{temp_path}/#{current_number}.mods"
+          File.open(end_filename, 'w') { |f| f.write(record) }
+          endnote_conversion = EndnoteConversionService.new(end_filename, mods_filename)
+          endnote_conversion.convert_to_mods
+          service = CitationIngestService.new(mods_filename, pdf_path)
+          service.ingest_citation
+        rescue => e
+          puts "#{e.class}: #{e.message}"
+          puts e.backtrace
+          error_list << [current_number, record]
+        end
       end
+      puts "#{error_list.length} Errors"
     end
 
   end
