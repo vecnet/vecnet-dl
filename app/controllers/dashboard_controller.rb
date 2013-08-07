@@ -21,6 +21,7 @@ class DashboardController < ApplicationController
   include ActionView::Helpers::DateHelper
   include BlacklightAdvancedSearch::ParseBasicQ
   include BlacklightAdvancedSearch::Controller
+  include JoinSolrParams
 
   with_themed_layout 'dashboard'
 

@@ -383,10 +383,10 @@ class CatalogController < ApplicationController
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Batch\""
-    unless params["search_field"] == 'advanced'
-      solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Citation\""
-    end
-    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
+    #unless params["search_field"] == 'advanced'
+    #  solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Citation\""
+    #end
+    #solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
     return solr_parameters
   end
 
