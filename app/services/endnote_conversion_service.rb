@@ -9,15 +9,15 @@ class EndnoteConversionService
       record = []
       f.lines do |line|
         ln = line.strip
-        if ln != ""
+        unless ln.blank?
           if ln.start_with?("%0")
-            yield record.join("\n")
+            yield record.join("\n") unless record.empty?
             record = []
           end
           record << ln
         end
       end
-      yield record.join("\n") if record.length > 0
+      yield record.join("\n") unless record.empty?
     end
   end
 
@@ -38,7 +38,8 @@ class EndnoteConversionService
       raise EndnoteError, "end2xml exit code #{s}"
     end
     if mods_xml_filename
-      File.open(mods_xml_filename) { |f| f.write(modsxml) }
+      puts "Mods file: #{mods_xml_filename.inspect}"
+      File.open(mods_xml_filename, 'w') { |f| f.write(modsxml) }
     end
   end
 end

@@ -2,7 +2,6 @@ module CurationConcern
   class CitationActor < CurationConcern::BaseActor
 
     def create!
-      puts("Into create: #{curation_concern.inspect}")
       curation_concern.apply_depositor_metadata(user.user_key)
       curation_concern.date_created = Date.today
       add_user_roles
@@ -11,11 +10,9 @@ module CurationConcern
     end
 
     def save
-      puts("into save")
       curation_concern.attributes = attributes
       curation_concern.date_modified = Date.today
       curation_concern.set_visibility(visibility)
-      puts "Is valid: #{curation_concern.inspect}"
       curation_concern.save!
       #puts "Errors: #{curation_concern.errors.inspect}"
     end
@@ -47,7 +44,7 @@ module CurationConcern
       cf=File.new(file)
       citation_file = CitationFile.new
       citation_file.batch = curation_concern
-      citation_file.resource_type = "Endnote Citation"
+      citation_file.resource_type = "CitationFile"
       citation_file.file = cf
       Sufia::GenericFile::Actions.create_metadata(
           citation_file, user, curation_concern.pid

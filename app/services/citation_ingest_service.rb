@@ -1,5 +1,48 @@
 require 'mods'
+require 'ostruct'
 class CitationIngestService
+  class PartExtractor
+    attr_reader :unit, :count, :dt,:details, :start_page, :end_page, :part, :title
+    def initialize(part_node,title)
+      @title=title
+      @part=part_node
+      @count = 0
+      extract_part
+    end
+
+    def extract_part
+      @dt= self.part.date.text
+      part_detail={}
+      self.part.detail.map{|n| part_detail[n.type_at.to_sym] = n.text}
+      @details=OpenStruct.new(part_detail)
+      unless self.part.extent.nil?
+        extract_extent(@part.extent)
+      end
+    end
+    def extract_extent(extent)
+      @unit= extent.unit.nil? ? "" : extent.unit.first
+      @start_page= extent.search(:start).text
+      @end_page= extent.search(:end).text
+    end
+
+    def volume
+      @details.respond_to?(:volume) ? @details.volume : ""
+    end
+
+    def issue
+      @details.respond_to?(:issue) ? @details.issue : ""
+    end
+
+    def citation
+      "#{@title} #{volume}, #{issue} (#{dt}): #{unit_details}"
+    end
+
+    def unit_details
+      unless unit.blank?
+        "#{@unit} #{@start_page} - #{@end_page}"
+      end
+    end
+  end
 
   attr_accessor :metadata_file, :parsed_mods, :curation_concern, :pdf_paths
 
@@ -9,18 +52,27 @@ class CitationIngestService
   end
 
   def ingest_citation
-    unless citation.new?
-      puts "Citation is already in Fedora with id #{citation.noid}. Not ingested."
+    citation= find_citation
+    unless citation.nil?
+      logger.error "Atleast one Citation is exists in Fedora with id #{citation.id}. Not ingested."
       return
     end
     actor.create!
-    puts "Created Citation with id: #{@curation_concern.pid}"
-    puts "Citation created as: #{Citation.find(@curation_concern.pid)}"
+    logger.info "Created Citation with id: #{@curation_concern.pid}"
+    return  @curation_concern.noid
   rescue ActiveFedora::RecordInvalid=>e
-    puts "Error occured during creation: #{e.inspect}"
+    logger.error "Error occured during creation: #{e.inspect}"
   end
 
-  def citation
+  def find_citation
+     if Citation.where(:desc_metadata__identifier_t=>get_identifiers).nil?
+      return nil
+    else
+      return Citation.where(:desc_metadata__identifier_t=>get_identifiers).first
+    end
+  end
+
+  def create_citation
     # TODO: this is place to check if citation already exists in fedora
     @curation_concern ||= Citation.new(pid: CurationConcern.mint_a_pid)
   end
@@ -36,7 +88,7 @@ class CitationIngestService
     metadata=
     {
       files:find_files_to_attach,
-      title:"add title",
+      title:get_title,
       creator: self.parsed_mods.plain_name.display_value,
       identifier: get_identifiers, #identifier
       #genre:self.parsed_mods.genre.text ,
@@ -46,7 +98,8 @@ class CitationIngestService
       language:get_languages,   #language
       resource_type:self.parsed_mods.typeOfResource.text, #mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
-      visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC}
+      visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    }
     #based_near:self.parsed_mods.get_location,   #based_near
     #self.parsed_mods.temporal,              #Mapped to dc temporal
     #self.parsed_mods.geographic} #Mapped spatial (but this is location name, so should be mapped to based_near?)
@@ -58,13 +111,17 @@ class CitationIngestService
 
   include Morphine
   register :actor do
-    CurationConcern.actor(citation, job_user, extract_metadata)
+    CurationConcern.actor(create_citation, job_user, extract_metadata)
   end
 
   protected
 
   def job_user
    User.batchuser()
+  end
+
+  def get_title
+    self.parsed_mods.title_info.full_title
   end
 
   def get_identifiers
@@ -89,6 +146,9 @@ class CitationIngestService
       if url.start_with?('internal-pdf:', 'C:/')
         resolve_pdf_path(url.sub(/internal-pdf:\/\/|C:\//, ''))
       end
+      #if url.start_with?('internal-pdf:')
+      #  resolve_pdf_path(url.sub(/internal-pdf:\/\//, ''))
+      #end
     end.compact
   end
 
@@ -99,23 +159,19 @@ class CitationIngestService
         title=node.titleInfo.text.gsub("\n","").strip
       end
     end
-    part= self.parsed_mods.part
-    dt= self.parsed_mods.part.date.text
-    part_detail={}
-    part.detail.map{|n| part_detail[n.type_at.to_sym] = n.text}
-    unit=part.extent.attribute("unit").value
-    start_page=part.extent.start.text
-    end_page=part.extent.end.text
-    citation="#{title} #{part_detail[:volume]}, #{part_detail[:issue]} (#{dt}): #{unit} #{start_page}-#{end_page}"
+    part= PartExtractor.new(self.parsed_mods.part,title)
+    citation=part.citation
+    return citation
   end
 
   private
   def resolve_pdf_path(fname)
     pdf_paths.each do |path|
+      logger.info "Find file #{fname} in path #{path.inspect}"
       s = File.join(path, fname)
       return s if ::File.exists?(s)
     end
-    puts "Could not locate file #{fname}"
+    logger.error "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
     nil
   end
 
