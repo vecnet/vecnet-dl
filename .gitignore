@@ -32,4 +32,5 @@ jetty/
 spec/*.end
 spec/*.xml
 vecnet_test
+*.log
 

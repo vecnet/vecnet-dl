@@ -14,42 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 %>
 
-<%= form_tag catalog_index_path, :class => 'form-horizontal', :method => :get do  %>
+<%= form_tag catalog_index_path, :method => :get do  %>
     <% advanced_search_context.tap{|h| h.delete(:include_full_text)} %>
 
-  <%= search_as_hidden_fields(:params => advanced_search_context ) %>  
-
-  <div> 
-	      
-    <div>
+  <%= search_as_hidden_fields(:params => advanced_search_context ) %>
+    <div class="row">
+    <div class="span5 searchoption">
+      <fieldset>
+        <legend class="small">Citation Search</legend>
         <div class="control-group">
           <label class="control-label">Find items that match</label>
           <div class="controls">
             <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %> of the fields below:
           </div>
         </div>
-      <fieldset>
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
         </div>
       </fieldset>
     </div>
-
+    <div class="span4 searchoption pull-right">
+      <%= render 'advanced/date_search_form' %>
+    </div>
+  </div>
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
     <div>
       <p>Within search:</p>
       <%= search_context_str %>
     </div>
   <% end %>
+
+    <%= link_to "Start over", {:controller => "catalog", :action => "index"}, :class =>"btn" %>
   
-  
-  <div class="form-actions"
-    <%= label_tag(:sort, "Sort results by") %> 
-    <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort]))) %>
+
+  <div class="form-actions">
     <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
-    <br />
-    <%= submit_tag 'Search', :class=>'btn btn-primary', :id=>'advanced_search' %>
-	  <%= link_to "Start over", {:controller => "advanced", :action => "index"}, :class =>"btn" %>
+    <%= submit_tag 'Search', :class=>'btn btn-primary', :id=>'advanced_search', :align=>"center" %>
+
   </div>
 <% end %>
 
