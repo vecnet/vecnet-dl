@@ -72,6 +72,6 @@ Vecnet::Application.configure do
 
   config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-production.pem')))
   # XXX: the login_url is wrong
-  config.pubtkt_login_url = 'https://www.vecnet.org/index.php/sso-login'
+  config.pubtkt_login_url = 'https://www.dev.vecnet.org/index.php/sso-login'
   config.pubtkt_logout_url = config.pubtkt_login_url
 end
