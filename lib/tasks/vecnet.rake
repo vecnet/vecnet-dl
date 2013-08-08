@@ -2,6 +2,8 @@
 # Tasks copied from to CurateND
 #
 require 'rake'
+require 'fileutils'
+require 'logger'
 namespace :vecnet do
   namespace :app do
     desc "Raise an error unless the RAILS_ENV is development"
@@ -15,6 +17,19 @@ namespace :vecnet do
     end
   end
 
+  def timed_action(action_name, &block)
+    start_time = Time.now
+    logger.info("\t ############ Starting #{action_name} at #{start_time} ")
+    yield
+    end_time = Time.now
+    time_taken = end_time - start_time
+    logger.info("\t ############ Complete #{action_name} at #{end_time}, Duration #{time_taken.inspect} ")
+  end
+
+  def logger
+    log = Logger.new('EndNoteIngester.log')
+  end
+
   namespace :import do
     def mesh_files
       files=[]
@@ -22,67 +37,97 @@ namespace :vecnet do
     end
     desc "Import Mesh Subjects from text file mesh-d2013.txt"
     task :mesh_subjects => :environment do
-      start_time=Time.now
-      puts "Starting to harvest at #{start_time}"
-      LocalAuthority.harvest_more_mesh_ascii("mesh_subject_harvest",mesh_files)
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
+      timed_action "harvest" do
+        LocalAuthority.harvest_more_mesh_ascii("mesh_subject_harvest",mesh_files)
+      end
     end
     task :one_time_mesh_print_entry_import => :environment do
-      start_time=Time.now
-      puts "Starting to harvest print entry at #{start_time}"
-      LocalAuthority.harvest_more_mesh_print_synonyms("mesh_subject_harvest",mesh_files)
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed  harvest at #{end_time},  Duration: #{time_taken.inspect}"
+      timed_action "harvest print entry" do
+        LocalAuthority.harvest_more_mesh_print_synonyms("mesh_subject_harvest",mesh_files)
+      end
     end
+
     desc "Resolve Mesh Tree Structure"
     task :eval_mesh_trees  => :environment do
-      start_time=Time.now
-      puts "Starting to eval tree at #{start_time}"
-      MeshTreeStructure.classify_all_trees
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
+      timed_action "eval tree" do
+        MeshTreeStructure.classify_all_trees
+      end
+    end
+
+    desc %q{import endnote file into repository. Environment vars:
+    ENDNOTE_FILE - the endnote file to ingest
+    ENDNOTE_PDF_PATH - colon seperated list of paths to search for pdf files}
+    task :endnote_conversion => :environment do
+      if ENV['ENDNOTE_FILE'].nil?
+        puts "You must provide a endnote file using the format 'import::endnote_conversion ENDNOTE_FILE=path/to/endnote/file ENDNOTE_PDF_PATH=path/to/find/pdf/files'."
+        return
+      end
+      if ENV['ENDNOTE_PDF_PATH'].nil?
+        puts "You must provide a endnote pdf path using the format 'import::endnote_conversion ENDNOTE_FILE=path/to/endnote/file ENDNOTE_PDF_PATH=path/to/find/pdf/files'."
+        return
+      end
+      temp_path = "#{Rails.root}/tmp/citations"
+      pdf_paths = ENV['ENDNOTE_PDF_PATH']|| ["/Users/blakshmi/projects/endnote"]
+      FileUtils.mkdir_p temp_path
+      error_list = []
+      timed_action "endnote_conversion" do
+        current_number = 1
+        EndnoteConversionService.each_record(ENV['ENDNOTE_FILE']) do |record|
+          begin
+            logger.info "#{current_number}) Ingesting"
+            logger.info("#{current_number} Ingesting")
+            end_filename = "#{temp_path}/#{current_number}.end"
+            mods_filename = "#{temp_path}/#{current_number}.mods"
+            File.open(end_filename, 'w') { |f| f.write(record) }
+            endnote_conversion = EndnoteConversionService.new(end_filename, mods_filename)
+            endnote_conversion.convert_to_mods
+            File.open(end_filename, 'w') { |f| f.write(record) }
+            service = CitationIngestService.new(mods_filename, pdf_paths)
+            noid=service.ingest_citation
+            current_number+=1
+          rescue => e
+            message= "#{e.class}: #{e.message}"
+            logger.error "Error Occurred: message"
+            logger.error e.backtrace
+            error_list << [{current_number => "#{record} failed with error.new Could not ingest for the following reasons: #{message}"}]
+          end
+        end
+        puts "Total Errors: #{error_list.length} Errors"
+        logger.Error "Complete Error list \n #{error_list.inspect} Errors"
+
+      end
     end
   end
   namespace :solrize_synonym do
   desc "get all synonym and create a synonym file to sent to solr"
     task :get_synonyms  => :environment do
-      start_time=Time.now
-      puts "Starting to get tree at #{start_time}"
-      FILE = ENV["FILE"]
-      subjects = SubjectMeshEntry.all
-      sym_file = File.new(File.join(Rails.root, FILE), "w")
-        subjects.each do |subject|
-          tmp_arr= []
-          tmp_arr << subject.term
-          tmp_arr += subject.subject_mesh_synonyms.map {|syn|
-            syn.subject_synonym
-          }
-          # escape all the commas!
-          tmp_arr.map! { |syn| syn.gsub(/,/, '\,') }
-          sym_file.write(tmp_arr.join(','))
-          sym_file.write("\n")
+      timed_action "get tree" do
+        FILE = ENV["FILE"]
+        subjects = SubjectMeshEntry.all
+        File.new(File.join(Rails.root, FILE), "w") do |sym_file|
+          subjects.each do |subject|
+            tmp_arr= []
+            tmp_arr << subject.term
+            tmp_arr += subject.subject_mesh_synonyms.map {|syn|
+              syn.subject_synonym
+            }
+            # escape all the commas!
+            tmp_arr.map! { |syn| syn.gsub(/,/, '\,') }
+            sym_file.write(tmp_arr.join(','))
+            sym_file.write("\n")
+          end
         end
-      sym_file.close
-      end_time=Time.now
-      time_taken=end_time-start_time
-      puts "Completed evaluation at #{end_time}, Duration: #{time_taken.inspect}"
+      end
     end
   end
 
   namespace :migrate do
     desc "Convert Batch objects to Collection objects"
     task :batch_to_collection => :environment do
-      start_time = Time.now
-      puts "Starting batch to collection migration at #{start_time}"
-      a = BatchToCollection.new
-      a.migrate
-      end_time = Time.now
-      time_taken = end_time - start_time
-      puts "Completed migration at #{end_time}, Duration: #{time_taken.inspect}"
+      timed_action "batch to collection migration" do
+        a = BatchToCollection.new
+        a.migrate
+      end
     end
   end
 

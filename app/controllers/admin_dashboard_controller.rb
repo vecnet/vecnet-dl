@@ -21,6 +21,7 @@ class AdminDashboardController < ApplicationController
   include ActionView::Helpers::DateHelper
   include BlacklightAdvancedSearch::ParseBasicQ
   include BlacklightAdvancedSearch::Controller
+  include JoinSolrParams
 
   with_themed_layout 'dashboard'
 
@@ -82,6 +83,7 @@ class AdminDashboardController < ApplicationController
     super
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:Collection\""
+    solr_parameters[:fq] << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
     return solr_parameters
   end
 end

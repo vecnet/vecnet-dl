@@ -8,13 +8,12 @@
   </div>
 <% end %>
 
-<% content_for :search_bar do %>
-  <%=render 'shared/site_search' %>
-<% end %>
-
 <% content_for :sidebar do %>
   <%= render 'facets' %>
 <% end %>
+<div class="span6">
+  <%=render 'shared/site_search' %>
+</div>
 
 <% if has_search_parameters? %>
   <div class="row">

@@ -63,6 +63,10 @@ Vecnet.list_filter= function(list){
 }
 
 $(function(){
+
+  $('.advanced').on('click', function(event){
+        $('#simple-search-form').toggleClass('hide');
+  });
   $(".ajax_modal_launch").on( 'click', function( e ){
     Vecnet.setup_autocomplete('#ajax_modal');
   });

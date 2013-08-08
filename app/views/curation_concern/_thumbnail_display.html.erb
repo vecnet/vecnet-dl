@@ -1,0 +1,8 @@
+<% concern = curation_concern.is_a?(Citation) ? curation_concern.generic_files.first : curation_concern %>
+<% if concern.image? %>
+  <a href="<%= download_path(concern) %>" target="_new"><img src="<%= download_path(concern) %>" class="thumbnail"/></a>
+<%elsif concern.pdf?%>
+  <a href="<%= download_path(concern) %>" target="_new"><img src="<%= download_path(concern, {:datastream_id => 'thumbnail'}) %>" class="thumbnail" /></a>
+<% else %>
+  <a href="<%= download_path(concern) %>" target="_new"><img src="/assets/default.png" alt="No preview available" class="thumbnail" /></a>
+<% end %>

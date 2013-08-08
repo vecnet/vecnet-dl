@@ -57,6 +57,7 @@
   <!-- solr lib dirs -->
   <lib dir="../lib/contrib/analysis-extras/lib" />
   <lib dir="../lib/contrib/analysis-extras/lucene-libs" />
+  <lib dir="../lib/contrib/extraction/lib" regex=".*\.jar" />
   
   <dataDir>${solr.data.dir:}</dataDir>
 
@@ -234,6 +235,19 @@
         inheritable_edit_access_group_t,inheritable_edit_access_person_t,
         inheritable_embargo_release_date_dt
       </str>
+    </lst>
+  </requestHandler>
+
+  <requestHandler name="/update/extract" startup="lazy" class="org.apache.solr.handler.extraction.ExtractingRequestHandler" >
+    <lst name="defaults">
+      <!-- All the main content goes into "text"... if you need to return the extracted text or do highlighting, use a stored field. -->
+      <str name="fmap.content">text</str>
+      <str name="lowernames">true</str>
+      <str name="uprefix">ignored_</str>
+      <!-- capture link hrefs but ignore div attributes -->
+      <str name="captureAttr">true</str>
+      <str name="fmap.a">links</str>
+      <str name="fmap.div">ignored_</str>
     </lst>
   </requestHandler>
 
