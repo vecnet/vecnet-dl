@@ -67,7 +67,8 @@ namespace :vecnet do
         return
       end
       temp_path = "#{Rails.root}/tmp/citations"
-      pdf_paths = ENV['ENDNOTE_PDF_PATH']|| ["/Users/blakshmi/projects/endnote"]
+      pdf_paths = ENV['ENDNOTE_PDF_PATH'].split(':')
+      #|| ["/Users/blakshmi/projects/endnote"]
       FileUtils.mkdir_p temp_path
       error_list = []
       timed_action "endnote_conversion" do
@@ -93,7 +94,7 @@ namespace :vecnet do
           end
         end
         puts "Total Errors: #{error_list.length} Errors"
-        logger.Error "Complete Error list \n #{error_list.inspect} Errors"
+        logger.error "Complete Error list \n #{error_list.inspect} Errors"
 
       end
     end

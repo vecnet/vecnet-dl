@@ -146,9 +146,6 @@ class CitationIngestService
       if url.start_with?('internal-pdf:', 'C:/')
         resolve_pdf_path(url.sub(/internal-pdf:\/\/|C:\//, ''))
       end
-      #if url.start_with?('internal-pdf:')
-      #  resolve_pdf_path(url.sub(/internal-pdf:\/\//, ''))
-      #end
     end.compact
   end
 
