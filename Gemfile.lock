@@ -86,6 +86,15 @@ GIT
       yaml_db (= 0.2.3)
       zipruby (= 0.3.6)
 
+GIT
+  remote: git@github.com:banurekha/mods.git
+  revision: b39facd7520a9348be883f01a0e2242d7a1c73b0
+  specs:
+    mods (0.0.22)
+      iso-639
+      nokogiri
+      nom-xml
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -331,10 +340,6 @@ GEM
     mime-types (1.23)
     mini_magick (3.6.0)
       subexec (~> 0.2.1)
-    mods (0.0.22)
-      iso-639
-      nokogiri
-      nom-xml
     morphine (0.1.1)
     multi_json (1.7.4)
     nest (1.1.1)
@@ -582,7 +587,7 @@ DEPENDENCIES
   jquery-rails
   method_decorators
   method_locator
-  mods
+  mods!
   morphine
   pg
   rabl
