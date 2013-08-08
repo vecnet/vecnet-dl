@@ -27,7 +27,7 @@ group :default do
   gem 'active_attr'
   gem 'browser'
   gem 'rubydora', "~>1.6.4"
-  gem 'mods', git: 'git@github.com:banurekha/mods.git'
+  gem 'mods', git: 'git://github.com/banurekha/mods.git'
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes

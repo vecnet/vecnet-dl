@@ -34,6 +34,15 @@ GIT
       sufia
 
 GIT
+  remote: git://github.com/banurekha/mods.git
+  revision: b39facd7520a9348be883f01a0e2242d7a1c73b0
+  specs:
+    mods (0.0.22)
+      iso-639
+      nokogiri
+      nom-xml
+
+GIT
   remote: git://github.com/jeremyf/rsolr.git
   revision: ab3b1f9342502154c9ca5b24187918b6658e6f34
   branch: adding-connection-information-to-error-handling
@@ -85,15 +94,6 @@ GIT
       sitemap (= 0.3.2)
       yaml_db (= 0.2.3)
       zipruby (= 0.3.6)
-
-GIT
-  remote: git@github.com:banurekha/mods.git
-  revision: b39facd7520a9348be883f01a0e2242d7a1c73b0
-  specs:
-    mods (0.0.22)
-      iso-639
-      nokogiri
-      nom-xml
 
 GEM
   remote: https://rubygems.org/
