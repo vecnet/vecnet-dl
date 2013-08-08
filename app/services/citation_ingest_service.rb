@@ -98,7 +98,8 @@ class CitationIngestService
       language:get_languages,   #language
       resource_type:self.parsed_mods.typeOfResource.text, #mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
-      visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      references:get_urls
     }
     #based_near:self.parsed_mods.get_location,   #based_near
     #self.parsed_mods.temporal,              #Mapped to dc temporal

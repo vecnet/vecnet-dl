@@ -56,5 +56,8 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
     map.archived_object_type({in: RDF::RDFS, to: 'domain'}) do |index|
       index.as :searchable, :displayable, :facetable
     end
+    map.references(:in => RDF::DC) do |index|
+      index.as :searchable, :facetable, :displayable
+    end
   end
 end

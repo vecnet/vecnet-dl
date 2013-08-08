@@ -13,7 +13,7 @@ class Citation < ActiveFedora::Base
   delegate_to :descMetadata, [:related_url, :based_near, :part_of, :creator,
                               :contributor, :tag, :description, :rights,
                               :publisher, :date_created, :subject,
-                              :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type]
+                              :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type, :references]
 
   attr_accessor :files
 
