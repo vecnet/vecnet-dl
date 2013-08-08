@@ -666,6 +666,7 @@
    <copyField source="*_s" dest="text"/>
    <copyField source="*_t" dest="text"/>
    <copyField source="*_facet" dest="text"/>
+   <copyField source="*_unstem_search" dest="text"/>
 
    <!-- copy name to alphaNameSort, a field designed for sorting by name -->
    <!-- <copyField source="name" dest="alphaNameSort"/> -->
