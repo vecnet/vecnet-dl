@@ -118,6 +118,67 @@
           object_type_facet
         </str>
 
+       <str name="qf_citation">
+         desc_metadata__title_t^50000
+         desc_metadata__creator_t^40000
+         desc_metadata__description_t^40000
+         desc_metadata__subject_t^40000
+         desc_metadata__publisher_t^30000
+         desc_metadata__date_created_t
+         desc_metadata__language_t
+         desc_metadata__resource_type_t
+         desc_metadata__based_near_t
+         desc_metadata__tag_t
+         desc_metadata__rights_t
+         depositor_t
+         desc_metadata__title_unstem_search^25000
+       </str>
+       <str name="pf_citation">
+         desc_metadata__title_t^500000
+         desc_metadata__creator_t^400000
+         desc_metadata__description_t^400000
+         desc_metadata__subject_t^400000
+         desc_metadata__publisher_t^300000
+         desc_metadata__date_created_t
+         desc_metadata__language_t
+         desc_metadata__resource_type_t
+         desc_metadata__based_near_t
+         desc_metadata__tag_t
+         desc_metadata__rights_t
+         depositor_t
+         desc_metadata__title_unstem_search^25000
+       </str>
+       <str name="qf_full_text_citation">
+         desc_metadata__title_t^50000
+         desc_metadata__creator_t^40000
+         desc_metadata__description_t^40000
+         desc_metadata__subject_t^40000
+         desc_metadata__publisher_t^30000
+         desc_metadata__date_created_t
+         desc_metadata__language_t
+         desc_metadata__resource_type_t
+         desc_metadata__based_near_t
+         desc_metadata__tag_t
+         desc_metadata__rights_t
+         depositor_t
+         desc_metadata__title_unstem_search^25000
+         all_text_unstem_search^10000
+       </str>
+       <str name="pf_full_text_citation">
+         desc_metadata__title_t^50000
+         desc_metadata__creator_t^40000
+         desc_metadata__description_t^40000
+         desc_metadata__subject_t^40000
+         desc_metadata__publisher_t^30000
+         desc_metadata__date_created_t
+         desc_metadata__language_t
+         desc_metadata__resource_type_t
+         desc_metadata__based_near_t
+         desc_metadata__tag_t
+         desc_metadata__rights_t
+         all_text_unstem_search
+       </str>
+
        <str name="author_qf">
          author_unstem_search^200
          author_addl_unstem_search^50
