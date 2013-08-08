@@ -15,6 +15,19 @@ namespace :vecnet do
     task :restrict_from_production do
       raise "This task is restricted from the production environment" if Rails.env == 'production'
     end
+
+    desc "Characterize uncharacterized files"
+    task :characterize => :environment do
+      if ENV['CONTENT_TYPE'].nil?
+        raise "You must provide a content type using the format 'vecnet::app::characterize CONTENT_TYPE=GenericFile'."
+      end
+      klass=ENV['CONTENT_TYPE'].constantize
+      klass.find(:all, :rows => klass.count).each do |gf|
+        if gf.characterization.content.nil?
+          Resque.enqueue(CharacterizeJob, gf.pid)
+        end
+      end
+    end
   end
 
   def timed_action(action_name, &block)
