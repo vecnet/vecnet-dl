@@ -49,7 +49,7 @@ module CurationConcern
       Sufia::GenericFile::Actions.create_metadata(
           citation_file, user, curation_concern.pid
       )
-      citation_file.set_visibility(visibility)
+      citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
       attach_citation_file(citation_file, user, cf, File.basename(file))
       cf.close
     end
