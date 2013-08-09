@@ -203,7 +203,6 @@ before 'deploy', 'env:set_paths'
 
 set :application, 'vecnet-dl'
 set :repository,  "git://github.com/banurekha/vecnet.git"
-
 set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
 #############################################################
@@ -221,7 +220,7 @@ task :qa do
       #['/vendor/bundle','/vendor/bundle','/vendor'],
     ]
   end
-  set :branch,      'master'
+  set :branch,      fetch(:branch, 'master')
   set :rails_env,   'qa'
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
@@ -244,7 +243,7 @@ desc "Setup for the Production environment"
 task :production do
   set :shared_directories, %w(log)
   set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml )
-  set :branch,      'master'
+  set :branch,      fetch(:branch, 'master')
   set :rails_env,   'production'
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
