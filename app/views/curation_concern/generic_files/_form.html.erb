@@ -65,13 +65,27 @@
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
-                  hint: metadata_help('publisher')
-      %>
+                  hint: metadata_help('publisher')%>
       <%= f.input :based_near,
                   hint: metadata_help('based_near'),
                   label: get_label(:based_near),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+      <%= f.input :identifier,
+                  hint: metadata_help('identifier'),
+                  label: get_label(:identifier),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+      <%= f.input :related_url,
+                  hint: metadata_help('related_url'),
+                  label: get_label(:related_url),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+      <%= f.input :date_created,
+                  hint: metadata_help('date_created'),
+                  label: get_label(:date_created),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete'} %>
       <%= render "spatial", curation_concern: curation_concern, f: f %>
       <%= render "temporal", curation_concern: curation_concern, f: f %>
     </fieldset>
