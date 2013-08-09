@@ -96,10 +96,11 @@ class CitationIngestService
       description:self.parsed_mods.abstract.text, #description
       subject:get_subjects,
       language:get_languages,   #language
-      resource_type:self.parsed_mods.typeOfResource.text, #mapped to dc type
+      resource_type:'Citation',
+          #self.parsed_mods.typeOfResource.text, #mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
       visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      references:get_urls
+      related_url:get_related_urls
     }
     #based_near:self.parsed_mods.get_location,   #based_near
     #self.parsed_mods.temporal,              #Mapped to dc temporal
@@ -141,6 +142,9 @@ class CitationIngestService
     self.parse_mods.location.url.map {|loc| loc.text.gsub("\n","").strip}
   end
 
+  def get_related_urls
+    get_urls.reject{|url| url.start_with?('internal-pdf:', 'C:/')}.compact
+  end
   def find_files_to_attach
     related_url = get_urls
     related_url.map do |url|
