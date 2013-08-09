@@ -3,8 +3,7 @@
     <h1><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h1>
 <% end %>
 <p>
-  <%= render '/curation_concern/media_display', generic_file: curation_concern if can?(:read, curation_concern)%>
-  <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
+ <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
 </p>
 <div class="row">
   <div class="span3">
