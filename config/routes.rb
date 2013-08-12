@@ -31,9 +31,11 @@ Vecnet::Application.routes.draw do
 
   match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
 
-  match "files/:id" => "curation_concern/generic_files#show", via: :get, as: "files"
+  match "files/:id/(:version)" => "curation_concern/generic_files#show", via: :get, as: "files"
 
   match "citations/:id" => "curation_concern/citations#show", via: :get, as: "citations"
+
+  match "downloads/:id/(:version)" => "downloads#show", via: :get, as: "download"
 
   # Authority vocabulary queries route
   match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
