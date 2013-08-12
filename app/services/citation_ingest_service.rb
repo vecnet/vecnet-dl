@@ -97,7 +97,7 @@ class CitationIngestService
       subject:get_subjects,
       language:get_languages,   #language
       resource_type:'Citation',
-          #self.parsed_mods.typeOfResource.text, #mapped to dc type
+      reference:self.parsed_mods.typeOfResource.text, #mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
       visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:get_related_urls
@@ -154,14 +154,18 @@ class CitationIngestService
     end.compact
   end
 
-  def get_bibliographic_citation
-    title=''
+  def get_journal_title
+    title=[]
     self.parsed_mods.related_item.each do |node|
       if node.type_at == "host"
-        title=node.titleInfo.text.gsub("\n","").strip
+        title<<node.titleInfo.text.gsub("\n","").strip
       end
     end
-    part= PartExtractor.new(self.parsed_mods.part,title)
+    title
+  end
+
+  def get_bibliographic_citation
+    part= PartExtractor.new(self.parsed_mods.part,get_journal_title.first||'')
     citation=part.citation
     return citation
   end
