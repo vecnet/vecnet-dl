@@ -15,7 +15,7 @@ class DownloadsController < ApplicationController
     if params.has_key?(:version)
       logger.debug "checking version"
       #raise NotLatestVersion.new("Version your are trying to download is out dated. Cannot download out dated version") unless generic_file.current_version_just_id == params[:version]
-      render :text => "Version your are trying to download is out dated. Cannot download out dated version", :status => 500, :layout=>true unless generic_file.current_version_just_id == params[:version]
+      render :text => "Version your are trying to download is out dated. Cannot download out dated version", :status => 403, :layout=>true unless generic_file.current_version_just_id == params[:version]
     end
   end
 
