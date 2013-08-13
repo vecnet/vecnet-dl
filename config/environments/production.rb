@@ -62,11 +62,17 @@ Vecnet::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.application_url = "http://dl.vecnet.org"
+  config.application_url = "https://dl.vecnet.org"
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.fits_path = '/opt/fits-0.6.1/fits.sh'
+
+  # XXX: the key will need to be changed
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
+  # XXX: the login_url is wrong
+  config.pubtkt_login_url = 'https://www.dev.vecnet.org/index.php/sso-login'
+  config.pubtkt_logout_url = config.pubtkt_login_url
 end

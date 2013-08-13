@@ -6,31 +6,37 @@ class User < ActiveRecord::Base
   # Connects this user object to Sufia behaviors.
   include Sufia::User
 
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, :to => :ability
-
-  Devise.add_module(:http_header_authenticatable,
-                    :strategy => true,
-                    #:controller => :sessions,
-                    :model => 'devise/models/http_header_authenticatable')
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-
 
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :remember_me, :username#, :password
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
+  attr_accessible :uid
 
+  def self.find_by_uid(uid)
+    User.where(uid: uid).limit(1).first
+  end
 
-  #attr_accessor :password
+  def self.find_or_create_from_pubtkt(pubtkt)
+    user = User.find_by_uid(pubtkt.uid)
+    user = User.create_from_pubtkt(pubtkt) if user.nil?
+    user.group_list = pubtkt.tokens.split(',') if pubtkt.tokens.present?
+    user.update_from_ldap
+    user
+  end
 
-  #def password_required?; false; end
-  #def email_required?; false; end
+  def self.create_from_pubtkt(pubtkt)
+    user = User.new(uid: pubtkt.uid,
+                    email: "#{pubtkt.uid}@nd.edu")
+    # just until the user table gets migrated
+    user.reset_password_token = pubtkt.signature
+    user.save!
+    user
+  end
 
   def display_name
-    username
+    # only here until LDAP is working
+    uid
   end
 
   def self.audituser
@@ -53,16 +59,27 @@ class User < ActiveRecord::Base
     update_column(:agreed_to_terms_of_service, true)
   end
 
+  # Override Hydra methods that assume Devise is present
+  def user_key
+    uid
+  end
+
+  def self.find_by_user_key(key)
+    find_by_uid(key)
+  end
+
+
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
   # the account.
   def to_s
-    email
+    uid
   end
 
-  #delegating groups to roles since there is no difference between roles and groups yet
+  # What is difference between groups and roles?
   def groups
-    roles
+    return [] if self.group_list.nil?
+    self.group_list
   end
 
   def roles
@@ -71,10 +88,14 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    self.admin
+    return false if self.group_list.nil?
+    self.group_list.include?('dl_librarian')
   end
 
   def admin!
     update_column(:admin, true)
+  end
+
+  def update_from_ldap
   end
 end

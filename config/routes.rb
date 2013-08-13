@@ -1,7 +1,5 @@
 Vecnet::Application.routes.draw do
 
-  devise_for :users
-
   resources 'role_dashboard', :only=>:index do
     collection do
       get 'page/:page', :action => :index
@@ -48,5 +46,12 @@ Vecnet::Application.routes.draw do
     end
   end
 
-
+  # since there is no pubtkt login for development
+  if Rails.env.development?
+    match 'development_sessions/log_in' => "development_sessions#new", :via => :get
+    # morally the next should be a delete action, but is a get to match how the
+    # single sign on works in production
+    match 'development_sessions/log_out' => "development_sessions#invalidate", :via => :get
+    resources :development_sessions
+  end
 end

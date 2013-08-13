@@ -26,13 +26,13 @@ Vecnet::Application.configure do
 
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
@@ -77,4 +77,8 @@ Vecnet::Application.configure do
   # end
 
   config.fits_path = '/opt/fits-0.6.2/fits.sh'
+
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
+  config.pubtkt_login_url = 'https://www.dev.vecnet.org/index.php/sso-login'
+  config.pubtkt_logout_url = config.pubtkt_login_url
 end

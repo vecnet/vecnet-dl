@@ -1,3 +1,4 @@
+require 'OpenSSL'
 Resque.inline = true
 Vecnet::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
@@ -9,6 +10,8 @@ Vecnet::Application.configure do
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
+
+  config.log_level = :debug
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -71,4 +74,9 @@ Vecnet::Application.configure do
       password:"shantivan",
   }
 
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-development.pem')))
+  config.pubtkt_login_url = '/development_sessions/log_in'
+  config.pubtkt_logout_url = '/development_sessions/log_out'
+  # private_key only needed by DevelopmentSessionsController
+  config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
 end

@@ -47,12 +47,12 @@
               <%= bootstrap_navigation_element 'Profile', profile_path(current_user)%>
               <%= render :partial => 'admin_dashboard/admin.html.erb'%>
               <li class="divider"></li>
-              <li><%= link_to raw('<i class="icon-signout"></i> Logout'), destroy_user_session_path, :id => 'logout_nav_link' %></li>
+              <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>
             </ul>
           </li>
         <% else %>
         <li>
-          <%= link_to raw('<i class="icon-signin"></i> Login'), new_user_session_path, :class => "btn btn-small" %>
+          <%= link_to raw('<i class="icon-signin"></i> Login'), user_login_url(request.original_url), :class => "btn btn-small" %>
         </li>
         <% end %>
     </ul><!-- /.nav /.pull-right -->
