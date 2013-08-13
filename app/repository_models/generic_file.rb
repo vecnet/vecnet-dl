@@ -4,6 +4,8 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
 
+  has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
+
   delegate_to :descMetadata, [:description], :unique => true
 
   validates :title, presence: { message: 'Your must have a title.' }
