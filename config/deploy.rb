@@ -237,7 +237,7 @@ end
 desc "Setup for the Production environment"
 task :production do
   set :shared_directories, %w(log)
-  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml )
+  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
   set :branch,      'master'
   set :rails_env,   'production'
   set :deploy_to,   '/home/app/vecnet'
