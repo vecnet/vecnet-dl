@@ -1,6 +1,6 @@
 <% content_for :page_title, curation_concern_page_title(curation_concern) %>
 <% content_for :page_header do %>
-  <h1><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h1>
+  <h2><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h2>
 <% end %>
 <p>
   <% if can? :edit, curation_concern %>
@@ -20,6 +20,7 @@
     <%= render :partial => '/curation_concern/thumbnail_display' %>
   </div>
   <div class="span9">
+    <%= render :partial => '/curation_concern/version_check', curation_concern: curation_concern %>
     <%= render "attributes", curation_concern: curation_concern %>
     <%= render "characterize_details", curation_concern: curation_concern %>
   </div>

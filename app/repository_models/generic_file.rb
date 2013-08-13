@@ -43,6 +43,10 @@ class GenericFile
     content.latest_version.versionID
   end
 
+  def current_version_just_id
+    content.latest_version.versionID.split('.').last
+  end
+
   def human_readable_type
     self.class.to_s.demodulize.titleize
   end

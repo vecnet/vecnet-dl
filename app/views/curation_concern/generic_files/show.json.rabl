@@ -1,5 +1,5 @@
 object curation_concern
-attributes :pid, :title
+attributes :id, :title
 
 node(:metadata) do
   result={}
