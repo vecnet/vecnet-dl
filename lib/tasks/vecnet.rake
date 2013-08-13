@@ -84,6 +84,17 @@ namespace :vecnet do
       time_taken = end_time - start_time
       puts "Completed migration at #{end_time}, Duration: #{time_taken.inspect}"
     end
+
+    desc "Add uid info to each User in the database"
+    task :users_to_uid => :environment do
+      start_time = Time.now
+      puts "Starting add uid info at #{start_time}"
+      a = AddUidToUsers.new
+      a.migrate
+      end_time = Time.now
+      time_taken = end_time - start_time
+      puts "Completed add uid info at #{end_time}, Duration: #{time_taken.inspect}"
+    end
   end
 
 
