@@ -31,6 +31,7 @@ jetty/
 #Ignore some of my local xml files
 spec/*.end
 spec/*.xml
+spec/support/files/*.xml
 vecnet_test
 *.log
-
+gitlog

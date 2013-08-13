@@ -21,11 +21,13 @@
     <hgroup>
         <div class="container">
           <div id="title-bar" class="row">
-            <div id="site-title" class="span8">
+            <div id="site-title" class="span6">
               <h1><%= link_to 'Digital Library', root_path%></h1>
               <p class="lead">Curate Metadata in the VECNet Digital Library</p>
             </div>
-            <div id="site-search" class="span4">
+            <div id="site-search" class="span6">
+              <%= image_tag "icon_dl.jpg", :class=>'img' %>
+              <%= render 'shared/site_search' if show_site_search?%>
               <%= yield(:search_bar) %>
             </div>
           </div>

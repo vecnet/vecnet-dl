@@ -14,7 +14,7 @@
   @include background(linear-gradient(top, rgb(1,72,95), rgb(0,147,173)));
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020031', endColorstr='#6d3353',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 .jumbotron h1 {
   font-size: 80px;
@@ -26,7 +26,7 @@
 .jumbotron p {
   font-size: 24px;
   font-weight: 300;
-  line-height: 1.25;
+  line-height: 1;
   margin-bottom: 30px;
 }
 
@@ -41,6 +41,14 @@
 .jumbotron a:hover {
   color: #fff;
   text-shadow: 0 0 10px rgba(255,255,255,.25);
+}
+.jumbotron .img {
+  float:right;
+  height:155px;
+  margin-right:-10px;
+  margin-bottom:-40px;
+  //background-image: image-url("icon_dl.jpg");
+  //background:url('/assets/icon_dl.jpg');
 }
 
 /* Pattern overlay
@@ -76,10 +84,10 @@ only screen and ( -o-min-device-pixel-ratio: 2/1) {
   border-bottom: 1px solid #ddd;
 }
 .subhead h1 {
-  font-size: 60px;
+  font-size: 54px;
 }
 .subhead p {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 .subhead .navbar {
   display: none;
