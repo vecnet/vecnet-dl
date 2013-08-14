@@ -1,5 +1,9 @@
 object curation_concern
-attributes :id, :title
+attribute :noid=>:id
+attribute :title
+node(:version_with_id) do
+"#{curation_concern.noid}/#{curation_concern.current_version_just_id}"  if curation_concern.respond_to?(:current_version_just_id)
+end
 
 node(:metadata) do
   result={}
@@ -7,7 +11,6 @@ node(:metadata) do
         :date_created, :subject, :resource_type, :identifier, :language, :spatials, :temporals].each {|term|
           result[term] = curation_concern.send(term) if curation_concern.send(term).present?
         }
-
   result
 end
 
