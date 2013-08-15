@@ -101,13 +101,17 @@ namespace :vecnet do
             current_number+=1
           rescue => e
             message= "#{e.class}: #{e.message}"
-            logger.error "Error Occurred: message"
-            logger.error e.backtrace
-            error_list << [{current_number => "#{record} failed with error.new Could not ingest for the following reasons: #{message}"}]
+            logger.error "Error Occurred: #{message}"
+            e.backtrace.each{|error|
+              logger.error error.inspect
+            }
+            error_list << [{current_number => "#{current_number} failed with error.new Could not ingest for the following reasons: #{message}"}]
           end
         end
         puts "Total Errors: #{error_list.length} Errors"
-        logger.error "Complete Error list \n #{error_list.inspect} Errors"
+        error_list.each{|error|
+          logger.error error.inspect
+        }
 
       end
     end

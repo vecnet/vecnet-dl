@@ -3,7 +3,6 @@ module CurationConcern
 
     def create!
       curation_concern.apply_depositor_metadata(user.user_key)
-      curation_concern.date_created = Date.today
       add_user_roles
       save
       create_files

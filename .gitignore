@@ -35,3 +35,5 @@ spec/support/files/*.xml
 vecnet_test
 *.log
 gitlog
+config/pubtkt-development.pem
+config/pubtkt-private-development.pem

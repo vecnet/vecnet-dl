@@ -44,7 +44,7 @@ class CitationIngestService
     end
   end
 
-  attr_accessor :metadata_file, :parsed_mods, :curation_concern, :pdf_paths
+  attr_accessor :metadata_file, :curation_concern, :pdf_paths
 
   def initialize(mods_input_file, pdf_paths = [])
     @metadata_file = mods_input_file
@@ -77,34 +77,33 @@ class CitationIngestService
     @curation_concern ||= Citation.new(pid: CurationConcern.mint_a_pid)
   end
 
-  def parse_mods
-    @parsed_mods ||= Mods::Record.new.from_str(File.read(self.metadata_file))
+  def parsed_mods
+    return @parsed_mods if defined?(@parsed_mods)
+    @parsed_mods = Mods::Record.new.from_str(File.read(self.metadata_file))
   end
 
   def extract_metadata
-    if self.parsed_mods.nil?
-      @parsed_mods=parse_mods
-    end
     metadata=
     {
       files:find_files_to_attach,
       title:get_title,
-      creator: self.parsed_mods.plain_name.display_value,
+      creator: parsed_mods.plain_name.display_value,
       identifier: get_identifiers, #identifier
-      #genre:self.parsed_mods.genre.text ,
-      #note:self.parsed_mods.note.text ,
-      description:self.parsed_mods.abstract.text, #description
+      #genre:parsed_mods.genre.text ,
+      #note:parsed_mods.note.text ,
+      description:parsed_mods.abstract.text, #description
       subject:get_subjects,
       language:get_languages,   #language
       resource_type:'Citation',
-      reference:self.parsed_mods.typeOfResource.text, #mapped to dc type
+      references:get_journal_title, #mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
       visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      related_url:get_related_urls
+      related_url:get_related_urls,
+      date_created:get_pub_date
     }
-    #based_near:self.parsed_mods.get_location,   #based_near
-    #self.parsed_mods.temporal,              #Mapped to dc temporal
-    #self.parsed_mods.geographic} #Mapped spatial (but this is location name, so should be mapped to based_near?)
+    #based_near:parsed_mods.get_location,   #based_near
+    #parsed_mods.temporal,              #Mapped to dc temporal
+    #parsed_mods.geographic} #Mapped spatial (but this is location name, so should be mapped to based_near?)
     #creator, #publisher, #contributor
     #date_created, date_modified, date_uploaded
     #puts metadata.inspect
@@ -118,28 +117,32 @@ class CitationIngestService
 
   protected
 
+  def mint_a_id
+    return get_title.sort.first[0..5]+get_pub_date
+  end
+
   def job_user
    User.batchuser()
   end
 
   def get_title
-    self.parsed_mods.title_info.full_title
+    parsed_mods.title_info.full_title
   end
 
   def get_identifiers
-    self.parse_mods.identifier.text
+    (parsed_mods.identifier.map {|i| i.text.gsub("\n","").strip}<<mint_a_id).compact
   end
 
   def get_subjects
-    self.parse_mods.subject.map{|sub| sub.text.gsub("\n","").strip}
+    parsed_mods.subject.map{|sub| sub.text.gsub("\n","").strip}
   end
 
   def get_languages
-    self.parse_mods.language.map{|lang| lang.text.gsub("\n","").strip}
+    parsed_mods.language.map{|lang| lang.text_term.text.gsub("\n","").strip}
   end
 
   def get_urls
-    self.parse_mods.location.url.map {|loc| loc.text.gsub("\n","").strip}
+    parsed_mods.location.url.map {|loc| loc.text.gsub("\n","").strip}
   end
 
   def get_related_urls
@@ -156,7 +159,7 @@ class CitationIngestService
 
   def get_journal_title
     title=[]
-    self.parsed_mods.related_item.each do |node|
+    parsed_mods.related_item.each do |node|
       if node.type_at == "host"
         title<<node.titleInfo.text.gsub("\n","").strip
       end
@@ -164,8 +167,12 @@ class CitationIngestService
     title
   end
 
+  def get_pub_date
+    parsed_mods.part.date.text
+  end
+
   def get_bibliographic_citation
-    part= PartExtractor.new(self.parsed_mods.part,get_journal_title.first||'')
+    part= PartExtractor.new(parsed_mods.part,get_journal_title.first||'')
     citation=part.citation
     return citation
   end
