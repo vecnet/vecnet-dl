@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def self.audituser
-    User.find_by_user_key(audituser_key) || User.create!(Devise.authentication_keys.first => audituser_key)
+    User.find_by_user_key(audituser_key) || User.create!(uid:audituser_key, email:"#{audituser_key}@test.com")
   end
 
   def self.audituser_key
@@ -48,11 +48,11 @@ class User < ActiveRecord::Base
   end
 
   def self.batchuser
-    User.find_by_user_key(batchuser_key) || User.create!(Devise.authentication_keys.first => batchuser_key, password: Devise.friendly_token[0,20])
+    User.find_by_user_key(batchuser_key) || User.create!(uid:batchuser_key, email:"#{batchuser_key}@test.com")
   end
 
   def self.batchuser_key
-    'vecnet_batchuser@example.com'
+    'vecnet_batchuser'
   end
 
   def agree_to_terms_of_service!
