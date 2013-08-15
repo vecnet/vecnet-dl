@@ -1,9 +1,4 @@
 <table class="table table-striped <%= dom_class(curation_concern) %> attributes">
-  <caption class="table-heading"><h2>Attributes</h2></caption>
-  <thead>
-    <tr><th>Attribute Name</th><th>Values</th></tr>
-  </thead>
-  <tbody>
   <%= curation_concern_attribute_to_html(curation_concern, :title, 'Title', include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :creator, 'Creator(s)', include_empty: true) %>
   <%= curation_concern_attribute_to_url_html(curation_concern, :related_url, 'Related URL', include_empty: true) %>
@@ -20,5 +15,4 @@
   <%= curation_concern_attribute_to_html(curation_concern, :references , "Journal Title", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :bibliographic_citation , "Bibliographic Citation", include_empty: true) %>
   <%# curation_concern_attribute_to_html(curation_concern, :temporals , "Time period(s) of Content", include_empty: true) %>
-  </tbody>
 </table>

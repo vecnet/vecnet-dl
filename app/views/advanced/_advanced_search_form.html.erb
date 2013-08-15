@@ -19,7 +19,7 @@ limitations under the License.
 
   <%= search_as_hidden_fields(:params => advanced_search_context ) %>
     <div class="row">
-    <div class="span5 searchoption">
+    <div class="span6 searchoption">
       <fieldset>
         <legend class="small">Citation Search</legend>
         <div class="control-group">
@@ -33,9 +33,9 @@ limitations under the License.
         </div>
       </fieldset>
     </div>
-    <div class="span4 searchoption pull-right">
-      <%= render 'advanced/date_search_form' %>
-    </div>
+    <!--<div class="span4 searchoption pull-right">-->
+      <!--<%# render 'advanced/date_search_form' %>-->
+    <!--</div>-->
   </div>
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
     <div>
@@ -44,13 +44,10 @@ limitations under the License.
     </div>
   <% end %>
 
-    <%= link_to "Start over", {:controller => "catalog", :action => "index"}, :class =>"btn" %>
-  
-
   <div class="form-actions">
     <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
     <%= submit_tag 'Search', :class=>'btn btn-primary', :id=>'advanced_search', :align=>"center" %>
-
+    <%= link_to "Start over", {:controller => "catalog", :action => "index"}, :class =>"btn pull-right" %>
   </div>
 <% end %>
 

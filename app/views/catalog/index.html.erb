@@ -1,13 +1,5 @@
 <% content_for :page_title, "#{application_name} Search Results" %>
 
-<% content_for :page_header do %>
-  <div class="row">
-    <div class="span8">
-      <h2>Search <%=t('sufia.product_name') %></h2>
-    </div>
-  </div>
-<% end %>
-
 <% content_for :sidebar do %>
   <%= render 'facets' %>
 <% end %>
@@ -18,7 +10,6 @@
 <% if has_search_parameters? %>
   <div class="row">
     <div class="span6"> <h3>Search Results</h3> </div>
-    <div class="span3"> <%= link_to "New Search", catalog_index_path, :id=>"startOverLink", :class=>"btn btn-primary" %> </div>
   </div>
   <div class="alert alert-info search-constraints">
     <i class="icon-search icon-large"></i>
