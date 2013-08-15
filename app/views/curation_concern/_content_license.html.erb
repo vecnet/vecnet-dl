@@ -1,0 +1,18 @@
+<fieldset>
+  <legend>Choose a License for your Content
+    <small>
+      What do you want others to be able to do with your work?
+    </small>
+    <%=render :partial => "curation_concern/rights_modal"%>
+  </legend>
+
+  <%= f.input :rights,
+    as: :select,
+    collection: Sufia::Engine::config.cc_licenses,
+    input_html: {  :size=>7, :multiple => true },
+    hint: metadata_help('rights'),
+    selected:Sufia::Engine::config.cc_licenses["All rights reserved"]
+
+  %>
+
+</fieldset>
