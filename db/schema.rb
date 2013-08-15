@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130724212309) do
+ActiveRecord::Schema.define(:version => 20130815180833) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(:version => 20130724212309) do
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
   create_table "subject_mesh_entries", :id => false, :force => true do |t|
-    t.string   "subject_mesh_term_id"
+    t.string   "subject_mesh_term_id", :null => false
     t.string   "term"
     t.text     "subject_description"
     t.datetime "created_at",           :null => false
@@ -255,7 +255,6 @@ ActiveRecord::Schema.define(:version => 20130724212309) do
     t.string   "uid"
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["uid"], :name => "index_users_on_uid", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username"
@@ -268,5 +267,9 @@ ActiveRecord::Schema.define(:version => 20130724212309) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
+
+  add_foreign_key "receipts", "notifications", :name => "receipts_on_notification_id"
 
 end
