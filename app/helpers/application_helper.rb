@@ -22,7 +22,8 @@ module ApplicationHelper
 
   def custom_value_to_html(curation_concern, label, options = {})
     markup = ""
-    noid_with_version = "#{curation_concern.send(:noid)}/#{curation_concern.send(:current_version_just_id)}"
+    version=curation_concern.send(:current_version_just_id)
+    noid_with_version = version.blank? ? nil : "#{curation_concern.send(:noid)}/#{version}"
     return markup if !noid_with_version.present? && !options[:include_empty]
     markup << %(<tr><th>#{label}</th>\n<td><ul class='tabular'>)
     [noid_with_version].flatten.compact.each do |v|

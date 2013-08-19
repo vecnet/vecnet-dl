@@ -41,11 +41,11 @@ class GenericFile
   end
 
   def current_version_id
-    content.latest_version.versionID
+    content.latest_version.nil? ? "" : content.latest_version.versionID
   end
 
   def current_version_just_id
-    content.latest_version.versionID.split('.').last
+    current_version_id.split('.').last
   end
 
   def human_readable_type
