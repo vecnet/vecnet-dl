@@ -14,7 +14,8 @@ module JoinSolrParams
   def add_join_query_to_solr(solr_parameters, user_parameters = params)
     if user_parameters[:include_full_text] && user_parameters[:citation]
       solr_parameters[:q] ||= []
-      solr_parameters[:q] <<" OR _query_:\"{!join from=parent_id_s to=id}all_text_unstem_search:#{user_parameters[:citation]}\""
+      join_caluse = solr_parameters[:q].empty? ? '' : ' OR '
+      solr_parameters[:q] << join_caluse + "_query_:\"{!join from=parent_id_s to=id}all_text_unstem_search:#{user_parameters[:citation]}\""
     end
     return solr_parameters
   end
