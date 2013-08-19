@@ -134,7 +134,9 @@ class CitationIngestService
   end
 
   def get_subjects
-    parsed_mods.subject.map{|sub| sub.text.gsub("\n","").strip}
+    parsed_mods.subject.map{|sub|
+      sub.text.gsub(/\n|\*/,"").strip
+    }
   end
 
   def get_languages
