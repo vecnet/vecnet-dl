@@ -15,19 +15,19 @@ limitations under the License.
 %>
 
 <%= form_tag catalog_index_path, :method => :get do  %>
-    <% advanced_search_context.tap{|h| h.delete(:include_full_text)} %>
+    <%tmp= advanced_search_context.tap{|h| h.delete(:include_full_text)} %>
 
-  <%= search_as_hidden_fields(:params => advanced_search_context ) %>
+  <%= search_as_hidden_fields(:params => tmp ) %>
     <div class="row">
     <div class="span6 searchoption">
       <fieldset>
-        <legend class="small">Citation Search</legend>
-        <div class="control-group">
-          <label class="control-label">Find items that match</label>
-          <div class="controls">
-            <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %> of the fields below:
-          </div>
-        </div>
+        <legend class="small">Search Digital Library including citations</legend>
+        <!--<div class="control-group">-->
+          <!--<label class="control-label">Find items that match</label>-->
+          <!--<div class="controls">-->
+            <%#select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %>
+          <!--</div>-->
+        <!--</div>-->
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
         </div>
