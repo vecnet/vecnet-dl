@@ -2,14 +2,18 @@
   <hr>
   <div class="row">
     <div class="span12">
-      <p> <a href="https://vecnet.org/index.php/contact-vecnet">Contact us</a> | FAQ | Privacy Policy | <a href="https://vecnet.org/index.php/about-us">Terms of Use</a></p>
-      <p class="fine-print"> Copyright &copy; 2013 <a href="https://vecnet.org/">Vector Ecology and Control Network (VECNet)</a></p>
+      <% if Rails.env == 'production' %>
+        <p> <a href="https://vecnet.org/index.php/about-vecnet/contact-vecnet">Contact us</a> | <a href="https://vecnet.org/index.php/about-vecnet/faq">FAQ</a> | <a href="https://vecnet.org/index.php/user-privacy-policy">User Privacy Policy</a> | <a href="https://vecnet.org/index.php/terms-of-use">Terms of Use</a></p>
+        <p class="fine-print"> Copyright &copy; 2013 <a href="https://vecnet.org/">Vector Ecology and Control Network (VECNet)</a></p>
+      <% else %>
+        <p> <a href="https://dev.vecnet.org/index.php/about-vecnet/contact-vecnet">Contact us</a> | <a href="https://dev.vecnet.org/index.php/about-vecnet/faq">FAQ</a> | <a href="https://dev.vecnet.org/index.php/user-privacy-policy">User Privacy Policy</a> | <a href="https://dev.vecnet.org/index.php/terms-of-use">Terms of Use</a></p>
+        <p class="fine-print"> Copyright &copy; 2013 <a href="https://dev.vecnet.org/">Vector Ecology and Control Network (VECNet)</a></p>
+      <% end %>
+
       <p>
         Powered by <a href="https://github.com/curationexperts/sufia">Sufia</a>, a <a href="http://projecthydra.org">Hydra</a> project.
       </p>
-      <p>
-        Build: <%= Rails.configuration.build_identifier %>
-      </p>
+      <p>Build: <%= Rails.configuration.build_identifier %></p>
     </div>
   </div>
 </footer>
