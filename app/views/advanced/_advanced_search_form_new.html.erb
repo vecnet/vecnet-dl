@@ -1,0 +1,34 @@
+<%= form_tag catalog_index_path, :method => :get , :class => "search-form" do  %>
+    <%tmp= advanced_search_context.tap{|h| h.delete(:include_full_text)} %>
+    <%= search_as_hidden_fields(:params => tmp ) %>
+    <fieldset>
+        <div class="row">
+        <div id="advanced_search" class='span4'>
+          <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
+          <%= text_field_tag(
+          :citation,
+          params[:citation],
+          :class => "q search-query",
+           :id => "citation",
+          :placeholder => 'Search Digital Library including citations',
+          :size => "30",
+          :tabindex => "1",
+          :type => "search",
+          )%><button type="submit" class="search-submit btn btn-primary" id="search-submit-header" tabindex="2">
+          <i class="icon-search icon-white"></i> Go
+        </button>
+        </div>
+          <div class="checkbox pull-right">
+            <%= check_box_tag "include_full_text","1", params[:include_full_text]=='1' %> <%= label_tag "include_full_text", "include article full text" %>
+          </div>
+        </div>
+    </fieldset>
+    <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
+        <div>
+          <p>Within search:</p>
+          <%= search_context_str %>
+        </div>
+    <% end %>
+<% end %>
+
+
