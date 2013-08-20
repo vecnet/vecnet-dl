@@ -43,6 +43,15 @@ namespace :vecnet do
     log = Logger.new('EndNoteIngester.log')
   end
 
+  namespace :destroy do
+    desc "Remove all citations in giving environment"
+    task :citation => :environment do
+      timed_action "destroy citations" do
+        Citation.find(:all).each{|c| c.destroy}
+      end
+    end
+  end
+
   namespace :import do
     def mesh_files
       files=[]
