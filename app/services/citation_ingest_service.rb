@@ -52,6 +52,7 @@ class CitationIngestService
   end
 
   def ingest_citation
+    #this is place to check if citation already exists in fedora
     citation= find_citation
     unless citation.nil?
       logger.error "Atleast one Citation is exists in Fedora with id #{citation.id}. Not ingested."
@@ -65,15 +66,14 @@ class CitationIngestService
   end
 
   def find_citation
-     if Citation.where(:desc_metadata__identifier_t=>get_identifiers).nil?
+     if Citation.where(:desc_metadata__references_t=>mint_a_id).nil?
       return nil
     else
-      return Citation.where(:desc_metadata__identifier_t=>get_identifiers).first
+      return Citation.where(:desc_metadata__references_t=>get_identifiers).first
     end
   end
 
   def create_citation
-    # TODO: this is place to check if citation already exists in fedora
     @curation_concern ||= Citation.new(pid: CurationConcern.mint_a_pid)
   end
 
@@ -88,14 +88,15 @@ class CitationIngestService
       files:find_files_to_attach,
       title:get_title,
       creator: parsed_mods.plain_name.display_value,
-      identifier: get_identifiers, #identifier
+      identifier: get_curated_id, #identifier
       #genre:parsed_mods.genre.text ,
       #note:parsed_mods.note.text ,
       description:parsed_mods.abstract.text, #description
       subject:get_subjects,
       language:get_languages,   #language
       resource_type:'Citation',
-      references:get_journal_title, #mapped to dc type
+      source:get_journal_title,
+      references:mint_a_id,#mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
       visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:get_related_urls,
@@ -129,8 +130,16 @@ class CitationIngestService
     parsed_mods.title_info.full_title
   end
 
+  def get_cite_key
+    parsed_mods.cite_key
+  end
+
+  def get_curated_id
+    (parsed_mods.identifier - get_cite_key).map{|i| i.text.gsub("\n","").strip}.compact
+  end
+
   def get_identifiers
-    (parsed_mods.identifier.map {|i| i.text.gsub("\n","").strip}<<mint_a_id).compact
+    (parsed_mods.identifier.map {|i| i.text.gsub("\n","").strip}).compact
   end
 
   def get_subjects
