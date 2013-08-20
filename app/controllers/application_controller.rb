@@ -1,5 +1,3 @@
-require 'time'
-require 'pub_ticket'
 require Curate::Engine.root.join('app/controllers/application_controller')
 class ApplicationController < ActionController::Base
 
@@ -7,23 +5,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :user_signed_in?, :user_login_url, :user_logout_url
 
-  # If there is a valid pubtkt, create a user object
-  # If there is not a valid pubtkt, destroy the user object
-  # We don't raise any authentication errors here.
   def decode_user_if_pubtkt_present
-    @current_user = nil
-    ticket = cookies[:auth_pubtkt]
-    if ticket.present?
-      # cache pubticket? to reduce parsing and crypto checking
-      logger.debug "Found Pub Ticket: #{ticket}"
-      pt = ::PubTicket.new(ticket)  # Rails has already URL unescaped `ticket`
-      if pt.signature_valid?(Rails.configuration.pubtkt_public_key)
-        logger.debug "Pubtkt: Signature valid"
-        if pt.ticket_valid?(request.remote_ip, Time.now)
-          @current_user = User.find_or_create_from_pubtkt(pt)
-        end
-      end
-    end
+    # use authenticate instead of authenticate! since we
+    # do not raise an error if there is a problem with the pubtkt.
+    # in that case we make the current user nil
+    env['warden'].authenticate(:pubtkt)
+    @current_user = env['warden'].user
   end
 
   # provide the "devise API" for 'user'
