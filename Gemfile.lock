@@ -35,7 +35,7 @@ GIT
 
 GIT
   remote: git://github.com/banurekha/mods.git
-  revision: b39facd7520a9348be883f01a0e2242d7a1c73b0
+  revision: 66df62ae3c3170d3d1b5abbc302e572127b62505
   specs:
     mods (0.0.22)
       iso-639
