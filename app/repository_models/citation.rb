@@ -17,4 +17,37 @@ class Citation < ActiveFedora::Base
 
   attr_accessor :files
 
+  def to_solr(solr_doc={}, opts={})
+    super(solr_doc, opts)
+    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
+    solr_doc["subject_parents_t"] = get_subject_parents
+    return solr_doc
+  end
+
+  def get_subject_parents
+    subjects=self.subject
+    all_trees_arr=[]
+    subjects.each do |sub|
+      mesh_subject= SubjectMeshEntry.find_by_term(sub)
+      if mesh_subject
+        all_trees_arr<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      end
+    end
+
+
+    return all_trees_arr.uniq
+  end
+
+  def get_hierarchical_faceting_on_subject
+    subjects=self.subject
+    all_trees=[]
+    subjects.each do |sub|
+      mesh_subject= SubjectMeshEntry.find_by_term(sub)
+      if mesh_subject
+        all_trees<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      end
+    end
+    return all_trees.flatten
+  end
+
 end
