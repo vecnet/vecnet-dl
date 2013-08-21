@@ -29,7 +29,8 @@ class DashboardController < ApplicationController
   self.copy_blacklight_config_from(CatalogController)
 
   before_filter :authenticate_user!
-  before_filter :agreed_to_terms_of_service!
+  #Removing user agreement check since vecnet does not need any user agreement acceptance
+  #before_filter :agreed_to_terms_of_service!
   before_filter :enforce_show_permissions, :only=>:show
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
 
