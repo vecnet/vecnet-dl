@@ -62,5 +62,11 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
     map.source(:in => RDF::DC) do |index|
       index.as :searchable, :facetable, :displayable
     end
+    map.spatials(:to => "spatial", :in => RDF::DC)do |index|
+      index.as :searchable, :facetable, :displayable
+    end
+    map.temporals(:to => "temporal", :in => RDF::DC)do |index|
+      index.as :searchable, :facetable, :displayable
+    end
   end
 end

@@ -23,13 +23,12 @@ on element ids -->
   <% gf = ActiveFedora::Base.find(document.id, cast: true) %>
   <td>
     <a href="" title="Click for more details"><i id="expand_<%= noid.gsub(":", "_") %>" class="icon-plus icon-large fleft show-details"></i></a>&nbsp;
-    <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>document} %>
-    <span class="center"><%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}" %> <br /></span>
+     <span class="center"><%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}" %> <br /></span>
   </td>
   <td><%= gf.human_readable_type %></td>
   <td width="17%"><%= document.fetch(:desc_metadata__date_uploaded_dt,'').to_time.strftime("%m/%d/%Y") unless document.fetch(:desc_metadata__date_uploaded_dt,'').blank? %> </td>
   <td width="5%">
-    <%= link_to_edit_permissions(gf, document) if gf.is_a?(GenericFile) %>
+    <%= link_to_edit_permissions(gf, document)%>
   </td>
   <% if current_user -%>
     <td width="23%" class="inline-item-actions">
@@ -40,7 +39,7 @@ on element ids -->
                   edit_polymorphic_path([:curation_concern, gf]),
                   :class=> 'itemicon itemedit',
                   :title => 'Edit File'
-            ) if((can? :edit, gf) && (gf.is_a?(GenericFile)) )%>
+            ) if(can? :edit, gf) %>
         </li>
 
         <li>

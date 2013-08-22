@@ -4,6 +4,8 @@ class Citation < ActiveFedora::Base
   include CurationConcern::WithCitationFiles
   include CurationConcern::WithAccessRight
   include CurationConcern::ModelMethods
+  include CurationConcern::Embargoable
+  include SpatialCoverage
   self.human_readable_short_description = "Citation from Endnote"
 
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
@@ -16,6 +18,26 @@ class Citation < ActiveFedora::Base
                               :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type, :references, :source]
 
   attr_accessor :files
+
+  def spatials
+    return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
+  end
+
+  def temporals
+    return Array(self.datastreams["descMetadata"].temporals).collect{|temporal| Temporal.parse_temporal(temporal)}
+  end
+
+  def spatials=(formated_str)
+    self.datastreams["descMetadata"].spatials=formated_str
+  end
+
+  def temporals=(formated_str)
+    self.datastreams["descMetadata"].temporals=formated_str
+  end
+
+  def human_readable_type
+    self.class.to_s.demodulize.titleize
+  end
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)

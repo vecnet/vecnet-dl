@@ -22,6 +22,20 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
       Citation.find(params[:id])
     end
   end
+
+  def edit
+    respond_with(curation_concern)
+  end
+
+  def update
+    actor.update!
+    respond_with([:curation_concern, curation_concern])
+  rescue ActiveFedora::RecordInvalid
+    respond_with([:curation_concern, curation_concern]) do |wants|
+      wants.html { render 'edit', status: :unprocessable_entity }
+    end
+  end
+
   def show
     respond_with(curation_concern)
   end
@@ -31,7 +45,28 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
     curation_concern.destroy
     flash[:notice] = "Deleted #{title}"
     respond_with { |wants|
-      wants.html { redirect_to dashboard_index_path }
+      wants.html { redirect_to redirect_to_dashboard }
     }
+  end
+
+  include Morphine
+  register :actor do
+    CurationConcern.actor(curation_concern, current_user, params[:citations])
+  end
+  private
+  def show_breadcrumbs?
+    true
+  end
+
+  def redirect_to_dashboard
+    query_params = session[:search] ? session[:search].dup : {}
+    query_params.delete :counter
+    query_params.delete :total
+    controller=query_params.delete :controller
+    if controller.eql?("admin_dashboard")
+      return admin_dashboard_index_path(query_params)
+    else
+      return dashboard_index_path(query_params)
+    end
   end
 end

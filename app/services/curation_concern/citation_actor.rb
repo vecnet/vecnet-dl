@@ -18,7 +18,6 @@ module CurationConcern
 
     def update!
       super
-      update_contained_citation_file_visibility
     end
 
     protected
