@@ -35,6 +35,7 @@ Sufia.config do |config|
       "Audio" => "Audio",
       "Book" => "Book",
       "Conference Proceeding" => "Conference Proceeding",
+      "Citations" => "Citations",
       "Dataset" => "Dataset",
       "Dataset: Climate/Weather" => "Dataset: Climate/Weather",
       "Dataset: Demography" => "Dataset: Demography",
