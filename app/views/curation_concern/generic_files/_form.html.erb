@@ -85,8 +85,8 @@
                   label: get_label(:date_created),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete'} %>
-      <%= render "spatial", curation_concern: curation_concern, f: f %>
-      <%= render "temporal", curation_concern: curation_concern, f: f %>
+      <%= render "/curation_concern/spatial", curation_concern: curation_concern, f: f %>
+      <%= render "/curation_concern/temporal", curation_concern: curation_concern, f: f %>
     </fieldset>
 
     <fieldset>
