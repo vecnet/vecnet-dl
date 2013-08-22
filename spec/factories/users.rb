@@ -3,9 +3,8 @@
 FactoryGirl.define do
   factory :user do
     sequence(:username) {|n| "username-#{n}" }
+    sequence(:uid) {|n| "username-#{n}" }
     agreed_to_terms_of_service true
     email "g@g.com"
-    password "123123"
-    password_confirmation { "123123" }
   end
 end
