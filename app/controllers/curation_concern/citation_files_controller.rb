@@ -55,7 +55,7 @@ class CurationConcern::CitationFilesController < CurationConcern::BaseController
   def create
     curation_concern.batch = parent
     actor.create!
-    redirect_to dashboard_index_path
+    redirect_to edit_curation_concern_citation_path(parent)
     flash[:curation_concern_pid] = curation_concern.pid
   rescue ActiveFedora::RecordInvalid
     respond_with([:curation_concern, curation_concern]) { |wants|
