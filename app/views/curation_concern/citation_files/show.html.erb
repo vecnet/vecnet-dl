@@ -1,0 +1,13 @@
+<% content_for :page_title, curation_concern_page_title(curation_concern) %>
+<% content_for :page_header do %>
+  <h2>File Details</h2>
+<% end %>
+
+<%= render "attributes", curation_concern: curation_concern %>
+
+  <div class="form-actions">
+    <%= link_to "Download this File", download_path(curation_concern), class: 'btn btn-primary' %>
+    <% if can? :edit, curation_concern %>
+      <%= link_to "Edit this File", edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
+    <% end %>
+  </div>

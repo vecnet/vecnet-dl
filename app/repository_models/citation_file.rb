@@ -2,8 +2,11 @@ require Curate::Engine.root.join('app/repository_models/curation_concern/with_fu
 class CitationFile < ActiveFedora::Base
 
   include Sufia::GenericFile
+  include CurationConcern::Model
   include CurationConcern::WithAccessRight
   include CurationConcern::WithFullText
+  include CurationConcern::Embargoable
+  include CurationConcern::ModelMethods
 
   belongs_to :batch, property: :is_part_of, class_name: 'ActiveFedora::Base'
 
@@ -46,9 +49,18 @@ class CitationFile < ActiveFedora::Base
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
+    solr_doc["noid_s"] = noid
     solr_doc["all_text_unstem_search"] = get_full_text unless get_full_text.blank?
     solr_doc["parent_id_s"] = self.batch.pid
     return solr_doc
+  end
+
+  def to_param
+    noid
+  end
+
+  def to_s
+    title
   end
 
 end

@@ -16,7 +16,16 @@ Vecnet::Application.routes.draw do
 
   namespace :curation_concern, path: :concern do
     resources :collections
-    resources :citations, except: :edit
+    resources :citations
+    resources(
+        :citation_files,
+        only: [:new, :create],
+        path: 'container/:parent_id/citation_files'
+    )
+    resources(
+        :citation_files,
+        only: [:show, :edit, :update, :destroy]
+    )
   end
 
   # User profile & follows
