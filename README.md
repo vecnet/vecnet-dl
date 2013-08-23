@@ -75,6 +75,9 @@ Initializing new production environment
   * Migrate fedora objects: `RAILS_ENV=production bundle exec rake vecnet:migrate:batch_to_collection`
  7. Done!
 
+## Deploy from branch
+cap <environment> deploy -S branch=<branch name>
+
 ## Pubtkt Authentication
 
 The site uses the pubtkt authentication scheme, which uses a signed cookie for every request.

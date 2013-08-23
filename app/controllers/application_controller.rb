@@ -40,4 +40,10 @@ class ApplicationController < ActionController::Base
   end
 
   alias_method :user_logout_url, :user_login_url
+
+  protected
+  def agreed_to_terms_of_service!
+    return false unless current_user
+    return current_user
+  end
 end
