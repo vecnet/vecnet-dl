@@ -1,8 +1,9 @@
 <% if document.has_key?(:noid_s) %>
 <li>
   <h2>
+    <%# debug document.class.inspect %>
     <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), construct_show_path(document) %>
-    <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' unless document[:desc_metadata__resource_type_t].include?('Citation')%></small>
+    <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' unless document.has?(:desc_metadata__resource_type_t, 'Citation')%></small>
   </h2>
   <div class="thumbnail-container">
     <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>document, :height=>200, :width=>150} %>
