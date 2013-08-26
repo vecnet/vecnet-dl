@@ -10,7 +10,20 @@ class CurationConcern::CitationFilesController < CurationConcern::BaseController
       when /catalog/
         add_breadcrumb 'Back to Search results', request.referer
     end
-    super
+    add_edit_breadcrumb
+  end
+
+  def add_edit_breadcrumb
+    case action_name
+      when 'show'
+        add_breadcrumb curation_concern.human_readable_type, request.path
+      when 'new', 'create'
+        add_breadcrumb "Parent #{parent.human_readable_type}", curation_concern_citation_path(parent)
+        add_breadcrumb "New #{curation_concern.human_readable_type}", request.path
+      else
+        add_breadcrumb "Parent #{parent.human_readable_type}", edit_curation_concern_citation_path(parent)
+        add_breadcrumb action_name.titleize, request.path
+    end
   end
 
   before_filter :parent
