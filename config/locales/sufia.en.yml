@@ -23,6 +23,7 @@ en:
       related_url:       "Related URL"
       spatials:          "Lat Long(x,y dd)"
       temporals:         "Time period(s) of Content"
+      source:            "Journal Title"
 
     metadata_help:
       resource_type: "Pre-defined categories to describe the type of file content being uploaded, such as \"article\" or \"dataset.\"  More than one type may be selected."
@@ -41,6 +42,7 @@ en:
       rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list. <em>This is a required field</em>."
       spatials: "A point location specified by geographic coordinates in decimal degrees."
       temporals: "Time period(s) for which the data set corresponds. Use the YYYY-MM-DD format.If the full date is unknown, month and year (YYYY-MM) or just year (YYYY) may be used"
+      source: "Journal Title that article published in."
     access_label:
       public: "Global Access"
       public_embargo: "Global Access with embargo"

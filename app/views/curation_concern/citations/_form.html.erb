@@ -22,6 +22,11 @@
                   hint: metadata_help('creator'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
+      <%= f.input :source,
+                  label: get_label(:source),
+                  hint: metadata_help('source'),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge'} %>
       <%= f.input :tag,
                   label: get_label(:tag),
                   hint: metadata_help('tag'),
