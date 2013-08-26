@@ -22,12 +22,12 @@ on element ids -->
 <tr id="document_<%= noid.gsub(":", "_") %>" class="<%= cycle("","zebra") %>">
   <% gf = ActiveFedora::Base.find(document.id, cast: true) %>
   <td>
-    <a href="" title="Click for more details"><i id="expand_<%= noid.gsub(":", "_") %>" class="icon-plus icon-large fleft show-details"></i></a>&nbsp;
+     <a href="" title="Click for more details"><i id="expand_<%= noid.gsub(":", "_") %>" class="icon-plus icon-large fleft show-details"></i></a>&nbsp;
      <span class="center"><%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}" %> <br /></span>
   </td>
-  <td><%= gf.human_readable_type %></td>
-  <td width="17%"><%= document.fetch(:desc_metadata__date_uploaded_dt,'').to_time.strftime("%m/%d/%Y") unless document.fetch(:desc_metadata__date_uploaded_dt,'').blank? %> </td>
-  <td width="5%">
+  <td class="inline-item-actions"><%= gf.human_readable_type %></td>
+  <td><%= document.fetch(:desc_metadata__date_uploaded_dt,'').to_time.strftime("%m/%d/%Y") unless document.fetch(:desc_metadata__date_uploaded_dt,'').blank? %> </td>
+  <td>
     <%= link_to_edit_permissions(gf, document)%>
   </td>
   <% if current_user -%>
