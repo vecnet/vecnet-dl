@@ -63,6 +63,20 @@ To resolrize with mesh synonyms...it will take a LONG time to complete.
     #resolrize all objects
     RAILS_ENV=qa bundle exec rake solrizer:fedora:solrize_objects
 
+To ingest Citation to qa/Production
+     #Copy endnote file to file to /opt/endnote  and make sure everyone can read
+     sudo cp /from/path/to/endnote/file /opt/endnote
+     sudo chmod -r 755 /opt/endnote
+     #Copy pdf to /opt/citation_file/<createfolder_with_endnote_file_name> and make sure everyone can read
+     sudo cp -r /from/path/to/endnote/pdf/* /opt/citation_file/<endnotefilename>
+     sudo chmod -r 755 /opt/citation_file/<endnotefilename>
+     #Execute citation task as app user
+     sudo su app
+     cd /home/app/vecnet/current
+     chruby 1.9.3-p392
+     RAILS_ENV=production bundle exec rake vecnet:import:endnote_conversion ENDNOTE_FILE=/opt/endnote/<endnotefilename> ENDNOTE_PDF_PATH=/opt/citation_files:/opt/citation_files/<endnotefilename>
+
+
 Initializing new production environment
 
  1. Do system setup as in `SETUP` file
