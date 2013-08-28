@@ -64,6 +64,10 @@ Vecnet.list_filter= function(list){
 
 $(function(){
 
+   $('.pager').on('click', 'a.disabled', function(event) {
+        event.preventDefault();
+   });
+
   $('.advanced').on('click', function(event){
         $('#simple-search-form').toggleClass('hide');
   });

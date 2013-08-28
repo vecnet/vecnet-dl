@@ -223,3 +223,11 @@ body { padding-top: 40px; }
  }
 }
 
+.pager {
+  .disabled {
+    background-color: transparent;
+    color: #999999;
+    cursor: default;
+  }
+}
+
