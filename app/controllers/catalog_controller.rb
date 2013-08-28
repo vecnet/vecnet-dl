@@ -100,11 +100,10 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
     config.add_facet_field "desc_metadata__resource_type_facet", :label => "Resource Type", :limit => 5, :sort => 'index'
     #config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
-    config.add_facet_field "desc_metadata__creator_facet", :label => "Creator", :limit => 5, :sort => 'index'
+    config.add_facet_field "desc_metadata__creator_facet", :label => "Author", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__archived_object_type_facet", :label => "Citation", :limit => 5, :sort => 'index'
-    config.add_facet_field "desc_metadata__language_facet", :label => "Language", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__based_near_facet", :label => "Location", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5, :sort => 'index'
     #config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
@@ -122,16 +121,9 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field "desc_metadata__title_display", :label => "Title"
-    config.add_index_field "desc_metadata__subject_display", :label => "Subject"
-    config.add_index_field "desc_metadata__creator_display", :label => "Creator"
-    config.add_index_field "desc_metadata__publisher_display", :label => "Publisher"
-    config.add_index_field "desc_metadata__based_near_display", :label => "Location"
-    config.add_index_field "desc_metadata__language_display", :label => "Language"
+    config.add_index_field "desc_metadata__creator_display", :label => "Author"
+    config.add_index_field "desc_metadata__date_created_display", :label => "Publish Date"
     config.add_index_field "desc_metadata__contributor_display", :label => "Contributor"
-    config.add_index_field "desc_metadata__tag_display", :label => "Keyword"
-    config.add_index_field "desc_metadata__date_modified_display", :label => "Date Modified"
-
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
     config.add_show_field "desc_metadata__title_display", :label => "Title"
@@ -366,7 +358,8 @@ class CatalogController < ApplicationController
     config.add_sort_field 'desc_metadata__date_uploaded_dt asc', :label => "date uploaded \u25B2"
     config.add_sort_field 'desc_metadata__date_modified_dt desc', :label => "date modified \u25BC"
     config.add_sort_field 'desc_metadata__date_modified_dt asc', :label => "date modified \u25B2"
-    #config.add_sort_field 'desc_metadata__based_near_t desc', :label => "Location \u25BC"
+    #config.add_sort_field 'desc_metadata__date_created_sort asc ', :label => "Pub Date"
+    #config.add_sort_field 'desc_metadata__date_title_sort asc ', :label => "Title"
     #config.add_sort_field 'desc_metadata__based_near_t asc', :label => "Location \u25B2"
     #config.add_sort_field 'desc_metadata__creator_t desc', :label => "Creator \u25BC"
     #config.add_sort_field 'desc_metadata__creator_t asc', :label => "Creator \u25B2"
