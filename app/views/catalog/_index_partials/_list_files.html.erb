@@ -1,18 +1,17 @@
 <% if document.has_key?(:noid_s) %>
 <li>
-  <h2>
+  <h4>
     <%# debug document.class.inspect %>
     <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), construct_show_path(document) %>
     <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' unless document.has?(:desc_metadata__resource_type_t, 'Citation')%></small>
-  </h2>
+  </h4>
   <div class="thumbnail-container">
     <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>document, :height=>200, :width=>150} %>
   </div>
   <dl class="thumbnail-content list">
     <% index_fields.each do |solr_fname, field| -%>
       <% if should_render_index_field? document, field %>
-        <dt class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_label :field => solr_fname %></dt>
-        <dd class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_value :document => document, :field => solr_fname %></dd>
+        <%= "#{render_index_field_value :document => document, :field => solr_fname}" %>
       <% end -%>
     <% end -%>
   </dl>
