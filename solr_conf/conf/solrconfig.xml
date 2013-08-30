@@ -102,81 +102,76 @@
             those searches. You may also be interested in:
             http://wiki.apache.org/solr/LocalParams
        -->
-        <str name="qf">
-          id
-          title_t^25000
-          subject_unstem_search^15000
-          text
-          active_fedora_model_s
-          object_type_facet
-        </str>
-        <str name="pf">
-          id
-          title_t^250000
-          text^10
-          active_fedora_model_s
-          object_type_facet
-        </str>
+       <str name="qf">
+         title_unstem_search^100000
+         desc_metadata__subject_unstem_search^50000
+         desc_metadata__title_t^25000
+         desc_metadata__subject_t^15000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
+       </str>
+       <str name="pf">
+         title_unstem_search^100000
+         subject_unstem_search^50000
+         desc_metadata__title_t^25000
+         desc_metadata__subject_t^15000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
+       </str>
 
        <str name="qf_citation">
-         desc_metadata__title_t^50000
+         title_unstem_search^100000
+         desc_metadata__title_t^750000
+         desc_metadata__creator_unstem_search^50000
          desc_metadata__creator_t^40000
-         desc_metadata__description_t^40000
-         desc_metadata__subject_t^40000
-         desc_metadata__publisher_t^30000
-         desc_metadata__date_created_t
-         desc_metadata__language_t
-         desc_metadata__resource_type_t
-         desc_metadata__based_near_t
-         desc_metadata__tag_t
-         desc_metadata__rights_t
-         depositor_t
-         desc_metadata__title_unstem_search^25000
+         desc_metadata__subject_unstem_search^30000
+         desc_metadata__subject_t^25000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
        </str>
        <str name="pf_citation">
-         desc_metadata__title_t^500000
-         desc_metadata__creator_t^400000
-         desc_metadata__description_t^400000
-         desc_metadata__subject_t^400000
-         desc_metadata__publisher_t^300000
-         desc_metadata__date_created_t
-         desc_metadata__language_t
-         desc_metadata__resource_type_t
-         desc_metadata__based_near_t
-         desc_metadata__tag_t
-         desc_metadata__rights_t
-         depositor_t
-         desc_metadata__title_unstem_search^25000
+         title_unstem_search^100000
+         desc_metadata__title_t^750000
+         desc_metadata__creator_unstem_search^50000
+         desc_metadata__creator_t^40000
+         desc_metadata__subject_unstem_search^30000
+         desc_metadata__subject_t^25000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
        </str>
        <str name="qf_full_text_citation">
-         desc_metadata__title_t^50000
+         title_unstem_search^100000
+         desc_metadata__title_t^750000
+         desc_metadata__creator_unstem_search^50000
          desc_metadata__creator_t^40000
-         desc_metadata__description_t^40000
-         desc_metadata__subject_t^40000
-         desc_metadata__publisher_t^30000
-         desc_metadata__date_created_t
-         desc_metadata__language_t
-         desc_metadata__resource_type_t
-         desc_metadata__based_near_t
-         desc_metadata__tag_t
-         desc_metadata__rights_t
-         depositor_t
-         desc_metadata__title_unstem_search^25000
+         desc_metadata__subject_unstem_search^30000
+         desc_metadata__subject_t^25000
          all_text_unstem_search^10000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
        </str>
        <str name="pf_full_text_citation">
-         desc_metadata__title_t^50000
+         title_unstem_search^100000
+         desc_metadata__title_t^750000
+         desc_metadata__creator_unstem_search^50000
          desc_metadata__creator_t^40000
-         desc_metadata__description_t^40000
-         desc_metadata__subject_t^40000
-         desc_metadata__publisher_t^30000
-         desc_metadata__date_created_t
-         desc_metadata__language_t
-         desc_metadata__resource_type_t
-         desc_metadata__based_near_t
-         desc_metadata__tag_t
-         desc_metadata__rights_t
-         all_text_unstem_search
+         desc_metadata__subject_unstem_search^30000
+         desc_metadata__subject_t^25000
+         all_text_unstem_search^10000
+         id
+         text
+         active_fedora_model_s
+         object_type_facet
        </str>
 
        <str name="author_qf">
