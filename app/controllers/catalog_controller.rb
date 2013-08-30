@@ -99,7 +99,7 @@ class CatalogController < ApplicationController
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
     config.add_facet_field "desc_metadata__resource_type_facet", :label => "Resource Type", :limit => 5, :sort => 'index'
-    #config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
+    config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
     config.add_facet_field "desc_metadata__creator_facet", :label => "Author", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5, :sort => 'index'
@@ -354,11 +354,12 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
+    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'relevance'
     config.add_sort_field 'desc_metadata__date_uploaded_dt desc', :label => "date uploaded \u25BC"
     config.add_sort_field 'desc_metadata__date_uploaded_dt asc', :label => "date uploaded \u25B2"
     config.add_sort_field 'desc_metadata__date_modified_dt desc', :label => "date modified \u25BC"
     config.add_sort_field 'desc_metadata__date_modified_dt asc', :label => "date modified \u25B2"
-    #config.add_sort_field 'desc_metadata__date_created_sort asc ', :label => "Pub Date"
+    config.add_sort_field 'pub_date_sort desc', :label => "Pub date"
     #config.add_sort_field 'desc_metadata__date_title_sort asc ', :label => "Title"
     #config.add_sort_field 'desc_metadata__based_near_t asc', :label => "Location \u25B2"
     #config.add_sort_field 'desc_metadata__creator_t desc', :label => "Creator \u25BC"
