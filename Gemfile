@@ -33,6 +33,7 @@ group :default do
   gem 'therubyracer', :platforms => :ruby
   gem 'method_decorators'
   gem 'rabl'
+  gem 'chronic'
 end
 
 group :headless do

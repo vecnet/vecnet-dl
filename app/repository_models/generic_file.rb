@@ -60,7 +60,21 @@ class GenericFile
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
     solr_doc["subject_parents_t"] = get_subject_parents
+    solr_doc["pub_date"] = get_formated_date_created
     return solr_doc
+  end
+
+  def get_formated_date_created
+    return nil if self.date_created.nil?
+    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
+    pub_date=self.date_created.first
+    if self.date_created.size>1
+      logger.error "#{self.pid} has more than one pub date, #{self.date_created.inspect}, but will only use #{pub_date} for sorting"
+    end
+    pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
+    @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
+    puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
+    return @pub_date_sort.to_time.utc.iso8601
   end
 
   def get_subject_parents
