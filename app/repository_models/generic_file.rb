@@ -60,6 +60,7 @@ class GenericFile
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
     solr_doc["subject_parents_t"] = get_subject_parents
+    solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
     return solr_doc
   end
