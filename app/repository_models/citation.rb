@@ -41,8 +41,7 @@ class Citation < ActiveFedora::Base
 
   def concat_title
     return nil if self.title.blank?
-    puts "#{self.title.inspect}"
-    return self.title.join(',')
+    return self.title.is_a?(Array) ? self.title.join(',') : self.title
   end
 
   def to_solr(solr_doc={}, opts={})
@@ -65,7 +64,7 @@ class Citation < ActiveFedora::Base
     pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
     @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
     puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
-    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
+    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
   end
 
   def get_subject_parents
