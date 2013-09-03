@@ -56,22 +56,29 @@ class GenericFile
     EndNote.new(self).to_endnote
   end
 
+  def concat_title
+    return nil if self.title.blank?
+    return self.title.join(',')
+  end
+
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
     solr_doc["subject_parents_t"] = get_subject_parents
     solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
+    solr_doc["title_alpha_sort"] = concat_title
     return solr_doc
   end
 
   def get_formated_date_created
-    return nil if self.date_created.nil?
+    return nil if self.date_created.blank?
     return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
     pub_date=self.date_created.first
     if self.date_created.size>1
       logger.error "#{self.pid} has more than one pub date, #{self.date_created.inspect}, but will only use #{pub_date} for sorting"
     end
+    puts "Is nil: #{self.date_created.blank?}, Pub date to sort: #{pub_date.inspect}"
     pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
     @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
     puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"

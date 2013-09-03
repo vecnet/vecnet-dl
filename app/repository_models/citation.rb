@@ -11,8 +11,8 @@ class Citation < ActiveFedora::Base
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
 
   #delegate_to :properties, [:relative_path, :depositor], :unique => true
-  delegate_to :descMetadata, [:date_uploaded, :date_modified, :title], :unique => true
-  delegate_to :descMetadata, [:related_url, :based_near, :part_of, :creator,
+  delegate_to :descMetadata, [:date_uploaded, :date_modified], :unique => true
+  delegate_to :descMetadata, [:title, :related_url, :based_near, :part_of, :creator,
                               :contributor, :tag, :description, :rights,
                               :publisher, :date_created, :subject,
                               :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type, :references, :source]
@@ -39,17 +39,24 @@ class Citation < ActiveFedora::Base
     self.class.to_s.demodulize.titleize
   end
 
+  def concat_title
+    return nil if self.title.blank?
+    puts "#{self.title.inspect}"
+    return self.title.join(',')
+  end
+
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
     solr_doc["subject_parents_t"] = get_subject_parents
     solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
+    solr_doc["title_alpha_sort"] = concat_title
     return solr_doc
   end
 
   def get_formated_date_created
-    return nil if self.date_created.nil?
+    return nil if self.date_created.blank?
     return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
     pub_date=self.date_created.first
     if self.date_created.size>1
@@ -58,7 +65,7 @@ class Citation < ActiveFedora::Base
     pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
     @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
     puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
-    return @pub_date_sort.to_time.utc.iso8601
+    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
   end
 
   def get_subject_parents
