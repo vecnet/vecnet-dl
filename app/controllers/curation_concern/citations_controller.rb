@@ -51,7 +51,7 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
 
   include Morphine
   register :actor do
-    CurationConcern.actor(curation_concern, current_user, params[:citations])
+    CurationConcern.actor(curation_concern, current_user, params[:citation])
   end
   private
   def show_breadcrumbs?
