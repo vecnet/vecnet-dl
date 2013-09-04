@@ -17,7 +17,7 @@
       <%= "(#{render_index_field_value :document => document, :field => "desc_metadata__date_created_display"})" %>
     <% end %>
     <br>
-    <%= truncate(render_index_field_value :document => document, :field => "desc_metadata__description_display", length:100) if document.has_key?(:desc_metadata__description_display)%>
+    <%= raw(truncate((render_index_field_value :document => document, :field => "desc_metadata__description_display"), :length => 80, :omission => "...#{link_to '[more]', construct_show_path(document)}")) if document.has_key?(:desc_metadata__description_display)%>
   </dl>
 </li>
 <% end %>
