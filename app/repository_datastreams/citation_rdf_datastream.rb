@@ -51,7 +51,9 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
     end
     map.related_url(:to => "seeAlso", :in => RDF::RDFS)
 
-    map.bibliographic_citation({in: RDF::DC, to: 'bibliographicCitation'})
+    map.bibliographic_citation({in: RDF::DC, to: 'bibliographicCitation'})do |index|
+      index.as :searchable, :displayable
+    end
 
     map.archived_object_type({in: RDF::RDFS, to: 'domain'}) do |index|
       index.as :searchable, :displayable, :facetable
