@@ -70,5 +70,8 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
     map.temporals(:to => "temporal", :in => RDF::DC)do |index|
       index.as :searchable, :facetable, :displayable
     end
+    map.alternative(:in => RDF::DC) do |index|
+      index.as :searchable, :displayable
+    end
   end
 end

@@ -52,6 +52,31 @@ namespace :vecnet do
     end
   end
 
+  namespace :citation do
+    desc "Reformat all citations bio in giving environment"
+    task :reformat_all_bib => :environment do
+      timed_action "reformat bibliographic citations" do
+        Citation.find(:all).each do |c|
+          c.update_citation
+          bib_format = c.reformat_bibliographic_citation.blank? ? "No bib available" : c.reformat_bibliographic_citation
+          puts bib_format
+        end
+      end
+    end
+
+    task :reformat_citation_with_id => :environment do
+      if ENV['PID'].nil?
+        raise "You must provide a PID to reformat."
+      end
+      timed_action "reformat bibliographic citations" do
+        c = Citation.find(ENV['PID'])
+        bib_format = c.reformat_bibliographic_citation.blank? ? "No bib available" : c.reformat_bibliographic_citation
+        puts bib_format
+        c.update_citation
+      end
+    end
+  end
+
   namespace :import do
     def mesh_files
       files=[]
