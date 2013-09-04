@@ -355,13 +355,13 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
-    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'relevance'
-    config.add_sort_field 'desc_metadata__date_uploaded_dt desc', :label => "date uploaded \u25BC"
-    config.add_sort_field 'desc_metadata__date_uploaded_dt asc', :label => "date uploaded \u25B2"
-    config.add_sort_field 'desc_metadata__date_modified_dt desc', :label => "date modified \u25BC"
-    config.add_sort_field 'desc_metadata__date_modified_dt asc', :label => "date modified \u25B2"
-    config.add_sort_field 'pub_date_sort desc', :label => "Pub date"
-    #config.add_sort_field 'desc_metadata__date_title_sort asc ', :label => "Title"
+    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'Relevance'
+    config.add_sort_field 'desc_metadata__date_uploaded_dt desc', :label => "Date Uploaded \u25BC"
+    config.add_sort_field 'desc_metadata__date_uploaded_dt asc', :label => "Date Uploaded \u25B2"
+    config.add_sort_field 'desc_metadata__date_modified_dt desc', :label => "Date Modified \u25BC"
+    config.add_sort_field 'desc_metadata__date_modified_dt asc', :label => "Date Modified \u25B2"
+    config.add_sort_field 'pub_date_sort desc', :label => "Publish date"
+    config.add_sort_field 'title_alpha_sort asc', :label => "Title"
     #config.add_sort_field 'desc_metadata__based_near_t asc', :label => "Location \u25B2"
     #config.add_sort_field 'desc_metadata__creator_t desc', :label => "Creator \u25BC"
     #config.add_sort_field 'desc_metadata__creator_t asc', :label => "Creator \u25B2"
