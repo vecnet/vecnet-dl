@@ -11,9 +11,9 @@ class Citation < ActiveFedora::Base
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
 
   #delegate_to :properties, [:relative_path, :depositor], :unique => true
-  delegate_to :descMetadata, [:date_uploaded, :date_modified], :unique => true
-  delegate_to :descMetadata, [:title, :related_url, :based_near, :part_of, :creator,
-                              :contributor, :tag, :description, :rights,
+  delegate_to :descMetadata, [:date_uploaded, :date_modified, :title, :description], :unique => true
+  delegate_to :descMetadata, [ :related_url, :based_near, :part_of, :creator,
+                              :contributor, :tag, :rights,
                               :publisher, :date_created, :subject,
                               :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type, :references, :source]
 
