@@ -58,8 +58,6 @@ namespace :vecnet do
       timed_action "reformat bibliographic citations" do
         Citation.find(:all).each do |c|
           c.update_citation
-          bib_format = c.reformat_bibliographic_citation.blank? ? "No bib available" : c.reformat_bibliographic_citation
-          puts bib_format
         end
       end
     end
