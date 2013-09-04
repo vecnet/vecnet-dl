@@ -121,12 +121,13 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
+    #config.add_index_field 'desc_metadata__title_display', :helper_method => :get_first_title, :show=>false
     config.add_index_field "desc_metadata__creator_display", :label => "Author"
-    config.add_index_field "desc_metadata__date_created_display", :label => "Publish Date"
+    config.add_index_field "desc_metadata__bibliographic_citation_display", :label => "Bibliographic Citation"
     config.add_index_field "desc_metadata__contributor_display", :label => "Contributor"
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field "desc_metadata__title_display", :label => "Title"
+    config.add_show_field "desc_metadata__title_display", :label => "Title", :helper_method => :get_first_title
     config.add_show_field "desc_metadata__description_display", :label => "Description"
     config.add_show_field "desc_metadata__tag_display", :label => "Keyword"
     config.add_show_field "desc_metadata__subject_display", :label => "Subject"

@@ -1,7 +1,6 @@
 <% if document.has_key?(:noid_s) %>
 <li>
   <h4>
-    <%# debug document.class.inspect %>
     <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), construct_show_path(document) %>
     <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' unless document.has?(:desc_metadata__resource_type_t, 'Citation')%></small>
   </h4>
@@ -11,9 +10,14 @@
   <dl class="thumbnail-content list">
     <% index_fields.each do |solr_fname, field| -%>
       <% if should_render_index_field? document, field %>
-        <%= "#{render_index_field_value :document => document, :field => solr_fname}" %>
+        <%= "#{render_index_field_value :document => document, :field => solr_fname};" %>
       <% end -%>
     <% end -%>
+    <% if document.has_key?(:desc_metadata__date_created_display) && !document.has_key?(:desc_metadata__bibliographic_citation_display)%>
+      <%= "(#{render_index_field_value :document => document, :field => "desc_metadata__date_created_display"})" %>
+    <% end %>
+    <br>
+    <%= truncate(render_index_field_value :document => document, :field => "desc_metadata__description_display", length:100) if document.has_key?(:desc_metadata__description_display)%>
   </dl>
 </li>
 <% end %>
