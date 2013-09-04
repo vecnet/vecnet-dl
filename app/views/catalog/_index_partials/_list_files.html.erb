@@ -10,7 +10,7 @@
   <dl class="thumbnail-content list">
     <% index_fields.each do |solr_fname, field| -%>
       <% if should_render_index_field? document, field %>
-        <%= "#{render_index_field_value :document => document, :field => solr_fname};" %>
+        <%= raw "#{render_index_field_value :document => document, :field => solr_fname};" %>
       <% end -%>
     <% end -%>
     <% if document.has_key?(:desc_metadata__date_created_display) && !document.has_key?(:desc_metadata__bibliographic_citation_display)%>
