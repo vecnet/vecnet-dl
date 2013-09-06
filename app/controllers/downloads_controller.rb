@@ -1,4 +1,5 @@
 require 'sufia/noid'
+require Curate::Engine.root.join('app/controllers/downloads_controller')
 
 class DownloadsController < ApplicationController
   include Sufia::Noid # for normalize_identifier method
@@ -24,8 +25,7 @@ class DownloadsController < ApplicationController
   prepend_before_filter :normalize_identifier, except: [:index, :new, :create]
 
   def show
-    logger.debug "Test"
-    authorize!(:show, generic_file)
+    authorize!(:show, generic_file) unless (params.has_key?(:datastream_id) && params[:datastream_id].eql?('thumbnail'))
     send_content (generic_file)
   end
 
@@ -38,8 +38,9 @@ class DownloadsController < ApplicationController
     if params.has_key?(:datastream_id)
       opts[:filename] = params[:datastream_id]
       ds = asset.datastreams[params[:datastream_id]]
+    else
+      ds = asset.datastreams["content"]
     end
-    ds = asset.datastreams["content"] if ds.nil?
     raise ActionController::RoutingError.new('Not Found') if ds.nil?
     data = ds.content
     opts[:type] = ds.mimeType
