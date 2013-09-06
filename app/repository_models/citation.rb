@@ -93,6 +93,7 @@ class Citation < ActiveFedora::Base
     return all_trees.flatten
   end
 
+  #one time conversion for converting bib data, not need anymore
   def reformat_bibliographic_citation
     return '' if self.bibliographic_citation.blank? || self.bibliographic_citation.first.gsub(/[,():\/s]/,'').blank?
     space=' '
@@ -122,6 +123,11 @@ class Citation < ActiveFedora::Base
   def update_citation
     self.alternative=self.bibliographic_citation
     self.bibliographic_citation=reformat_bibliographic_citation
+    self.save!
+  end
+
+  def update_citation_resource_type
+    self.resource_type='Article'
     self.save!
   end
 

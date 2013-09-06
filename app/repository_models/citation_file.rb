@@ -62,5 +62,10 @@ class CitationFile < ActiveFedora::Base
     title
   end
 
+  def update_visibility_as_authenticated
+    self.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+    self.save!
+  end
+
 end
 
