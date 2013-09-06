@@ -36,7 +36,7 @@ class CitationIngestService
     def citation
       "#{@title} #{volume}, #{issue} (#{dt}): #{unit_details}"
     end
-
+    #TODO: Need to make sure this works before we ingest anymore citation
     def format_volume
       vol=[]
       vol<<volume
@@ -75,30 +75,6 @@ class CitationIngestService
   def initialize(mods_input_file, pdf_paths = [])
     @metadata_file = mods_input_file
     @pdf_paths = pdf_paths
-  end
-
-  def self.reformat_bibliographic_citation(concern)
-    #concern=ActiveFedora::Base.find(curation_concern_pid, cast:true)
-    space=' '
-    comma=','
-    comma='.'
-    citation=concern.bibliographic_citation.first
-    return '' if citation.gsub(/[,():\/s]/,'').blank?
-    journal=concern.source.first
-    pubdate= concern.date_created.first
-    citation_arr=citation.split(':')
-    issue_details= citation_arr.first.gsub(journal, '').gsub(pubdate,'').gsub(/[^a-zA-Z0-9,]/,'').split(',')
-    unless issue_details.blank?
-      volume=issue_details.first
-      issue=issue_details.last
-      formatted_volume=issue_details.count==2 ? "#{space}#{volume}(#{issue})" : "#{space}#{issue_details.join(' ')}"
-    end
-    pages= citation_arr.last.gsub('page','').gsub(/[\s]/,'').split('-')
-    formated_pages=pages.gsub(/[\s-]/,'').split('-').count==2 ? "#{pages}" : pages.gsub(/[\s-]/,'')
-    format_unit_details=formated_pages.blank? ? '': "#{comma}#{space}#{formated_pages}"
-    format_publish_date=pubdate.blank? ? '' : "#{space}(#{pubdate})"
-    first_part="#{journal}#{formatted_volume}#{format_unit_details}"
-    return first_part.blank? ? format_publish_date : "#{first_part}#{dot}#{format_publish_date}"
   end
 
   def ingest_citation
