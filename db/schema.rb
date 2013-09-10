@@ -13,6 +13,20 @@
 
 ActiveRecord::Schema.define(:version => 20130815180833) do
 
+  create_table "Admin1Code", :id => false, :force => true do |t|
+    t.string  "fips_code", :limit => 10
+    t.string  "name",      :limit => 200
+    t.string  "asciiname", :limit => 8000
+    t.integer "geonameid"
+  end
+
+  create_table "admin1code", :id => false, :force => true do |t|
+    t.string  "fips_code", :limit => 10
+    t.string  "name",      :limit => 200
+    t.string  "asciiname", :limit => 8000
+    t.integer "geonameid"
+  end
+
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
     t.string   "document_id"
@@ -43,6 +57,28 @@ ActiveRecord::Schema.define(:version => 20130815180833) do
     t.datetime "updated_at",                 :null => false
   end
 
+  create_table "countryinfo", :id => false, :force => true do |t|
+    t.string  "iso_alpha2",      :limit => 2
+    t.string  "iso_alpha3",      :limit => 3
+    t.integer "iso_numeric"
+    t.string  "fips_code",       :limit => 3
+    t.string  "name",            :limit => 200
+    t.string  "capital",         :limit => 200
+    t.float   "areainsqkm"
+    t.integer "population"
+    t.string  "continent",       :limit => 2
+    t.string  "tld",             :limit => 10
+    t.string  "currencycode",    :limit => 3
+    t.string  "currencyname",    :limit => 20
+    t.string  "phone",           :limit => 20
+    t.string  "postalcode",      :limit => 100
+    t.string  "postalcoderegex", :limit => 200
+    t.string  "languages",       :limit => 200
+    t.integer "geonameid"
+    t.string  "neighbors",       :limit => 50
+    t.string  "equivfipscode",   :limit => 3
+  end
+
   create_table "domain_terms", :force => true do |t|
     t.string "model"
     t.string "term"
@@ -70,6 +106,43 @@ ActiveRecord::Schema.define(:version => 20130815180833) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "geoname", :id => false, :force => true do |t|
+    t.integer "geonameid",                      :null => false
+    t.string  "name",           :limit => 200
+    t.string  "asciiname",      :limit => 200
+    t.string  "alternatenames", :limit => 8000
+    t.float   "latitude"
+    t.float   "longitude"
+    t.string  "fclass",         :limit => 1
+    t.string  "fcode",          :limit => 10
+    t.string  "country",        :limit => 2
+    t.string  "cc2",            :limit => 60
+    t.string  "admin1",         :limit => 20
+    t.string  "admin2",         :limit => 80
+    t.string  "admin3",         :limit => 20
+    t.string  "admin4",         :limit => 20
+    t.integer "population",     :limit => 8
+    t.integer "elevation"
+    t.integer "gtopo30"
+    t.string  "timezone",       :limit => 40
+    t.date    "moddate"
+  end
+
+  create_table "geonamedetail", :id => false, :force => true do |t|
+    t.integer "geonamedetailid",                :null => false
+    t.integer "geonameid"
+    t.string  "alternatename",   :limit => 200
+    t.string  "countryname",     :limit => 200
+    t.string  "admin1name",      :limit => 200
+  end
+
+  create_table "geonamehierarchy", :id => false, :force => true do |t|
+    t.integer "hierarchyid",                           :null => false
+    t.integer "geonameid"
+    t.string  "hierarchytree",         :limit => 1000
+    t.string  "hierarchytreetopnoamy", :limit => 8000
+  end
 
   create_table "help_requests", :force => true do |t|
     t.string   "view_port"
@@ -267,6 +340,14 @@ ActiveRecord::Schema.define(:version => 20130815180833) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_foreign_key "admin1code", "geoname", :name => "fk_geonameid", :column => "geonameid", :primary_key => "geonameid"
+
+  add_foreign_key "countryinfo", "geoname", :name => "fk_geonameid", :column => "geonameid", :primary_key => "geonameid"
+
+  add_foreign_key "geonamedetail", "geoname", :name => "fk_geonameid", :column => "geonameid", :primary_key => "geonameid"
+
+  add_foreign_key "geonamehierarchy", "geoname", :name => "fk_geonameid", :column => "geonameid", :primary_key => "geonameid"
 
   add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
 
