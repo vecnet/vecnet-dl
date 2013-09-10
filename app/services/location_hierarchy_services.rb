@@ -62,23 +62,43 @@ class LocationHierarchyServices
     puts "Locations for parse and find gid: #{locations.inspect}"
     unless locations.blank?
       locations.each do |location|
-        q = location.split(",").first
-        puts "trying to find: #{q.inspect}"
-        hits = Geonames::Search.search(q)
-        puts "hits: #{hits.inspect}"
-        hits.each do |result|
-          if result[:label].gsub(/[\s,]/,'').eql?(location.gsub(/[\s,]/,''))
-            key=result[:label]
-            geoname_id = result[:value]
-            puts geoname_id.inspect
-            geonames_ids[location]=geoname_id
-            break
-          end
-        end
+        id = self.location_to_geonameid(location)
+        geonames_ids[location] = id if id
       end
     end
-      puts "hash_of_locations: #{geonames_ids.inspect}"
+    puts "hash_of_locations: #{geonames_ids.inspect}"
     return geonames_ids
+  end
+
+  def self.location_to_geonameid(location)
+    @@loc_memo ||= {}
+    if @@loc_memo[location]
+      return @@loc_memo[location]
+    end
+    q = location.split(",").first
+    puts "trying to find: #{q.inspect}"
+    hits = Geonames::Search.search(q)
+    puts "hits: #{hits.inspect}"
+    # first look for an exact match for "place,admin1,country"
+    # remove commas since sometimes an second comma is inserted even when there is no admin1
+    hits.each do |result|
+      if result[:label].gsub(/[\s,]/,'').eql?(location.gsub(/[\s,]/,''))
+        puts result.inspect
+        @@loc_memo[location] = result[:value]
+        return result[:value]
+      end
+    end
+    # now look for something with the same place name
+    # This does not try to find the most specific place with the name, though
+    hits.each do |result|
+      result_place = result[:label].split(",").first
+      if result_place == q
+        puts result.inspect
+        @@loc_memo[location] = result[:value]
+        return result[:value]
+      end
+    end
+    return nil
   end
 
   def self.get_solr_hierarchy_from_tree(tree)
