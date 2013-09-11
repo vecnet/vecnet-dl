@@ -79,7 +79,6 @@ class GenericFile
   def locations
     locations=self.based_near
     new_locations=locations.map{|loc| refactor_location(loc) }
-    puts new_locations
     new_locations
   end
 
@@ -101,7 +100,6 @@ class GenericFile
       end
     end
     location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
-    puts "To solrize:#{location_trees.inspect}"
     return location_trees.flatten
   end
 
@@ -112,10 +110,8 @@ class GenericFile
     if self.date_created.size>1
       logger.error "#{self.pid} has more than one pub date, #{self.date_created.inspect}, but will only use #{pub_date} for sorting"
     end
-    puts "Is nil: #{self.date_created.blank?}, Pub date to sort: #{pub_date.inspect}"
     pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
     @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
-    puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
     return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
   end
 

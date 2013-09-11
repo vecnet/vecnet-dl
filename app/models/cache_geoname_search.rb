@@ -5,7 +5,8 @@ class CacheGeonameSearch < ActiveRecord::Base
   attr_accessible :geoname_id, :geo_location, :object_id
 
   def self.find_or_create(location,geoname_id)
-    if CacheGeonameSearch.find_by_geoname_id(geoname_id).nil?
+    puts "Update: #{location.inspect}, #{geoname_id.inspect} "
+    if CacheGeonameSearch.find_by_geo_location(location).nil?
       return CacheGeonameSearch.create_from_attributes(location,geoname_id)
     else
       return CacheGeonameSearch.update_from_attributes(location,geoname_id)
@@ -21,6 +22,7 @@ class CacheGeonameSearch < ActiveRecord::Base
   end
 
   def self.update_from_attributes(location,geoname_id,pid=nil)
+    puts "Update: #{location.inspect}, #{geoname_id.inspect} "
     cache = CacheGeonameSearch.find_by_geo_location(location)
     unless cache.geoname_id == geoname_id
       cache.update_attributes!(geoname_id: geoname_id)
