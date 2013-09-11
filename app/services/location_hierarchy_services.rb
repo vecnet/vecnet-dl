@@ -9,19 +9,16 @@ class LocationHierarchyServices
     puts @file.inspect
     File.open(@file) do |f|
       f.each_line do |line|
-        tmp=line.split('|')
+        tree_with_geoid=line.strip.split('|')
         begin
-          geoname_id=tmp.first
-          trees=tmp-[geoname_id]
-          puts "Processing tree: #{trees.inspect}"
+          geoname_id=tree_with_geoid.first
+          trees=tree_with_geoid-[geoname_id]
           trees.each { |tree|
             if tree.split('.').include?(@earth)
-              GeonameHierarchy.create!( :geonameid => geoname_id,
-                                      :hierarchytree => tree,
-                                      :hierarchytreetopnoamy=>eval_tree(tree)
-              )
+              GeonameHierarchy.find_or_create(geoname_id,tree)
+
             else
-              GeonameHierarchy.create!( :geonameid => geoname_id)
+              GeonameHierarchy.find_or_create(geoname_id,nil)
             end
           }
         rescue Exception => e
@@ -33,26 +30,24 @@ class LocationHierarchyServices
 
   def eval_tree(tree)
     geoname_ids=tree.split('.')
-    geoasciinames=[]
-    geoname_ids.each do |id|
-      geoasciinames<<Geoname.find(id).asciiname
-    end
-    return geoasciinames.join(';')
+    geonames = geoname_ids.map{|id| Geoname.find(id).name}
+    return geonames.join(';')
   end
 
-  def resolve_names(geoname_id)
-    GeonameHierarchy.create!( :geoname_id => geoname_id,
-                              :name => Geoname.find(geoname_id).name,
-                              :countryname=>eval_country_name(geoname_id),
-                              :admin1name=>eval_admin1_name(geoname_id)
-    )
-
-  end
+  #Yet to create this service
+  #def resolve_names(geoname_id)
+  #  GeonameDetail.create!( :geoname_id => geoname_id,
+  #                            :name => Geoname.find(geoname_id).name,
+  #                            :countryname=>eval_country_name(geoname_id),
+  #                            :admin1name=>eval_admin1_name(geoname_id)
+  #  )
+  #
+  #end
 
   def self.find_hierarchy(geo_name_id)
-    tree_id, tree_names= Geonames::Hierarchy.hierarchy(geo_name_id)
-    puts "tree: #{tree_id}, Names:#{tree_names}"
-    GeonameHierarchy.find_or_create(geo_name_id,tree_id, tree_names)
+    tree_id, tree_names= GeonameWebServices::Hierarchy.hierarchy(geo_name_id)
+    #puts "tree: #{tree_id}, Names:#{tree_names}"
+    GeonameHierarchy.find_or_create(geo_name_id,tree_id)
     return tree_id, tree_names
 
   end
@@ -71,20 +66,20 @@ class LocationHierarchyServices
   end
 
   def self.location_to_geonameid(location)
-    @@loc_memo ||= {}
-    if @@loc_memo[location]
-      return @@loc_memo[location]
+    location_memo = CacheGeonameSearch.find_by_geo_location(location)
+    if  location_memo
+      return location_memo.geoname_id
     end
     q = location.split(",").first
     puts "trying to find: #{q.inspect}"
-    hits = Geonames::Search.search(q)
+    hits = GeonameWebServices::Search.search(q)
     puts "hits: #{hits.inspect}"
     # first look for an exact match for "place,admin1,country"
     # remove commas since sometimes an second comma is inserted even when there is no admin1
     hits.each do |result|
       if result[:label].gsub(/[\s,]/,'').eql?(location.gsub(/[\s,]/,''))
         puts result.inspect
-        @@loc_memo[location] = result[:value]
+        CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
     end
@@ -94,7 +89,7 @@ class LocationHierarchyServices
       result_place = result[:label].split(",").first
       if result_place == q
         puts result.inspect
-        @@loc_memo[location] = result[:value]
+        CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
     end
