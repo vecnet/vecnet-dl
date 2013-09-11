@@ -4,6 +4,8 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
 
+  attr_accessor :locations
+
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
   delegate_to :descMetadata, [:description], :unique => true
