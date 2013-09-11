@@ -77,9 +77,9 @@ class GenericFile
     location_trees=[]
     location_tree_to_solrize=[]
     geoname_id_hash.each do |location,geoname_id|
-      hierarchy= GeonameHierarchy.find_by_geonameid(geoname_id)
-      if hierarchy && hierarchy.hierarchytreetopnoamy.present?
-        location_tree_to_solrize<<hierarchy.hierarchytreetopnoamy.gsub!(';',':').gsub!('Earth:','')
+      hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+      if hierarchy && hierarchy.hierarchy_tree_name.present?
+        location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
       else
         tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
         location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
