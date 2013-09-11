@@ -111,7 +111,7 @@ namespace :vecnet do
     desc "Load Hierarchy to table"
     task :trees => :environment do
       timed_action "location hierarchy" do
-       LocationHierarchyServices.new().process_all_location
+       LocationHierarchyServices.new().process_all_geoname_hierachy
       end
     end
     desc "get locations for generic files from solr"
