@@ -386,6 +386,14 @@ class CatalogController < ApplicationController
 
   protected
 
+  def add_access_controls_to_solr_params(solr_parameters, user_parameters)
+    apply_gated_discovery(solr_parameters, user_parameters) unless check_permission?
+  end
+
+  def check_permission?
+    return current_user && current_user.admin?
+  end
+
   def exclude_unwanted_models(solr_parameters, user_parameters)
     super
     solr_parameters[:fq] ||= []
