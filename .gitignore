@@ -37,3 +37,4 @@ vecnet_test
 gitlog
 config/pubtkt-development.pem
 config/pubtkt-private-development.pem
+config/database.yml

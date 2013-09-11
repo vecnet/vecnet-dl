@@ -69,7 +69,22 @@ class GenericFile
     solr_doc["pub_date"] = get_formated_date_created
     solr_doc["title_alpha_sort"] = concat_title
     solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
+    #Temp solr fields for location until we fix geoname autocomplete
+    solr_doc["location_facet"] = locations
+    solr_doc["location_display"] = locations
+
     return solr_doc
+  end
+
+  def locations
+    locations=self.based_near
+    new_locations=locations.map{|loc| refactor_location(loc) }
+    puts new_locations
+    new_locations
+  end
+
+  def refactor_location(location)
+    return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
   end
 
   def get_hierarchy_on_location
