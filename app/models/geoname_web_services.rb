@@ -1,33 +1,5 @@
-#class Geonames < ActiveResource::Base
-#  self.site = "http://ws.geonames.org/"
-#  self.element_name = "hierarchyJSON"
-#  self.collection_name = "hierarchyJSON"
-#
-#  def self.collection_path(prefix_options = {}, query_options = nil)
-#    super(prefix_options, query_options).gsub(/\.json|\.xml/, "")
-#  end
-#
-#  def self.instantiate_collection(collection, prefix_options = {})
-#    puts collection.inspect
-#    col = super(collection,prefix_options)
-#    geoname_id_tree=[]
-#    geoname_tree=[]
-#    col.each {|item|
-#        geoname_id_tree<< item.geonameId
-#        geoname_tree<< item.name
-#    }
-#    return geoname_id_tree.join(','),geoname_tree.join(';')
-#  end
-#
-#  def self.find_hierarchy(geoname_id, options = {:username => 'banu'})
-#    #return GeoNamesHierarchy.find(:all,:from => "/hierarchyJSON", :params => {:geonameId =>geoname_id, :username=>"banu"})
-#    return Geonames.find(:all,  :params => { :geonameId => geoname_id }.merge(options))
-#  end
-#
-#end
 
-
-module Geonames
+module GeonameWebServices
 
   module JsonFormat # :nodoc:
     extend self
@@ -93,9 +65,7 @@ module Geonames
     end
 
     def self.instantiate_collection(collection, prefix_options = {})
-      puts "Before Super Json Response from Geo Names: #{collection.inspect}"
       col = super(collection["geonames"],prefix_options)
-      puts "Json Response from Geo Names: #{col.inspect}"
       col.map! {|item|  {
          label: item.name+ (item.adminName1 ? ", " + item.adminName1 : "")+", " + item.countryName, value:"#{item.geonameId}"}
       }
