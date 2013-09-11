@@ -73,6 +73,9 @@ Sufia.config do |config|
   config.queue = Sufia::Resque::Queue
 
   # Map hostnames onto Google Analytics tracking IDs
-  #config.google_analytics_id = 'UA-99999999-1'
+  if Rails.env.production?
+    config.google_analytics_id = 'UA-40044476-1'
+    config.google_analytics_domain = 'vecnet.org'
+  end
 
 end
