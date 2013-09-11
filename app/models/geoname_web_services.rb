@@ -34,15 +34,14 @@ module GeonameWebServices
     end
 
     def self.instantiate_collection(collection, prefix_options = {})
-      puts collection.inspect
       col = super(collection,prefix_options)
       geoname_id_tree=[]
       geoname_tree=[]
       col.each {|item|
         geoname_id_tree<< item.geonameId
-        geoname_tree<< item.name
+        geoname_tree<< item.toponymName
       }
-      return geoname_id_tree.join(','),geoname_tree.join(';')
+      return geoname_id_tree.join('.'),geoname_tree.join(';')
     end
 
     def self.hierarchy(geoname_id, options = {:username => 'banu'})
@@ -55,7 +54,7 @@ module GeonameWebServices
   class Search < GeonamesResource
     # place search
     #
-    # http://www.geonames.org/export/web-services.html#postalCodeSearch
+    # http://www.geonames.org/export/web-services.html#Search
     #
     self.element_name = "searchJSON"
     self.collection_name = "searchJSON"
@@ -71,9 +70,8 @@ module GeonameWebServices
       }
       return col
     end
-    def self.search(term, options = {:maxRows => 10,:userame => 'banu'})
-      #self.find(:all, :from => "/searchJSON", :params => { :q => term }.merge(options))
-      return self.find(:all, :params => { :q =>term, :username=>"cam156", :maxRows=>10})
+    def self.search(term, options = {:maxRows => 10,:username => 'banu'})
+      self.find(:all, :from => "/searchJSON", :params => { :q => term }.merge(options))
     end
   end
 
