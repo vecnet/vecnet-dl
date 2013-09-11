@@ -15,7 +15,7 @@ Warden::Strategies.add(:pubtkt) do
     pt = ::PubTicket.new(ticket)  # Rails has already URL unescaped `ticket`
     if pt.signature_valid?(Rails.configuration.pubtkt_public_key)
       if pt.ticket_valid?(request.ip, Time.now)
-        logger.debug "Pubtkt: Signature and ticket valid. User: #{pt.uid}"
+        logger.info "Pubtkt: Signature and ticket valid. User: #{pt.uid}, Groups: #{pt.tokens}"
         u = User.find_or_create_from_pubtkt(pt)
       end
     end
