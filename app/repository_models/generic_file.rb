@@ -70,7 +70,7 @@ class GenericFile
     solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
     solr_doc["title_alpha_sort"] = concat_title
-    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
+    #solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
     #Temp solr fields for location until we fix geoname autocomplete
     solr_doc["location_facet"] = locations
     solr_doc["location_display"] = locations
@@ -89,20 +89,23 @@ class GenericFile
   end
 
   def get_hierarchy_on_location
+    unless self.based_near.blank?
     geoname_id_hash= LocationHierarchyServices.get_geoname_ids(self.based_near)
     location_trees=[]
     location_tree_to_solrize=[]
     geoname_id_hash.each do |location,geoname_id|
-      hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
-      if hierarchy && hierarchy.hierarchy_tree_name.present?
-        location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
-      else
-        tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
-        location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
-      end
+        hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+        if hierarchy && hierarchy.hierarchy_tree_name.present?
+          location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
+        else
+          tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
+          location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
+        end
     end
     location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
     return location_trees.flatten
+    end
+    return nil
   end
 
   def get_formated_date_created
