@@ -491,7 +491,6 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    seed_dump (0.6.0)
     sexp_processor (4.2.1)
     sextant (0.2.3)
       activesupport (>= 3.2)
@@ -603,7 +602,6 @@ DEPENDENCIES
   ruby_gntp
   rubydora (~> 1.6.4)
   sass-rails (~> 3.2.3)
-  seed_dump
   sextant
   simple_form
   simplecov

@@ -34,8 +34,6 @@ group :default do
   gem 'method_decorators'
   gem 'rabl'
   gem 'chronic'
-  #To get dump of geoname_hierarchy
-  gem 'seed_dump'
 end
 
 group :headless do
