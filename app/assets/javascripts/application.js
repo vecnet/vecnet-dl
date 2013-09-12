@@ -20,6 +20,7 @@
 //= require jquery-ui-1.9.2/jquery.ui.autocomplete
 //
 //= require blacklight/blacklight
+//= require blacklight/hierarchy/hierarchy
 //
 //= require bootstrap-dropdown
 //= require bootstrap-button
@@ -72,7 +73,9 @@ $(function(){
         $('#simple-search-form').toggleClass('hide');
   });
   $(".ajax_modal_launch").on( 'click', function( e ){
+    console.log("Launch Modal")
     Vecnet.setup_autocomplete('#ajax_modal');
+    Blacklight.do_hierarchical_facet_expand_contract_behavior();
   });
 
   // custom css expression for a case-insensitive contains()
