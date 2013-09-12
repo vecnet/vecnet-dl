@@ -107,6 +107,7 @@
          desc_metadata__subject_unstem_search^50000
          desc_metadata__title_t^25000
          desc_metadata__subject_t^15000
+         subject_syn_en
          id
          text
          active_fedora_model_s
@@ -117,6 +118,7 @@
          subject_unstem_search^50000
          desc_metadata__title_t^25000
          desc_metadata__subject_t^15000
+         subject_syn_en
          id
          text
          active_fedora_model_s
@@ -126,10 +128,9 @@
        <str name="qf_citation">
          title_unstem_search^100000
          desc_metadata__title_t^750000
-         desc_metadata__creator_unstem_search^50000
-         desc_metadata__creator_t^40000
          desc_metadata__subject_unstem_search^30000
          desc_metadata__subject_t^25000
+         subject_syn_en
          id
          text
          active_fedora_model_s
@@ -138,10 +139,9 @@
        <str name="pf_citation">
          title_unstem_search^100000
          desc_metadata__title_t^750000
-         desc_metadata__creator_unstem_search^50000
-         desc_metadata__creator_t^40000
          desc_metadata__subject_unstem_search^30000
          desc_metadata__subject_t^25000
+         subject_syn_en
          id
          text
          active_fedora_model_s
