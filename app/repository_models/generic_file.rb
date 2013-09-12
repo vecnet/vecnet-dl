@@ -4,6 +4,8 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
 
+  attr_accessor :locations
+
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
   delegate_to :descMetadata, [:description], :unique => true
@@ -68,7 +70,42 @@ class GenericFile
     solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
     solr_doc["title_alpha_sort"] = concat_title
+    #solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
+    #Temp solr fields for location until we fix geoname autocomplete
+    solr_doc["location_facet"] = locations
+    solr_doc["location_display"] = locations
+
     return solr_doc
+  end
+
+  def locations
+    locations=self.based_near
+    new_locations=locations.map{|loc| refactor_location(loc) }
+    new_locations
+  end
+
+  def refactor_location(location)
+    return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
+  end
+
+  def get_hierarchy_on_location
+    unless self.based_near.blank?
+    geoname_id_hash= LocationHierarchyServices.get_geoname_ids(self.based_near)
+    location_trees=[]
+    location_tree_to_solrize=[]
+    geoname_id_hash.each do |location,geoname_id|
+        hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+        if hierarchy && hierarchy.hierarchy_tree_name.present?
+          location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
+        else
+          tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
+          location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
+        end
+    end
+    location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
+    return location_trees.flatten
+    end
+    return nil
   end
 
   def get_formated_date_created
@@ -78,10 +115,8 @@ class GenericFile
     if self.date_created.size>1
       logger.error "#{self.pid} has more than one pub date, #{self.date_created.inspect}, but will only use #{pub_date} for sorting"
     end
-    puts "Is nil: #{self.date_created.blank?}, Pub date to sort: #{pub_date.inspect}"
     pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
     @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
-    puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
     return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
   end
 

@@ -8,6 +8,7 @@ class Ability
       can :read, String
       can :read, ActiveFedora::Base
       can :read, SolrDocument
+      can :manage, :all
     else
       super
     end

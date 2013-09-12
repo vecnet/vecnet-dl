@@ -250,20 +250,16 @@
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
-        <!-- in this example, we will only use synonyms at query time
-        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
-        -->
+        <!-- in this example, we will only use synonyms at query time-->
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+
         <!-- Case insensitive stop word removal.
           add enablePositionIncrements=true in both the index and query
           analyzers to leave a 'gap' for more accurate phrase queries.
         -->
-        <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="stopwords_en.txt"
-                enablePositionIncrements="true"
-                />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
+	    <filter class="solr.EnglishPossessiveFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
 	<!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -272,14 +268,13 @@
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory"
                 ignoreCase="true"
                 words="stopwords_en.txt"
                 enablePositionIncrements="true"
                 />
         <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
+	    <filter class="solr.EnglishPossessiveFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
 	<!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -355,7 +350,6 @@
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
            maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
@@ -538,6 +532,7 @@
    we use 'tint' for faster range-queries. -->
    <field name="pub_date" type="date" indexed="true" stored="true"/>
    <field name="title_alpha_sort" type="alphaOnlySort" indexed="true" stored="true"/>
+   <field name="subject_syn_en" type="text_en" indexed="true" stored="true"/>
      
    <!-- format is used for facet, display, and choosing which partial to use for the show view, so it must be stored and indexed -->
    <field name="format" type="string" indexed="true" stored="true"/>
@@ -614,6 +609,7 @@
    <copyField source="desc_metadata__title_t" dest="title_unstem_search"/>
    <copyField source="desc_metadata__subject_t" dest="subject_unstem_search"/>
    <copyField source="*_t" dest="*_unstem_search"/>
+   <copyField source="desc_metadata__subject_t" dest="subject_syn_en"/>
 
 
   <!-- sort fields -->

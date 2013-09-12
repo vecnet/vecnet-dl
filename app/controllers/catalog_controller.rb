@@ -55,6 +55,15 @@ class CatalogController < ApplicationController
     end
   end
 
+  def location_facet
+    @pagination = get_facet_pagination(params[:id], params)
+    (@response, @document_list) = get_search_results
+    respond_to do |format|
+      format.html
+      format.js { render :layout => false }
+    end
+  end
+
   def recent
     if user_signed_in?
       # grab other people's documents
@@ -104,13 +113,15 @@ class CatalogController < ApplicationController
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__archived_object_type_facet", :label => "Citation", :limit => 5, :sort => 'index'
-    config.add_facet_field "desc_metadata__based_near_facet", :label => "Location", :limit => 5, :sort => 'index'
+    config.add_facet_field "location_facet", :label => "Location", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5, :sort => 'index'
     #config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
     config.add_facet_field 'hierarchy_facet', :label => 'MeSH Tree', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
+    config.add_facet_field 'location_hierarchy_facet', :label => 'Location Tree', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
     config.facet_display = {
         :hierarchy => {
-            'hierarchy' => [nil]
+            'hierarchy' => [nil],
+            'location_hierarchy' => [nil]
         }
     }
 
@@ -374,6 +385,14 @@ class CatalogController < ApplicationController
   end
 
   protected
+
+  def add_access_controls_to_solr_params(solr_parameters, user_parameters)
+    apply_gated_discovery(solr_parameters, user_parameters) unless check_permission?
+  end
+
+  def check_permission?
+    return current_user && current_user.admin?
+  end
 
   def exclude_unwanted_models(solr_parameters, user_parameters)
     super

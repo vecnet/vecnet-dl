@@ -37,6 +37,7 @@ Vecnet::Application.routes.draw do
   match "catalog/recent" => "catalog#recent", :as => :catalog_recent
 
   match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
+  match "catalog/location/facet" => "catalog#location_facet", :as => :catalog_location_facet
 
   match "files/:id/(:version)" => "curation_concern/generic_files#show", via: :get, as: "files"
 

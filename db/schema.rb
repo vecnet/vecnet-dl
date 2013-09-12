@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815180833) do
+ActiveRecord::Schema.define(:version => 20130911013248) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -70,6 +70,87 @@ ActiveRecord::Schema.define(:version => 20130815180833) do
 
   add_index "follows", ["followable_id", "followable_type"], :name => "fk_followables"
   add_index "follows", ["follower_id", "follower_type"], :name => "fk_follows"
+
+  create_table "geoname", :id => false, :force => true do |t|
+    t.integer  "geonameid",                      :null => false
+    t.string   "name",           :limit => 200
+    t.string   "asciiname",      :limit => 200
+    t.string   "alternatenames", :limit => 8000
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "fclass",         :limit => 1
+    t.string   "fcode",          :limit => 10
+    t.string   "country",        :limit => 2
+    t.string   "cc2",            :limit => 60
+    t.string   "admin1",         :limit => 20
+    t.string   "admin2",         :limit => 80
+    t.string   "admin3",         :limit => 20
+    t.string   "admin4",         :limit => 20
+    t.integer  "population",     :limit => 8
+    t.integer  "elevation"
+    t.integer  "gtopo30"
+    t.string   "timezone",       :limit => 40
+    t.date     "moddate"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "geoname", ["geonameid", "name"], :name => "geonamename_idx", :unique => true
+  add_index "geoname", ["geonameid"], :name => "geonameid_idx", :unique => true
+
+  create_table "geoname_hierarchy", :force => true do |t|
+    t.integer  "geoname_id"
+    t.string   "hierarchy_tree",      :limit => 1000
+    t.string   "hierarchy_tree_name", :limit => 8000
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  add_index "geoname_hierarchy", ["geoname_id", "hierarchy_tree"], :name => "geonamehierarchy_tree_idx", :unique => true
+  add_index "geoname_hierarchy", ["geoname_id"], :name => "geonamehierarchy_geonameid_idx"
+
+  create_table "geoname_places", :id => false, :force => true do |t|
+    t.integer  "geoname_id",      :null => false
+    t.string   "name"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "fclass"
+    t.string   "fcode"
+    t.string   "country"
+    t.string   "cc2"
+    t.string   "admin1"
+    t.string   "admin2"
+    t.string   "admin3"
+    t.string   "admin4"
+    t.date     "geoname_moddate"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "geoname_places", ["geoname_id", "name"], :name => "places_by_id_and_name", :unique => true
+  add_index "geoname_places", ["geoname_id"], :name => "places_by_geoname_id", :unique => true
+
+  create_table "geoname_search", :force => true do |t|
+    t.integer  "geoname_id"
+    t.string   "geo_location"
+    t.string   "object_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "geoname_search", ["geo_location"], :name => "entries_by_geo_location"
+  add_index "geoname_search", ["geoname_id", "object_id"], :name => "entries_by_geoname_id_and_object_id", :unique => true
+
+  create_table "geoname_tree_structures", :force => true do |t|
+    t.integer  "geoname_id"
+    t.string   "tree_structure",       :limit => 1000
+    t.string   "tree_structure_names", :limit => 8000
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "geoname_tree_structures", ["geoname_id", "tree_structure"], :name => "geoname_by_geoname_id_and_tree_structure", :unique => true
+  add_index "geoname_tree_structures", ["tree_structure"], :name => "geoname_by_tree_structure"
 
   create_table "help_requests", :force => true do |t|
     t.string   "view_port"

@@ -36,15 +36,20 @@ class Tree
   end
 
   # TODO: maybe change this to take a stream to write to?
-  def print_stdout
-    nodes.keys.each do |id|
-      ts = tree_numbers(id).join("|")
-      puts "#{id}|#{ts}"
+  def print_to_file
+    #f = File.new("#{Dir.pwd}/tmp/geoname_tree.txt", "wb")
+    File.open("geoname_tree.txt", 'w') do |f|
+      nodes.keys.each do |id|
+        ts = tree_numbers(id).join("|")
+        f.write("#{id}|#{ts}")
+        f.write("\n")
+        puts "#{id}|#{ts}"
+      end
     end
   end
 end
 
 # TODO: split this out into a rake task
 tree = Tree.new
-tree.load_from_file("hierarchy.txt")
-tree.print_stdout
+tree.load_from_file("/Users/blakshmi/projects/Geonames_data/hierarchy.txt")
+tree.print_to_file
