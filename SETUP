@@ -70,7 +70,7 @@ sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
 # make hole in firewall (optional)
-sudo iptables -I INPUT -p tcp --dport 8081 -j ACCEPT
+iptables -I INPUT -p tcp --dport 8983 -s 10.0.0.0/8 -m state --state NEW -j ACCEPT
 sudo /sbin/service iptables save
 
 # fedora
