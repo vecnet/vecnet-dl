@@ -39,9 +39,9 @@ namespace :vecnet do
     logger.info("\t ############ Complete #{action_name} at #{end_time}, Duration #{time_taken.inspect} ")
   end
 
-  def logger
-    log = Logger.new('log/EndNoteIngester.log')
-  end
+  #def logger
+  #  log = Logger.new('log/EndNoteIngester.log')
+  #end
 
   def location_consolidation_csv
     files = GenericFile.find_with_conditions({},{:sort=>'pub_date desc', :rows=>1000, :fl=>'id,  desc_metadata__based_near_display, location_hierarchy_facet'})
@@ -93,6 +93,17 @@ namespace :vecnet do
             csv << [c['id'], title ]
           }
         end
+      end
+    end
+  end
+
+  desc "Dump repository contents to file named $OUTFILE or STDOUT"
+  task :dump_statistics => :environment do
+    timed_action "Dumping Statistics" do
+      if ENV['OUTFILE']
+        DumpRepository.run_to_file(ENV['OUTFILE'])
+      else
+        DumpRepository.run(STDOUT)
       end
     end
   end
