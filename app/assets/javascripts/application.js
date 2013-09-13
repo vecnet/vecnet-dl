@@ -20,7 +20,6 @@
 //= require jquery-ui-1.9.2/jquery.ui.autocomplete
 //
 //= require blacklight/blacklight
-//= require blacklight/hierarchy/hierarchy
 //
 //= require bootstrap-dropdown
 //= require bootstrap-button
@@ -34,6 +33,7 @@
 //= require help_modal
 //= require auto_complete
 //= require icon_toggle
+//= require blacklight/hierarchy/hierarchy
 
 Vecnet={}
 Vecnet.setup_autocomplete = function(form_selector) {
@@ -75,7 +75,11 @@ $(function(){
   $(".ajax_modal_launch").on( 'click', function( e ){
     console.log("Launch Modal")
     Vecnet.setup_autocomplete('#ajax_modal');
-    Blacklight.do_hierarchical_facet_expand_contract_behavior();
+    var target = $(this).attr("href");
+    $("#ajax-modal").on('shown', function() {
+        Blacklight.do_hierarchical_facet_expand_contract_behavior();
+      });
+
   });
 
   // custom css expression for a case-insensitive contains()

@@ -177,6 +177,46 @@ body { padding-top: 40px; }
     }
   }
 }
+
+ul.facet-hierarchy {
+  ul {
+    li {
+      margin-left: 8px;
+      margin-right: 0;
+      padding-right: 0;
+      position: relative;
+      .count {
+        margin-right: 0;
+        position: absolute;
+        top:0;
+        right:0;
+      }
+      a{
+        display: block;
+        width: 90%;
+      }
+    }
+  }
+  li{
+    margin-left: 8px;
+    margin-right: 0;
+    padding-right: 0;
+    position: relative;
+  .count {
+    margin-right: 0;
+    position: absolute;
+    top:0;
+    right:0;
+  }
+  a{
+    display: block;
+    width: 90%;
+  }
+  }
+  li.h-node { list-style-image: asset_data_url("blacklight/hierarchy/chevron-right.png"); }
+  li.h-node.twiddle-open { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
+  li.h-leaf { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
+}
 .inline-item-actions {
   white-space: nowrap;
 }

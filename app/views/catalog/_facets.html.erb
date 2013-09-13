@@ -2,19 +2,19 @@
 
 <ul class="nav nav-list slide-list" id="facets">
  <%= render_facet_partials %>
-  <% if(@response.total>0)  %>
+  <% if has_facet_values?(['hierarchy_facet']) %>
     <li>
       <%= link_to facet_field_labels['hierarchy_facet'], url_for(params.merge(:id => 'hierarchy_facet', :action=>"subject_facet", :path_only=>true)), :class => "ajax_modal_launch" %>
     <li>
-    <!--<li>-->
-      <!--<%# link_to facet_field_labels['location_hierarchy_facet'], url_for(params.merge(:id => 'location_hierarchy_facet', :action=>"location_facet", :path_only=>true)), :class => "ajax_modal_launch" %>-->
-    <!--</li>-->
+  <% end %>
+  <% if has_facet_values?(['location_hierarchy_facet']) %>
+      <li class="expandable_new grey">
+        <a data-target="#collapse_location_hierarchy" data-parent="#" data-toggle="collapse" class="accordion-toggle grey">
+          Location Hierarchy <i class="icon-chevron-right grey"></i>
+        </a>
+      </li>
  <% end %>
-  <li class="expandable_new grey">
-    <a data-target="#collapse_location_hierarchy" data-parent="#" data-toggle="collapse" class="accordion-toggle grey">
-      Location Hierarchy <i class="icon-chevron-right grey"></i>
-    </a>
-  </li>
+
 </ul>
 <div id="collapse_location_hierarchy" class="collapse">
   <ul class="facet-hierarchy">
