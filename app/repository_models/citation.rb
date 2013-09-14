@@ -44,6 +44,10 @@ class Citation < ActiveFedora::Base
     return self.title.is_a?(Array) ? self.title.join(',') : self.title
   end
 
+  def endnote_export
+    EndNote.new(self).to_endnote
+  end
+
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
