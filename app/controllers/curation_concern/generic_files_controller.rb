@@ -4,14 +4,17 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path
-    case request.referer
-      when /dashboard/
+    case URI(request.referer).path
+      when '/dashboard'
         add_breadcrumb 'Dashboard', dashboard_index_path
-      when /catalog/
+      when '/catalog'
+        add_breadcrumb 'Back to Search results', request.referer
+      when '/'
         add_breadcrumb 'Back to Search results', request.referer
     end
     super
   end
+
 
   before_filter :parent
   before_filter :curation_concern

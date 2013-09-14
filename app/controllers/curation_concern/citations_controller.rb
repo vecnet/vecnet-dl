@@ -1,14 +1,16 @@
 require Curate::Engine.root.join('app/controllers/curation_concern/base_controller')
 require Curate::Engine.root.join('app/services/curation_concern')
 class CurationConcern::CitationsController < CurationConcern::BaseController
-  respond_to(:html)
+  respond_to(:html,:endnote)
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path
-    case request.referer
-      when /dashboard/
+    case URI(request.referer).path
+      when '/dashboard'
         add_breadcrumb 'Dashboard', dashboard_index_path
-      when /catalog/
+      when '/catalog'
+        add_breadcrumb 'Back to Search results', request.referer
+      when '/'
         add_breadcrumb 'Back to Search results', request.referer
     end
     super
@@ -37,7 +39,9 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
   end
 
   def show
-    respond_with(curation_concern)
+    respond_with(curation_concern){|format|
+      format.endnote { render :text => curation_concern.endnote_export }
+    }
   end
 
   def destroy
