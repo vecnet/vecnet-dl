@@ -72,14 +72,11 @@ $(function(){
   $('.advanced').on('click', function(event){
         $('#simple-search-form').toggleClass('hide');
   });
-  $(".ajax_modal_launch").on( 'click', function( e ){
-    console.log("Launch Modal")
+  $("#subject_modal").on( 'click', function( e ){
     Vecnet.setup_autocomplete('#ajax_modal');
-    var target = $(this).attr("href");
-    $("#ajax-modal").on('shown', function() {
-        Blacklight.do_hierarchical_facet_expand_contract_behavior();
-      });
-
+  });
+  $("#ajax-modal").on('shown', function() {
+    Blacklight.do_hierarchical_facet_expand_contract_behavior()
   });
 
   // custom css expression for a case-insensitive contains()
