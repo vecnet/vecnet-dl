@@ -108,6 +108,13 @@ namespace :vecnet do
     end
   end
 
+  desc "Solrize location hierarchy"
+  task :depositor_conversion => :environment do
+    timed_action "to convert all user id on depositor and edit persons to new UID scheme" do
+      ConvertDepositor.new.update_all_object
+    end
+  end
+
 
   namespace :destroy do
     desc "Remove all citations in giving environment"
