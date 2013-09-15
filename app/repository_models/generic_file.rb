@@ -70,7 +70,7 @@ class GenericFile
     solr_doc["pub_dt"] = get_formated_date_created
     solr_doc["pub_date"] = get_formated_date_created
     solr_doc["title_alpha_sort"] = concat_title
-    #solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
+    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
     #Temp solr fields for location until we fix geoname autocomplete
     solr_doc["location_facet"] = locations
     solr_doc["location_display"] = locations
