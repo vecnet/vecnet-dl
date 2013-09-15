@@ -4,6 +4,7 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
   respond_to(:html,:endnote)
 
   def attach_action_breadcrumb
+    logger.debug "Breadcrumb: #{request.referer},  host:#{URI(request.referer).host}, Path:#{URI(request.referer).path}"
     add_breadcrumb 'Home', root_path
     case URI(request.referer).path
       when '/dashboard'
