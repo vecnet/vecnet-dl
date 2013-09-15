@@ -13,11 +13,14 @@ class ConvertDepositor
   #
   def migrate(pid)
     object= ActiveFedora::Base.find(pid, cast:true)
+    if object.respond_to?(:depositor)
+      dirty=false
       if user_map.keys.include?(object.depositor)
         email=object.depositor
         object.depositor = user_map[email]
         puts "Changed object #{object.pid} from depositor #{email} to #{user_map[email]}"
         logger.error "Changed object #{object.pid} from depositor #{email} to #{user_map[email]}"
+        dirty=true
       end
       user_permissions={}
       object.permissions.select{|r| r[:type] == 'user'}.each do |r|
@@ -27,17 +30,21 @@ class ConvertDepositor
         if user_map.keys.include?email
           rights_ds = object.datastreams["rightsMetadata"]
           rights_ds.update_indexed_attributes([:edit_access, :person]=>user_map[email])
+          puts "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
+          logger.error "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
+          dirty=true
         end
-        puts "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
-        logger.error "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
-
       end
-      begin
-        object.save!
-      rescue    ActiveFedora::RecordInvalid=>e
-        logger.error "Error occurred during user permission migration : #{object.id}"
-        logger.error "#{e.inspect}"
+      if dirty
+        begin
+          #TODO need to save only if object
+          object.save!
+        rescue    Exception=>e
+          logger.error "Error occurred during user permission migration : #{object.id}"
+          logger.error "#{e.inspect}"
+        end
       end
+    end
   end
 
   def update_all_object

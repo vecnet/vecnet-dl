@@ -4,6 +4,7 @@
 require 'rake'
 require 'fileutils'
 require 'logger'
+require File.expand_path('../../../app/script/convert_depoistor', __FILE__)
 namespace :vecnet do
   namespace :app do
     desc "Raise an error unless the RAILS_ENV is development"
