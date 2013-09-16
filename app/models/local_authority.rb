@@ -56,7 +56,6 @@ class LocalAuthority
           mesh.each_mesh_record do |record|
             record_id= record['UI'].first
             begin
-              puts "Begin transaction"
               import_print_synonyms(record,record_id)
             rescue Exception => e
               puts e.inspect
@@ -111,19 +110,14 @@ class LocalAuthority
     return if query.empty?
     lowQuery = query.downcase
     hits = []
-    logger.debug("Find by term: #{term.inspect}, model:#{model.inspect}")
-    puts"Find by term: #{term.inspect}, model:#{model.inspect}"
-# move lc_subject into it's own table since being part of the usual structure caused it to be too slow.
-# When/if we move to having multiple dictionaries for subject we will need to also do a check for the appropriate dictionary.
+    # move lc_subject into it's own table since being part of the usual structure caused it to be too slow.
+    # When/if we move to having multiple dictionaries for subject we will need to also do a check for the appropriate dictionary.
     if (term == 'subject' && model == 'generic_files') # and local_authoritiy = lc_subject
-      logger.debug("Matched subject")
       sql = SubjectMeshEntry.where("lower(term) like ?", "#{lowQuery}%").select("term, subject_mesh_term_id").limit(25).to_sql
       SubjectMeshEntry.find_by_sql(sql).each do |hit|
         hits << {:uri => hit.subject_mesh_term_id, :label => hit.term}
       end
     else
-      logger.debug("Else part --------- Find by term: #{term.inspect}, model:#{model.inspect}")
-      puts "---------ERROR-------"
       dterm = DomainTerm.where(:model => model, :term => term).first
       if dterm
         authorities = dterm.local_authorities.collect(&:id).uniq
