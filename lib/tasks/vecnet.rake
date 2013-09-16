@@ -243,6 +243,25 @@ namespace :vecnet do
         MeshTreeStructure.classify_all_trees
       end
     end
+    desc "task to process mods file and print metadata into csv"
+    task :display_new_bib => :environment do
+      timed_action "Show new bib format for citations" do
+        end_note_path = "#{Rails.root}/tmp/citations"
+        current_number = 0
+        filename = "bib.csv"
+        CSV.open("#{Rails.root.to_s}/tmp/#{filename}", "wb") do |csv|
+          Dir.glob("#{end_note_path}/*.mods") do |mods_file|
+            puts "Process file #{mods_file.inspect}"
+            # do work on files ending in .mods in the desired directory
+            service = CitationIngestService.new(mods_file)
+            bib=service.extract_metadata
+            csv << [bib]
+            current_number+=1
+          end
+        end
+        puts "processed #{current_number} files"
+      end
+    end
 
     desc %q{import endnote file into repository. Environment vars:
     ENDNOTE_FILE - the endnote file to ingest

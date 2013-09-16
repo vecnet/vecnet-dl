@@ -2,11 +2,15 @@ require 'mods'
 require 'ostruct'
 class CitationIngestService
   class PartExtractor
-    attr_reader :unit, :count, :dt,:details, :start_page, :end_page, :part, :title
+    attr_reader :unit, :count, :dt,:details, :start_page, :end_page, :part, :journal, :space, :dash, :dot, :comma
     def initialize(part_node,title)
-      @title=title
+      @journal=title
       @part=part_node
       @count = 0
+      @space=' '
+      @comma=','
+      @dot='.'
+      @dash='-'
       extract_part
     end
 
@@ -21,52 +25,52 @@ class CitationIngestService
     end
     def extract_extent(extent)
       @unit= extent.unit.nil? ? "" : extent.unit.first
-      @start_page= extent.search(:start).text
-      @end_page= extent.search(:end).text
+      @start_page= extent.search(:start).text.blank? ? nil : extent.search(:start).text
+      @end_page= extent.search(:end).text.blank? ? nil : extent.search(:end).text
     end
 
     def volume
-      @details.respond_to?(:volume) ? @details.volume : ""
+      @details.respond_to?(:volume) ? @details.volume : nil
     end
 
     def issue
-      @details.respond_to?(:issue) ? @details.issue : ""
+      @details.respond_to?(:issue) ? @details.issue : nil
     end
 
     def citation
-      "#{@title} #{volume}, #{issue} (#{dt}): #{unit_details}"
+      "Journal:#{@journal}, Volume:#{volume}, issue:#{issue}, publis_date:#{dt}, start_page:#{start_page}, end_page:#{end_page}"
     end
-    #TODO: Need to make sure this works before we ingest anymore citation
+
     def format_volume
-      vol=[]
-      vol<<volume
-      vol<<issue
-      return vol.join(' , ')
+      if volume && issue
+        return "#{space}#{volume}(#{issue})"
+      elsif volume
+        return "#{space}#{volume}"
+      elsif issue
+        return "#{space}(#{issue})"
+      end
+      return ''
     end
 
     def format_publish_date
       return '' if dt.blank?
-      "(#{dt})"
-    end
-
-    def format_citation
-      "#{@title} #{format_volume} #{format_publish_date} #{format_unit_details}"
-    end
-
-    def format_unit_details
-      return ":#{unit_details}" unless unit_details.blank?
-      return ''
+      "#{space}(#{dt})"
     end
 
     def format_pages
-      page=[]
-      page<<@start_page
-      page<<@end_page
-      return page.join(' - ')
+      if start_page && end_page
+        return "#{comma}#{space}#{start_page}#{dash}#{end_page}"
+      elsif start_page
+        "#{comma}#{space}#{start_page}"
+      elsif end_page
+        "#{comma}#{space}#{end_page}"
+      end
+      return ''
     end
-    def unit_details
-      return format_pages if unit.blank?
-      "#{@unit} #{format_pages}"
+
+    def format_citation
+      first_part="#{@journal}#{format_volume}#{format_pages}"
+      return first_part.blank? ? format_publish_date : "#{first_part}#{dot}#{format_publish_date}"
     end
   end
 
@@ -120,9 +124,9 @@ class CitationIngestService
       description:parsed_mods.abstract.text, #description
       subject:get_subjects,
       language:get_languages,   #language
-      resource_type:'Citation',
+      resource_type:'Article',
       source:get_journal_title,
-      references:mint_a_id,#mapped to dc type
+      references:mint_a_citation_id,#mapped to dc type
       bibliographic_citation:get_bibliographic_citation,
       visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:get_related_urls,
@@ -144,7 +148,7 @@ class CitationIngestService
 
   protected
 
-  def mint_a_cite_id
+  def mint_a_citation_id
     return get_title.sort.first[0..5]+get_pub_date
   end
 
