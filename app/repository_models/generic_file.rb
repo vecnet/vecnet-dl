@@ -90,20 +90,21 @@ class GenericFile
 
   def get_hierarchy_on_location
     unless self.based_near.blank?
-    geoname_id_hash= LocationHierarchyServices.get_geoname_ids(self.based_near)
-    location_trees=[]
-    location_tree_to_solrize=[]
-    geoname_id_hash.each do |location,geoname_id|
-        hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
-        if hierarchy && hierarchy.hierarchy_tree_name.present?
-          location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
-        else
-          tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
-          location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
-        end
-    end
-    location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
-    return location_trees.flatten
+      geoname_id_hash= LocationHierarchyServices.get_geoname_ids(self.based_near)
+      location_trees=[]
+      location_tree_to_solrize=[]
+      geoname_id_hash.each do |location,geoname_id|
+          hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+          if hierarchy && hierarchy.hierarchy_tree_name.present?
+            location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
+          else
+            tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
+            location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
+          end
+      end
+      location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
+      puts "location: #{self.based_near.inspect}, Hierarchy:#{location_trees.inspect}"
+      return location_trees.flatten
     end
     return nil
   end
