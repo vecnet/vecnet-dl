@@ -11,7 +11,7 @@ class DumpRepository
 
     [Citation, GenericFile, CitationFile, Collection].each do |model|
       model_name = model.to_s
-      model.find_each(:all) do |obj|
+      model.find_each do |obj|
         mime_type = self.try_attribute(obj, :mime_type)
         content_size = self.try_attribute(self.try_attribute(obj, :content), :size)
         f.write "#{obj.noid},#{model_name},#{obj.create_date},#{obj.modified_date},#{mime_type},#{content_size},#{obj.edit_users.first},\"#{obj.title}\"\n"
