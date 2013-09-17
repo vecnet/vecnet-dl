@@ -20,7 +20,7 @@ class AuthoritiesController < ApplicationController
   def query
     s = params.fetch("q", "")
     if (params[:term]=="location")
-      hits = GeoNamesResource.find_location(s)
+      hits = GeonameWebServices::Search.search(s)
     else
       hits = LocalAuthority.entries_by_subject_mesh_term(params[:model], params[:term], s) #rescue []
     end

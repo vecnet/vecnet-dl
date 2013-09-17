@@ -45,11 +45,11 @@
       this._trigger("add");
 
       // should we attach an auto complete based on the input
-      if ($newField.find('input[type=text]').attr('id') == 'based_near_add') {
-        $newField.find('input[type=text]').autocomplete(get_autocomplete_opts("location"));
+      if ($newField.find('input[type=text]').attr('id') == 'generic_file_based_near') {
+        $newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("location"));
       }
-      else if ($newField.find('input[type=text]').attr('id') == 'subject_add') {
-        $newField.find('input[type=text]').autocomplete(get_autocomplete_opts("subject"));
+      else if ($newField.find('input[type=text]').attr('id') == 'generic_file_subject') {
+        $newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("subject"));
       }
       $newField.find('input[type=text]').focus();
       },
@@ -70,24 +70,5 @@
       this.element.removeClass( "managed" );
     }
   });
-
-    function get_autocomplete_opts(field) {
-        var autocomplete_opts = {
-            minLength: 2,
-            source: function( request, response ) {
-                $.getJSON( "/authorities/generic_files/" + field, {
-                    q: request.term
-                }, response );
-            },
-            focus: function() {
-                // prevent value inserted on focus
-                return false;
-            },
-            complete: function(event) {
-                $('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
-            }
-        };
-        return autocomplete_opts;
-    }
 
 })(jQuery);

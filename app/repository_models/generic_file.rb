@@ -3,6 +3,7 @@ require Curate::Engine.root.join('app/repository_models/generic_file')
 class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
+  include GeonameLocation
 
   attr_accessor :locations
 

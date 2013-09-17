@@ -65,6 +65,7 @@
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
                   hint: metadata_help('publisher')%>
+      <%= f.input :locations, as: :hidden, input_html:{class:'test' } %>
       <%= f.input :based_near,
                   hint: metadata_help('based_near'),
                   label: get_label(:based_near),
@@ -74,17 +75,17 @@
                   hint: metadata_help('identifier'),
                   label: get_label(:identifier),
                   as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+                  input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
       <%= f.input :related_url,
                   hint: metadata_help('related_url'),
                   label: get_label(:related_url),
                   as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+                  input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
       <%= f.input :date_created,
                   hint: metadata_help('date_created'),
                   label: get_label(:date_created),
                   as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete'} %>
+                  input_html: {class: 'input-xlarge'} %>
       <%= render "/curation_concern/spatial", curation_concern: curation_concern, f: f %>
       <%= render "/curation_concern/temporal", curation_concern: curation_concern, f: f %>
     </fieldset>
