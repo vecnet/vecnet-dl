@@ -3,8 +3,8 @@ module GeonameLocation
   extend ActiveSupport::Concern
 
   included do
-    before_save :format_based_near_from_location
-    attr_accessor :geoname_locations
+   before_save :format_based_near_from_location
+   attr_accessor :geoname_locations
   end
 
   class Location
@@ -63,18 +63,8 @@ module GeonameLocation
     end
 
     def self.parse_location(location_rdf)
-      temp=Location.decode_location(location_rdf)
-      return Location.new(temp['name'],temp['geoname_id'])
-    end
-
-    def formatted_location
-      if name.present? && geoname_id.present?
-        return "#{self.name}|#{self.geoname_id}"
-      elsif name.present?
-        return "#{self.name}|0"
-      elsif geoname_id.present?
-        raise RuntimeError, "invalid location, only id available"
-      end
+      temp=Location.decode(location_rdf)
+      return Location.new(temp['geoname_id'],temp['name'])
     end
 
     def to_s
@@ -86,7 +76,6 @@ module GeonameLocation
         return "geoname_id:#{geoname_id}"
       end
     end
-
   end
 
   def get_valid_locations

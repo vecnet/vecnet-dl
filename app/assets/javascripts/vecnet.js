@@ -58,6 +58,7 @@
 					if ($.inArray(newlocation, Vecnet.selected_location_ids) == -1) Vecnet.selected_location_ids.push(newlocation);
 					var hidden_field=  $('.geoname_location_with_id')
 					hidden_field.val(Vecnet.selected_location_ids);
+
 					console.log("Newterm: "+newlocation)
 				}
 			},

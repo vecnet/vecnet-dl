@@ -29,7 +29,6 @@
 //= require bootstrap-typeahead
 //
 
-
 //= require toggle_details
 //= require help_modal
 //= require auto_complete

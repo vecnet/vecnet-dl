@@ -5,6 +5,7 @@ class GenericFile
   include SpatialCoverage
   include GeonameLocation
   include Vecnet::ModelMethods
+  include GeonameLocation
 
   attr_accessor :locations
 

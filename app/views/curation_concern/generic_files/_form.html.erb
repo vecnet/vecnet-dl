@@ -65,7 +65,6 @@
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
                   hint: metadata_help('publisher')%>
-      <%= f.input :geoname_locations, as: :hidden, input_html:{class:'geoname_location_with_id' } %>
       <%= f.input :based_near,
                   hint: metadata_help('based_near'),
                   label: get_label(:based_near),

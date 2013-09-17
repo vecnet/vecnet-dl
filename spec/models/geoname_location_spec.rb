@@ -66,5 +66,6 @@ describe GeonameLocation do
         }.to raise_error(RuntimeError)
       end
     end
+
   end
 end
