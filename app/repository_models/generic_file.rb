@@ -94,16 +94,18 @@ class GenericFile
       location_trees=[]
       location_tree_to_solrize=[]
       geoname_id_hash.each do |location,geoname_id|
-          hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
-          if hierarchy && hierarchy.hierarchy_tree_name.present?
-            location_tree_to_solrize<<hierarchy.hierarchy_tree_name.gsub!(';',':').gsub!('Earth:','')
-          else
-            tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
-            location_tree_to_solrize<<tree_name.gsub!(';',':').gsub!('Earth:','')
-          end
+        hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+        hierarchy_with_earth=''
+        if hierarchy && hierarchy.hierarchy_tree_name.present?
+          hierarchy_with_earth= hierarchy.hierarchy_tree_name.gsub(';',':')
+        else
+          tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
+          hierarchy_with_earth=tree_name.gsub(';',':')
+        end
+        hierarchy_without_earth=hierarchy_with_earth.gsub('Earth:','')
+        location_tree_to_solrize<<hierarchy_without_earth
       end
       location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
-      puts "location: #{self.based_near.inspect}, Hierarchy:#{location_trees.inspect}"
       return location_trees.flatten
     end
     return nil
