@@ -28,13 +28,15 @@
 //= require bootstrap-popover
 //= require bootstrap-typeahead
 //
-//= require vecnet
-//= require manage_repeating_fields
+
+
 //= require toggle_details
 //= require help_modal
 //= require auto_complete
 //= require icon_toggle
 //= require blacklight/hierarchy/hierarchy
+//= require vecnet
+//= require manage_repeating_fields
 $(function(){
 
    $('.pager').on('click', 'a.disabled', function(event) {

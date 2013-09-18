@@ -56,15 +56,15 @@
 					var default_id= $(this).val().length == 0 ? "" : $(this).val()+"|0"
 					var newlocation= ui.item? ui.item.label+"|"+ui.item.value : default_id;
 					if ($.inArray(newlocation, Vecnet.selected_location_ids) == -1) Vecnet.selected_location_ids.push(newlocation);
-					var hidden_field=  $('#generic_file_locations')
-					hidden_field.val(Vecnet.selected_location_ids.join(";"));
+					var hidden_field=  $('.geoname_location_with_id')
+					hidden_field.val(Vecnet.selected_location_ids);
 					console.log("Newterm: "+newlocation)
 				}
 			},
 			close: function(event) {
 				console.log("On Close autocomplete: "+Vecnet.selected_location_ids.join(";"))
-				var hidden_field=  $('#generic_file_locations')
-				hidden_field.val(Vecnet.selected_location_ids.join(";"));
+				var hidden_field=  $('.geoname_location_with_id')
+				hidden_field.val(Vecnet.selected_location_ids);
 				$('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
 			}
 		};
