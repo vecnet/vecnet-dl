@@ -4,6 +4,7 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
   include GeonameLocation
+  include Vecnet::ModelMethods
 
   attr_accessor :locations
 
@@ -75,18 +76,19 @@ class GenericFile
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
-    solr_doc["subject_parents_t"] = get_subject_parents
-    solr_doc["pub_dt"] = get_formated_date_created
-    solr_doc["pub_date"] = get_formated_date_created
+    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject(self.subject)
+    solr_doc["subject_parents_t"] = get_subject_parents(self.subject)
+    solr_doc["pub_dt"] = get_formated_date_created(self.date_created)
+    solr_doc["pub_date"] = get_formated_date_created(self.date_created)
     solr_doc["title_alpha_sort"] = concat_title
-    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location
+    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location(self.based_near)
     #Temp solr fields for location until we fix geoname autocomplete
     solr_doc["location_facet"] = locations
     solr_doc["location_display"] = locations
 
     return solr_doc
   end
+
 
   def locations
     locations=self.based_near
@@ -97,7 +99,7 @@ class GenericFile
   def refactor_location(location)
     return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
   end
-
+=begin
   def get_hierarchy_on_location
     unless self.based_near.blank?
       geoname_id_hash= LocationHierarchyServices.get_geoname_ids(self.based_near)
@@ -142,8 +144,6 @@ class GenericFile
         all_trees_arr<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
       end
     end
-
-
     return all_trees_arr.uniq
   end
 
@@ -158,7 +158,6 @@ class GenericFile
     end
     return all_trees.flatten
   end
-
-
+=end
 end
 

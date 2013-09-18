@@ -65,6 +65,24 @@ class LocationHierarchyServices
     return geonames_ids
   end
 
+  def self.geoname_location_format(location)
+    location_memo = CacheGeonameSearch.find_by_geo_location(location)
+    if  location_memo
+      return location_memo.geo_location
+    end
+    q=location.split(",").first
+    hits = GeonameWebServices::Search.search(q)
+    hits.each do |result|
+      result_place = result[:label].split(",").first
+      if result_place == q
+        puts result.inspect
+        CacheGeonameSearch.find_or_create(location, result[:value])
+        return result[:label]
+      end
+    end
+    return nil
+  end
+
   def self.location_to_geonameid(location)
     location_memo = CacheGeonameSearch.find_by_geo_location(location)
     if  location_memo
