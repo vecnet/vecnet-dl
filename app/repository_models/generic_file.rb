@@ -31,6 +31,15 @@ class GenericFile
     self.datastreams["descMetadata"].temporals=formated_str
   end
 
+  def based_near
+    return Array(self.datastreams["descMetadata"].based_near).collect{|location| GeonameLocation::Location.parse_location(location)}
+  end
+
+  def based_near=(formated_str)
+    logger.debug("SO here is my formatter location: #{formated_str}")
+    self.datastreams["descMetadata"].based_near=formated_str
+  end
+
   def filename
     content.label
   end
