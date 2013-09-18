@@ -218,6 +218,18 @@ namespace :vecnet do
       end
     end
 
+    desc "update citations with metadata from csv"
+    task :enrich_metadata => :environment do
+      timed_action "update citation with metadata from csv" do
+        if ENV['CITATION_CSV_FILE'].nil?
+          puts "You must provide a csv file with metadata using the format 'vecnet::citation::enrich_metadata CITATION_CSV_FILE=path/to/citation/csv/file."
+          return
+        end
+        citation_metadata_update = CitationMetadataIngestService.new(ENV['CITATION_CSV_FILE'])
+        citation_metadata_update.ingest_all
+      end
+    end
+
   end
 
   namespace :import do

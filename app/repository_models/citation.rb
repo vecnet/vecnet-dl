@@ -6,6 +6,7 @@ class Citation < ActiveFedora::Base
   include CurationConcern::ModelMethods
   include CurationConcern::Embargoable
   include SpatialCoverage
+  include Vecnet::ModelMethods
   self.human_readable_short_description = "Citation from Endnote"
 
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
@@ -50,14 +51,29 @@ class Citation < ActiveFedora::Base
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject
-    solr_doc["subject_parents_t"] = get_subject_parents
-    solr_doc["pub_dt"] = get_formated_date_created
-    solr_doc["pub_date"] = get_formated_date_created
+    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject(self.subject)
+    solr_doc["subject_parents_t"] = get_subject_parents(self.subject)
+    solr_doc["pub_dt"] = get_formated_date_created(self.date_created)
+    solr_doc["pub_date"] = get_formated_date_created(self.date_created)
     solr_doc["title_alpha_sort"] = concat_title
+    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location(self.based_near)
+    #Temp solr fields for location until we fix geoname autocomplete
+    solr_doc["location_facet"] = locations
+    solr_doc["location_display"] = locations
     return solr_doc
   end
 
+  def locations
+    locations=self.based_near
+    new_locations=locations.map{|loc| refactor_location(loc) }
+    new_locations
+  end
+
+  def refactor_location(location)
+    return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
+  end
+
+=begin
   def get_formated_date_created
     return nil if self.date_created.blank?
     return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
@@ -96,6 +112,7 @@ class Citation < ActiveFedora::Base
     end
     return all_trees.flatten
   end
+=end
 
   #one time conversion for converting bib data, not need anymore
   def reformat_bibliographic_citation
