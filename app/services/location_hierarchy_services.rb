@@ -77,10 +77,12 @@ class LocationHierarchyServices
       if result_place == q
         puts result.inspect
         CacheGeonameSearch.find_or_create(location, result[:value])
+        puts "Found label: #{result.inspect}, Label #{result[:label]}"
         return result[:label]
       end
     end
-    return nil
+    logger.error("Could not find any geoname for given location: #{location}")
+    return location
   end
 
   def self.location_to_geonameid(location)
@@ -100,6 +102,7 @@ class LocationHierarchyServices
         CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
+      return nil
     end
     # now look for something with the same place name
     # This does not try to find the most specific place with the name, though
@@ -111,7 +114,7 @@ class LocationHierarchyServices
         return result[:value]
       end
     end
-    return nil
+    return location
   end
 
   def self.get_solr_hierarchy_from_tree(tree)
