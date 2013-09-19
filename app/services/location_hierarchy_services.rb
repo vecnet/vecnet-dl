@@ -6,7 +6,6 @@ class LocationHierarchyServices
   end
 
   def process_all_geoname_hierachy
-    puts @file.inspect
     File.open(@file) do |f|
       f.each_line do |line|
         tree_with_geoid=line.strip.split('|')
@@ -22,6 +21,7 @@ class LocationHierarchyServices
             end
           }
         rescue Exception => e
+          logger.error("#{e.inspect}")
           puts e.inspect
         end
       end
@@ -54,14 +54,12 @@ class LocationHierarchyServices
 
   def self.get_geoname_ids(locations)
     geonames_ids={}
-    puts "Locations for parse and find gid: #{locations.inspect}"
     unless locations.blank?
       locations.each do |location|
         id = self.location_to_geonameid(location)
         geonames_ids[location] = id if id
       end
     end
-    puts "hash_of_locations: #{geonames_ids.inspect}"
     return geonames_ids
   end
 
@@ -75,9 +73,7 @@ class LocationHierarchyServices
     hits.each do |result|
       result_place = result[:label].split(",").first
       if result_place == q
-        puts result.inspect
         CacheGeonameSearch.find_or_create(location, result[:value])
-        puts "Found label: #{result.inspect}, Label #{result[:label]}"
         return result[:label]
       end
     end
@@ -91,14 +87,11 @@ class LocationHierarchyServices
       return location_memo.geoname_id
     end
     q = location.split(",").first
-    puts "trying to find: #{q.inspect}"
     hits = GeonameWebServices::Search.search(q)
-    puts "hits: #{hits.inspect}"
     # first look for an exact match for "place,admin1,country"
     # remove commas since sometimes an second comma is inserted even when there is no admin1
     hits.each do |result|
       if result[:label].gsub(/[\s,]/,'').eql?(location.gsub(/[\s,]/,''))
-        puts result.inspect
         CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
@@ -109,12 +102,11 @@ class LocationHierarchyServices
     hits.each do |result|
       result_place = result[:label].split(",").first
       if result_place == q
-        puts result.inspect
         CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
     end
-    return location
+    return nil
   end
 
   def self.get_solr_hierarchy_from_tree(tree)
@@ -130,5 +122,4 @@ class LocationHierarchyServices
     end
     return hierarchies.reverse;
   end
-
 end
