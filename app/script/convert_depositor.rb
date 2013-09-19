@@ -6,55 +6,70 @@ class ConvertDepositor
   #
   # On rails console type
   #
-  # a = ConvertDepositor.new
-  # a.migrate(pid)
-
-  #or to convert all objects user a.update_all_object
+  # ConvertDepositor.all_repo_objects
   #
-  def migrate(pid)
+
+  def self.try_attribute(obj, name)
+    obj.send(name)
+  rescue NoMethodError
+    nil
+  end
+
+  def self.migrate(pid)
     object= ActiveFedora::Base.find(pid, cast:true)
-    if object.respond_to?(:depositor)
-      dirty=false
-      if user_map.keys.include?(object.depositor)
+    dirty=self.migrate_depositor(object)|| self.migrate_user_permission(object)
+
+    if dirty
+      puts "Need to save: #{dirty.inspect}"
+      begin
+        object.save!
+      rescue    Exception=>e
+        logger.error "Error occurred during save, either depositor or user permission changed for object : #{object.id}"
+        logger.error "#{e.inspect}"
+      end
+    end
+  end
+
+  def self.migrate_depositor(object)
+    if self.try_attribute(object, :depositor)
+      if self.user_map.keys.include?(object.depositor)
         email=object.depositor
         object.depositor = user_map[email]
         puts "Changed object #{object.pid} from depositor #{email} to #{user_map[email]}"
         logger.error "Changed object #{object.pid} from depositor #{email} to #{user_map[email]}"
-        dirty=true
+        return true
       end
+    end
+    return false
+  end
+
+  def self.migrate_user_permission(object)
+    if self.try_attribute(object, :permissions)
       user_permissions={}
       object.permissions.select{|r| r[:type] == 'user'}.each do |r|
         user_permissions[r[:name]] = r[:access]
       end
       user_permissions.keys.each do |email|
-        if user_map.keys.include?email
+        if self.user_map.keys.include?email
           rights_ds = object.datastreams["rightsMetadata"]
           rights_ds.update_indexed_attributes([:edit_access, :person]=>user_map[email])
           puts "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
           logger.error "Changed object #{object.pid} user permission from user #{email} to #{user_map[email]}"
-          dirty=true
-        end
-      end
-      if dirty
-        begin
-          #TODO need to save only if object
-          object.save!
-        rescue    Exception=>e
-          logger.error "Error occurred during user permission migration : #{object.id}"
-          logger.error "#{e.inspect}"
+          return true
         end
       end
     end
+    return false
   end
 
-  def update_all_object
+  def self.all_repo_objects
     assets = ActiveFedora::Base.find_with_conditions({},{:sort=>'pub_date desc', :rows=>2000, :fl=>'id, location_hierarchy_facet'})
     logger.debug("Total Object in repo: #{assets.count}")
-    assets.each { |asset| migrate(asset['id']) }
+    assets.each { |asset| self.migrate(asset['id']) }
   end
 
   # maps email to uid
-  def user_map
+  def self.user_map
     {
         'rick.johnson@nd.edu' => 'rjohnso5',
         'ladwig.1@nd.edu' => 'ladwig',
