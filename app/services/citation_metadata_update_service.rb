@@ -1,4 +1,4 @@
-class CitationMetadataIngestService
+class CitationMetadataUpdateService
 
   attr_accessor :metadata_file, :curation_concern, :citations
 
