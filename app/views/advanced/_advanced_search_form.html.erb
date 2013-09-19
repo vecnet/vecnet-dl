@@ -37,12 +37,12 @@ limitations under the License.
       <!--<%# render 'advanced/date_search_form' %>-->
     <!--</div>-->
   </div>
-  <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
-    <div>
-      <p>Within search:</p>
-      <%= search_context_str %>
-    </div>
-  <% end %>
+  <%# unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
+    <!--<div>-->
+      <!--<p>Within search:</p>-->
+      <!--<%= search_context_str %>-->
+    <!--</div>-->
+  <%# end %>
 
   <div class="form-actions">
     <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
