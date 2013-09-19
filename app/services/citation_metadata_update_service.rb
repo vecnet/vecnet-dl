@@ -39,8 +39,7 @@ class CitationMetadataUpdateService
 
     def geoname_locations
       geonames=locations.map{|location| LocationHierarchyServices.geoname_location_format(location)}
-      puts "Geonames to update: #{geonames.inspect}"
-      return geonames
+      return geonames.delete_if{|name| name.to_s.strip.empty?}.map{|t|t.strip}
     end
 
     def start_time
@@ -52,7 +51,14 @@ class CitationMetadataUpdateService
     end
 
     def find_citation_by_pid
-      return Citation.find(pid)
+      begin
+        c = Citation.find(pid)
+        return c
+      rescue ActiveFedora::ObjectNotFoundError=>e
+        logger.error "#{e.inspect}"
+        logger.error("Could not find citation with pid #{pid.inspect}, failed to update metadata #{self.to_s}")
+        return nil
+      end
     end
 
     def extract_metadata
@@ -70,9 +76,7 @@ class CitationMetadataUpdateService
 
     def update_citation
       begin
-        if curation_concern.nil?
-          logger.error("Could not find citation with pid #{pid.inspect}, failed to update metadata #{self.to_s}")
-        else
+        unless curation_concern.nil?
           actor.update!
           logger.info "Ingested Citation with id: @curation_concern.pid}"
           puts "Ingested Citation with id: #{@curation_concern.pid}"
