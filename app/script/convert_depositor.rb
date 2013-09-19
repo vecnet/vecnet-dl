@@ -17,7 +17,7 @@ class ConvertDepositor
 
   def self.migrate(pid)
     object= ActiveFedora::Base.find(pid, cast:true)
-    dirty=self.migrate_depositor(object)|| self.migrate_user_permission(object)
+    dirty=self.migrate_user_permission(object)|self.migrate_depositor(object)
 
     if dirty
       puts "Need to save: #{dirty.inspect}"
@@ -26,6 +26,7 @@ class ConvertDepositor
       rescue    Exception=>e
         logger.error "Error occurred during save, either depositor or user permission changed for object : #{object.id}"
         logger.error "#{e.inspect}"
+        puts e.inspect
       end
     end
   end

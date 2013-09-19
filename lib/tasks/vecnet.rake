@@ -4,7 +4,7 @@
 require 'rake'
 require 'fileutils'
 require 'logger'
-require File.expand_path('../../../app/script/convert_depoistor', __FILE__)
+require File.expand_path('../../../app/script/convert_depositor', __FILE__)
 namespace :vecnet do
   namespace :app do
     desc "Raise an error unless the RAILS_ENV is development"
@@ -112,7 +112,7 @@ namespace :vecnet do
   desc "Solrize location hierarchy"
   task :depositor_conversion => :environment do
     timed_action "to convert all user id on depositor and edit persons to new UID scheme" do
-      ConvertDepositor.new.update_all_object
+      ConvertDepositor.all_repo_objects
     end
   end
 
