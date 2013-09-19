@@ -1,2 +1,4 @@
 <% concern = curation_concern.is_a?(Citation) ? curation_concern.generic_files.first : curation_concern %>
-<%= link_to raw('<i class="icon-download-alt"></i> Download'), download_path(concern.noid),{class: 'btn', title: "Download #{concern.to_s.inspect}", :target => "_blank"} if can?(:read, concern)%>
+<% unless concern.nil? %>
+  <%= link_to raw('<i class="icon-download-alt"></i> Download'), download_path(concern.noid),{class: 'btn', title: "Download #{concern.to_s.inspect}", :target => "_blank"} if can?(:read, concern)%>
+<% end %>
