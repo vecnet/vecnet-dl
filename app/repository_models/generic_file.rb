@@ -89,6 +89,16 @@ class GenericFile
   def refactor_location(location)
     return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
   end
+
+  def update_related_files
+    related_files.each do |generic_file|
+      generic_file.rights = self.rights
+      generic_file.creator = self.creator
+      generic_file.tag = self.tag
+      generic_file.date_modified = Time.now.ctime
+      generic_file.save!
+    end
+  end
 =begin
   def get_hierarchy_on_location
     unless self.based_near.blank?
