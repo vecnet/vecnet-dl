@@ -70,7 +70,6 @@ class CitationMetadataUpdateService
           end_time:end_time,
           tag:keywords
         }
-      puts "Metadata to update: #{metadata.inspect}"
       return metadata
     end
 
@@ -80,6 +79,16 @@ class CitationMetadataUpdateService
           actor.update!
           logger.info "Ingested Citation with id: @curation_concern.pid}"
           puts "Ingested Citation with id: #{@curation_concern.pid}"
+        end
+      rescue ActiveFedora::RecordInvalid=>e
+        logger.error "Error occured during creation: #{e.inspect}"
+      end
+    end
+
+    def display_citation
+      begin
+        unless curation_concern.nil?
+          puts "Citation: #{curation_concern.pid}, Location:#{curation_concern.based_near.to_s}"
         end
       rescue ActiveFedora::RecordInvalid=>e
         logger.error "Error occured during creation: #{e.inspect}"
@@ -109,6 +118,12 @@ class CitationMetadataUpdateService
   def ingest_all
     citations.each do |c|
       c.update_citation
+    end
+  end
+
+  def get_all
+    citations.each do |c|
+      c.display_citation
     end
   end
 
