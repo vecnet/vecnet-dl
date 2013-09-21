@@ -1,4 +1,4 @@
-pid,title,country,place,start_year,end_year,subject
+pid,title,country,place,contentyear_start,contentyear_end,subject
 vecnet:m613mx716,"Population structure, mitochondrial polyphyly and the repeated loss of human biting ability in anopheline mosquitoes from the southwest Pacific",Papua New Guinea|Solomon Islands|Vanuatu|Australia,,1991,2009,Anopheles farauti 1| Anopheles hinesorum| Anopheles farauti 2| Anopheles irenicus|   Anopheles farauti 7
 vecnet:m613mx77v,Operational research to inform a sub-national surveillance intervention for malaria elimination in Solomon Islands,Solomon Islands,Isabel Province,2009,2010,
 vecnet:m613mx81f,The malaria eradication programme in the British Solomon Islands,Solomon Islands,,1973,1974,
