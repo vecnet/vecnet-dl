@@ -110,7 +110,7 @@ class CatalogController < ApplicationController
     config.add_facet_field "desc_metadata__resource_type_facet", :label => "Resource Type", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
     config.add_facet_field "desc_metadata__creator_facet", :label => "Author", :limit => 5, :sort => 'index'
-    config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5, :sort => 'index'
+    config.add_facet_field "desc_metadata__tag_facet", :label => "Tags/Keyword", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__subject_facet", :label => "Subject", :limit => 5, :sort => 'index'
     config.add_facet_field "location_facet", :label => "Location", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5, :sort => 'index'
