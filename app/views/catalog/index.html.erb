@@ -5,7 +5,7 @@
 <% end %>
 <div class="span6">
   <%=render 'shared/site_search' %>
-  <%= render 'home' %>
+  <%= render 'search_page' %>
 </div>
 
 <% if has_search_parameters? %>
@@ -24,7 +24,11 @@
   <%= render 'results_pagination' %>
 
 <% else %>
+    <div class="row">
+      <div class="span6">
+        <%= render 'home' %>
+      </div>
+    </div>
 
-  <%# render 'home' %>
 
 <% end %>
