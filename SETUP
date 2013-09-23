@@ -13,8 +13,10 @@ passwd blakshmi
 usermod -a -G wheel dbrower
 usermod -a -G wheel blakshmi
 usermod -a -G wheel dladmin
+# enable sudo access to wheel group
 visudo
-# enable sudo access to wheel group in above step
+uncomment line:  %wheel  ALL=(ALL)       ALL
+
 # now as normal user
 wget http://mirrors.nebo.edu/public/epel/6/i386/epel-release-6-8.noarch.rpm
 sudo rpm -i epel-release-6-8.noarch.rpm
