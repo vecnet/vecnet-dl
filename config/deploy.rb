@@ -74,7 +74,7 @@ set(:bundle_cmd) {
 #############################################################
 
 desc "Restart Application"
-task :restart_unicorn do
+task :restart_unicorn, :roles => :app do
   run "#{current_path}/script/reload-unicorn.sh"
 end
 
@@ -95,7 +95,7 @@ end
 
 namespace :deploy do
   desc "Execute various commands on the remote environment"
-  task :debug, :roles => :app do
+  task :debug, :roles => [:app, :work] do
     run "/usr/bin/env", :pty => false, :shell => '/bin/bash'
     run "whoami"
     run "pwd"
@@ -122,32 +122,22 @@ namespace :deploy do
     # Do nothing.
   end
 
+  # XXX: remove in favor of the default capistrano task?
   desc "Run the migrate rake task."
   task :migrate, :roles => :app do
     run "cd #{release_path}; #{rake} RAILS_ENV=#{rails_env} db:migrate"
   end
 
   desc "Precompile assets"
-  task :precompile do
+  task :precompile, :roles => :app do
     run "cd #{release_path}; #{rake} RAILS_ENV=#{rails_env} RAILS_GROUPS=assets assets:precompile"
   end
 
-  desc "Setup application symlinks for shared assets"
-  task :symlink_setup, :roles => [:app, :web] do
-    shared_directories.each { |link| run "mkdir -p #{shared_path}/#{link}" }
-  end
-
   desc "Link assets for current deploy to the shared location"
-  task :symlink_update, :roles => [:app, :web] do
+  task :symlink_update do
     (shared_directories + shared_files).each do |link|
       run "ln -nfs #{shared_path}/#{link} #{release_path}/#{link}"
     end
-  end
-
-  desc "copy shared files"
-  task :server_copy , :roles => [:app, :web] do
-    system "scp -r #{File.expand_path(File.dirname(__FILE__))}/../my_dir
-  #{user}@#{domain}:#{shared_path}/my_dir"
   end
 end
 
@@ -229,7 +219,8 @@ task :qa do
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
+  server "#{user}@#{domain}", :app, :web, :db, :primary => true
+  server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
 
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
@@ -253,29 +244,7 @@ task :production do
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
   server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
-
-  after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
-  after 'deploy:update_code', 'vecnet:write_env_vars'
-  after 'deploy', 'deploy:cleanup'
-  after 'deploy', 'deploy:restart'
-  after 'deploy', 'vecnet:restart_workers'
-end
-
-desc "Setup for the Worker environment"
-task :worker do
-  set :shared_directories, %w(log)
-  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-worker.pem)
-  set :branch,      fetch(:branch, 'master')
-  set :rails_env,   'worker'
-  set :deploy_to,   '/home/app/vecnet'
-  set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
-
-  set :user,        'app'
-  set :domain,      'dl-vecnet-w1.crc.nd.edu'
-  set :without_bundle_environments, 'headless development test'
-
-  default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
+  #server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
 
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
