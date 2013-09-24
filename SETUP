@@ -160,7 +160,7 @@ sudo yum install nginx
 sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
 sudo cp devops/etc/nginx/conf.d/vecnet.conf /etc/nginx/conf.d
-sudo rm /etc/nginx/conf.d/default
+sudo rm /etc/nginx/conf.d/default.conf
 sudo chkconfig nginx on
 sudo service nginx start
 
