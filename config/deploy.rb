@@ -143,6 +143,12 @@ namespace :deploy do
       run "ln -nfs #{shared_path}/#{link} #{release_path}/#{link}"
     end
   end
+
+  desc "copy shared files"
+  task :server_copy , :roles => [:app, :web] do
+    system "scp -r #{File.expand_path(File.dirname(__FILE__))}/../my_dir
+  #{user}@#{domain}:#{shared_path}/my_dir"
+  end
 end
 
 # this code doesn't work quite right, but it is the way to do it.
@@ -243,6 +249,29 @@ task :production do
 
   set :user,        'app'
   set :domain,      'dl-vecnet.crc.nd.edu'
+  set :without_bundle_environments, 'headless development test'
+
+  default_environment['PATH'] = "#{ruby_bin}:$PATH"
+  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
+
+  after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
+  after 'deploy:update_code', 'vecnet:write_env_vars'
+  after 'deploy', 'deploy:cleanup'
+  after 'deploy', 'deploy:restart'
+  after 'deploy', 'vecnet:restart_workers'
+end
+
+desc "Setup for the Worker environment"
+task :worker do
+  set :shared_directories, %w(log)
+  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-worker.pem)
+  set :branch,      fetch(:branch, 'master')
+  set :rails_env,   'worker'
+  set :deploy_to,   '/home/app/vecnet'
+  set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
+
+  set :user,        'app'
+  set :domain,      'dl-vecnet-w1.crc.nd.edu'
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"

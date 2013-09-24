@@ -195,11 +195,14 @@ cd bibutils_5.0
 sudo make install
 
 # setup application
-# I think running 'cap ENV deploy:setup' on your dev machine will take care of the following...
-sudo su - app
+#Copy public key into app folder who ever is going to deploy to that machine
+#Run cap ENV deploy:setup in dev machine
+#Install bundler manually in that host machine
+ chruby 1.9.3-p392
+ gem install bundler
+ cd vecnet
+ bundle install
 git clone git://github.com/banurekha/vecnet.git
-chruby 1.9.3-p392
-gem install bundler
-cd vecnet
-bundle install
+
+
 
