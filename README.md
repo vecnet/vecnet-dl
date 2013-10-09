@@ -90,7 +90,12 @@ Initializing new production environment
  7. Done!
 
 ## Deploy from branch
-cap <environment> deploy -S branch=<branch name>
+
+    cap <environment> deploy -S branch=<branch name>
+
+## Gather repository contents for statistics
+
+    OUTFILE=~/repo-stats-20130916.csv RAILS_ENV=production bundle exec rake vecnet:dump_statistics
 
 ## Pubtkt Authentication
 
