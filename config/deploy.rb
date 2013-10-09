@@ -219,8 +219,7 @@ task :qa do
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :db, :primary => true
-  server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
+  server "#{user}@#{domain}", :app, :web, :db, :work, :primary => true
 
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
@@ -243,8 +242,8 @@ task :production do
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :work, :db, :primary => true
-  #server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
+  server "#{user}@#{domain}", :app, :web, :db, :primary => true
+  server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
 
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
