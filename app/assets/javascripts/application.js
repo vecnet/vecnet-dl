@@ -33,6 +33,7 @@
 //= require help_modal
 //= require auto_complete
 //= require icon_toggle
+//= require permissions
 //= require blacklight/hierarchy/hierarchy
 
 Vecnet={}
