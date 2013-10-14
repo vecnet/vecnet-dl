@@ -113,7 +113,7 @@ $(function() {
 	    }
 
 	});
-    */
+  */
 
 
   function addPerm(un, perm_form, perm, perm_type)
