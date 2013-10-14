@@ -59,6 +59,10 @@ class User < ActiveRecord::Base
     update_column(:agreed_to_terms_of_service, true)
   end
 
+  def agreed_to_terms_of_service?
+    true
+  end
+
   # Override Hydra methods that assume Devise is present
   def user_key
     uid
