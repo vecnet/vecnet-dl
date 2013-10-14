@@ -39,7 +39,7 @@
   <%= render 'shared/flash_message' %>
 
   <div id="main" role="main" class="container <%= yield(:page_class) if content_for?(:page_class)%>">
-    <%= render 'shared/breadcrumbs.html.erb'  if show_breadcrumbs?%>
+    <%= render 'shared/breadcrumbs'  if show_breadcrumbs?%>
     <% if content_for?(:page_header) %>
       <div class="row">
         <div class="span12 main-header">
