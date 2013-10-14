@@ -58,7 +58,7 @@
               <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
               <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
               <%= bootstrap_navigation_element 'Profile', profile_path(current_user)%>
-              <%= render :partial => 'admin_dashboard/admin.html.erb'%>
+              <%= render :partial => 'admin_dashboard/admin' %>
               <li class="divider"></li>
               <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>
             </ul>
