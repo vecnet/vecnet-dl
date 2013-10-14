@@ -1,0 +1,90 @@
+<div id="permissions_display">
+  <fieldset>
+    <legend>
+      Visibility and Access Rights
+      <%= render :partial => "curation_concern/permission_modal"%>
+    </legend>
+    <div class="control-group">
+      <label class="radio">
+        <input type="radio" id="visibility_open" name="<%= f.object_name %>[visibility]" value="<%= AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC %>" <% if curation_concern.open_access? %> checked="true"<% end %>/>
+        <span class="label label-success">Global Access</span> Visible to the world.
+      </label>
+      <%# FIXME: the input box does not allow edits %>
+      <!--
+      <label class="radio">
+        <input type="radio" id="visibility_embargo" name="<%= f.object_name %>[visibility]" value="<%= AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO %>" <% if curation_concern.open_access_with_embargo_release_date? %> checked="true"<% end %>/>
+        <span class="label label-warning">Global Access with Embargo</span> Treated as <span class="label label-important">Private</span> until <%= f.input :embargo_release_date, wrapper: :inline, input_html: { placeholder: Date.today, class: 'input-small datepicker' } %> then it is <span class="label label-success">Open Access</span>.
+      </label>
+    -->
+      <label class="radio">
+        <input type="radio" id="visibility_ndu" name="<%= f.object_name %>[visibility]" value="<%= AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>" <% if curation_concern.authenticated_only_access? %> checked="true"<% end %> />
+        <span class="label label-info"><%=t('sufia.institution_name') %></span> Visible to all <%=t('sufia.institution_name') %>.
+      </label>
+      <label class="radio">
+        <input type="radio" id="visibility_restricted" name="<%= f.object_name %>[visibility]" value="<%= AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE%>" <% if curation_concern.private_access? %> checked="true"<% end %>/>
+        <span class="label label-important">Private</span> Only visible to you and the people listed below.
+      </label>
+    </div>
+  </fieldset>
+
+  <!-- people and groups -->
+  <%# If you change the html here, also adjust the html in assets/javascripts/permissions.js %>
+
+  <fieldset>
+    <legend>
+      Additional Permissions
+    </legend>
+
+    <p><%= curation_concern.permissions.inspect %></p>
+
+    <table class="table table-bordered">
+    <tr>
+      <th width="60%">Person/Group</th>
+      <th width="40%">Access Level</th>
+    </tr>
+    <tr id="file_permissions">
+      <td>
+        <%= label_tag :owner_access, "Depositor (<span id=\"file_owner\">#{curation_concern.depositor}</span>)".html_safe, :class=>"control-label" %>
+      </td>
+      <td>
+        <%= Sufia::Engine.config.owner_permission_levels.keys[0] %>
+      </td>
+    </tr>
+    <% curation_concern.permissions.each do |permission| %>
+      <%-# skip the public, registered, and depositor perms as they are displayed above -%>
+      <% next if permission[:name].downcase == 'public' %>
+      <% next if permission[:name].downcase == 'registered' %>
+      <% next if permission[:name].downcase == curation_concern.depositor %>
+      <tr>
+        <td>
+          <%= label_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
+        </td>
+        <td>
+          <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'span20 select_perm' %>
+          <button class="btn close remove_perm">X</button>
+        </td>
+      </tr>
+    <% end %>
+    </table>
+    <div class="row control-group">
+      <div id="new-user">
+        <div class="input-append">
+          <%= text_field_tag 'new_user_name_skel', nil, :class => "span6" %>
+          <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'span4' %>
+          <button class="btn btn-mini btn-inverse" id="add_new_user_skel"><i class="icon-plus-sign"></i> Add</button>
+          <br /> <span id="directory_user_result"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row control-group">
+      <div id="new-group" >
+        <div class="input-append">
+          <%= select_tag 'new_group_name_skel', options_for_select(["Select a group"] + groups), :class => 'span6' %>
+          <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class => 'span4' %>
+          <button class="btn btn-mini btn-inverse" id="add_new_group_skel" ><i class="icon-plus-sign"></i> Add</button>
+          <br /><span id="directory_group_result"></span>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

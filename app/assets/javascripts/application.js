@@ -34,6 +34,7 @@
 //= require help_modal
 //= require auto_complete
 //= require icon_toggle
+//= require permissions
 //= require blacklight/hierarchy/hierarchy
 //= require vecnet
 //= require manage_repeating_fields
