@@ -268,3 +268,8 @@ ul.facet-hierarchy {
   }
 }
 
+/* override blacklight-4.0.1/app/assets/stylesheets/blacklight/_modal.css.scss */
+button.close {
+  display: block;
+}
+

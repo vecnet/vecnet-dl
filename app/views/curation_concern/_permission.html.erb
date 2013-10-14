@@ -35,8 +35,6 @@
       Additional Permissions
     </legend>
 
-    <p><%= curation_concern.permissions.inspect %></p>
-
     <table class="table table-bordered">
     <tr>
       <th width="60%">Person/Group</th>
@@ -66,10 +64,13 @@
       </tr>
     <% end %>
     </table>
+    <div id="permissions_error">
+      <p id='permissions_error_text'></p>
+    </div>
     <div class="row control-group">
       <div id="new-user">
         <div class="input-append">
-          <%= text_field_tag 'new_user_name_skel', nil, :class => "span6" %>
+          <%= text_field_tag 'new_user_name_skel', nil, :class => "span6", :placeholder => "User Name" %>
           <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'span4' %>
           <button class="btn btn-mini btn-inverse" id="add_new_user_skel"><i class="icon-plus-sign"></i> Add</button>
           <br /> <span id="directory_user_result"></span>
@@ -79,7 +80,7 @@
     <div class="row control-group">
       <div id="new-group" >
         <div class="input-append">
-          <%= select_tag 'new_group_name_skel', options_for_select(["Select a group"] + groups), :class => 'span6' %>
+          Group Name: <%= text_field_tag 'new_group_name_skel', nil, :class => 'span6', :placeholder => "Group Name" %>
           <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class => 'span4' %>
           <button class="btn btn-mini btn-inverse" id="add_new_group_skel" ><i class="icon-plus-sign"></i> Add</button>
           <br /><span id="directory_group_result"></span>

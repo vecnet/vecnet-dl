@@ -77,7 +77,7 @@ $(function() {
 
   // add button for new group
   $('#add_new_group_skel').on('click', function() {
-      if ($('#new_group_name_skel :selected').index() == "0" || $('#new_group_permission_skel :selected').index() == "0") {
+      if ($('#new_group_name_skel').val() == "" || $('#new_group_permission_skel :selected').index() == "0") {
         $('#new_group_name_skel').focus();
         return false;
       }
