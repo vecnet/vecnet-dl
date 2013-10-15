@@ -58,8 +58,13 @@
           <%= label_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
         </td>
         <td>
-          <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'span20 select_perm' %>
-          <button class="btn close remove_perm">X</button>
+          <div class="input-append">
+            <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'input-large select_perm' %>
+            <button class="btn btn-danger remove">
+              <i class="icon-white icon-minus"></i>
+              <span>Remove</span>
+            </button>
+          </div>
         </td>
       </tr>
     <% end %>
@@ -68,21 +73,26 @@
       <p id='permissions_error_text'></p>
     </div>
     <div class="row control-group">
-      <div id="new-user">
+      <div id="new-user controls">
         <div class="input-append">
-          <%= text_field_tag 'new_user_name_skel', nil, :class => "span6", :placeholder => "User Name" %>
-          <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'span4' %>
-          <button class="btn btn-mini btn-inverse" id="add_new_user_skel"><i class="icon-plus-sign"></i> Add</button>
-          <br /> <span id="directory_user_result"></span>
+          <%= text_field_tag 'new_user_name_skel', nil, :class => "input-large", :placeholder => "User Name" %>
+          <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'input-large' %>
+          <button class="btn btn-success add">
+            <i class="icon-white icon-plus"></i>
+            <span>Add</span>
+          </button>
         </div>
       </div>
     </div>
     <div class="row control-group">
-      <div id="new-group" >
+      <div id="new-group controls" >
         <div class="input-append">
-          Group Name: <%= text_field_tag 'new_group_name_skel', nil, :class => 'span6', :placeholder => "Group Name" %>
-          <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class => 'span4' %>
-          <button class="btn btn-mini btn-inverse" id="add_new_group_skel" ><i class="icon-plus-sign"></i> Add</button>
+          Group Name: <%= text_field_tag 'new_group_name_skel', nil, :class => 'input-large', :placeholder => "Group Name" %>
+          <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class => 'input-large' %>
+          <button class="btn btn-success add">
+            <i class="icon-white icon-plus"></i>
+            <span>Add</span>
+          </button>
           <br /><span id="directory_group_result"></span>
         </div>
       </div>
