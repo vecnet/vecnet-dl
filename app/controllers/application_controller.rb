@@ -39,7 +39,9 @@ class ApplicationController < ActionController::Base
     "#{Rails.configuration.pubtkt_login_url}?#{redirect_params.to_query}"
   end
 
-  alias_method :user_logout_url, :user_login_url
+  def user_logout_url
+    Rails.configuration.pubtkt_logout_url
+  end
 
   protected
   def agreed_to_terms_of_service!
