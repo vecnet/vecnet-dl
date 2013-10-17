@@ -58,13 +58,12 @@
           <%= label_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
         </td>
         <td>
-          <div class="input-append">
             <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'input-large select_perm' %>
-            <button class="btn btn-danger remove remove_perm">
-              <i class="icon-white icon-minus"></i>
-              <span>Remove</span>
+            <%# permission[:access] %>
+            <button class="btn close remove_perm">
+              <span>X</span>
             </button>
-          </div>
+
         </td>
       </tr>
     <% end %>
@@ -75,7 +74,7 @@
     <div class="row control-group">
       <div id="new-user controls">
         <div class="input-append">
-          <%= text_field_tag 'new_user_name_skel', nil, :class => "input-large", :placeholder => "User Name" %>
+          <%= text_field_tag 'new_user_name_skel', nil, :class => "input-large username_with_autocomplete", :placeholder => "User Name" %>
           <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'input-large' %>
           <button class="btn btn-success add" id="add_new_user_skel">
             <i class="icon-white icon-plus"></i>

@@ -24,8 +24,15 @@ class UsersController < ApplicationController
     if query.blank?
       @users = User.order(sort_val).page(params[:page]).per(10) if query.blank? 
     else
-      @users = User.where("(email like lower(?) OR username like lower(?))",query,query).order(sort_val).page(params[:page]).per(10)
+      @users = User.where("(uid like lower(?) OR username like lower(?))",query,query).order(sort_val).page(params[:page]).per(10)
     end
+    logger.debug("Users are: #{@users.inspect}")
+    hits=[]
+    @users.each do |user|
+      hits << {:uri => user.uid, :label => user.uid}
+    end
+    logger.debug("Hit are: #{hits.inspect}")
+    render :json=>hits
   end
 
   # Display user profile
