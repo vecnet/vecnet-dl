@@ -39,6 +39,14 @@ $(function() {
   });
   */
 
+	$(".username_with_autocomplete")
+		// don't navigate away from the field on tab when selecting an item
+			.bind( "keydown", function( event ) {
+				if ( event.keyCode === $.ui.keyCode.TAB &&
+						$( this ).data( "autocomplete" ).menu.active ) {
+					event.preventDefault();
+				}
+			}).autocomplete(username_autocomplete() );
 
   // add button for new user
   $('#add_new_user_skel').on('click', function() {
@@ -115,6 +123,24 @@ $(function() {
 	});
   */
 
+	function username_autocomplete() {
+		var autocomplete_opts = {
+			minLength: 2,
+			source: function( request, response ) {
+				$.getJSON( "/users", {
+					uq: request.term
+				}, response );
+			},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			complete: function(event) {
+				$('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
+			}
+		};
+		return autocomplete_opts;
+	};
 
   function addPerm(un, perm_form, perm, perm_type)
   {
