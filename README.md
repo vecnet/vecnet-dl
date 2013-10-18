@@ -23,6 +23,10 @@ To deploy to Production:
 
     cap production deploy
 
+To Deploy from branch
+
+    cap <environment> deploy -S branch=<branch name>
+
 ## Other server admin tasks
 
 To rebuild the Fedora object store:
@@ -88,10 +92,6 @@ Initializing new production environment
   * Resolrize: `RAILS_ENV=production bundle exec rake solrizer:fedora:solrize_objects`
   * Migrate fedora objects: `RAILS_ENV=production bundle exec rake vecnet:migrate:batch_to_collection`
  7. Done!
-
-## Deploy from branch
-
-    cap <environment> deploy -S branch=<branch name>
 
 ## Gather repository contents for statistics
 
