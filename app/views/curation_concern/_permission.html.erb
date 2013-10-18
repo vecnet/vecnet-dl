@@ -59,7 +59,6 @@
         </td>
         <td>
             <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'input-large select_perm' %>
-            <%# permission[:access] %>
             <button class="btn close remove_perm">
               <span>X</span>
             </button>
