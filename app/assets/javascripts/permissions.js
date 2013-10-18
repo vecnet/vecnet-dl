@@ -153,9 +153,10 @@ $(function() {
 
       $('#new_perms').append(td1);
       $('#new_perms').append(td2);
-
-      td1.html('<label class="control-label">'+un+'</label>');
-      td2.html(perm);
+			var select= $('<select class="input-large select_perm"></select>');
+		  select.append($('<option>', { value : perm }).text(perm));
+    	td1.html('<label class="control-label">'+un+'</label>');
+      td2.html(select);
       td2.append(remove);
       remove.click(function () {
         tr.remove();
