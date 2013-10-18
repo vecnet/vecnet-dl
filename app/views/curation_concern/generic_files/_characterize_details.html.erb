@@ -24,8 +24,9 @@
         <th>Access Control</th>
         <td>
           <%= link_to_edit_permissions(curation_concern) %><br/>
-          Read: <%= (curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe %><br/>
-          Edit: <%= (curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe %>
+          <%= "Readonly: #{(curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe}" unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
+          <%= "<br />".html_safe unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
+          <%= "Read and Edit: #{(curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe}" unless (curation_concern.edit_users + curation_concern.edit_groups).blank?%>
         </td>
       </tr>
     <% end %>
