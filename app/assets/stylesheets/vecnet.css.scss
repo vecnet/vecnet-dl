@@ -267,6 +267,11 @@ ul.facet-hierarchy {
     cursor: default;
   }
 }
+/* override curate form display */
+.control-label {
+  display: inline;
+  label { display: inline; }
+}
 
 /* override blacklight-4.0.1/app/assets/stylesheets/blacklight/_modal.css.scss */
 button.close {

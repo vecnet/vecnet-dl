@@ -9,30 +9,65 @@
     <fieldset class="required">
        <%= f.input :title,
                   label: get_label(:title),
-                  hint: metadata_help('title'),
+                  hint: help_icon('title'),
                   input_html: {class: 'input-xxlarge'}
       %>
+      <%= f.input :creator,
+                  label: get_label(:creator),
+                  hint: help_icon('creator'),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge'} %>
+
+    </fieldset>
+    <fieldset class="optional prompt">
+      <legend>Any additional information is optional, but helpful for others looking to find your work.</legend>
+
+      <%= f.input :contributor,
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge', multiple: 'multiple'},
+                  label: get_label(:contributor),
+                  hint: help_icon('contributor')
+      %>
+
       <%= f.input :resource_type,
                   :collection => Sufia::Engine.config.resource_types.keys,
                   label: get_label(:resource_type),
-                  hint: metadata_help('resource_type'),
+                  hint: help_icon('resource_type'),
                   :input_html => {:size => 7, :multiple => true} %>
-      <%= f.input :creator,
-                  label: get_label(:creator),
-                  hint: metadata_help('creator'),
+
+      <%= f.input :date_created,
+                  hint: help_icon('date_created'),
+                  label: get_label(:date_created),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
+
+      <%= render "/curation_concern/temporal", curation_concern: curation_concern, f: f %>
+
+      <%= f.input :subject,
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge', multiple: 'multiple'},
+                  label: get_label(:subject),
+                  hint: help_icon('subject')
+      %>
+
       <%= f.input :tag,
                   label: get_label(:tag),
-                  hint: metadata_help('tag'),
+                  hint: help_icon('tag'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
-    </fieldset>
-    <%= render '/curation_concern/content_license', f: f %>
-    <%= render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
 
-    <fieldset class="optional prompt">
-      <legend>Any additional information is optional, but helpful for others looking to find your work.</legend>
+      <%= f.input :identifier,
+                  hint: help_icon('identifier'),
+                  label: get_label(:identifier),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+
+      <%= f.input :related_url,
+                  hint: help_icon('related_url'),
+                  label: get_label(:related_url),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+
       <%= f.input :description,
                   input_html: {
                           class: 'input-xxlarge',
@@ -40,53 +75,28 @@
                   },
                   as: :text,
                   label: get_label(:description),
-                  hint: metadata_help('description')
+                  hint: help_icon('description')
       %>
-      <%= f.input :contributor,
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge', multiple: 'multiple'},
-                  label: get_label(:contributor),
-                  hint: metadata_help('contributor')
-      %>
-      <%= f.input :subject,
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge', multiple: 'multiple'},
-                  label: get_label(:subject),
-                  hint: metadata_help('subject')
-      %>
+
       <%= f.input :language,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
-                  hint: metadata_help('language'),
+                  hint: help_icon('language'),
                   label: get_label(:language)
       %>
+
       <%= f.input :publisher,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
-                  hint: metadata_help('publisher')%>
+                  hint: help_icon('publisher')%>
+
       <%= f.input :based_near,
-                  hint: metadata_help('based_near'),
+                  hint: help_icon('based_near'),
                   label: get_label(:based_near),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
-      <%= f.input :identifier,
-                  hint: metadata_help('identifier'),
-                  label: get_label(:identifier),
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
-      <%= f.input :related_url,
-                  hint: metadata_help('related_url'),
-                  label: get_label(:related_url),
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
-      <%= f.input :date_created,
-                  hint: metadata_help('date_created'),
-                  label: get_label(:date_created),
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete'} %>
       <%= render "/curation_concern/spatial", curation_concern: curation_concern, f: f %>
-      <%= render "/curation_concern/temporal", curation_concern: curation_concern, f: f %>
     </fieldset>
 
     <fieldset>
@@ -95,15 +105,20 @@
             Upload New Version
             <small>Upload a new version from your computer.</small>
           </legend>
-      <% else %>
       <% end %>
-
-      <%= f.input :file,
+     <%= f.input :file,
                   as: :file,
                   label: "Upload Files",
-                  hint: "You can roll back to different version in show page"
+                  hint: help_icon("You can roll back to different version in show page")
       %>
     </fieldset>
+
+    <%= render '/curation_concern/content_license', f: f %>
+    <%= render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
+
+
+
+
 
     <div class="row">
       <div class="span12 form-actions">

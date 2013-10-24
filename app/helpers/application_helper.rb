@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include GenericFileHelper
   def construct_show_path(solr_document, options = {})
     object_type=solr_document.has?('has_model_s') ? solr_document['has_model_s'].first.gsub("info:fedora/afmodel:",'') : ""
     if object_type.eql?("Citation")
@@ -11,6 +12,14 @@ module ApplicationHelper
   def get_first_title args
     value ||= args[:document].get(args[:field], :sep => nil) if args[:document] and args[:field]
     render_field_value value.first
+  end
+
+  def help_icon(key)
+    link_to '#', id: "generic_file_#{key.to_s}_help", rel: 'popover',
+            'data-content' => metadata_help(key).html_safe,
+            'data-original-title' => get_label(key) do
+      content_tag 'i', '', class: "icon-question-sign icon-large"
+    end
   end
 
   def curation_concern_attribute_to_url_html(curation_concern, method_name, label, options = {})

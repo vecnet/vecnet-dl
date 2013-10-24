@@ -9,27 +9,27 @@
     <fieldset class="required">
        <%= f.input :title,
                   label: get_label(:title),
-                  hint: metadata_help('title'),
+                  hint: help_icon('title'),
                   input_html: {class: 'input-xxlarge'}
       %>
       <%= f.input :resource_type,
                   :collection => Sufia::Engine.config.resource_types.keys,
                   label: get_label(:resource_type),
-                  hint: metadata_help('resource_type'),
+                  hint: help_icon('resource_type'),
                   :input_html => {:size => 7, :multiple => true} %>
       <%= f.input :creator,
                   label: get_label(:creator),
-                  hint: metadata_help('creator'),
+                  hint: help_icon('creator'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
       <%= f.input :source,
                   label: get_label(:source),
-                  hint: metadata_help('source'),
+                  hint: help_icon('source'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
       <%= f.input :tag,
                   label: get_label(:tag),
-                  hint: metadata_help('tag'),
+                  hint: help_icon('tag'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
     </fieldset>
@@ -45,48 +45,48 @@
                   },
                   as: :text,
                   label: get_label(:description),
-                  hint: metadata_help('description')
+                  hint: help_icon('description')
       %>
       <%= f.input :contributor,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:contributor),
-                  hint: metadata_help('contributor')
+                  hint: help_icon('contributor')
       %>
       <%= f.input :subject,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:subject),
-                  hint: metadata_help('subject')
+                  hint: help_icon('subject')
       %>
       <%= f.input :language,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
-                  hint: metadata_help('language'),
+                  hint: help_icon('language'),
                   label: get_label(:language)
       %>
       <%= f.input :publisher,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
-                  hint: metadata_help('publisher')%>
+                  hint: help_icon('publisher')%>
       <%= f.input :based_near,
-                  hint: metadata_help('based_near'),
+                  hint: help_icon('based_near'),
                   label: get_label(:based_near),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
       <%= f.input :identifier,
-                  hint: metadata_help('identifier'),
+                  hint: help_icon('identifier'),
                   label: get_label(:identifier),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
       <%= f.input :related_url,
-                  hint: metadata_help('related_url'),
+                  hint: help_icon('related_url'),
                   label: get_label(:related_url),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
       <%= f.input :date_created,
-                  hint: metadata_help('date_created'),
+                  hint: help_icon('date_created'),
                   label: get_label(:date_created),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete'} %>

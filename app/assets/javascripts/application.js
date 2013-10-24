@@ -105,7 +105,7 @@ $(function(){
   //$('#ajax-modal').on('keyDown',".filterinput", Vecnet.list_filter($('ul.facet-hierarchy')));
 
   $('abbr').tooltip();
-  $("a[rel=popover]").popover({ trigger: "hover" });
+  $("a[rel=popover]").popover({ html : true ,trigger: "hover" });
   $('.multi_value.control-group').manage_fields();
   $('.spatial_value.control-group').manage_fields();
 

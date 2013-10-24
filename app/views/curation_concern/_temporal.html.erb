@@ -3,7 +3,7 @@
 <%end_time= temporal_data[:end_time]%>
 <div class="control-group multi_value optional generic_file_temporals managed">
   <%= f.label get_label(:temporals) %>
-  <%= f.hint metadata_help(:temporals)%>
+  <%= f.hint help_icon(:temporals)%>
   <div class="controls">
     <ul class="listing">
       <% start_time.each_with_index do |start,index| %>
