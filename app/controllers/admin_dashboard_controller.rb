@@ -28,6 +28,34 @@ class AdminDashboardController < ApplicationController
   # This is needed as of BL 3.7
   self.copy_blacklight_config_from(CatalogController)
 
+  #Removing sort field from config and readding to change order of sorting
+
+  configure_blacklight.sort_fields.delete("score desc, pub_date_sort desc, title_sort asc")
+  configure_blacklight.sort_fields.delete("pub_date_sort desc")
+  configure_blacklight.sort_fields.delete("pub_date_sort asc")
+  configure_blacklight.sort_fields.delete("desc_metadata__date_uploaded_dt desc")
+  configure_blacklight.sort_fields.delete("desc_metadata__date_uploaded_dt asc")
+  configure_blacklight.sort_fields.delete("desc_metadata__date_modified_dt desc")
+  configure_blacklight.sort_fields.delete("desc_metadata__date_modified_dt asc")
+  configure_blacklight.sort_fields.delete("title_alpha_sort asc")
+
+  configure_blacklight do |config|
+    # "sort results by" select (pulldown)
+    # label in pulldown is followed by the name of the SOLR field to sort by and
+    # whether the sort is ascending or descending (it must be asc or desc
+    # except in the relevancy case).
+    # label is key, solr field is value
+    config.add_sort_field 'pub_date_sort desc', :label => "Publish Date \u25BC"
+    config.add_sort_field 'pub_date_sort asc', :label => "Publish Date \u25B2"
+    config.add_sort_field 'title_alpha_sort asc', :label => "Title"
+    config.add_sort_field 'desc_metadata__date_uploaded_dt desc', :label => "Date Uploaded \u25BC"
+    config.add_sort_field 'desc_metadata__date_uploaded_dt asc', :label => "Date Uploaded \u25B2"
+    config.add_sort_field 'desc_metadata__date_modified_dt desc', :label => "Date Modified \u25BC"
+    config.add_sort_field 'desc_metadata__date_modified_dt asc', :label => "Date Modified \u25B2"
+    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'Relevancy'
+
+  end
+
   before_filter :authenticate_user!
 
   # This filters out objects that you want to exclude from search results, like FileAssets
