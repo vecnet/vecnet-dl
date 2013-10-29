@@ -140,4 +140,39 @@ describe GenericFile do
       end
     end
   end
+
+  describe 'saving geoname location with geoname id' do
+    let(:name) {'fakelocation'}
+    let(:geoname_location_id) {'fakelocation|0'}
+    let(:empty) {""}
+    let(:name_array) {["fakelocation","anotherlocation"]}
+    let(:geoname_id_array) { ["fakelocation|123","anotherlocation|345"]}
+
+    context 'set location from given name and geoname id' do
+      it 'should save encoded location and geoname_id to based_near' do
+        vecnet_generic_file.name = [name]
+        vecnet_generic_file.geoname_locations = geoname_location_id
+        vecnet_generic_file.save
+        puts "#{GenericFile.find(vecnet_generic_file.pid).based_near}"
+        GenericFile.find(vecnet_generic_file.pid).based_near.should_not be_empty
+        GenericFile.find(vecnet_generic_file.pid).based_near.first.should be_instance_of(GeonameLocation::Location)
+        vecnet_generic_file.format_based_near_from_location.should==["name=fakelocation;geoname_id=0"]
+      end
+    end
+
+    context 'set based_near from name_array and geoname_id array' do
+      before {
+        vecnet_generic_file.name=name_array
+        vecnet_generic_file.geoname_locations=geoname_id_array.join(';')
+      }
+      it 'should encode the array to based_near' do
+        vecnet_generic_file.format_based_near_from_location.should==["name=fakelocation;geoname_id=123", "name=anotherlocation;geoname_id=345"]
+      end
+      it 'should decode to geoname locations from based_near array' do
+        vecnet_generic_file.save
+        gf=GenericFile.find(vecnet_generic_file.pid)
+        gf.based_near.size.should == 2
+      end
+    end
+  end
 end

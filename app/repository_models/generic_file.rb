@@ -7,7 +7,7 @@ class GenericFile
   include Vecnet::ModelMethods
   include GeonameLocation
 
-  attr_accessor :locations
+  attr_accessor :locations, :geoname_based_near
 
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
@@ -38,7 +38,6 @@ class GenericFile
   end
 
   def based_near=(formated_str)
-    logger.debug("SO here is my formatter location: #{formated_str}")
     self.datastreams["descMetadata"].based_near=formated_str
   end
 
@@ -93,7 +92,7 @@ class GenericFile
 
   def locations
     locations=self.based_near
-    new_locations=locations.map{|loc| refactor_location(loc) }
+    new_locations=locations.map{|loc| refactor_location(loc.name) }
     new_locations
   end
 

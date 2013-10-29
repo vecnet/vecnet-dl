@@ -15,20 +15,24 @@ module Vecnet
 
     def get_hierarchy_on_location(locations=nil)
       unless locations.blank?
-        geoname_id_hash= LocationHierarchyServices.get_geoname_ids(locations)
+        #geoname_id_hash= LocationHierarchyServices.get_geoname_ids(locations)
         location_trees=[]
         location_tree_to_solrize=[]
-        geoname_id_hash.each do |location,geoname_id|
-          hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
+        locations.each do |location|
+          hierarchy= GeonameHierarchy.find_by_geoname_id(location.geoname_id)
           hierarchy_with_earth=''
+          #find in local database for given geoname id
           if hierarchy && hierarchy.hierarchy_tree_name.present?
             hierarchy_with_earth= hierarchy.hierarchy_tree_name.gsub(';',':')
+            #then find in geoname webservices webservices
           else
-            tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
-            hierarchy_with_earth=tree_name.gsub(';',':')
+            tree_id, tree_name = LocationHierarchyServices.find_hierarchy(location.geoname_id)
+            hierarchy_with_earth=tree_name.gsub(';',':') unless tree_name.blank?
           end
-          hierarchy_without_earth=hierarchy_with_earth.gsub('Earth:','')
-          location_tree_to_solrize<<hierarchy_without_earth
+          unless hierarchy_with_earth.blank?
+            hierarchy_without_earth=hierarchy_with_earth.gsub('Earth:','')
+            location_tree_to_solrize<<hierarchy_without_earth
+          end
         end
         location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
         return location_trees.flatten

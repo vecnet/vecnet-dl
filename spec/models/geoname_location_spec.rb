@@ -20,19 +20,21 @@ describe GeonameLocation do
   it { should respond_to(:geoname_locations) }
   context 'should returns encoded value' do
     subject { LocationTest.new }
+    let(:locations){["locatio","Lond Pharrak, Balochistn, Pakistan"]}
     let(:location_with_id) { ["locatio|0", "Lond Pharrak, Balochistn, Pakistan|1345791"]   }
     it "having both location and id" do
-      subject.geoname_locations = location_with_id
+      subject.name = locations
+      subject.geoname_locations = location_with_id.join(';')
       subject.format_based_near_from_location.should==["name=locatio;geoname_id=0", "name=Lond Pharrak, Balochistn, Pakistan;geoname_id=1345791"]
     end
   end
 
-  context "test only longitude" do
+  context "should encode only valid location" do
     let(:location_array) {["location", "locationtest", "test"]}
     let(:location_with_id) {["location|10", "Lond Pharrak, Balochistn, Pakistan|1345791", "test"]}
     it "encode with id" do
-      subject.based_near = location_array
-      subject.geoname_locations = location_with_id
+      subject.name = location_array
+      subject.geoname_locations = location_with_id.join(';')
       subject.format_based_near_from_location.should== ["name=location;geoname_id=10", "name=test"]
     end
   end

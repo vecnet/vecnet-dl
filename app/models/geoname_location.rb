@@ -3,8 +3,8 @@ module GeonameLocation
   extend ActiveSupport::Concern
 
   included do
-   before_save :format_based_near_from_location
-   attr_accessor :geoname_locations
+    before_save :format_based_near_from_location
+    attr_accessor :geoname_locations, :name
   end
 
   class Location
@@ -63,8 +63,20 @@ module GeonameLocation
     end
 
     def self.parse_location(location_rdf)
-      temp=Location.decode(location_rdf)
-      return Location.new(temp['geoname_id'],temp['name'])
+      temp=Location.decode_location(location_rdf)
+      name=temp['name']
+      geoname_id=temp['geoname_id'] || '0'
+      return Location.new(name,geoname_id)
+    end
+
+    def formatted_location
+      if name.present? && geoname_id.present?
+        return "#{self.name}|#{self.geoname_id}"
+      elsif name.present?
+        return "#{self.name}|0"
+      elsif geoname_id.present?
+        raise RuntimeError, "invalid location, only id available"
+      end
     end
 
     def to_s
@@ -80,23 +92,24 @@ module GeonameLocation
 
   def get_valid_locations
     locations=self.geoname_locations.blank? ? [] : self.geoname_locations.split(';')
-    unless self.based_near.blank?
-      return locations.reject!{|l| !self.based_near.include?l.split('|').first}
+    unless self.name.blank?
+      locations.reject!{|l| !self.name.include?l.split('|').first}
     else
-      return locations
+      return []
     end
+    return locations
   end
 
   def format_based_near_from_location
-    puts "Location array: #{self.geoname_locations}, locations:#{self.based_near}"
-    temp=[]
+    reformated_locations=[]
     locations=get_valid_locations
-    locations.each do |location_with_id|
-      test=location_with_id.split('|')
-      encoded_location= test.count==2 ? GeonameLocation::Location.new(test.first, test.last).encode_location : GeonameLocation::Location.new(test.first, nil).encode_location
-      temp<<encoded_location
+    unless locations.blank?
+      locations.each do |location_with_id|
+        geo_location_arr=location_with_id.split('|')
+        encoded_location= geo_location_arr.count==2 ? Location.new(geo_location_arr.first, geo_location_arr.last).encode_location : Location.new(geo_location_arr.first, nil).encode_location
+        reformated_locations<<encoded_location
+      end
+      self.based_near=reformated_locations
     end
-    logger.debug("formatter location: #{temp.inspect}")
-    self.based_near=temp
   end
 end
