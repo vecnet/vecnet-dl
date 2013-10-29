@@ -49,18 +49,25 @@ class LocationHierarchyServices
     #puts "tree: #{tree_id}, Names:#{tree_names}"
     GeonameHierarchy.find_or_create(geo_name_id,tree_id)
     return tree_id, tree_names
-
+  rescue ActiveRecord::RecordNotFound
+    logger.error "Could not find hierarchy for given geoname id #{geo_name_id.inspect}"
+    return nil
   end
 
   def self.get_geoname_ids(locations)
     geonames_ids={}
     unless locations.blank?
       locations.each do |location|
-        id = self.location_to_geonameid(location)
-        geonames_ids[location] = id if id
+        begin
+          id = self.location_to_geonameid(location)
+          geonames_ids[location] = id if id
+        rescue ActiveRecord::RecordNotFound
+          logger.error "Could not find geoname ids for given location #{location.inspect}"
+        end
       end
     end
     return geonames_ids
+
   end
 
   def self.geoname_location_format(location)
