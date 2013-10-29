@@ -80,11 +80,13 @@ $(function(){
   $('.multi_value.control-group').manage_fields();
   $('.spatial_value.control-group').manage_fields();
 
-  $('#generic_file_based_near').autocomplete(Vecnet.get_autocomplete_opts("location"))
+  //$('#generic_file_based_near').autocomplete(Vecnet.get_autocomplete_opts("location"))
+
+	$('.based_near_with_autocomplete').autocomplete(Vecnet.get_autocomplete_opts("location"))
 
   $("a[rel=popover]").click(function() { return false;});
 
-  $("#generic_file_subject")
+  $(".generic_file_subject")
     // don't navigate away from the field on tab when selecting an item
     .bind( "keydown", function( event ) {
       if ( event.keyCode === $.ui.keyCode.TAB &&

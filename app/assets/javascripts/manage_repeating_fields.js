@@ -43,12 +43,13 @@
       $newField.children('input').val('');
       $listing.append($newField);
       this._trigger("add");
-
+			console.log("attach autocomplete to location to "+ $newField.find('input[type=text]').hasClass("based_near_with_autocomplete"))
       // should we attach an auto complete based on the input
-      if ($newField.find('input[type=text]').attr('id') == 'generic_file_based_near') {
+      if ($newField.find('input[type=text]').hasClass("based_near_with_autocomplete")) {
+				console.log("attach autocomplete to location")
         $newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("location"));
       }
-      else if ($newField.find('input[type=text]').attr('id') == 'generic_file_subject') {
+      else if ($newField.find('input[type=text]').hasClass('subject_with_autocomplete')){
         $newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("subject"));
       }
       $newField.find('input[type=text]').focus();

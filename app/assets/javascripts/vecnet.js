@@ -45,6 +45,8 @@
 				var selectedObj = ui.item;
 				if (field == 'location'){
 					var location=selectedObj.label+"|"+selectedObj.value
+					var hidden_field=  $('.geoname_location_with_id')
+					if (hidden_field.val().length > 0 && $.inArray(hidden_field.val(), Vecnet.selected_location_ids) == -1) Vecnet.selected_location_ids.push(hidden_field.val());
 					// add the selected item
 					if ($.inArray(location, Vecnet.selected_location_ids) == -1) Vecnet.selected_location_ids.push(location);
 				}
@@ -57,15 +59,15 @@
 					var newlocation= ui.item? ui.item.label+"|"+ui.item.value : default_id;
 					if ($.inArray(newlocation, Vecnet.selected_location_ids) == -1) Vecnet.selected_location_ids.push(newlocation);
 					var hidden_field=  $('.geoname_location_with_id')
-					hidden_field.val(Vecnet.selected_location_ids);
-
+					hidden_field.val(Vecnet.selected_location_ids.join(";"));
 					console.log("Newterm: "+newlocation)
 				}
 			},
 			close: function(event) {
 				console.log("On Close autocomplete: "+Vecnet.selected_location_ids.join(";"))
 				var hidden_field=  $('.geoname_location_with_id')
-				hidden_field.val(Vecnet.selected_location_ids);
+				var locations=Vecnet.selected_location_ids.join(";")
+				hidden_field.val(locations);
 				$('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
 			}
 		};
