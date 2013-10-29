@@ -20,6 +20,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
   before_filter :parent
   before_filter :curation_concern
+  before_filter :setup_form, :only => [:new, :edit]
   load_resource :parent, class: "ActiveFedora::Base"
 
   def parent
@@ -36,6 +37,23 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
     Sufia::Noid.namespaceize(params[:parent_id])
   end
   protected :namespaced_parent_id
+
+  # Override setup_form in concrete controllers to get the form ready for display
+  def setup_form
+    logger.debug("Curation concern: #{curation_concern.inspect}")
+    name=[]
+    geoname_locations=[]
+    unless curation_concern.based_near.empty?
+      curation_concern.based_near.each do |location|
+        name << location.name
+        geoname_locations<<"#{location.name}|#{location.geoname_id}"
+      end
+    end
+    curation_concern.name= (curation_concern.name.blank? ? name : curation_concern.name)|| name
+    temp= ((curation_concern.geoname_locations.blank? ? geoname_locations : curation_concern.geoname_locations) || geoname_locations)
+    curation_concern.geoname_locations= temp.is_a?(Array) ? temp.join(';') : temp
+  end
+  protected :setup_form
 
   def curation_concern
     @curation_concern ||=
@@ -76,6 +94,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
   end
 
   def edit
+    setup_form
     respond_with(curation_concern)
   end
 

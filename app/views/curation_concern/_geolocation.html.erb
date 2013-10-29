@@ -1,0 +1,10 @@
+<%= f.input :geoname_locations,  as: :hidden, input_html:{class:'geoname_location_with_id'} %>
+<%# debug f.name.inspect %>
+<%= f.input :name,
+            hint: metadata_help('based_near'),
+            label: get_label(:based_near),
+            as: :multi_value,
+            input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+
+
+

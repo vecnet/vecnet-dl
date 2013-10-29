@@ -50,7 +50,7 @@
       %>
       <%= f.input :subject,
                   as: :multi_value,
-                  input_html: {class: 'input-xlarge', multiple: 'multiple'},
+                  input_html: {class: 'input-xlarge subject_with_autocomplete', multiple: 'multiple'},
                   label: get_label(:subject),
                   hint: metadata_help('subject')
       %>
@@ -65,11 +65,7 @@
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
                   label: get_label(:publisher),
                   hint: metadata_help('publisher')%>
-      <%= f.input :based_near,
-                  hint: metadata_help('based_near'),
-                  label: get_label(:based_near),
-                  as: :multi_value,
-                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+      <%= render "/curation_concern/geolocation", curation_concern: curation_concern, f: f %>
       <%= f.input :identifier,
                   hint: metadata_help('identifier'),
                   label: get_label(:identifier),
