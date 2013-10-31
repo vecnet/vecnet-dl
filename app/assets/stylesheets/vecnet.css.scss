@@ -211,10 +211,13 @@ ul.facet-hierarchy {
   a{
     width: 90%;
   }
+    li.h-node { list-style-image: asset_data_url("blacklight/hierarchy/chevron-right.png"); }
+    li.h-node.twiddle-open { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
   }
-  li.h-node { list-style-image: asset_data_url("blacklight/hierarchy/chevron-right.png"); }
-  li.h-node.twiddle-open { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
-  li.h-leaf { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
+  li.h-leaf {
+    list-style-type: none;
+    list-style-image: none;
+  }
 }
 .inline-item-actions {
   white-space: nowrap;
