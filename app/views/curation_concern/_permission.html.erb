@@ -35,37 +35,37 @@
       Additional Permissions
     </legend>
 
-    <table class="table table-bordered">
-    <tr>
-      <th width="60%">Person/Group</th>
-      <th width="40%">Access Level</th>
-    </tr>
-    <tr id="file_permissions">
-      <td>
-        <%= label_tag :owner_access, "Depositor (<span id=\"file_owner\">#{curation_concern.depositor}</span>)".html_safe, :class=>"control-label" %>
-      </td>
-      <td>
-        <%= Sufia::Engine.config.owner_permission_levels.keys[0] %>
-      </td>
-    </tr>
-    <% curation_concern.permissions.each do |permission| %>
-      <%-# skip the public, registered, and depositor perms as they are displayed above -%>
-      <% next if permission[:name].downcase == 'public' %>
-      <% next if permission[:name].downcase == 'registered' %>
-      <% next if permission[:name].downcase == curation_concern.depositor %>
-      <tr>
-        <td>
-          <%= label_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
-        </td>
-        <td>
-            <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'input-large select_perm' %>
-            <button class="btn close remove_perm">
-              <span>X</span>
-            </button>
+    <table id="custom_permission" class="table .table-striped">
+        <tr>
+          <th width="50%">Person/Group</th>
+          <th width="50%">Access Level</th>
+        </tr>
+        <tr id="file_permissions">
+          <td>
+            <%= label_tag :owner_access, "Depositor (<span id=\"file_owner\">#{curation_concern.depositor}</span>)".html_safe, :class=>"control-label" %>
+          </td>
+          <td>
+            <%= Sufia::Engine.config.owner_permission_levels.keys[0] %>
+          </td>
+        </tr>
+        <% curation_concern.permissions.each do |permission| %>
+          <%-# skip the public, registered, and depositor perms as they are displayed above -%>
+          <% next if permission[:name].downcase == 'public' %>
+          <% next if permission[:name].downcase == 'registered' %>
+          <% next if permission[:name].downcase == curation_concern.depositor %>
+          <tr>
+            <td>
+              <%= label_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
+            </td>
+            <td>
+                <%= select_tag "generic_file[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(Sufia::Engine.config.permission_levels, permission[:access]), :class=>'select_perm' %>
+                <button class="btn close remove_perm">
+                  <span>X</span>
+                </button>
 
-        </td>
-      </tr>
-    <% end %>
+            </td>
+          </tr>
+        <% end %>
     </table>
     <div id="permissions_error">
       <p id='permissions_error_text'></p>
@@ -73,8 +73,8 @@
     <div class="row control-group">
       <div id="new-user controls">
         <div class="input-append">
-          <%= text_field_tag 'new_user_name_skel', nil, :class => "input-large username_with_autocomplete", :placeholder => "User Name" %>
-          <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class=> 'input-large' %>
+          <%= text_field_tag 'new_user_name_skel', nil, :class => "input-large username_with_autocomplete", :placeholder => "User Name", :class=>'with-right-margin' %>
+          <%= select_tag 'new_user_permission_skel', options_for_select(Sufia::Engine.config.permission_levels)%>
           <button class="btn btn-success add" id="add_new_user_skel">
             <i class="icon-white icon-plus"></i>
             <span>Add</span>
@@ -85,8 +85,8 @@
     <div class="row control-group">
       <div id="new-group controls" >
         <div class="input-append">
-          Group Name: <%= text_field_tag 'new_group_name_skel', nil, :class => 'input-large', :placeholder => "Group Name" %>
-          <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels), :class => 'input-large' %>
+          Group Name: <%= text_field_tag 'new_group_name_skel', nil, :class => 'input-large', :placeholder => "Group Name" , :class=>'with-right-margin'%>
+          <%= select_tag 'new_group_permission_skel', options_for_select(Sufia::Engine.config.permission_levels) %>
           <button class="btn btn-success add" id="add_new_group_skel">
             <i class="icon-white icon-plus"></i>
             <span>Add</span>

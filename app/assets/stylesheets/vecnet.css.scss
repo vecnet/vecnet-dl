@@ -5,6 +5,7 @@
 body { padding-top: 40px; }
 @media screen and (max-width: 768px) {
   body { padding-top: 0px; }
+
 }
 
 .navbar {
@@ -270,11 +271,21 @@ ul.facet-hierarchy {
 /* override curate form display */
 .control-label {
   display: inline;
+  font-weight: bold;
   label { display: inline; }
+}
+
+#custom_permission{
+  width: 700px;
+}
+
+.with-right-margin{
+  margin-right:.5em;
 }
 
 /* override blacklight-4.0.1/app/assets/stylesheets/blacklight/_modal.css.scss */
 button.close {
   display: block;
 }
+
 

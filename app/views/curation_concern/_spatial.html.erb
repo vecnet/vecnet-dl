@@ -8,7 +8,7 @@
     <ul class="listing">
       <% latitude.each_with_index do |lat,index| %>
         <li class="field-wrapper input-append">
-          <%= f.text_field :latitude, name:"generic_file[latitude][]", class:"input-small input", value:lat,
+          <%= f.text_field :latitude, name:"generic_file[latitude][]", class:"input-small input with-right-margin", value:lat,
                            placeholder:"latitude"%>
           <%= f.error :latitude %>
 
@@ -26,7 +26,7 @@
 
         <%= f.text_field :longitude, name:"generic_file[longitude][]",
                          id:"generic_file_longitude",value:"",
-                         class:"input-small", placeholder:"longitude"%>
+                         class:"input-small with-right-margin", placeholder:"longitude"%>
         <%= f.error :longitude%>
       </li>
     </ul>

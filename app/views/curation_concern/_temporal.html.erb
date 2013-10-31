@@ -8,7 +8,7 @@
     <ul class="listing">
       <% start_time.each_with_index do |start,index| %>
         <li class="field-wrapper input-append">
-          <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input", value:start,
+          <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input with-right-margin", value:start,
                            placeholder:"start_time"%>
           <%= f.error :start_time %>
 
@@ -20,13 +20,13 @@
         </li>
       <% end %>
       <li class="field-wrapper input-append">
-        <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input", value:"",
+        <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input with-right-margin", value:"",
                        placeholder:"start_time"%>
         <%= f.error :start_time %>
 
         <%= f.text_field :end_time, name:"generic_file[end_time][]",
                          id:"generic_file_end_time",value:"",
-                         class:"input-small", placeholder:"end_time"%>
+                         class:"input-small ", placeholder:"end_time"%>
         <%= f.error :end_time%>
       </li>
     </ul>

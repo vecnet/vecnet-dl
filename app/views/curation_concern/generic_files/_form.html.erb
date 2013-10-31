@@ -6,8 +6,9 @@
         </div>
     <% end -%>
 
-    <fieldset class="required">
-       <%= f.input :title,
+    <fieldset>
+      <legend>Any information is optional, but helpful for others looking to find your work.</legend>
+      <%= f.input :title,
                   label: get_label(:title),
                   hint: help_icon('title'),
                   input_html: {class: 'input-xxlarge'}
@@ -17,11 +18,6 @@
                   hint: help_icon('creator'),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge'} %>
-
-    </fieldset>
-    <fieldset class="optional prompt">
-      <legend>Any additional information is optional, but helpful for others looking to find your work.</legend>
-
       <%= f.input :contributor,
                   as: :multi_value,
                   input_html: {class: 'input-xlarge', multiple: 'multiple'},
@@ -115,10 +111,6 @@
 
     <%= render '/curation_concern/content_license', f: f %>
     <%= render "/curation_concern/permission", curation_concern: curation_concern, f: f %>
-
-
-
-
 
     <div class="row">
       <div class="span12 form-actions">
