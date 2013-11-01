@@ -27,10 +27,10 @@ en:
 
     metadata_help:
       resource_type: 'Pre-defined categories to describe the type of file content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected.'
-      title: "A name for the file to aid in identifying it. Defaults to the file name, though a more descriptive title is encouraged. <em>This is a required field</em>."
-      tag: "Words or phrases you select to describe what the file is about. These are used to search for content. <em>This is a required field</em>."
+      title: "A name for the file to aid in identifying it. Defaults to the file name, though a more descriptive title is encouraged."
+      tag: "Words or phrases you select to describe what the file is about. These are used to search for content."
       subject: "Headings or index terms describing what the file is about; these <em>do</em> need to confirm to an existing vocabulary. Currently MeSH Subject Headings are supported."
-      creator: "The person or group responsible for the file being uploaded. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John&quot;.<em>This is a required field</em>."
+      creator: "The person or group responsible for the file being uploaded. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John&quot;"
       related_url: "A link to a website or other specific content (audio, video, PDF document) related to the file. An example is the URL of a research project from which the file was derived."
       based_near: "A place name related to the file, such as its site of publication, or the city, state, or country the file's contents are about. Calls upon the GeoNames web service (<a href=http://www.geonames.org>geonames.org</a>)."
       contributor: "A person or group you want to recognize for playing a role in the creation of the file, but not the primary role. If there is a specific role you would like noted, include it in parentheses, e.g. \"Jones, Mary (advisor).\""
@@ -39,7 +39,7 @@ en:
       identifier: "A unique handle describing the file. An example would be a DOI for a journal article, or an ISBN or OCLC number for a book."
       language: " The language of the file content."
       publisher: "The person or group making the file available."
-      rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list. <em>This is a required field</em>."
+      rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list."
       spatials: "A point location specified by geographic coordinates in decimal degrees."
       temporals: "Time period(s) for which the data set corresponds. Use the YYYY-MM-DD format.If the full date is unknown, month and year (YYYY-MM) or just year (YYYY) may be used"
       source: "Journal Title that article published in."
