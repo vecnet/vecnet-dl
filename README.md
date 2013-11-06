@@ -93,6 +93,18 @@ Initializing new production environment
   * Migrate fedora objects: `RAILS_ENV=production bundle exec rake vecnet:migrate:batch_to_collection`
  7. Done!
 
+## NCBI Terminalogy
+
+Work in progress. Download the NCBI taxonomy from
+
+    ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+
+Then use `ruby lib/make-ncbi-trees.rb > ncbi-trees.txt` to create a tree file.
+The tree files has one record per line, with each record having three fields seperated by a vertical bar, '|'.
+The first field if the taxon id number, the second is the taxon's rank, and the third is the tree number
+for the taxon.
+Each term has a single tree number (unlike MeSH terms).
+
 ## Gather repository contents for statistics
 
     OUTFILE=~/repo-stats-20130916.csv RAILS_ENV=production bundle exec rake vecnet:dump_statistics
