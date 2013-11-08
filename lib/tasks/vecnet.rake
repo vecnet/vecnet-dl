@@ -51,7 +51,7 @@ namespace :vecnet do
     end
   end
 
-  desc "Solrize location hierarchy"
+  desc "Convert depositor email to username"
   task :depositor_conversion => :environment do
     timed_action "to convert all user id on depositor and edit persons to new UID scheme" do
       ConvertDepositor.all_repo_objects
