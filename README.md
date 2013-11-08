@@ -95,15 +95,16 @@ Initializing new production environment
 
 ## NCBI Terminalogy
 
-Work in progress. Download the NCBI taxonomy from
+Work in progress. After running `rake db:migrate` the following task will download the NCBI taxonomy from
+the following location
 
     ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
 
-Then use `ruby lib/make-ncbi-trees.rb > ncbi-trees.txt` to create a tree file.
-The tree files has one record per line, with each record having three fields seperated by a vertical bar, '|'.
-The first field if the taxon id number, the second is the taxon's rank, and the third is the tree number
-for the taxon.
-Each term has a single tree number (unlike MeSH terms).
+and ingest the terms into the database.
+
+    rake vecnet:import:ncbi_taxonomy
+
+There are about 1,091,096 terms (November 2013).
 
 ## Gather repository contents for statistics
 
