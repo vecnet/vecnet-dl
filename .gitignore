@@ -27,6 +27,7 @@ coverage/
 .rvmrc
 rails_best_practice*
 jetty/
+data/
 
 #Ignore some of my local xml files
 spec/*.end

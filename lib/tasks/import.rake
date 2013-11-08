@@ -43,6 +43,43 @@ namespace :vecnet do
       end
     end
 
+    #
+    # NCBI Taxonomy terms
+    #
+
+    desc "import taxonomy terms from NCBI dump files"
+    task :ncbi_taxonomy => ['data/tax-tree.txt', 'data/tax-synonyms.txt'] do
+    end
+
+    file 'data/tax-tree.txt' => 'data/taxdump/nodes.dmp' do
+      require 'ncbi_tools'
+      puts "Creating Tree File"
+      NcbiTools.new.create_tree_file('data/taxdump/nodes.dmp',
+                                 'data/taxdump/names.dmp',
+                                 'data/tax-tree.txt')
+    end
+    file 'data/tax-synonyms.txt' => 'data/taxdump/names.dmp' do
+      require 'ncbi_tools'
+      puts "Creating Synonym File"
+      NcbiTools.new.create_synonym_file('data/taxdump/names.dmp',
+                                    'data/tax-synonyms.txt')
+    end
+    file 'data/taxdump/names.dmp' => 'data/taxdump/nodes.dmp'
+    file "data/taxdump/nodes.dmp" => ["data/taxdump", "data/taxdump.tar.gz"] do
+      sh "mkdir -p data/taxdump && tar -x -v -C data/taxdump -m -f data/taxdump.tar.gz"
+    end
+
+    file "data/taxdump.tar.gz" => "data" do
+      sh "curl -# -o data/taxdump.tar.gz ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz"
+    end
+
+    directory "data"
+    directory "data/taxdump"
+
+    #
+    # Citations
+    #
+
     desc %q{import endnote file into repository. Environment vars:
     ENDNOTE_FILE - the endnote file to ingest
     ENDNOTE_PDF_PATH - colon seperated list of paths to search for pdf files}
