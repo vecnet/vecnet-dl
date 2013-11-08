@@ -4,13 +4,14 @@ class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
   include Vecnet::ModelMethods
+  include CurationConcern::WithSpecies
 
   attr_accessor :locations
 
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
   delegate_to :descMetadata, [:description], :unique => true
-  delegate_to :descMetadata, [:species]
+
 
   def spatials
      return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
