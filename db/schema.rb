@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911013248) do
+ActiveRecord::Schema.define(:version => 20131108172049) do
+
+  create_table "Admin1Code", :id => false, :force => true do |t|
+    t.string  "fips_code", :limit => 10
+    t.string  "name",      :limit => 200
+    t.string  "asciiname", :limit => 8000
+    t.integer "geonameid"
+  end
+
+  create_table "admin1code", :id => false, :force => true do |t|
+    t.string  "fips_code", :limit => 10
+    t.string  "name",      :limit => 200
+    t.string  "asciiname", :limit => 8000
+    t.integer "geonameid"
+  end
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -41,6 +55,28 @@ ActiveRecord::Schema.define(:version => 20130911013248) do
     t.string   "subject",    :default => ""
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+  end
+
+  create_table "countryinfo", :id => false, :force => true do |t|
+    t.string  "iso_alpha2",      :limit => 2
+    t.string  "iso_alpha3",      :limit => 3
+    t.integer "iso_numeric"
+    t.string  "fips_code",       :limit => 3
+    t.string  "name",            :limit => 200
+    t.string  "capital",         :limit => 200
+    t.float   "areainsqkm"
+    t.integer "population"
+    t.string  "continent",       :limit => 2
+    t.string  "tld",             :limit => 10
+    t.string  "currencycode",    :limit => 3
+    t.string  "currencyname",    :limit => 20
+    t.string  "phone",           :limit => 20
+    t.string  "postalcode",      :limit => 100
+    t.string  "postalcoderegex", :limit => 200
+    t.string  "languages",       :limit => 200
+    t.integer "geonameid"
+    t.string  "neighbors",       :limit => 50
+    t.string  "equivfipscode",   :limit => 3
   end
 
   create_table "domain_terms", :force => true do |t|
@@ -109,27 +145,6 @@ ActiveRecord::Schema.define(:version => 20130911013248) do
   add_index "geoname_hierarchy", ["geoname_id", "hierarchy_tree"], :name => "geonamehierarchy_tree_idx", :unique => true
   add_index "geoname_hierarchy", ["geoname_id"], :name => "geonamehierarchy_geonameid_idx"
 
-  create_table "geoname_places", :id => false, :force => true do |t|
-    t.integer  "geoname_id",      :null => false
-    t.string   "name"
-    t.float    "latitude"
-    t.float    "longitude"
-    t.string   "fclass"
-    t.string   "fcode"
-    t.string   "country"
-    t.string   "cc2"
-    t.string   "admin1"
-    t.string   "admin2"
-    t.string   "admin3"
-    t.string   "admin4"
-    t.date     "geoname_moddate"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  add_index "geoname_places", ["geoname_id", "name"], :name => "places_by_id_and_name", :unique => true
-  add_index "geoname_places", ["geoname_id"], :name => "places_by_geoname_id", :unique => true
-
   create_table "geoname_search", :force => true do |t|
     t.integer  "geoname_id"
     t.string   "geo_location"
@@ -141,16 +156,19 @@ ActiveRecord::Schema.define(:version => 20130911013248) do
   add_index "geoname_search", ["geo_location"], :name => "entries_by_geo_location"
   add_index "geoname_search", ["geoname_id", "object_id"], :name => "entries_by_geoname_id_and_object_id", :unique => true
 
-  create_table "geoname_tree_structures", :force => true do |t|
-    t.integer  "geoname_id"
-    t.string   "tree_structure",       :limit => 1000
-    t.string   "tree_structure_names", :limit => 8000
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+  create_table "geonamedetail", :id => false, :force => true do |t|
+    t.integer "geonamedetailid",                :null => false
+    t.integer "geonameid"
+    t.string  "alternatename",   :limit => 200
+    t.string  "countryname",     :limit => 200
+    t.string  "admin1name",      :limit => 200
   end
 
-  add_index "geoname_tree_structures", ["geoname_id", "tree_structure"], :name => "geoname_by_geoname_id_and_tree_structure", :unique => true
-  add_index "geoname_tree_structures", ["tree_structure"], :name => "geoname_by_tree_structure"
+  create_table "geonamehierarchy", :primary_key => "hierarchyid", :force => true do |t|
+    t.integer "geonameid"
+    t.string  "hierarchytree",         :limit => 1000
+    t.string  "hierarchytreetopnoamy", :limit => 8000
+  end
 
   create_table "help_requests", :force => true do |t|
     t.string   "view_port"
@@ -274,6 +292,22 @@ ActiveRecord::Schema.define(:version => 20130911013248) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "species_taxon_entries", :id => false, :force => true do |t|
+    t.string   "species_taxon_id", :null => false
+    t.string   "term"
+    t.string   "term_type"
+    t.string   "full_tree_id"
+    t.string   "facet_tree_id"
+    t.string   "facet_tree_term"
+    t.text     "term_synonyms"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "species_taxon_entries", ["species_taxon_id", "facet_tree_term"], :name => "entries_by_id_and_tree_term", :unique => true
+  add_index "species_taxon_entries", ["species_taxon_id", "term"], :name => "entries_by_species_id_and_term", :unique => true
+  add_index "species_taxon_entries", ["species_taxon_id", "term_synonyms"], :name => "entries_by_species_id_and_synonyms", :unique => true
 
   create_table "subject_local_authority_entries", :force => true do |t|
     t.string   "label"
