@@ -10,6 +10,7 @@ class GenericFile
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
   delegate_to :descMetadata, [:description], :unique => true
+  delegate_to :descMetadata, [:species]
 
   def spatials
      return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}

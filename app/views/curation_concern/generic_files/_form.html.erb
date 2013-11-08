@@ -46,6 +46,12 @@
                   hint: help_icon('subject')
       %>
 
+      <%= f.input :species,
+                  hint: help_icon('species'),
+                  label: get_label(:species),
+                  as: :multi_value,
+                  input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+
       <%= f.input :tag,
                   label: get_label(:tag),
                   hint: help_icon('tag'),
@@ -92,6 +98,7 @@
                   label: get_label(:based_near),
                   as: :multi_value,
                   input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
+
       <%= render "/curation_concern/spatial", curation_concern: curation_concern, f: f %>
     </fieldset>
 
