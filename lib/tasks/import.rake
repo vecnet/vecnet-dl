@@ -1,3 +1,5 @@
+require 'ncbi_tools'
+require 'benchmark'
 
 namespace :vecnet do
   namespace :import do
@@ -48,18 +50,20 @@ namespace :vecnet do
     #
 
     desc "import taxonomy terms from NCBI dump files"
-    task :ncbi_taxonomy => ['data/tax-tree.txt', 'data/tax-synonyms.txt'] do
+    task :ncbi_taxonomy => [:environment, :ncbi_generate_files] do
+      puts "Importing terms"
+      NcbiSpeciesTerms.load_from_tree_file("data/tax-tree.txt")
     end
 
-    file 'data/tax-tree.txt' => 'data/taxdump/nodes.dmp' do
-      require 'ncbi_tools'
+    task :ncbi_generate_files => ['data/tax-tree.txt', 'data/tax-synonyms.txt']
+
+    file 'data/tax-tree.txt' => ['data/taxdump/nodes.dmp', 'data/taxdump/names.dmp'] do
       puts "Creating Tree File"
       NcbiTools.new.create_tree_file('data/taxdump/nodes.dmp',
                                  'data/taxdump/names.dmp',
                                  'data/tax-tree.txt')
     end
     file 'data/tax-synonyms.txt' => 'data/taxdump/names.dmp' do
-      require 'ncbi_tools'
       puts "Creating Synonym File"
       NcbiTools.new.create_synonym_file('data/taxdump/names.dmp',
                                     'data/tax-synonyms.txt')
@@ -70,6 +74,7 @@ namespace :vecnet do
     end
 
     file "data/taxdump.tar.gz" => "data" do
+      puts "Downloading term file"
       sh "curl -# -o data/taxdump.tar.gz ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz"
     end
 
