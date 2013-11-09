@@ -27,6 +27,34 @@ namespace :vecnet do
         citation_metadata_csv
       end
     end
+    desc "Copy Subject Species to Species metadata"
+    task :one_time_species_copy => :environment do
+      timed_action "copy species from subject" do
+        Citation.find(:all).each do |c|
+          c.copy_species_from_subject
+          c.update_citation unless c.species.blank?
+        end
+        GenericFile.find(:all).each do |g|
+          g.copy_species_from_subject
+          logger.info("\t ############ Species to save: #{g.species.inspect}, Asset:#{g.id} ")
+          puts "Species to save: #{c.species.inspect}"
+          g.save unless c.species.blank?
+        end
+      end
+    end
+
+    desc "Copy Subject Species to Species metadata for given PID"
+    task :species_copy_for_given_pid => :environment do
+      if ENV['PID'].nil?
+        raise "You must provide a PID to copy."
+      end
+      timed_action "copy species from subject" do
+        c = ActiveFedora::Base.find(ENV['PID'], cast:true)
+        c.copy_species_from_subject
+        puts "Species to save: #{c.species.inspect}"
+        c.update_citation unless c.species.blank?
+      end
+    end
 
     def citation_metadata_csv
       citations = Citation.find_with_conditions({},{:sort=>'pub_date desc', :rows=>500, :fl=>'id,  desc_metadata__title_display, desc_metadata__date_created_display'})
