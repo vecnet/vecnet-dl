@@ -73,5 +73,10 @@ class CitationRdfDatastream < ActiveFedora::NtriplesRDFDatastream
     map.alternative(:in => RDF::DC) do |index|
       index.as :searchable, :displayable
     end
+
+    map.species(:to => "scientificName", :in => RDF::DWC) do |index|
+      index.as :searchable, :facetable, :displayable
+    end
+
   end
 end

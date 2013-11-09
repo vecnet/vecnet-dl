@@ -7,6 +7,8 @@ class Citation < ActiveFedora::Base
   include CurationConcern::Embargoable
   include SpatialCoverage
   include Vecnet::ModelMethods
+  include CurationConcern::WithSpecies
+
   self.human_readable_short_description = "Citation from Endnote"
 
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
