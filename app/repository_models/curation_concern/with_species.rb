@@ -11,14 +11,15 @@ module CurationConcern
     def copy_species_from_subject
       puts "copy from subjects"
       subjects=self.subject
-      species=[]
+      species=self.species || []
       unless subjects.blank?
         subjects.each do |sub|
-          species<<sub unless SubjectMeshEntry.find_all_by_term(sub).blank?
+          #TODO make sure subject is not part of species
+          species<<sub unless NcbiSpeciesTerms.find_all_by_term(sub).blank?
         end
       end
-      puts "Species to copy:#{species}"
-      self.species=species
+      puts "Asset: #{self.pid}, Species to copy:#{species}"
+      self.species=species.to_a.uniq
     end
 
   end
