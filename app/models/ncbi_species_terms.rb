@@ -37,19 +37,29 @@ class NcbiSpeciesTerms < ActiveRecord::Base
   def self.generate_facet_treenumbers(&block)
     tt = TreeTransform.new
     yield tt
-    NcbiSpeciesTerms.find_each do |term|
-      facet_tree = nil
-      # only give facets to species terms
-      if ["species", "species group", "species subgroup", "subspecies"].include? term.term_type
-        facet_tree = tt.transform(term.full_tree_id)
-      end
-      if term.facet_tree_id != facet_tree
-        term.facet_tree = facet_tree
+    puts "#{tt.inspect}"
+    # only give facets to species terms
+    NcbiSpeciesTerms.where(term_type: ["species", "species group", "species subgroup", "subspecies"]).find_each do |term|
+      ft_id = tt.transform(term.full_tree_id)
+      if term.facet_tree_id != ft_id
+        print "#{term.species_taxon_id} (#{term.term_type}) #{term.full_tree_id} -> #{ft_id} .\n"
+        term.facet_tree_id = ft_id
+        term.facet_tree_term = terms_for_treenumber(ft_id)
         term.save
       end
     end
   end
 
+  def self.terms_for_treenumber(tree_number)
+    return "" if tree_number.nil?
+    elements = tree_number.split(".")
+    taxons = NcbiSpeciesTerms.where(species_taxon_id: elements).all
+    result = elements.map do |tn|
+      t = taxons.index { |x| x.species_taxon_id == tn }
+      taxons[t].term
+    end
+    result.join("|")
+  end
 
   class TreeTransform
     def initialize
@@ -117,11 +127,13 @@ class NcbiSpeciesTerms < ActiveRecord::Base
 
     private
     def get_ranks(taxid_list)
+      need = taxid_list.select { |taxid| @rank_cache[taxid].nil? }
+      terms = NcbiSpeciesTerms.where(species_taxon_id: need) if need.length > 0
       taxid_list.map do |taxid|
         r = @rank_cache[taxid]
         if r.nil?
-          term = NcbiSpeciesTerms.find_by_species_taxon_id(taxid)
-          @rank_cache[taxid] = r = term.term_type unless term.nil?
+          @rank_cache[taxid] =
+            r = terms.find { |x| x.species_taxon_id == taxid }.term_type
         end
         r
       end
