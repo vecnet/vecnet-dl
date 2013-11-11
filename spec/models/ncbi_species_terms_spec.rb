@@ -23,4 +23,11 @@ EOS
     t.term_type.should == "genus"
     t.full_tree_id.should == "1.131567.2.1224.1236.72274.135621.10"
   end
+
+  describe "TreeTransform" do
+    before(:all) do
+    end
+    it "handles subtree directive" do
+    end
+  end
 end
