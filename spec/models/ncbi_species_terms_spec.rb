@@ -4,7 +4,7 @@ require 'stringio'
 describe "NCBI species terms" do
   it "imports from a file" do
     source = <<EOS
-1|root|no rank|
+1|root|no rank|1
 2|Bacteria|superkingdom|1.131567.2
 6|Azorhizobium|genus|1.131567.2.1224.28211.356.335928.6
 7|Azorhizobium caulinodans|species|1.131567.2.1224.28211.356.335928.6.7

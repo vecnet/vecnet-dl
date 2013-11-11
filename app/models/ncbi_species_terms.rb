@@ -55,8 +55,7 @@ class NcbiSpeciesTerms < ActiveRecord::Base
     elements = tree_number.split(".")
     taxons = NcbiSpeciesTerms.where(species_taxon_id: elements).all
     result = elements.map do |tn|
-      t = taxons.index { |x| x.species_taxon_id == tn }
-      taxons[t].term
+      taxons.find { |x| x.species_taxon_id == tn }
     end
     result.join("|")
   end
@@ -67,7 +66,6 @@ class NcbiSpeciesTerms < ActiveRecord::Base
       @remove_nodes = []
       @remove_ranks = []
       @prune_nodes = []
-      @rank_cache = {}
     end
     def subtree(taxid)
       @subtrees << taxid
@@ -127,15 +125,9 @@ class NcbiSpeciesTerms < ActiveRecord::Base
 
     private
     def get_ranks(taxid_list)
-      need = taxid_list.select { |taxid| @rank_cache[taxid].nil? }
-      terms = NcbiSpeciesTerms.where(species_taxon_id: need) if need.length > 0
+      terms = NcbiSpeciesTerms.where(species_taxon_id: taxid_list)
       taxid_list.map do |taxid|
-        r = @rank_cache[taxid]
-        if r.nil?
-          @rank_cache[taxid] =
-            r = terms.find { |x| x.species_taxon_id == taxid }.term_type
-        end
-        r
+        terms.find { |x| x.species_taxon_id == taxid }.term_type
       end
     end
   end
