@@ -50,12 +50,34 @@ namespace :vecnet do
     #
 
     desc "import taxonomy terms from NCBI dump files"
-    task :ncbi_taxonomy => [:environment, :ncbi_generate_files] do
+    task :ncbi_taxonomy do
+      # invoke the tasks explicitly (as opposed to listing them as
+      # prerequisites), since we want them done in the given order
+      Rake::Task["vecnet:import:ncbi_import_terms"].invoke
+      Rake::Task["vecnet:import:ncbi_generate_facet_tree"].invoke
+    end
+
+    task :ncbi_import_terms => [:environment, :ncbi_generate_files] do
       puts "Importing terms"
       NcbiSpeciesTerms.load_from_tree_file("data/tax-tree.txt")
     end
 
+    task :ncbi_generate_facet_tree => [:environment] do
+      puts "Generating Faceting Tree"
+      NcbiSpeciesTerms.generate_facet_treenumbers do |t|
+        t.subtree(7157)   # keep Culicidae family
+        t.subtree(5820)   # keep Plasmodium genus
+        t.remove_rank("subfamily")
+        t.remove_rank("subgenus")
+        t.remove_rank("tribe")
+        t.remove_rank("no rank")
+      end
+    end
+
     task :ncbi_generate_files => ['data/tax-tree.txt', 'data/tax-synonyms.txt']
+
+    directory "data"
+    directory "data/taxdump"
 
     file 'data/tax-tree.txt' => ['data/taxdump/nodes.dmp', 'data/taxdump/names.dmp'] do
       puts "Creating Tree File"
@@ -72,14 +94,10 @@ namespace :vecnet do
     file "data/taxdump/nodes.dmp" => ["data/taxdump", "data/taxdump.tar.gz"] do
       sh "mkdir -p data/taxdump && tar -x -v -C data/taxdump -m -f data/taxdump.tar.gz"
     end
-
     file "data/taxdump.tar.gz" => "data" do
       puts "Downloading term file"
       sh "curl -# -o data/taxdump.tar.gz ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz"
     end
-
-    directory "data"
-    directory "data/taxdump"
 
     #
     # Citations

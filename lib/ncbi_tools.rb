@@ -5,10 +5,10 @@ class NcbiTools
     names = parse_names_file(names_dmp_filename)
     File.open(out_filename, "w") do |f|
       taxons.keys.each do |taxonid|
-        tree_number(taxons, taxonid)
+        tn = tree_number(taxons, taxonid)
         t = taxons[taxonid]
         term = names[taxonid].first
-        f.puts "#{taxonid}|#{term}|#{t[:level]}|#{t[:tree_number]}"
+        f.puts "#{taxonid}|#{term}|#{t[:level]}|#{tn}"
       end
     end
   end

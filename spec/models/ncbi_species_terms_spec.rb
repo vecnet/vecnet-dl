@@ -25,9 +25,48 @@ EOS
   end
 
   describe "TreeTransform" do
-    before(:all) do
+    before(:each) do
+      NcbiSpeciesTerms.import([:species_taxon_id, :term_type, :full_tree_id], [
+        ["1", "genus", "1"],
+        ["2", "no rank", "1.2"],
+        ["3", "subgenus", "1.2.3"],
+        ["4", "species", "1.2.3.4"],
+        ["5", "species", "1.2.5"]
+      ])
+      @tt = NcbiSpeciesTerms::TreeTransform.new
+      @tt.subtree("2")
     end
     it "handles subtree directive" do
+      @tt.subtree("4")
+      @tt.transform("1.2.3").should == "2.3"
+      @tt.transform("1.3").should == nil
+      @tt.transform("2.3.5").should == "2.3.5"
+      @tt.transform("2.3.4").should == "4"  # two subtrees!
+    end
+    it "handles removing nodes" do
+      @tt.remove("3")
+      @tt.remove("5")
+      @tt.transform("1.2.3").should == "2"
+      @tt.transform("1.2.4").should == "2.4"
+      @tt.transform("1.9.8.2.4.5.3.6").should == "2.4.6"
+    end
+    it "handles removing ranks" do
+      @tt.remove_rank("no rank")
+      @tt.transform("1.2.3.4").should == "3.4"
+      @tt.transform("1.2").should == nil
+    end
+    it "handles removing ranks in the middle" do
+      @tt.remove_rank("subgenus")
+      @tt.transform("1.2.3.4").should == "2.4"
+    end
+    it "prunes branches" do
+      @tt.prune("3")
+      @tt.transform("1.2.4").should == "2.4"
+      @tt.transform("1.2.3.4").should == nil
+    end
+    it "looks up the ranks correctly" do
+      r = @tt.send(:get_ranks, ["1", "2", "3", "4", "5"])
+      r.should == ["genus", "no rank", "subgenus", "species", "species"]
     end
   end
 end
