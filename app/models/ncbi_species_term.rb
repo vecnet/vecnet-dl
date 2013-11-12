@@ -67,6 +67,21 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     result.join("|")
   end
 
+  def get_solr_hierarchy_from_tree
+    hierarchies = [];
+    depth = facet_tree_term.count-1
+    tree_to_solrize = facet_tree_term #facet_tree_term.count>3 ? facet_tree_term[2..-1] : facet_tree_term
+    current_hierarchy = tree_to_solrize.join(':');
+    loop do
+      #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
+      hierarchies << "#{current_hierarchy}"
+      current_hierarchy = current_hierarchy.rpartition(':').first
+      depth= depth.to_i-1
+      break if current_hierarchy.empty?
+    end
+    return hierarchies.reverse;
+  end
+
   class TreeTransform
     def initialize
       @subtrees = []

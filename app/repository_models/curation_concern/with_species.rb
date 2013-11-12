@@ -4,8 +4,7 @@ module CurationConcern
 
     included do
       delegate_to :descMetadata, [:species]
-
-      #before_save :copy_species_from_subject
+      before_save :copy_species_from_subject
     end
 
     def copy_species_from_subject

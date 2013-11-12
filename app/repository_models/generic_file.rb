@@ -65,6 +65,7 @@ class GenericFile
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject(self.subject)
+    solr_doc["species_hierarchy_facet"] = get_hierarchical_faceting_on_species
     solr_doc["subject_parents_t"] = get_subject_parents(self.subject)
     solr_doc["pub_dt"] = get_formated_date_created(self.date_created)
     solr_doc["pub_date"] = get_formated_date_created(self.date_created)
