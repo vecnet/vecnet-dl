@@ -16,6 +16,10 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     end
   end
 
+  def self.get_species_term(term)
+    NcbiSpeciesTerm.where(term_type: ["species", "species group", "species subgroup", "subspecies"], :term=>term).all
+  end
+
 
   def self.load_from_tree_file(tree_filename)
     entries = []

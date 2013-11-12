@@ -31,14 +31,24 @@ namespace :vecnet do
     task :one_time_species_copy => :environment do
       timed_action "copy species from subject" do
         Citation.find(:all).each do |c|
-          c.copy_species_from_subject
+          c.assign_species_from_subject
+          logger.info("\t ############ Species to save: #{g.species.inspect}, Citation id:#{g.id} ")
           c.update_citation unless c.species.blank?
         end
         GenericFile.find(:all).each do |g|
-          g.copy_species_from_subject
-          logger.info("\t ############ Species to save: #{g.species.inspect}, Asset:#{g.id} ")
-          puts "Species to save: #{c.species.inspect}"
-          g.save unless c.species.blank?
+          g.assign_species_from_subject
+          logger.info("\t ############ Species to save: #{g.species.inspect}, GenericFile id:#{g.id} ")
+          g.save unless g.species.blank?
+        end
+      end
+    end
+
+    desc "Remove all Species from Species metadata"
+    task :one_time_species_delete => :environment do
+      timed_action "removing species from citations" do
+        Citation.find(:all).each do |c|
+          c.species=[]
+          c.save
         end
       end
     end

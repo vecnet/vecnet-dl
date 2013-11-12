@@ -71,16 +71,5 @@ module Vecnet
       end
       return all_trees.flatten
     end
-
-    def get_hierarchical_faceting_on_species(species=self.species)
-      all_trees=[]
-      species.each do |specie|
-        ncbi_specie= NcbiSpeciesTerm.find_by_term(specie)
-        if ncbi_specie
-          all_trees<<ncbi_specie.get_solr_hierarchy_from_tree.flatten
-        end
-      end
-      return all_trees.flatten
-    end
   end
 end
