@@ -207,7 +207,7 @@ set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
 desc "Setup for the QA environment"
 task :qa do
-  set :shared_directories, %w(log)
+  set :shared_directories, %w(log data)
   set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
   set :branch,      fetch(:branch, 'master')
   set :rails_env,   'qa'
@@ -230,7 +230,7 @@ end
 
 desc "Setup for the Production environment"
 task :production do
-  set :shared_directories, %w(log)
+  set :shared_directories, %w(log data)
   set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
   set :branch,      fetch(:branch, 'master')
   set :rails_env,   'production'
