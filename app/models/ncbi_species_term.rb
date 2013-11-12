@@ -1,12 +1,10 @@
-class NcbiSpeciesTerms < ActiveRecord::Base
+class NcbiSpeciesTerm < ActiveRecord::Base
   self.table_name = 'species_taxon_entries'
 
   attr_accessible :species_taxon_id, :subject_description,:term, :term_synonyms,  :term_type,
                   :full_tree_id,  :facet_tree_id, :facet_tree_term
 
   serialize :term_synonyms
-
-  self.primary_key = 'species_taxon_id'
 
 
   def self.load_from_tree_file(tree_filename)
@@ -15,23 +13,23 @@ class NcbiSpeciesTerms < ActiveRecord::Base
     File.open(tree_filename) do |f|
       f.each do |line|
         fields = line.strip.split('|')
-        entries << fields[0..3]
-        #entries << NcbiSpeciesTerms.new(species_taxon_id: fields[0],
-        #                                term: fields[1],
-        #                                term_type: fields[2],
-        #                                full_tree_id: fields[3]
-        #                               )
+        #entries << fields[0..3]
+        entries << NcbiSpeciesTerm.new(species_taxon_id: fields[0],
+                                        term: fields[1],
+                                        term_type: fields[2],
+                                        full_tree_id: fields[3]
+                                       )
         count += 1
-        if (count % 10000) == 0
+        if (count % 100) == 0
           print "importing #{count - 999}--#{count}."
-          NcbiSpeciesTerms.import [:species_taxon_id, :term, :term_type, :full_tree_id], entries
+          NcbiSpeciesTerm.import entries#[:species_taxon_id, :term, :term_type, :full_tree_id], entries
           print ".\n"
           entries = []
         end
       end
     end
     print "importing #{count}."
-    NcbiSpeciesTerms.import [:species_taxon_id, :term, :term_type, :full_tree_id], entries
+    NcbiSpeciesTerm.import [:species_taxon_id, :term, :term_type, :full_tree_id], entries
   end
 
   def self.generate_facet_treenumbers(&block)
@@ -39,7 +37,7 @@ class NcbiSpeciesTerms < ActiveRecord::Base
     yield tt
     puts "#{tt.inspect}"
     # only give facets to species terms
-    NcbiSpeciesTerms.where(term_type: ["species", "species group", "species subgroup", "subspecies"]).find_each do |term|
+    NcbiSpeciesTerm.where(term_type: ["species", "species group", "species subgroup", "subspecies"]).find_each do |term|
       ft_id = tt.transform(term.full_tree_id)
       if term.facet_tree_id != ft_id
         print "#{term.species_taxon_id} (#{term.term_type}) #{term.full_tree_id} -> #{ft_id} .\n"
@@ -53,7 +51,7 @@ class NcbiSpeciesTerms < ActiveRecord::Base
   def self.terms_for_treenumber(tree_number)
     return "" if tree_number.nil?
     elements = tree_number.split(".")
-    taxons = NcbiSpeciesTerms.where(species_taxon_id: elements).all
+    taxons = NcbiSpeciesTerm.where(species_taxon_id: elements).all
     result = elements.map do |tn|
       taxons.find { |x| x.species_taxon_id == tn }
     end
@@ -125,7 +123,7 @@ class NcbiSpeciesTerms < ActiveRecord::Base
 
     private
     def get_ranks(taxid_list)
-      terms = NcbiSpeciesTerms.where(species_taxon_id: taxid_list)
+      terms = NcbiSpeciesTerm.where(species_taxon_id: taxid_list)
       taxid_list.map do |taxid|
         terms.find { |x| x.species_taxon_id == taxid }.term_type
       end

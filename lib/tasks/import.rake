@@ -59,12 +59,12 @@ namespace :vecnet do
 
     task :ncbi_import_terms => [:environment, :ncbi_generate_files] do
       puts "Importing terms"
-      NcbiSpeciesTerms.load_from_tree_file("data/tax-tree.txt")
+      NcbiSpeciesTerm.load_from_tree_file("data/tax-tree.txt")
     end
 
     task :ncbi_generate_facet_tree => :environment do
       puts "Generating Faceting Tree"
-      NcbiSpeciesTerms.generate_facet_treenumbers do |t|
+      NcbiSpeciesTerm.generate_facet_treenumbers do |t|
         t.subtree("7157")   # keep Culicidae family
         t.subtree("5820")   # keep Plasmodium genus
         t.remove_rank("subfamily")
