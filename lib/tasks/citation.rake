@@ -32,7 +32,7 @@ namespace :vecnet do
       timed_action "copy species from subject" do
         Citation.find(:all).each do |c|
           c.assign_species_from_subject
-          logger.info("\t ############ Species to save: #{g.species.inspect}, Citation id:#{g.id} ")
+          logger.info("\t ############ Species to save: #{c.species.inspect}, Citation id:#{c.id} ")
           c.update_citation unless c.species.blank?
         end
         GenericFile.find(:all).each do |g|
