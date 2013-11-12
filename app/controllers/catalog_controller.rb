@@ -64,6 +64,15 @@ class CatalogController < ApplicationController
     end
   end
 
+  def species_facet
+    @pagination = get_facet_pagination(params[:id], params)
+    (@response, @document_list) = get_search_results
+    respond_to do |format|
+      format.html
+      format.js { render :layout => false }
+    end
+  end
+
   def recent
     if user_signed_in?
       # grab other people's documents
@@ -118,10 +127,12 @@ class CatalogController < ApplicationController
     #config.add_facet_field "file_format_facet", :label => "File Format", :limit => 5
     config.add_facet_field 'hierarchy_facet', :label => 'Subject Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
     config.add_facet_field 'location_hierarchy_facet', :label => 'Location Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
+    config.add_facet_field 'species_hierarchy_facet', :label => 'Species Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
     config.facet_display = {
         :hierarchy => {
             'hierarchy' => [nil],
-            'location_hierarchy' => [nil]
+            'location_hierarchy' => [nil],
+            'species_hierarchy' => [nil]
         }
     }
 

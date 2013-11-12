@@ -12,6 +12,11 @@
         <%= link_to facet_field_labels['location_hierarchy_facet'], url_for(params.merge(:id => 'location_hierarchy_facet', :action=>"location_facet", :path_only=>true)), :id=>'location_modal', :class => "ajax_modal_launch" %>
       </li>
  <% end %>
+  <% if has_facet_values?(['species_hierarchy_facet']) %>
+      <li class="expandable_new grey">
+        <%= link_to facet_field_labels['species_hierarchy_facet'], url_for(params.merge(:id => 'species_hierarchy_facet', :action=>"species_facet", :path_only=>true)), :id=>'species_modal', :class => "ajax_modal_launch" %>
+      </li>
+  <% end %>
 
 </ul>
 
