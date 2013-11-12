@@ -5,6 +5,16 @@ class NcbiSpeciesTerm < ActiveRecord::Base
                   :full_tree_id,  :facet_tree_id, :facet_tree_term
 
   serialize :term_synonyms
+  serialize :facet_tree_term
+
+  def facet_tree_term
+    trees = read_attribute(:facet_tree_term) || write_attribute(:facet_tree_term, "")
+    if trees
+      trees.split("|")
+    else
+      []
+    end
+  end
 
 
   def self.load_from_tree_file(tree_filename)
@@ -35,7 +45,6 @@ class NcbiSpeciesTerm < ActiveRecord::Base
   def self.generate_facet_treenumbers(&block)
     tt = TreeTransform.new
     yield tt
-    puts "#{tt.inspect}"
     # only give facets to species terms
     NcbiSpeciesTerm.where(term_type: ["species", "species group", "species subgroup", "subspecies"]).find_each do |term|
       ft_id = tt.transform(term.full_tree_id)
@@ -53,7 +62,7 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     elements = tree_number.split(".")
     taxons = NcbiSpeciesTerm.where(species_taxon_id: elements).all
     result = elements.map do |tn|
-      taxons.find { |x| x.species_taxon_id == tn }
+      taxons.find { |x| x.species_taxon_id == tn }.term
     end
     result.join("|")
   end
