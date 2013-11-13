@@ -16,8 +16,10 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     end
   end
 
-  def self.get_species_term(term)
-    NcbiSpeciesTerm.where(term_type: ["species", "species group", "species subgroup", "subspecies"], :term=>term).all
+  def self.get_species_term(terms)
+    #ignore case
+    term_types=["species", "species group", "species subgroup", "subspecies"]
+    NcbiSpeciesTerm.where("term_type in (?) and lower(term) in ( ?)", term_types, terms.collect{|term|term.downcase}).all
   end
 
 
@@ -27,7 +29,6 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     File.open(tree_filename) do |f|
       f.each do |line|
         fields = line.strip.split('|')
-        #entries << fields[0..3]
         entries << NcbiSpeciesTerm.new(species_taxon_id: fields[0],
                                         term: fields[1],
                                         term_type: fields[2],
@@ -36,7 +37,7 @@ class NcbiSpeciesTerm < ActiveRecord::Base
         count += 1
         if (count % 100) == 0
           print "importing #{count - 999}--#{count}."
-          NcbiSpeciesTerm.import entries#[:species_taxon_id, :term, :term_type, :full_tree_id], entries
+          NcbiSpeciesTerm.import entries
           print ".\n"
           entries = []
         end
@@ -74,7 +75,7 @@ class NcbiSpeciesTerm < ActiveRecord::Base
   def get_solr_hierarchy_from_tree
     hierarchies = [];
     depth = facet_tree_term.count-1
-    tree_to_solrize = facet_tree_term #facet_tree_term.count>3 ? facet_tree_term[2..-1] : facet_tree_term
+    tree_to_solrize = facet_tree_term
     current_hierarchy = tree_to_solrize.join(':');
     loop do
       #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
