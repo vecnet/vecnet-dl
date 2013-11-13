@@ -179,6 +179,12 @@ body { padding-top: 40px; }
   }
 }
 
+.facet_select{
+  .count{
+    text-decoration: underline;
+  }
+}
+
 ul.facet-hierarchy {
   li.h-node {
     list-style-image:asset_data_url("blacklight/hierarchy/chevron-right.png");
