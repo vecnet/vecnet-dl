@@ -116,12 +116,12 @@ class CatalogController < ApplicationController
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-    config.add_facet_field "desc_metadata__resource_type_facet", :label => "Resource Type", :limit => 5, :sort => 'index'
-    config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
     config.add_facet_field "desc_metadata__creator_facet", :label => "Author", :limit => 5, :sort => 'index'
+    config.add_facet_field "desc_metadata__contributor_facet", :label => "Contributor", :limit => 5
+    config.add_facet_field "desc_metadata__source_facet", :label => "Journal", :limit =>5, :sort=> 'index'
     config.add_facet_field "desc_metadata__tag_facet", :label => "Keyword", :limit => 5, :sort => 'index'
     config.add_facet_field "desc_metadata__publisher_facet", :label => "Publisher", :limit => 5, :sort => 'index'
-    config.add_facet_field "desc_metadata__source_facet", :label => "Journal", :limit =>5, :sort=> 'index'
+    config.add_facet_field "desc_metadata__resource_type_facet", :label => "Resource Type", :limit => 5, :sort => 'index'
     config.add_facet_field 'hierarchy_facet', :label => 'Subject Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
     config.add_facet_field 'location_hierarchy_facet', :label => 'Location Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
     config.add_facet_field 'species_hierarchy_facet', :label => 'Species Hierarchy', :partial => 'blacklight/hierarchy/facet_hierarchy', :limit => 100000, :show=> false, :sort => 'index'
