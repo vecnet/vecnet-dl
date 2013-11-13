@@ -180,7 +180,10 @@ body { padding-top: 40px; }
 }
 
 ul.facet-hierarchy {
-  li.h-node {list-style-image:asset_data_url("blacklight/hierarchy/chevron-right.png");}
+  li.h-node {
+    list-style-image:asset_data_url("blacklight/hierarchy/chevron-right.png");
+    cursor: pointer;
+  }
   li.h-node.twiddle-open { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
   ul {
     li {
@@ -204,7 +207,6 @@ ul.facet-hierarchy {
     margin-right: 0;
     padding-right: 0;
     position: relative;
-    cursor: pointer;
   .count {
     margin-right: 0;
     position: absolute;
@@ -214,12 +216,16 @@ ul.facet-hierarchy {
   a{
     width: 90%;
   }
-    li.h-node { list-style-image: asset_data_url("blacklight/hierarchy/chevron-right.png"); }
+    li.h-node {
+      list-style-image: asset_data_url("blacklight/hierarchy/chevron-right.png");
+      cursor: pointer;
+    }
     li.h-node.twiddle-open { list-style-image: asset_data_url("blacklight/hierarchy/chevron-down.png"); }
   }
   li.h-leaf {
     list-style-type: none;
     list-style-image: none;
+    cursor: default;
   }
 }
 .inline-item-actions {

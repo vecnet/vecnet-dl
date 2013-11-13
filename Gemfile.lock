@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/banurekha/blacklight-hierarchy.git
-  revision: 90547efcc9f76bf51bcb1d30029c4a7a448aea5d
+  revision: 8b4d6436640783de30f7fffc46661a0aa9ddd461
   specs:
     blacklight-hierarchy (0.0.3)
       blacklight (~> 4.0.0)
