@@ -11,11 +11,16 @@ module CurationConcern
       subjects=self.subject
       species=self.species || []
       unless subjects.blank?
-        subjects.each do |sub|
-          species<<sub unless NcbiSpeciesTerm.get_species_term(sub).blank?
+        subject_terms = []
+        subjects.each { |s| subject_terms << s }
+        sp_terms = NcbiSpeciesTerm.get_species_term(subject_terms)
+        if sp_terms.length > 0
+          sp_terms.each do |s|
+            species << s.term
+          end
+          self.species = species.to_a.uniq
         end
       end
-      self.species=species.to_a.uniq
     end
 
     #Include species from subject as well to species hierarchy

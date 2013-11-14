@@ -8,11 +8,11 @@ class NcbiSpeciesTerm < ActiveRecord::Base
   serialize :facet_tree_term
 
   def facet_tree_term
-    trees = read_attribute(:facet_tree_term) || write_attribute(:facet_tree_term, "")
-    if trees
-      trees.split("|")
-    else
+    trees = read_attribute(:facet_tree_term)
+    if trees.nil?
       []
+    else
+      trees.split("|")
     end
   end
 
@@ -35,8 +35,8 @@ class NcbiSpeciesTerm < ActiveRecord::Base
                                         full_tree_id: fields[3]
                                        )
         count += 1
-        if (count % 100) == 0
-          print "importing #{count - 999}--#{count}."
+        if (count % 10000) == 0
+          print "importing #{count - 9999}--#{count}."
           NcbiSpeciesTerm.import entries
           print ".\n"
           entries = []
