@@ -43,14 +43,20 @@
       $newField.children('input').val('');
       $listing.append($newField);
       this._trigger("add");
-
+			console.log("attach autocomplete to location to "+ $newField.find('input[type=text]').hasClass("based_near_with_autocomplete"))
       // should we attach an auto complete based on the input
-      if ($newField.find('input[type=text]').attr('id') == 'based_near_add') {
-        $newField.find('input[type=text]').autocomplete(get_autocomplete_opts("location"));
+      if ($newField.find('input[type=text]').hasClass('based_near_with_autocomplete')) {
+				console.log("attach autocomplete to location")
+        $newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("location"));
       }
-      else if ($newField.find('input[type=text]').attr('id') == 'subject_add') {
-        $newField.find('input[type=text]').autocomplete(get_autocomplete_opts("subject"));
+      else if ($newField.find('input[type=text]').hasClass('subject_with_autocomplete')) {
+				console.log("attach autocomplete to subject")
+				$newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("subject"));
       }
+			else if ($newField.find('input[type=text]').hasClass('species_with_autocomplete')) {
+				console.log("attach autocomplete to species")
+				$newField.find('input[type=text]').autocomplete(Vecnet.get_autocomplete_opts("species"));
+			}
       $newField.find('input[type=text]').focus();
       },
 
@@ -71,7 +77,7 @@
     }
   });
 
-    function get_autocomplete_opts(field) {
+    /*function get_autocomplete_opts(field) {
         var autocomplete_opts = {
             minLength: 2,
             source: function( request, response ) {
@@ -88,6 +94,6 @@
             }
         };
         return autocomplete_opts;
-    }
+    }*/
 
 })(jQuery);

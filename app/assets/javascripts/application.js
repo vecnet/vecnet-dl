@@ -28,6 +28,7 @@
 //= require bootstrap-popover
 //= require bootstrap-typeahead
 //
+//= require vecnet
 //= require manage_repeating_fields
 //= require toggle_details
 //= require help_modal
@@ -36,33 +37,6 @@
 //= require permissions
 //= require blacklight/hierarchy/hierarchy
 
-Vecnet={}
-Vecnet.setup_autocomplete = function(form_selector) {
-  terms = $("li").map(function(){
-    return $(this).data('term');
-  }).get()
-}
-
-Vecnet.unique = function(list) {
-  var result = [];
-  $.each(list, function(i, e) {
-    if ($.inArray(e, result) == -1) result.push(e);
-  });
-  return result;
-}
-
-Vecnet.list_filter= function(list){
-  var filter = $('.filterinput').val();
-  if(filter) {
-    // this finds all links in a list that contain the input,
-    // and hide the ones not containing the input while showing the ones that do
-    $(list).find("a:not(:Contains(" + filter + "))").parents('li').slideUp();
-    $(list).find("a:Contains(" + filter + ")").parents('li').slideDown();
-  } else {
-    $(list).find('li').slideDown();
-  }
-  return false;
-}
 
 $(function(){
 
@@ -109,45 +83,37 @@ $(function(){
   $('.multi_value.control-group').manage_fields();
   $('.spatial_value.control-group').manage_fields();
 
-  $('#generic_file_based_near').autocomplete(get_autocomplete_opts("location"))
-  $('#based_near_add').autocomplete(get_autocomplete_opts("location"))
+  $('.based_near_with_autocomplete').autocomplete(Vecnet.get_autocomplete_opts("location"))
+  $('#based_near_add').autocomplete(Vecnet.get_autocomplete_opts("location"))
 
   $("a[rel=popover]").click(function() { return false;});
 
-  $("#generic_file_subject")
+  $(".subject_with_autocomplete")
     // don't navigate away from the field on tab when selecting an item
     .bind( "keydown", function( event ) {
       if ( event.keyCode === $.ui.keyCode.TAB &&
         $( this ).data( "autocomplete" ).menu.active ) {
         event.preventDefault();
     }
-  }).autocomplete(get_autocomplete_opts("subject") );
+  }).autocomplete(Vecnet.get_autocomplete_opts("subject") );
 
-    $("#subject_add")
-        // don't navigate away from the field on tab when selecting an item
-        .bind( "keydown", function( event ) {
-            if ( event.keyCode === $.ui.keyCode.TAB &&
-                $( this ).data( "autocomplete" ).menu.active ) {
-                event.preventDefault();
-            }
-        }).autocomplete(get_autocomplete_opts("subject") );
+	$(".species_with_autocomplete")
+	// don't navigate away from the field on tab when selecting an item
+		.bind( "keydown", function( event ) {
+			if ( event.keyCode === $.ui.keyCode.TAB &&
+					$( this ).data( "autocomplete" ).menu.active ) {
+				event.preventDefault();
+			}
+		}).autocomplete(Vecnet.get_autocomplete_opts("species") );
 
-  function get_autocomplete_opts(field) {
-    var autocomplete_opts = {
-      minLength: 2,
-      source: function( request, response ) {
-        $.getJSON( "/authorities/generic_files/" + field, {
-            q: request.term
-        }, response );
-      },
-      focus: function() {
-        // prevent value inserted on focus
-        return false;
-      },
-      complete: function(event) {
-        $('.ui-autocomplete-loading').removeClass("ui-autocomplete-loading");
-      }
-    };
-    return autocomplete_opts;
-  };
+	$("#subject_add")
+			// don't navigate away from the field on tab when selecting an item
+			.bind( "keydown", function( event ) {
+					if ( event.keyCode === $.ui.keyCode.TAB &&
+							$( this ).data( "autocomplete" ).menu.active ) {
+							event.preventDefault();
+					}
+			}).autocomplete(Vecnet.get_autocomplete_opts("subject") );
+
+
 });
