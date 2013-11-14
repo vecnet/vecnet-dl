@@ -8,9 +8,6 @@
 
 <div class="modal-body">
   <%= render "hierarchy_facet_help_text", hierarchy: 'Subject terms' %>
-  <form class="filterform" action="#">
-    <input class="filterinput autocomplete  search-query" type="text" placeholder = "Filter Subject Term">
-  </form>
  <ul class="facet-hierarchy">
    <% facet_field = facet_configuration_for_field(params[:id]||'hierarchy_facet') %>
    <%= render_hierarchy(facet_field) %>
