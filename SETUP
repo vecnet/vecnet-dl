@@ -156,6 +156,7 @@ sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
 ####exit
 
 # nginx
+sudo cp devops/etc/yum.repos.d/nginx.repo /etc/yum.repos.d
 sudo yum install nginx
 sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
