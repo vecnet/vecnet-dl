@@ -135,4 +135,16 @@ class LocalAuthority
     end
     return hits
   end
+
+  def self.entries_by_species(term, query)
+    return if query.empty?
+    term_types=["species", "species group", "species subgroup", "subspecies"]
+    lowQuery = query.downcase
+    hits = []
+    sql = NcbiSpeciesTerm.where("term_type in (?) and lower(term) like ?", term_types, "#{lowQuery}%").select("term, species_taxon_id").limit(25).to_sql
+    NcbiSpeciesTerm.find_by_sql(sql).each do |hit|
+      hits << {:uri => hit.species_taxon_id, :label => hit.term}
+    end
+    return hits
+  end
 end
