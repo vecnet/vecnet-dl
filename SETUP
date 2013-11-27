@@ -60,6 +60,8 @@ sudo su - -c 'pg_ctl reload' postgres
 sudo yum install redis
 sudo chkconfig redis on
 sudo service redis start
+sudo iptables -I INPUT -p tcp --source 129.74.246.0/24 --dport 6379 -m state --state NEW -j ACCEPT
+sudo service iptables save
 
 # tomcat
 sudo yum install tomcat6
@@ -183,7 +185,6 @@ sudo chkconfig vecnet-worker-pool on
 # setup iptables
 sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-sudo iptables -I INPUT -p tcp --source 10.0.0.0/8
 sudo /sbin/service iptables save
 
 # clamav
