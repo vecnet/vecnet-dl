@@ -18,7 +18,7 @@ namespace :vecnet do
         c = ActiveFedora::Base.find(ENV['PID'], cast:true)
         bib_format = c.reformat_bibliographic_citation.blank? ? "No bib available" : c.reformat_bibliographic_citation
         puts bib_format
-        c.update_citation
+        c.save
       end
     end
     desc "get all citations from solr"
@@ -33,7 +33,7 @@ namespace :vecnet do
         Citation.find(:all).each do |c|
           c.assign_species_from_subject
           logger.info("\t ############ Species to save: #{c.species.inspect}, Citation id:#{c.id} ")
-          c.update_citation unless c.species.blank?
+          c.save! unless c.species.blank?
         end
         GenericFile.find(:all).each do |g|
           g.assign_species_from_subject
@@ -62,17 +62,17 @@ namespace :vecnet do
         c = ActiveFedora::Base.find(ENV['PID'], cast:true)
         c.copy_species_from_subject
         puts "Species to save: #{c.species.inspect}"
-        c.update_citation unless c.species.blank?
+        c.save unless c.species.blank?
       end
     end
 
     def citation_metadata_csv
-      citations = Citation.find_with_conditions({},{:sort=>'pub_date desc', :rows=>500, :fl=>'id,  desc_metadata__title_display, desc_metadata__date_created_display'})
+      citations = Citation.find_with_conditions({},{:sort=>'pub_date desc', :rows=>500, :fl=>'id,  desc_metadata__title_display, desc_metadata__bibliographic_citation_t, desc_metadata__species_t'})
       puts "Total records found: #{citations.count}"
       @filename = "citation.csv"
       CSV.open("#{Rails.root.to_s}/tmp/#{@filename}", "wb") do |csv| #creates a tempfile csv
          citations.each do |c|
-          csv << [c['id'],c['desc_metadata__title_display'],c['desc_metadata__date_created_display']].flatten
+          csv << [c['id'],c['desc_metadata__bibliographic_citation_t']].flatten
         end
       end
       puts "Now find all id that have more than one title"
@@ -84,6 +84,15 @@ namespace :vecnet do
             c['desc_metadata__title_display'].each { |title|
               csv << [c['id'], title ]
             }
+          end
+        end
+      end
+      species_filename = "citation_with_species.csv"
+      CSV.open("#{Rails.root.to_s}/tmp/#{species_filename}", "wb") do |csv| #creates a tempfile csv
+        csv << ["pid", "bib", "species"] #creates the header
+        citations.each do |c|
+          unless c['desc_metadata__species_t'].blank?
+            csv << [c['id'],c['desc_metadata__bibliographic_citation_t'], c['desc_metadata__species_t']].flatten
           end
         end
       end
@@ -104,6 +113,18 @@ namespace :vecnet do
         CitationFile.find(:all).each do |c|
           c.update_visibility_as_authenticated
         end
+      end
+    end
+
+    desc "updating bibliographic citations for given citations"
+    task :update_citation_bib_record => :environment do
+      timed_action "update citation with metadata from csv" do
+        if ENV['CITATION_CSV_FILE'].nil?
+          puts "You must provide a csv file with metadata using the format 'vecnet::citation::update_citation_bib_record CITATION_CSV_FILE=path/to/citation/csv/file."
+          return
+        end
+        citation_metadata_update = CitationMetadataUpdateService.new(ENV['CITATION_CSV_FILE'])
+        citation_metadata_update.update_bib
       end
     end
 

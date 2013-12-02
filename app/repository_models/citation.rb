@@ -144,7 +144,7 @@ class Citation < ActiveFedora::Base
     return first_part.blank? ? format_publish_date : "#{first_part}#{dot}#{format_publish_date}"
   end
 
-  def update_citation
+  def update_bibliographic_citation
     self.alternative=self.bibliographic_citation
     self.bibliographic_citation=reformat_bibliographic_citation
     self.save!

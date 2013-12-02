@@ -13,6 +13,11 @@ class CitationMetadataUpdateService
       end
     end
 
+    def bibliographic_citations
+      return [] if bibliographic_citation.nil?
+      return bibliographic_citation.split("|").map{|t|t.strip}
+    end
+
     def places
       return [] if place.nil?
       return place.split("|").map{|t|t.strip}
@@ -73,6 +78,19 @@ class CitationMetadataUpdateService
       return metadata
     end
 
+    def update_bib_citation
+      begin
+        unless curation_concern.nil?
+          curation_concern.bibliographic_citation=bibliographic_citations
+          curation_concern.save!
+          #logger.info "Ingested Citation with id: @curation_concern.pid}"
+          puts "Citation with id: #{@curation_concern.pid}, data:#{self.to_s}, bibliographic_citation:#{curation_concern.bibliographic_citation.to_s} "
+        end
+      rescue ActiveFedora::RecordInvalid=>e
+        logger.error "Error occured during creation: #{e.inspect}"
+      end
+    end
+
     def update_citation
       begin
         unless curation_concern.nil?
@@ -88,7 +106,7 @@ class CitationMetadataUpdateService
     def display_citation
       begin
         unless curation_concern.nil?
-          puts "Citation: #{curation_concern.pid}, Location:#{curation_concern.based_near.to_s}"
+          puts "Citation: #{curation_concern.pid}, Location:#{curation_concern.based_near.to_s}, bibliographic_citation:#{curation_concern.bibliographic_citation.to_s}"
         end
       rescue ActiveFedora::RecordInvalid=>e
         logger.error "Error occured during creation: #{e.inspect}"
@@ -133,5 +151,12 @@ class CitationMetadataUpdateService
       @citations<<hash_object
     end
     logger.debug("Citations from csv: #{@citations.count}, First Citation: #{@citations.first.inspect}")
+  end
+
+  #Fixing incorrect citations on given ids
+  def update_bib
+    citations.each do |c|
+      c.update_bib_citation
+    end
   end
 end
