@@ -23,6 +23,7 @@ Sufia.config do |config|
       'Attribution-NoDerivs 3.0 United States' => 'http://creativecommons.org/licenses/by-nd/3.0/us/',
       'Attribution-NonCommercial-NoDerivs 3.0 United States' => 'http://creativecommons.org/licenses/by-nc-nd/3.0/us/',
       'Attribution-NonCommercial-ShareAlike 3.0 United States' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/us/',
+      'Attribution 3.0 Unported' => 'http://creativecommons.org/licenses/by/3.0/legalcode/:',
       'Public Domain Mark 1.0' => 'http://creativecommons.org/publicdomain/mark/1.0/',
       'CC0 1.0 Universal' => 'http://creativecommons.org/publicdomain/zero/1.0/',
       'All rights reserved' => 'All rights reserved'
