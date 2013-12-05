@@ -8,15 +8,15 @@
   </tr>
   </thead>
   <tbody>
-  <% curation_concern.related_files.each do |generic_file| %>
-    <tr class="<%= dom_class(generic_file) %> attributes">
-      <td class="attribute title"><%= generic_file %></td>
-      <td class="attribute date_uploaded"><%= generic_file.date_uploaded %></td>
-      <td class="attribute permission"><%= link_to_edit_permissions(generic_file) %></td>
+  <% curation_concern.related_files.each do |related_file| %>
+    <tr class="<%= dom_class(related_file) %> attributes">
+      <td class="attribute title"><%= related_file %></td>
+      <td class="attribute date_uploaded"><%= related_file.date_uploaded %></td>
+      <td class="attribute permission"><%= link_to_edit_permissions(related_file) %></td>
       <td>
-        <%= link_to raw('<i class="icon-eye-open"></i> View'), polymorphic_path([:curation_concern, generic_file]), class: 'btn' if can?(:edit, generic_file) %>
-        <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, generic_file]), class: 'btn' if can?(:edit, generic_file) %>
-        <%= render '/curation_concern/media_display', generic_file: generic_file if can?(:read, curation_concern)%>
+        <%= link_to raw('<i class="icon-eye-open"></i> View'), polymorphic_path([:curation_concern, related_file]), class: 'btn' if can?(:edit, related_file) %>
+        <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, related_file]), class: 'btn' if can?(:edit, related_file) %>
+        <%= render '/curation_concern/media_display', curation_concern: related_file if can?(:read, related_file)%>
       </td>
     </tr>
   <% end %>
