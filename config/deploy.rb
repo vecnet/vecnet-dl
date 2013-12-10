@@ -62,7 +62,7 @@ end
 
 # we are using chruby on the deploment machine
 # code from https://github.com/postmodern/chruby/wiki/Capistrano
-set :ruby_version, "1.9.3-p392"
+set :ruby_version, "2.0.0-p353"
 set :chruby_config, "/etc/profile.d/chruby.sh"
 set :set_ruby_cmd, "source #{chruby_config} && chruby #{ruby_version}"
 set(:bundle_cmd) {
@@ -212,7 +212,7 @@ task :qa do
   set :branch,      fetch(:branch, 'master')
   set :rails_env,   'qa'
   set :deploy_to,   '/home/app/vecnet'
-  set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
+  set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
 
   set :user,        'app'
   set :domain,      'dl-vecnet-qa.crc.nd.edu'
@@ -235,7 +235,7 @@ task :production do
   set :branch,      fetch(:branch, 'master')
   set :rails_env,   'production'
   set :deploy_to,   '/home/app/vecnet'
-  set :ruby_bin,    '/opt/rubies/1.9.3-p392/bin'
+  set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
 
   set :user,        'app'
   set :domain,      'dl-vecnet.crc.nd.edu'

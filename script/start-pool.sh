@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source /etc/profile.d/chruby.sh
-chruby 1.9.3-p392
+chruby 2.0.0-p353
 
 echo "Starting Resque pool"
 

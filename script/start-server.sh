@@ -4,7 +4,7 @@
 # there is an nginx reverse proxy at port 80
 
 source /etc/profile.d/chruby.sh
-chruby 1.9.3-p392
+chruby 2.0.0-p353
 
 #LISTEN_PORTS="-l 127.0.0.1:3001"
 source /home/app/vecnet/current/script/get-env.sh
