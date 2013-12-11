@@ -5,6 +5,7 @@ class GenericFile
   include SpatialCoverage
   include Vecnet::ModelMethods
   include CurationConcern::WithSpecies
+  include CurationConcern::WithExternalFiles
 
   attr_accessor :locations
 
