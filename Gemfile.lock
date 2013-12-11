@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/banurekha/curate.git
-  revision: 1cc969b7c39fb30a45f8898d875008724178eb03
+  revision: c03c9b13b5e3ffdb6498244011d81149bc2d8b3f
   branch: vecnet
   specs:
     curate (0.3.0)
@@ -166,7 +166,7 @@ GEM
     blankslate (2.1.2.4)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
-    bootstrap-datepicker-rails (1.1.1.5)
+    bootstrap-datepicker-rails (1.1.1.10)
       railties (>= 3.0)
     bootstrap-sass (2.2.2.0)
       sass (~> 3.2)
@@ -231,7 +231,7 @@ GEM
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
-    devise-guests (0.3.1)
+    devise-guests (0.3.2)
       devise
     diff-lcs (1.2.4)
     equivalent-xml (0.3.0)
