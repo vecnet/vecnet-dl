@@ -5,14 +5,16 @@ module CurationConcern
     included do
       has_metadata name: 'external_file', type: UrlDatastream
 
+      attr_accessor :linked_resource_url
+
       #delegate_to :external_file, [:file_location]
     end
-
-    def file_location
+    #This assusmes there can me only one link
+    def linked_resource
       self.datastreams["external_file"].content
     end
 
-    def file_location=(value)
+    def linked_resource=(value)
       self.datastreams["external_file"].content=value
     end
 

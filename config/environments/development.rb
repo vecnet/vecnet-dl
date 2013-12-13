@@ -79,4 +79,7 @@ Vecnet::Application.configure do
   config.pubtkt_logout_url = '/development_sessions/log_out'
   # private_key only needed by DevelopmentSessionsController
   config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
+
+  #PATH to store external large files
+  config.external_files_base_path = '/Users/blakshmi/local/external_files'
 end

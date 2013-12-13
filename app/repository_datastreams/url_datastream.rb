@@ -7,8 +7,14 @@ class UrlDatastream < ActiveFedora::Datastream
     self.content
   end
 
-  def file_location=(value)
-    URI.parse(value) unless value.nil?
-    self.content = value
+  def file_location=(url)
+    u = URI::Parser.new.parse(url) unless url.nil?
+    return if [URI::HTTP, URI::HTTPS, URI::FTP, URI::Generic].include?(u.class) && !u.scheme.eql?('javascript')
+    self.content = u.to_s
   end
+
+  def to_s
+    file_location
+  end
+
 end
