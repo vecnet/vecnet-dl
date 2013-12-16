@@ -81,5 +81,5 @@ Vecnet::Application.configure do
   config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
 
   #PATH to store external large files
-  config.external_files_base_path = '/Users/blakshmi/local/external_files'
+  config.external_files_base_path = '/Users/blakshmi/local/external_files/'
 end

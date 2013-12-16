@@ -4,13 +4,13 @@ module CurationConcern
       super
       add_user_roles
       update_file
-      create_linked_external_file
+      create_linked_resource
     end
 
     def update!
       super
       update_file
-      add_external_file
+      create_linked_resource
     end
 
     def rollback
@@ -25,7 +25,7 @@ module CurationConcern
     end
 
     def update_file
-      #TODO handle new external file path and the fact that there is no content
+      #handle new external file path and the fact that there is no content
       file = attributes.delete(:file)
       title = attributes[:title]
       title ||= file.original_filename if file
@@ -35,21 +35,20 @@ module CurationConcern
       end
     end
 
-    def linked_resource_urls
-      @linked_resource_urls ||= Array(attributes[:linked_resource_urls]).flatten.compact
+    def linked_resource_url
+      @linked_resource_url ||= attributes[:linked_resource_url]
     end
 
-    def create_linked_external_file
-      #TODO Handle multiple links
-      #linked_resource_urls.all? do |link_resource_url|
-        #verify attach external file to curation concern
-        create_linked_resource(link_resource_url)
-      #end
-    end
+    #def create_linked_external_file
+    #  #Handle multiple links?
+    #  #linked_resource_urls.all? do |link_resource_url|
+    #    #verify attach external file to curation concern
+    #    create_linked_resource(link_resource_url)
+    #  #end
+    #end
 
-    def create_linked_resource(link_resource_url)
-      return true if ! link_resource_url.present?
-      curation_concern.linked_resource= link_resource_url
+    def create_linked_resource
+      curation_concern.absolute_location= linked_resource_url
       curation_concern.save!
     end
 

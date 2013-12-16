@@ -151,5 +151,19 @@ namespace :vecnet do
 
       end
     end
+
+    desc %q{Ingest External file into repository. Environment vars: Directory that has input file}
+    task :ingest_external_file_link => :environment do
+      if ENV['SOURCE_PATH'].nil?
+        puts "You must provide a source path for external file using the format 'import::ingest_external_file_link SOURCE_PATH=path/to/external/file"
+        return
+      end
+      error_list = []
+      timed_action "endnote_conversion" do
+        puts "Starting to ingest external link object"
+        service = ExternalFileIngestService.new(ENV['SOURCE_PATH'])
+        service.process_files_from_source
+      end
+    end
   end
 end
