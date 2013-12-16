@@ -72,6 +72,6 @@ Vecnet::Application.configure do
 
   # XXX: the key will need to be changed
   config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
-  config.pubtkt_login_url = 'https://www.vecnet.org/index.php/login-register'
+  config.pubtkt_login_url =  'https://www.vecnet.org/index.php/sso-login'
   config.pubtkt_logout_url = 'https://www.vecnet.org/index.php/log-out'
 end
