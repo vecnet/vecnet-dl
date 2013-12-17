@@ -5,14 +5,19 @@ require 'zlib'
 # :path :method :ip :user :date :status :duration
 class LogParser
 
-  def scan_gzip(fname, &block)
-    Zlib::GzipReader.open(fname) do |gzip|
-      scan(gzip, &block)
-    end
+  def initialize(fname)
+    @fname = fname
+    @reader = File
+    self
   end
 
-  def scan_file(fname, &block)
-    File.open(fname) do |f|
+  def use_gzip
+    @reader = Zlib::GzipReader
+    self
+  end
+
+  def each(&block)
+    @reader.open(@fname) do |f|
       scan(f, &block)
     end
   end
