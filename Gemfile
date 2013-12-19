@@ -54,10 +54,12 @@ end
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', :require => false
   gem 'rspec-html-matchers'
   gem 'rspec-rails'
   gem 'webmock'
+  gem 'timecop'
+  gem 'selenium-webdriver', '2.35.1'
 end
 
 group :test, :development do

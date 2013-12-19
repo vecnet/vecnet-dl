@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :user do
     sequence(:username) {|n| "username-#{n}" }
-    sequence(:uid) {|n| "username-#{n}" }
+    #sequence(:id) {|n| "username-#{n}" }
     agreed_to_terms_of_service true
     email "g@g.com"
   end
