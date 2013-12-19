@@ -15,7 +15,7 @@ describe 'end to end behavior', describe_options do
     Warden.test_reset!
     Resque.inline = @old_resque_inline_value
   end
-  let(:user) { FactoryGirl.create(:user, agreed_to_terms_of_service: agreed_to_terms_of_service) }
+  let(:user) { FactoryGirl.create(:user, agreed_to_terms_of_service: true) }
   let(:another_user) { FactoryGirl.create(:user, agreed_to_terms_of_service: true) }
   let(:prefix) { Time.now.strftime("%Y-%m-%d-%H-%M-%S-%L") }
   let(:initial_title) { "#{prefix} Something Special" }
@@ -23,167 +23,158 @@ describe 'end to end behavior', describe_options do
   let(:updated_title) { "#{prefix} Another Not Quite" }
   let(:updated_file_path) { Rails.root.join('app/controllers/application_controller.rb').to_s }
 
-  describe 'terms of service' do
-    let(:agreed_to_terms_of_service) { false }
-    it "only requires me to agree once" do
+  describe 'Able to login' do
+    it "allows me to login" do
       login_as(user)
-      visit('/')
-      click_link('Get Started')
-      agree_to_terms_of_service
-      logout
-
-      visit('/')
-
-      login_as(user)
-      click_link('Get Started')
-      page.assert_selector('#terms_of_service', count: 0)
+      visit new_classify_concern_path
+      page.assert_selector('.main-header h1', "Create and Apply Metadata")
     end
   end
 
-  describe 'with user who has already agreed to the terms of service' do
-    let(:agreed_to_terms_of_service) { true }
-    it "displays the start uploading" do
-      login_as(user)
-      visit '/'
-      click_link "Get Started"
-      page.should have_content("What are you uploading?")
-    end
-
-    it "allows me to directly create a senior thesis...then delete it", js: true do
-      login_as(user)
-      visit('/concern/senior_theses/new')
-      page.assert_selector('.main-header h2', "Describe Your Thesis")
-    end
-  end
-
-  describe 'help request' do
-    let(:agreed_to_terms_of_service) { true }
-    # I want to test both JS mode and non-JS mode
-    [true, false].each do |using_javascript|
-      it "is available for users who are authenticated and agreed to ToS", js: using_javascript do
-        login_as(user)
-        visit('/')
-        click_link("Get Started")
-        click_link "Request Help"
-        within("#new_help_request") do
-          fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
-          click_on("Let Us Know")
-        end
-        page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
-      end
-    end
-  end
-
-  describe '+Add javascript behavior', js: true do
-    let(:contributors) { ["D'artagnan", "Porthos", "Athos", 'Aramas'] }
-    let(:agreed_to_terms_of_service) { true }
-    let(:title) {"Somebody Special's Senior Thesis" }
-    it 'handles contributor', js: true do
-      login_as(user)
-      visit('/concern/senior_theses/new')
-      describe_your_thesis(
-        "Title" => title,
-        "Upload your thesis" => initial_file_path,
-        "Contributors" => contributors,
-        :js => true
-      )
-      page.should have_content(title)
-      contributors.each do |contributor|
-        page.assert_selector(
-          '.senior_thesis.attributes .contributor.attribute',
-          text: contributor
-        )
-      end
-    end
-
-  end
-
-  describe 'I am logged in and request help' do
-    let(:agreed_to_terms_of_service) { true }
-    it "request help is registered" do
-      login_as(user, scope: :user, run_callbacks: false)
-      visit '/'
-      click_link "Get Started"
-      click_link "Request Help"
-      within("#new_help_request") do
-        fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
-        click_on("Submit")
-      end
-      page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
-    end
-  end
-
-  describe 'file uploaded via different paths' do
-    let(:agreed_to_terms_of_service) { true }
-    let(:contributors) { ["Goethe"]}
-    it "related file via senior_thesis#new and generic_file#new should be similar" do
-      login_as(user)
-      get_started
-      classify_what_you_are_uploading('Senior Thesis')
-      describe_your_thesis(
-        "Title" => 'Senior Thesis',
-        'Visibility' => 'Open Access',
-        "Upload your thesis" => initial_file_path,
-        "Assign DOI" => true,
-        "Contributors" => contributors,
-        "Button to click" => 'Create and Add Related Files...'
-      )
-      # While the title is different, the filenames should be the same
-      add_a_related_file(
-        "Title" => 'Related File',
-        'Visibility' => 'University of Notre Dame',
-        "Upload a related file" => initial_file_path
-      )
-
-      page.assert_selector('h1', text: 'Senior Thesis')
-
-      page.assert_selector(
-        '.senior_thesis.attributes .identifier.attribute',
-        count: 1
-      )
-
-      page.assert_selector(
-        '.generic_file.attributes .title.attribute',
-        text: "Related File",count: 1
-      )
-      page.assert_selector(
-        '.generic_file.attributes .permission.attribute',
-        text: "University of Notre Dame",count: 1
-      )
-      page.assert_selector(
-        '.generic_file.attributes .title.attribute',
-        text: "Senior Thesis",count: 1
-      )
-      page.assert_selector(
-        '.generic_file.attributes .permission.attribute',
-        text: "Open Access",count: 1
-      )
-      page.assert_selector(
-        '.generic_file.attributes .filename.attribute',
-        text: File.basename(initial_file_path),count: 2
-      )
-    end
-  end
-  describe 'with a user who has not agreed to terms of service' do
-    let(:agreed_to_terms_of_service) { false }
-    it "displays the terms of service page after authentication" do
-      login_as(user)
-      get_started
-      agree_to_terms_of_service
-      classify_what_you_are_uploading('Senior Thesis')
-      describe_your_thesis
-      path_to_view_thesis = view_your_new_thesis
-      path_to_edit_thesis = edit_your_thesis
-      view_your_updated_thesis
-      view_your_dashboard
-
-      logout
-      login_as(another_user)
-      other_persons_thesis_is_not_in_my_dashboard
-      i_can_see_another_users_open_resource(path_to_view_thesis)
-      i_cannot_edit_to_another_users_resource(path_to_edit_thesis)
-    end
-  end
+  #describe 'with user who has already agreed to the terms of service' do
+  #  let(:agreed_to_terms_of_service) { true }
+  #  it "displays the start uploading" do
+  #    login_as(user)
+  #    visit '/'
+  #    click_link "Get Started"
+  #    page.should have_content("What are you uploading?")
+  #  end
+  #
+  #  it "allows me to directly create a senior thesis...then delete it", js: true do
+  #    login_as(user)
+  #    visit('/concern/senior_theses/new')
+  #    page.assert_selector('.main-header h2', "Describe Your Thesis")
+  #  end
+  #end
+  #
+  #describe 'help request' do
+  #  let(:agreed_to_terms_of_service) { true }
+  #  # I want to test both JS mode and non-JS mode
+  #  [true, false].each do |using_javascript|
+  #    it "is available for users who are authenticated and agreed to ToS", js: using_javascript do
+  #      login_as(user)
+  #      visit('/')
+  #      click_link("Get Started")
+  #      click_link "Request Help"
+  #      within("#new_help_request") do
+  #        fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
+  #        click_on("Let Us Know")
+  #      end
+  #      page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
+  #    end
+  #  end
+  #end
+  #
+  #describe '+Add javascript behavior', js: true do
+  #  let(:contributors) { ["D'artagnan", "Porthos", "Athos", 'Aramas'] }
+  #  let(:agreed_to_terms_of_service) { true }
+  #  let(:title) {"Somebody Special's Senior Thesis" }
+  #  it 'handles contributor', js: true do
+  #    login_as(user)
+  #    visit('/concern/senior_theses/new')
+  #    describe_your_thesis(
+  #      "Title" => title,
+  #      "Upload your thesis" => initial_file_path,
+  #      "Contributors" => contributors,
+  #      :js => true
+  #    )
+  #    page.should have_content(title)
+  #    contributors.each do |contributor|
+  #      page.assert_selector(
+  #        '.senior_thesis.attributes .contributor.attribute',
+  #        text: contributor
+  #      )
+  #    end
+  #  end
+  #
+  #end
+  #
+  #describe 'I am logged in and request help' do
+  #  let(:agreed_to_terms_of_service) { true }
+  #  it "request help is registered" do
+  #    login_as(user, scope: :user, run_callbacks: false)
+  #    visit '/'
+  #    click_link "Get Started"
+  #    click_link "Request Help"
+  #    within("#new_help_request") do
+  #      fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
+  #      click_on("Submit")
+  #    end
+  #    page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
+  #  end
+  #end
+  #
+  #describe 'file uploaded via different paths' do
+  #  let(:agreed_to_terms_of_service) { true }
+  #  let(:contributors) { ["Goethe"]}
+  #  it "related file via senior_thesis#new and generic_file#new should be similar" do
+  #    login_as(user)
+  #    get_started
+  #    classify_what_you_are_uploading('Senior Thesis')
+  #    describe_your_thesis(
+  #      "Title" => 'Senior Thesis',
+  #      'Visibility' => 'Open Access',
+  #      "Upload your thesis" => initial_file_path,
+  #      "Assign DOI" => true,
+  #      "Contributors" => contributors,
+  #      "Button to click" => 'Create and Add Related Files...'
+  #    )
+  #    # While the title is different, the filenames should be the same
+  #    add_a_related_file(
+  #      "Title" => 'Related File',
+  #      'Visibility' => 'University of Notre Dame',
+  #      "Upload a related file" => initial_file_path
+  #    )
+  #
+  #    page.assert_selector('h1', text: 'Senior Thesis')
+  #
+  #    page.assert_selector(
+  #      '.senior_thesis.attributes .identifier.attribute',
+  #      count: 1
+  #    )
+  #
+  #    page.assert_selector(
+  #      '.generic_file.attributes .title.attribute',
+  #      text: "Related File",count: 1
+  #    )
+  #    page.assert_selector(
+  #      '.generic_file.attributes .permission.attribute',
+  #      text: "University of Notre Dame",count: 1
+  #    )
+  #    page.assert_selector(
+  #      '.generic_file.attributes .title.attribute',
+  #      text: "Senior Thesis",count: 1
+  #    )
+  #    page.assert_selector(
+  #      '.generic_file.attributes .permission.attribute',
+  #      text: "Open Access",count: 1
+  #    )
+  #    page.assert_selector(
+  #      '.generic_file.attributes .filename.attribute',
+  #      text: File.basename(initial_file_path),count: 2
+  #    )
+  #  end
+  #end
+  #describe 'with a user who has not agreed to terms of service' do
+  #  let(:agreed_to_terms_of_service) { false }
+  #  it "displays the terms of service page after authentication" do
+  #    login_as(user)
+  #    get_started
+  #    agree_to_terms_of_service
+  #    classify_what_you_are_uploading('Senior Thesis')
+  #    describe_your_thesis
+  #    path_to_view_thesis = view_your_new_thesis
+  #    path_to_edit_thesis = edit_your_thesis
+  #    view_your_updated_thesis
+  #    view_your_dashboard
+  #
+  #    logout
+  #    login_as(another_user)
+  #    other_persons_thesis_is_not_in_my_dashboard
+  #    i_can_see_another_users_open_resource(path_to_view_thesis)
+  #    i_cannot_edit_to_another_users_resource(path_to_edit_thesis)
+  #  end
+  #end
   protected
   def get_started
     visit '/'
