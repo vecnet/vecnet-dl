@@ -148,16 +148,9 @@ wget -O chruby-0.3.4.tar.gz https://github.com/postmodern/chruby/archive/v0.3.4.
 tar -xzvf chruby-0.3.4.tar.gz
 cd chruby-0.3.4/
 sudo make install
-sudo /usr/local/bin/ruby-build 1.9.3-p392 /opt/rubies/1.9.3-p392
+sudo /usr/local/bin/ruby-build 2.0.0-p353 /opt/rubies/2.0.0-p353
 # execute next command as root
 sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
-
-# don't do the following. this is just here in case we need to go back to rvm
-##### use RVM for the ruby management since that is how the produciton machine is doing it :(
-####sudo su - app
-####wget https://get.rvm.io
-####cat rvm-installer | bash -s stable --rails --autolibs=enabled --ruby=1.9.3
-####exit
 
 # nginx
 sudo cp devops/etc/yum.repos.d/nginx.repo /etc/yum.repos.d
@@ -203,7 +196,7 @@ sudo make install
 #Copy public key into app folder who ever is going to deploy to that machine
 #Run cap ENV deploy:setup in dev machine
 #Install bundler manually in that host machine
- chruby 1.9.3-p392
+ chruby 2.0.0-p353
  gem install bundler
  cd vecnet
  bundle install

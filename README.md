@@ -41,17 +41,17 @@ To rebuild the Fedora object store:
 
 To resolarize everything...it will take a LONG time to complete.
 
-    chruby 1.9.3-p392
+    chruby 2.0.0-p353
     RAILS_ENV=qa bundle exec rake solrizer:fedora:solrize_objects
 
 To load and build the MeSH trees run. This will run for a while (~0.5--1 hours)
 
-    chruby 1.9.3-p392
+    chruby 2.0.0-p353
     RAILS_ENV=qa bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees
 
 To resolrize with mesh synonyms...it will take a LONG time to complete.
 
-    chruby 1.9.3-p392
+    chruby 2.0.0-p353
     # This builds the synonyms.txt file if needed.
     # you could skip this if synonyms did not change
     RAILS_ENV=qa bundle exec rake vecnet:solrize_synonym:get_synonyms FILE=solr_conf/conf/synonyms.txt
@@ -77,7 +77,7 @@ To ingest Citation to qa/Production
      #Execute citation task as app user
      sudo su app
      cd /home/app/vecnet/current
-     chruby 1.9.3-p392
+     chruby 2.0.0-p353
      RAILS_ENV=production bundle exec rake vecnet:import:endnote_conversion ENDNOTE_FILE=/opt/endnote/<endnotefilename> ENDNOTE_PDF_PATH=/opt/citation_files:/opt/citation_files/<endnotefilename>
 
 
@@ -86,7 +86,7 @@ Initializing new production environment
  1. Do system setup as in `SETUP` file
  2. Get capistrano deploy working to new site
  3. on production machine:
-  * setup ruby: `chruby 1.9.3-p392`
+  * setup ruby: `chruby 2.0.0-p353`
   * Setup mesh terms: `RAILS_ENV=production bundle exec rake vecnet:import:mesh_subjects vecnet:import:eval_mesh_trees`
   * Migrate user table: See below
   * Resolrize: `RAILS_ENV=production bundle exec rake solrizer:fedora:solrize_objects`
