@@ -17,6 +17,7 @@ en:
 
     field_label:
       based_near:        "Location"
+      rights:            "Rights"
       description:       "Abstract or Summary"
       tag:               "Keyword"
       date_created:      "Date Created"

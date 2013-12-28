@@ -319,6 +319,8 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.8.1)
+    launchy (2.4.2)
+      addressable (~> 2.3)
     libv8 (3.16.14.3)
     listen (2.4.0)
       celluloid (>= 0.15.2)
@@ -611,6 +613,7 @@ DEPENDENCIES
   guard-spork
   jettywrapper
   jquery-rails
+  launchy
   method_decorators
   method_locator
   mods!

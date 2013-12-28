@@ -23,12 +23,147 @@ describe 'end to end behavior', describe_options do
   let(:updated_title) { "#{prefix} Another Not Quite" }
   let(:updated_file_path) { Rails.root.join('app/controllers/application_controller.rb').to_s }
 
+  def assert_breadcrumb_trail(page, *breadcrumbs)
+    page.assert_selector('.breadcrumb li', count: breadcrumbs.length)
+    within('.breadcrumb') do
+      breadcrumbs.each do |text, path|
+        if String(path).empty?
+          page.has_css?('li', text: text)
+        else
+          page.has_css?("li a[href='#{path}']", text: text)
+        end
+      end
+    end
+  end
+
+  def click_upload_file
+    within(".dropdown-menu") do
+      click_on 'Upload a file'
+    end
+  end
+
+  def create_mock_curation_concern(options = {})
+    options['Title'] ||= initial_title
+    options['Upload your thesis'] ||= initial_file_path
+    options['Visibility'] ||= 'visibility_restricted'
+    options["Button to click"] ||= "Save"
+    options["Contributors"] ||= ["Dante"]
+    options["Content License"] ||= Sufia::Engine.config.cc_licenses.keys.first
+
+    page.should have_content('Create and Apply Metadata')
+     within('#new_generic_file') do
+      fill_in("Title", with: options['Title'])
+      attach_file("generic_file_file", options['Upload your thesis'])
+      choose(options['Visibility'])
+      select(options['Content License'], from: I18n.translate('sufia.field_label.rights'))
+      fill_out_form_multi_value_for('contributor', with: options['Contributors'])
+      click_on(options["Button to click"])
+    end
+  end
+
+
+  def fill_out_form_multi_value_for(method_name, options={})
+    field_name = "generic_file[#{method_name}][]"
+    within(".control-group.generic_file_#{method_name}.multi_value") do
+      elements = [options[:with]].flatten.compact
+      if with_javascript?
+        elements.each_with_index do |element, i|
+          container = all('.input-append').last
+          within(container) do
+            fill_in(field_name, with: element)
+            click_on('Add')
+          end
+        end
+      else
+        fill_in(field_name, with: elements.first)
+      end
+    end
+  end
+
   describe 'Able to login' do
     it "allows me to login" do
       login_as(user)
       visit new_classify_concern_path
-      page.assert_selector('.main-header h1', "Create and Apply Metadata")
+      page.assert_selector('h1', :text => 'Create and Apply Metadata', :visible => true)
     end
+  end
+
+  describe 'breadcrumb' do
+    it 'renders a breadcrumb' do
+      login_as(user)
+      visit new_classify_concern_path
+      assert_breadcrumb_trail(page, ["Home", '/'], ["New Generic File", nil])
+    end
+  end
+
+  describe 'with user who sign in' , js: true do
+    before do
+      login_as(user)
+      visit '/'
+      click_link 'Username 1'
+    end
+
+    it 'allows me to create a mock curation concern' do
+      page.should have_css('.dropdown-menu', visible: true)
+      click_upload_file
+      page.assert_selector('h1', :text => 'Create and Apply Metadata', :visible => true)
+    end
+
+    it 'remembers mock curation concern inputs when data was invalid' do
+      click_upload_file
+      create_mock_curation_concern(
+          'Visibility' => 'visibility_restricted',
+          'I Agree' => true,
+          'Title' => ''
+      )
+      page.assert_selector('.main-header h2', "Create and Apply Metadata")
+      expect(page).to_not have_checked_field('visibility_restricted')
+      expect(page).to have_checked_field('visibility_open')
+    end
+    #
+    #it "a public item with future embargo is not visible today but is in the future" do
+    #  embargo_release_date = 2.days.from_now
+    #  # Because the JS will transform an unexpected input entry to the real
+    #  # today (browser's date), and I want timecop to help
+    #  embargo_release_date_formatted = embargo_release_date.strftime("%Y-%m-%d")
+    #  login_as(user)
+    #  visit('/concern/mock_curation_concerns/new')
+    #  create_mock_curation_concern(
+    #      'Embargo Release Date' => embargo_release_date_formatted,
+    #      'Visibility' => 'visibility_embargo',
+    #      'Contributors' => ['Dante'],
+    #      'I Agree' => true
+    #  )
+    #
+    #  page.assert_selector(
+    #      ".embargo_release_date.attribute",
+    #      text: embargo_release_date_formatted
+    #  )
+    #  page.assert_selector(
+    #      ".permission.attribute",
+    #      text: "Open Access"
+    #  )
+    #  noid = page.current_path.split("/").last
+    #  logout
+    #  visit("/show/#{noid}")
+    #
+    #  page.assert_selector('.contributor.attribute', text: 'Dante', count: 0)
+    #  page.assert_selector('h1', text: "Object Not Available")
+    #
+    #  # Seconds are weeks
+    #  begin
+    #    Timecop.scale(60*60*24*7)
+    #    sleep(1)
+    #  ensure
+    #    Timecop.scale(1)
+    #  end
+    #  visit("/show/#{noid}")
+    #  expect(Time.now > embargo_release_date).to be_true
+    #
+    #  # With the embargo release date passed an anonymous user should be able
+    #  # to see it.
+    #  page.assert_selector('h1', text: "Object Not Available", count: 0)
+    #end
   end
 
   #describe 'with user who has already agreed to the terms of service' do

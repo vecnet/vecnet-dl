@@ -14,7 +14,7 @@ require "rails/test_help"
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'rspec-html-matchers'
-require 'rspec/autorun'
+#require 'rspec/autorun'
 require 'database_cleaner'
 require 'factory_girl'
 
@@ -48,7 +48,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.include Devise::TestHelpers, type: :controller
-  config.include Warden::Test::Helpers, type: :feature
+  config.include Warden::Test::Helpers
   config.include FeatureSupport, type: :feature
 
 

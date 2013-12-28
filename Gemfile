@@ -76,6 +76,7 @@ group :test, :development do
   gem 'spork', '~> 1.0rc'
   gem 'ruby_gntp'
   gem 'sqlite3'
+  gem 'launchy'
 end
 
 group :deploy do
