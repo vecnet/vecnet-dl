@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     # do not raise an error if there is a problem with the pubtkt.
     # in that case we make the current user nil
     env['warden'].authenticate(:pubtkt)
-    @current_user = env['warden'].user
+    @current_user = request.env['warden'].user
   end
 
   # provide the "devise API" for 'user'
