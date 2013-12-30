@@ -1,10 +1,4 @@
 def FactoryGirl.create_citation(container_factory_name_or_object, user, attributes=nil, file = nil)
-  curation_concern =
-  if container_factory_name_or_object.is_a?(Symbol)
-    FactoryGirl.create_curation_concern(container_factory_name_or_object, user)
-  else
-    container_factory_name_or_object
-  end
   citation = Citation.new
   citation.batch = curation_concern
   citation.resource_type = "Article"

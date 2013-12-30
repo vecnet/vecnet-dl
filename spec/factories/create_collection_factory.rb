@@ -1,6 +1,8 @@
-def FactoryGirl.create_collection(container_factory_name_or_object, user, attributes=nil, file = nil)
-  collection = Collection.new
-  collection.title="test"
+def FactoryGirl.create_collection(pid, user, attributes=nil, file = nil)
+  pid = pid || CurationConcern.mint_a_pid
+  collection = Collection.new(pid: pid)
+  collection.apply_depositor_metadata(user.user_key)
+  collection.creator = user.name
   collection.save
   return collection
 end
