@@ -17,6 +17,8 @@ require 'rspec-html-matchers'
 #require 'rspec/autorun'
 require 'database_cleaner'
 require 'factory_girl'
+require 'capybara/rspec'
+require 'capybara/rails'
 
 Dir["#{File.dirname(__FILE__)}/factories/**/*.rb"].each { |f| require f }
 
@@ -46,9 +48,9 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
-  config.include Devise::TestHelpers, type: :controller
+ # config.include Devise::TestHelpers, :type => :controller
   config.include Warden::Test::Helpers
+  config.include Warden::Test::ControllerHelpers, type: :controller
   config.include FeatureSupport, type: :feature
 
 

@@ -4,26 +4,28 @@ describe CurationConcern::GenericFilesController do
   render_views
   let(:user) { FactoryGirl.create(:user) }
   let(:another_user) { FactoryGirl.create(:user) }
-  let(:parent) { FactoryGirl.create_curation_concern(:senior_thesis, user) }
+  let(:parent) { FactoryGirl.create_curation_concern(:collection, user) }
   let(:file) { Rack::Test::UploadedFile.new(__FILE__, 'text/plain', false) }
   let(:generic_file) { FactoryGirl.create_generic_file(parent, user) }
   let(:another_user) { FactoryGirl.create(:user) }
 
   describe '#new' do
-    it 'renders a form if you can edit the parent' do
+    it 'renders a form if you are logged in' do
       parent
-      sign_in user
+      warden.set_user(user)
       get(:new, parent_id: parent.to_param)
       response.should be_successful
       expect(response).to render_template('new')
     end
 
-    it 'redirects if you cannot edit the parent' do
-      sign_in(another_user)
+    it 'redirects if you are not logged in' do
+      warden.set_user(nil)
       parent
-      expect {
+      #expect {
         get :new, parent_id: parent.to_param
-      }.to raise_rescue_response_type(:unauthorized)
+      #}.to raise_rescue_response_type(:unauthorized)
+      response.status.should == 401
+      puts "Response: #{response.body}"
     end
   end
 
@@ -43,7 +45,7 @@ describe CurationConcern::GenericFilesController do
     }
 
     it 'redirects to parent when successful' do
-      sign_in(user)
+      warden.set_user(user)
       parent
       controller.actor = successful_actor
 
@@ -54,12 +56,12 @@ describe CurationConcern::GenericFilesController do
       )
 
       expect(response).to(
-        redirect_to(controller.polymorphic_path([:curation_concern, parent]))
+        redirect_to(dashboard_index_path)
       )
     end
 
     it 'renders form when unsuccessful' do
-      sign_in(user)
+      warden.set_user(user)
       parent
       controller.actor = failing_actor
 
@@ -78,7 +80,7 @@ describe CurationConcern::GenericFilesController do
   describe '#edit' do
     it 'should be successful' do
       generic_file
-      sign_in user
+      warden.set_user(user)
       get :edit, id: generic_file.to_param
       controller.curation_concern.should be_kind_of(GenericFile)
       response.should be_successful
@@ -101,20 +103,20 @@ describe CurationConcern::GenericFilesController do
     it 'renders form when unsuccessful' do
       generic_file
       controller.actor = failing_actor
-      sign_in(user)
+      warden.set_user(user)
       put :update, id: generic_file.to_param, generic_file: {title: updated_title}
       expect(response).to render_template('edit')
       response.status.should == 422
     end
 
-    it 'redirects to parent when successful' do
+    it 'redirects to edit page when successful' do
       generic_file
-      sign_in(user)
+      warden.set_user(user)
       put :update, id: generic_file.to_param, generic_file: {title: updated_title}
       response.status.should == 302
       expect(response).to(
         redirect_to(
-          controller.polymorphic_path([:curation_concern, generic_file])
+          controller.edit_polymorphic_path([:curation_concern, generic_file])
         )
       )
     end
@@ -123,7 +125,7 @@ describe CurationConcern::GenericFilesController do
   describe '#show' do
     it 'should be successful if logged in' do
       generic_file
-      sign_in user
+      warden.set_user(user)
       get :show, id: generic_file.to_param
       controller.curation_concern.should be_kind_of(GenericFile)
       response.should be_successful
@@ -131,7 +133,7 @@ describe CurationConcern::GenericFilesController do
 
     it 'does not allow another user to view it' do
       generic_file
-      sign_in another_user
+      warden.set_user another_user
       expect {
         get :show, id: generic_file.to_param
       }.to raise_rescue_response_type(:unauthorized)
@@ -141,10 +143,10 @@ describe CurationConcern::GenericFilesController do
   describe '#destroy' do
     it 'should be successful if file exists' do
       parent = generic_file.batch
-      sign_in(user)
+      warden.set_user(user)
       delete :destroy, id: generic_file.to_param
       expect(response.status).to eq(302)
-      expect(response).to redirect_to(controller.polymorphic_path([:curation_concern, parent]))
+      expect(response).to redirect_to(dashboard_index_path)
     end
   end
 end

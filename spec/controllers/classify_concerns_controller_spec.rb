@@ -7,29 +7,28 @@ describe ClassifyConcernsController do
   describe '#new' do
     it 'requires authentication' do
       get :new
-      response.status.should == 302
-      expect(response).to redirect_to(user_session_path)
+      response.status.should == 401
     end
     it 'renders when signed in' do
-      sign_in(user)
+      warden.set_user(user)
       get :new
-      response.status.should == 200
+      response.status.should == 302
     end
   end
 
   describe '#create' do
     let(:user) { FactoryGirl.create(:user) }
-    it 'redirect to login page if user is not logged in' do
+    let(:collection) { FactoryGirl.create_curation_concern(:collection, user) }
+    it 'raise user not signed in error if user is not logged in' do
       post :create, classify: { curation_concern_type: 'GenericFile' }
-      response.status.should == 302
-      expect(response).to redirect_to(user_session_path)
+      response.status.should == 401
     end
 
     it 'requires authentication' do
-      sign_in(user)
-      post :create, classify_concern: { curation_concern_type: 'GenericFile' }
-      response.status.should == 302
-      expect(response).to redirect_to(new_curation_concern_generic_file_path)
+      warden.set_user(user)
+      get :new
+      #response.should be_successful
+      expect(response).to redirect_to(new_curation_concern_collection_path)
     end
 
   end
