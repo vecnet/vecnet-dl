@@ -14,7 +14,7 @@ require "rails/test_help"
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'rspec-html-matchers'
-#require 'rspec/autorun'
+require 'rspec/autorun'
 require 'database_cleaner'
 require 'factory_girl'
 require 'capybara/rspec'
@@ -61,15 +61,19 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+    ActiveFedora::TestCleaner.setup
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
+    ActiveFedora::TestCleaner.start
     DatabaseCleaner.start
   end
 
   config.after(:each) do
+    WebMock.allow_net_connect!
+    ActiveFedora::TestCleaner.clean
     DatabaseCleaner.clean
   end
 end
