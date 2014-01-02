@@ -93,5 +93,13 @@ module Vecnet
     config.default_antivirus_instance = lambda { |file_path|
       AntiVirusScanner::NO_VIRUS_FOUND_RETURN_VALUE
     }
+
+    Warden::Manager.serialize_into_session do |user|
+      user.uid
+    end
+
+    Warden::Manager.serialize_from_session do |id|
+      User.find_by_uid(id)
+    end
   end
 end

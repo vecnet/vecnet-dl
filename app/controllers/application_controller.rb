@@ -9,14 +9,15 @@ class ApplicationController < ActionController::Base
     # use authenticate instead of authenticate! since we
     # do not raise an error if there is a problem with the pubtkt.
     # in that case we make the current user nil
-    env['warden'].authenticate(:pubtkt)
-    @current_user = request.env['warden'].user
+    request.env['warden'].authenticate(:pubtkt)
+    @current_user = request.env['warden'].user.nil? ? nil : request.env['warden'].user.uid
   end
 
   # provide the "devise API" for 'user'
 
   def current_user
-    @current_user
+    return User.find_by_uid(@current_user) unless @current_user.nil?
+    nil
   end
 
   def user_signed_in?
@@ -28,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def user_session
-    current_user && session
+    current_user.uid && session
   end
 
   # path helpers, since pubtkt passes the return url as a parameter
