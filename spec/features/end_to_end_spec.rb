@@ -38,13 +38,13 @@ describe 'end to end behavior', describe_options do
   end
 
   def click_upload_file
-    within(".dropdown-menu") do
+    within(".user-menu") do
       click_on 'Upload a file'
     end
   end
 
   def create_mock_curation_concern(options = {})
-    options['Title'] ||= 'Bogus Title'
+    options['Title'] ||= initial_title
     options['Upload your thesis'] ||= initial_file_path
     options['Visibility'] ||= 'visibility_restricted'
     options["Button to click"] ||= "Save"
@@ -53,7 +53,7 @@ describe 'end to end behavior', describe_options do
 
     page.should have_content('Create and Apply Metadata')
      within('#new_generic_file') do
-      fill_in("Title", with: options['Title'])
+      fill_in("generic_file_title", with: options['Title'])
       #attach_file("generic_file_file", options['Upload your thesis'])
       choose(options['Visibility'])
       select(options['Content License'], from: I18n.translate('sufia.field_label.rights'))
@@ -101,7 +101,7 @@ describe 'end to end behavior', describe_options do
     before do
       login_as(user)
       visit '/'
-      click_link 'Username 1'
+      click_link 'username'
     end
 
     it 'allows me to create a mock curation concern' do
@@ -112,21 +112,20 @@ describe 'end to end behavior', describe_options do
   end
 
   describe 'with user who sign in' do
-    #TODO this test fails with error ActionDispatch::Cookies::CookieOverflow (ActionDispatch::Cookies::CookieOverflow)
-    #it 'saves mock curation concern inputs when data is valid' do
-    #  Capybara.current_driver = :selenium
-    #  login_as(user)
-    #  visit new_classify_concern_path
-    #  create_mock_curation_concern(
-    #      'Visibility' => 'visibility_restricted',
-    #      'I Agree' => true,
-    #      'Title' => ''
-    #  )
-    #  #puts "Capybara Session:#{Capybara.session.inspect}"
-    #  within('#documents') do
-    #    page.should have_content('Bogus Title')
-    #  end
-    #end
+    it 'saves mock curation concern inputs when data is valid' do
+      Capybara.current_driver = :selenium
+      login_as(user)
+      visit new_classify_concern_path
+      create_mock_curation_concern(
+          'Visibility' => 'visibility_restricted',
+          'I Agree' => true,
+          'Title' => 'Bogus Title'
+      )
+      #puts "Capybara Session:#{Capybara.session.inspect}"
+      within('#documents') do
+        page.should have_content('Bogus Title')
+      end
+    end
   end
 
   #describe '+Add javascript behavior', js: true do

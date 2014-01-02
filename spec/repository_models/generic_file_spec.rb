@@ -25,7 +25,7 @@ describe GenericFile do
     end
 
     let(:persisted_generic_file) {
-      FactoryGirl.create_generic_file(:senior_thesis, user)
+      FactoryGirl.create_generic_file(:collection, user)
     }
 
     it 'has a current version id' do
@@ -64,7 +64,7 @@ describe GenericFile do
         vecnet_generic_file=GenericFile.new
         vecnet_generic_file.longitude = [longitude]
         vecnet_generic_file.valid?
-        vecnet_generic_file.errors[:spatials].should == ['Invalid Spatial data, Latitude and Longitude must be of same length']
+        vecnet_generic_file.errors[:spatials].should == ['Invalid Spatial Data. latitude is blank']
       end
       it 'should save encoded latitude and longitude to spatials' do
         vecnet_generic_file.latitude = [latitude]
