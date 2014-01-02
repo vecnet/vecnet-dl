@@ -3,7 +3,7 @@
       <% if Rails.env=='production' %>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu help-menu">
             <li><a href="https://www.vecnet.org/index.php/about-vecnet">About VecNet</a></li>
             <li><a href="https://www.vecnet.org/index.php/about-vecnet/partner-sites">Partner Sites</a></li>
             <li><a href="https://www.vecnet.org/index.php/about-vecnet/faq">FAQ</a></li>
@@ -14,7 +14,7 @@
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu tools-menu">
             <li><a href="https://ci.vecnet.org/ts/">Transmission Simulator</a></li>
             <li><a href="https://ci.vecnet.org/risk_mapper/">Risk Mapper</a></li>
             <li><a href="https://ci.vecnet.org/pie/">PIE</a></li>
@@ -26,7 +26,7 @@
       <% else %>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu help-menu">
             <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/about-vecnet">About VecNet</a></li>
             <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/partner-sites">Partner Sites</a></li>
             <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/faq">FAQ</a></li>
@@ -37,7 +37,7 @@
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu tools-menu">
             <li><a href="http://vecnet-qa.crc.nd.edu/ts/">Transmission Simulator</a></li>
             <li><a href="http://vecnet-qa.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
             <li><a href="http://vecnet-qa.crc.nd.edu/expert_openmalaria/">PIE</a></li>
@@ -49,11 +49,11 @@
       <% end %>
         <% if current_user %>
           <li class="dropdown">
-            <a href=# class="dropdown-toggle" data-toggle="dropdown">
+            <a href=# class="dropdown-toggle" data-toggle="dropdown" id="username">
               <i class="icon-user">&nbsp;</i><%= current_user.name %>
               <i class="caret" title="click for additional menu options"></i>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu user-menu">
               <%= bootstrap_navigation_element 'My Dashboard',     dashboard_index_path -%>
               <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
               <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
