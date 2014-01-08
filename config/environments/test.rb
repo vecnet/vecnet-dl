@@ -55,9 +55,9 @@ Vecnet::Application.configure do
     }
   end
 
-  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-development.pem')))
-  config.pubtkt_login_url = '/development_sessions/log_in'
-  config.pubtkt_logout_url = '/development_sessions/log_out'
+  #config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-development.pem')))
+  #config.pubtkt_login_url = '/development_sessions/log_in'
+  #config.pubtkt_logout_url = '/development_sessions/log_out'
   # private_key only needed by DevelopmentSessionsController
-  config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
+  #config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
 end
