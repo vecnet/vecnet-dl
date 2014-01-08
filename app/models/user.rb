@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
   attr_accessible :uid
 
+  serialize :group_list
+
   def self.find_by_uid(uid)
     User.where(uid: uid).limit(1).first
   end
