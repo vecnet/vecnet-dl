@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
     user = User.find_by_uid(pubtkt.uid)
     user = User.create_from_pubtkt(pubtkt) if user.nil?
     user.group_list = pubtkt.tokens.split(',') if pubtkt.tokens.present?
-    user.update_from_ldap
+    #user.update_from_ldap
+    user.save!
     user
   end
 
