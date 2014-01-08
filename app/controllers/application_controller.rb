@@ -37,15 +37,17 @@ class ApplicationController < ActionController::Base
   def user_login_url(back=nil)
     back = root_path unless back
     redirect_params = { back: back }
-    if defined?(Rails.configuration.pubtkt_login_url)
-      Rails.configuration.pubtkt_login_url
+    logger.debug("######User login url: #{Rails.configuration.inspect}, Rails Config class:#{Rails.configuration.class}######")
+    if Rails.configuration.respond_to?(:pubtkt_login_url)
+      logger.debug "#######returns #{Rails.configuration.pubtkt_login_url}#######"
+      return Rails.configuration.pubtkt_login_url
     end
     nil
   end
 
   def user_logout_url
-    if defined?(Rails.configuration.pubtkt_logout_url)
-      Rails.configuration.pubtkt_logout_url
+    if Rails.configuration.respond_to?(:pubtkt_logout_url)
+      return Rails.configuration.pubtkt_logout_url
     end
     nil
   end
