@@ -18,50 +18,15 @@ describe 'end to end behavior', describe_options do
   end
   let(:user) { FactoryGirl.create(:user, agreed_to_terms_of_service: true) }
   let(:another_user) { FactoryGirl.create(:user, agreed_to_terms_of_service: true) }
+  let(:admin_user) { FactoryGirl.create(:user, group_list: ['dl_librarian'], agreed_to_terms_of_service: true) }
   let(:prefix) { Time.now.strftime("%Y-%m-%d-%H-%M-%S-%L") }
   let(:initial_title) { "#{prefix} Something Special" }
+  let(:initial_resource_type) { "Article" }
   let(:initial_file_path) { __FILE__ }
   let(:updated_title) { "#{prefix} Another Not Quite" }
   let(:updated_file_path) { Rails.root.join('app/controllers/application_controller.rb').to_s }
-
-  def assert_breadcrumb_trail(page, *breadcrumbs)
-    page.assert_selector('.breadcrumb li', count: breadcrumbs.length)
-    within('.breadcrumb') do
-      breadcrumbs.each do |text, path|
-        if String(path).empty?
-          page.has_css?('li', text: text)
-        else
-          page.has_css?("li a[href='#{path}']", text: text)
-        end
-      end
-    end
-  end
-
-  def click_upload_file
-    within(".user-menu") do
-      click_on 'Upload a file'
-    end
-  end
-
-  def create_mock_curation_concern(options = {})
-    options['Title'] ||= initial_title
-    options['Upload your thesis'] ||= initial_file_path
-    options['Visibility'] ||= 'visibility_restricted'
-    options["Button to click"] ||= "Save"
-    options["Contributors"] ||= ["Dante"]
-    options["Content License"] ||= Sufia::Engine.config.cc_licenses.keys.first
-
-    page.should have_content('Create and Apply Metadata')
-     within('#new_generic_file') do
-      fill_in("generic_file_title", with: options['Title'])
-      #attach_file("generic_file_file", options['Upload your thesis'])
-      choose(options['Visibility'])
-      select(options['Content License'], from: I18n.translate('sufia.field_label.rights'))
-      fill_out_form_multi_value_for('contributor', with: options['Contributors'])
-      click_on(options["Button to click"])
-    end
-  end
-
+  let(:public_title) { 'Fake title with public access' }
+  let(:restricted_title) {'Fake Article with restricted access'}
 
   def fill_out_form_multi_value_for(method_name, options={})
     field_name = "generic_file[#{method_name}][]"
@@ -101,7 +66,7 @@ describe 'end to end behavior', describe_options do
     before do
       login_as(user)
       visit '/'
-      click_link 'username'
+      click_link user.name
     end
 
     it 'allows me to create a mock curation concern' do
@@ -118,7 +83,6 @@ describe 'end to end behavior', describe_options do
       visit new_classify_concern_path
       create_mock_curation_concern(
           'Visibility' => 'visibility_restricted',
-          'I Agree' => true,
           'Title' => 'Bogus Title'
       )
       #puts "Capybara Session:#{Capybara.session.inspect}"
@@ -126,183 +90,178 @@ describe 'end to end behavior', describe_options do
         page.should have_content('Bogus Title')
       end
     end
+    it "a public item is visible when logged out" , js: true do
+      Capybara.current_driver = :selenium
+      login_as(user)
+      visit new_classify_concern_path
+      create_mock_curation_concern(
+          'Visibility' => 'visibility_open',
+          'Contributors' => ['Dante'],
+          'Title' => public_title
+      )
+      within('#documents') do
+        page.should have_content('Fake title with public access')
+      end
+      logout
+      visit '/'
+      within('.search-form') do
+        fill_in "Search Digital Library", with: public_title
+        click_button("search-submit-header")
+      end
+      page.should have_content "1 to 1 of 1"
+      click_link public_title
+      page.should have_content "Download"
+      page.should_not have_content "Edit"
+    end
   end
 
   #describe '+Add javascript behavior', js: true do
   #  let(:contributors) { ["D'artagnan", "Porthos", "Athos", 'Aramas'] }
   #  let(:agreed_to_terms_of_service) { true }
-  #  let(:title) {"Somebody Special's Senior Thesis" }
+  #  let(:title) {"Somebody Special's Senior file" }
   #  it 'handles contributor', js: true do
   #    login_as(user)
-  #    visit('/concern/senior_theses/new')
-  #    describe_your_thesis(
+  #    visit('/concern/generic_file/new')
+  #    describe_your_file(
   #      "Title" => title,
-  #      "Upload your thesis" => initial_file_path,
+  #      "Upload your file" => initial_file_path,
   #      "Contributors" => contributors,
   #      :js => true
   #    )
   #    page.should have_content(title)
   #    contributors.each do |contributor|
   #      page.assert_selector(
-  #        '.senior_thesis.attributes .contributor.attribute',
+  #        '.senior_file.attributes .contributor.attribute',
   #        text: contributor
   #      )
   #    end
   #  end
   #
   #end
-  #
-  #describe 'I am logged in and request help' do
-  #  let(:agreed_to_terms_of_service) { true }
-  #  it "request help is registered" do
-  #    login_as(user, scope: :user, run_callbacks: false)
-  #    visit '/'
-  #    click_link "Get Started"
-  #    click_link "Request Help"
-  #    within("#new_help_request") do
-  #      fill_in('How can we help you', with: "I'm trapped in a fortune cookie factory!")
-  #      click_on("Submit")
-  #    end
-  #    page.assert_selector('.notice', text: HelpRequestsController::SUCCESS_NOTICE)
-  #  end
-  #end
-  #
-  #describe 'file uploaded via different paths' do
-  #  let(:agreed_to_terms_of_service) { true }
-  #  let(:contributors) { ["Goethe"]}
-  #  it "related file via senior_thesis#new and generic_file#new should be similar" do
-  #    login_as(user)
-  #    get_started
-  #    classify_what_you_are_uploading('Senior Thesis')
-  #    describe_your_thesis(
-  #      "Title" => 'Senior Thesis',
-  #      'Visibility' => 'Open Access',
-  #      "Upload your thesis" => initial_file_path,
-  #      "Assign DOI" => true,
-  #      "Contributors" => contributors,
-  #      "Button to click" => 'Create and Add Related Files...'
-  #    )
-  #    # While the title is different, the filenames should be the same
-  #    add_a_related_file(
-  #      "Title" => 'Related File',
-  #      'Visibility' => 'University of Notre Dame',
-  #      "Upload a related file" => initial_file_path
-  #    )
-  #
-  #    page.assert_selector('h1', text: 'Senior Thesis')
-  #
-  #    page.assert_selector(
-  #      '.senior_thesis.attributes .identifier.attribute',
-  #      count: 1
-  #    )
-  #
-  #    page.assert_selector(
-  #      '.generic_file.attributes .title.attribute',
-  #      text: "Related File",count: 1
-  #    )
-  #    page.assert_selector(
-  #      '.generic_file.attributes .permission.attribute',
-  #      text: "University of Notre Dame",count: 1
-  #    )
-  #    page.assert_selector(
-  #      '.generic_file.attributes .title.attribute',
-  #      text: "Senior Thesis",count: 1
-  #    )
-  #    page.assert_selector(
-  #      '.generic_file.attributes .permission.attribute',
-  #      text: "Open Access",count: 1
-  #    )
-  #    page.assert_selector(
-  #      '.generic_file.attributes .filename.attribute',
-  #      text: File.basename(initial_file_path),count: 2
-  #    )
-  #  end
-  #end
-  #describe 'with a user who has not agreed to terms of service' do
-  #  let(:agreed_to_terms_of_service) { false }
-  #  it "displays the terms of service page after authentication" do
-  #    login_as(user)
-  #    get_started
-  #    agree_to_terms_of_service
-  #    classify_what_you_are_uploading('Senior Thesis')
-  #    describe_your_thesis
-  #    path_to_view_thesis = view_your_new_thesis
-  #    path_to_edit_thesis = edit_your_thesis
-  #    view_your_updated_thesis
-  #    view_your_dashboard
-  #
-  #    logout
-  #    login_as(another_user)
-  #    other_persons_thesis_is_not_in_my_dashboard
-  #    i_can_see_another_users_open_resource(path_to_view_thesis)
-  #    i_cannot_edit_to_another_users_resource(path_to_edit_thesis)
-  #  end
-  #end
+
+  describe 'with a regular user' do
+    it "create and view file in my dashboard" do
+      login_as(user)
+      visit new_classify_concern_path
+      describe_your_file({'Title'=>initial_title, 'Visibility' => 'visibility_open'})
+      path_to_view_file = view_your_new_file(initial_title)
+      path_to_edit_file = edit_your_file(initial_title)
+      view_your_updated_file
+      view_your_dashboard
+      logout(user)
+
+      login_as(another_user)
+      page.assert_selector('h2', :text => 'My Dashboard', :visible => true)
+      other_persons_file_is_not_in_my_dashboard(updated_title,another_user)
+      i_can_see_another_users_open_resource(path_to_view_file)
+      i_cannot_edit_to_another_users_resource(path_to_edit_file)
+    end
+  end
+
+  describe 'with a admin user' do
+    it "create and view all file in admin dashboard" do
+      login_as(user)
+      visit new_classify_concern_path
+      describe_your_file({'Title'=>restricted_title})
+      path_to_view_file=view_your_new_file(restricted_title)
+      logout(user)
+
+      login_as(admin_user)
+     # page.assert_selector('h2', :text => 'My Dashboard', :visible => true)
+      other_persons_file_is_not_in_my_dashboard(restricted_title, admin_user)
+      #save_and_open_page
+      visit_admin_dashboard
+      view_admin_dashboard
+      admin_can_see_another_users_restricted_resource(path_to_view_file)
+      admin_can_edit_another_users_resource
+    end
+  end
+
   protected
-  def get_started
-    visit '/'
-    click_link "Get Started"
-  end
 
-  def agree_to_terms_of_service
-    within('#terms_of_service') do
-      click_on("I Agree")
+  # Quick access to Warden::Proxy.
+  def warden
+    @warden ||= begin
+      manager = Warden::Manager.new(nil, &Rails.application.config.middleware.detect{|m| m.name == 'Warden::Manager'}.block)
+      @request.env['warden'] = Warden::Proxy.new(@request.env, manager)
     end
   end
 
-  def classify_what_you_are_uploading(concern)
-    page.should have_content("What are you uploading?")
-    within('#new_classify_concern') do
-      select(concern, from: 'classify_concern_curation_concern_type')
-      click_on("Continue")
-    end
-  end
-
-  def describe_your_thesis(options = {})
+  def create_mock_curation_concern(options = {})
     options['Title'] ||= initial_title
-    options['Upload your thesis'] ||= initial_file_path
-    options['Visibility'] ||= 'Private'
-    options["Button to click"] ||= "Create Senior thesis"
+    options['Upload your file'] ||= initial_file_path
+    options['Visibility'] ||= 'visibility_restricted'
+    options["Button to click"] ||= "Save"
     options["Contributors"] ||= ["Dante"]
     options["Content License"] ||= Sufia::Engine.config.cc_licenses.keys.first
-    page.should have_content('Describe Your Thesis')
-    # Without accepting agreement
-    within('#new_senior_thesis') do
-      fill_in("Title", with: options['Title'])
-      attach_file("Upload your thesis", options['Upload your thesis'])
+    options["Contributors"] ||= ["Dante"]
+    options["Resource Type"] ||= Sufia::Engine.config.resource_types.keys.first
+
+    page.should have_content('Create and Apply Metadata')
+    within('#new_generic_file') do
+      fill_in("generic_file_title", with: options['Title'])
+      #attach_file("generic_file_file", options['Upload your file'])
       choose(options['Visibility'])
-      if options['Assign DOI']
-        check('senior_thesis_assign_doi')
-      end
-      select(options['Content License'], from: 'Content License')
-      within('.senior_thesis_contributor.multi_value') do
+      select(options['Content License'], from: I18n.translate('sufia.field_label.rights'))
+      select(options['Resource Type'], from: "Resource type")
+      fill_out_form_multi_value_for('contributor', with: options['Contributors'])
+      click_on(options["Button to click"])
+    end
+  end
+
+  def describe_your_file(options = {})
+    options['Title'] ||= initial_title
+    options['Upload your file'] ||= initial_file_path
+    options['Visibility'] ||= 'Private'
+    options["Button to click"] ||= "Save"
+    options["Contributors"] ||= ["Dante"]
+    options["Content License"] ||= Sufia::Engine.config.cc_licenses.keys.first
+    options["Resource Type"] ||= initial_resource_type
+
+    page.should have_content('Create and Apply Metadata')
+
+    within('#new_generic_file') do
+      fill_in("generic_file_title", with: options['Title'])
+      attach_file("generic_file_file", options['Upload your file'])
+      choose(options['Visibility'])
+      select(options['Content License'], from: "Rights")
+      select(options['Resource Type'], from: "Resource type")
+      within('div.generic_file_contributor.multi_value') do
         contributors = [options['Contributors']].flatten.compact
         if options[:js]
           contributors.each_with_index do |contributor, i|
             within('.input-append:last') do
-              fill_in('senior_thesis[contributor][]', with: contributor)
+              fill_in('generic_file[contributor][]', with: contributor)
               click_on('Add')
             end
           end
         else
-          fill_in('senior_thesis[contributor][]', with: contributors.first)
+          fill_in('generic_file[contributor][]', with: contributors.first)
         end
       end
       click_on(options["Button to click"])
     end
+  end
 
-    within('.alert.error') do
-      page.should have_content('You must accept the contributor agreement')
+  protected
+
+  def assert_breadcrumb_trail(page, *breadcrumbs)
+    page.assert_selector('.breadcrumb li', count: breadcrumbs.length)
+    within('.breadcrumb') do
+      breadcrumbs.each do |text, path|
+        if String(path).empty?
+          page.has_css?('li', text: text)
+        else
+          page.has_css?("li a[href='#{path}']", text: text)
+        end
+      end
     end
-    page.should have_content("Describe Your Thesis")
+  end
 
-    # With accepting agreement
-    within('#new_senior_thesis') do
-      # The system remembers the initial title
-      find("#senior_thesis_title").value.should == options["Title"]
-      attach_file("Upload your thesis", options['Upload your thesis'])
-      check("I have read and accept the contributor licence agreement")
-      click_on(options["Button to click"])
+  def click_upload_file
+    page.should have_css('.user-menu', visible: true)
+    within(".user-menu") do
+      click_on 'Upload a file'
     end
   end
 
@@ -314,35 +273,41 @@ describe 'end to end behavior', describe_options do
       fill_in("Title", with: options['Title'])
       attach_file("Upload a file", options['Upload a file'])
       choose(options['Visibility'])
-      click_on("Attach to Senior Thesis")
+      click_on("Attach to Senior file")
     end
   end
 
-  def view_your_new_thesis
-    path_to_view_thesis  = page.current_path
-    page.should have_content("Related Files")
-    page.should have_content(initial_title)
-    within(".generic_file.attributes") do
-      page.should have_content(File.basename(initial_file_path))
+  def view_your_new_file(title_to_look_for)
+    visit '/dashboard'
+    page.should have_content(title_to_look_for)
+    click_link title_to_look_for
+    path_to_view_file  = page.current_path
+    page.should have_content("Description")
+    page.should have_content(title_to_look_for)
+    within(".generic_file.characterize") do
+      page.should have_content("Filename: #{File.basename(initial_file_path)}")
     end
 
-    return path_to_view_thesis
+    return path_to_view_file
   end
 
-  def edit_your_thesis
-    click_on("Edit This Senior Thesis")
+  def edit_your_file(title_to_edit)
+    visit '/dashboard'
+    page.should have_content(title_to_edit)
+    click_link title_to_edit
+    click_on("Edit")
     edit_page_path = page.current_path
-    within('.edit_senior_thesis') do
-      fill_in("Title", with: updated_title)
-      fill_in("Abstract", with: "Lorem Ipsum")
-      click_on("Update Senior thesis")
+    within('.edit_generic_file') do
+      fill_in("generic_file_title", with: updated_title)
+      fill_in("generic_file_description", with: "Lorem Ipsum")
+      click_on("Save")
     end
     return edit_page_path
   end
-  def view_your_updated_thesis
-    page.should have_content("Related Files")
-    page.should have_content(updated_title)
-    click_on("Back to Dashboard")
+  def view_your_updated_file
+    page.should have_content("Edit #{updated_title}")
+    click_on("Cancel")
+    page.assert_selector('h2', :text => 'My Dashboard', :visible => true)
   end
 
   def view_your_dashboard
@@ -364,29 +329,31 @@ describe 'end to end behavior', describe_options do
       # I call CSS/Dom shenannigans; I can't access 'Creator' link
       # directly and instead must find by CSS selector, validate it
       all('a.accordion-toggle').each do |elem|
-        if elem.text == 'Creator'
+        if elem.text == 'Resource Type'
           elem.click
         end
       end
-      click_on(user.username)
+      click_on(initial_resource_type)
     end
     within('.alert.alert-info') do
       page.should have_content("You searched for: #{search_term}")
     end
     within('.alert.alert-warning') do
-      page.should have_content(user.username)
+      page.should have_content(initial_resource_type)
     end
   end
 
-  def other_persons_thesis_is_not_in_my_dashboard
+  def other_persons_file_is_not_in_my_dashboard(search_title,logged_user)
     visit "/dashboard"
-    search_term = "\"#{updated_title}\""
+    search_term = "\"#{search_title}\""
+
     within(".search-form") do
       fill_in("q", with: search_term)
       click_on("Go")
     end
+    page.should have_selector('a#username', :text => logged_user.name)
     within('#documents') do
-      page.should_not have_content(updated_title)
+      page.should_not have_content(search_title)
     end
   end
 
@@ -398,5 +365,64 @@ describe 'end to end behavior', describe_options do
   def i_cannot_edit_to_another_users_resource(path_to_other_persons_resource)
     visit path_to_other_persons_resource
     page.should_not have_content(updated_title)
+  end
+
+  def admin_can_see_another_users_restricted_resource(path_to_other_persons_resource)
+    visit path_to_other_persons_resource
+    page.should have_content(restricted_title)
+  end
+
+  def admin_can_edit_another_users_resource
+#Assuming there is only one resource available
+    visit '/admin_dashboard'
+    page.assert_selector('h2', :text => 'Admin Dashboard', :visible => true)
+    page.should have_content(restricted_title)
+    page.should have_selector('a.itemedit')
+    find(:css, ".itemedit", :visible=>true).click
+    page.should have_content("Edit #{restricted_title}")
+    click_on("Cancel")
+  end
+
+  def visit_admin_dashboard
+    puts "Admin user: #{admin_user.inspect}, groups_list:#{admin_user.group_list}, groups:#{admin_user.groups}"
+
+    click_link(admin_user.name)
+    page.should have_css('.user-menu', visible: true)
+    within(".user-menu") do
+      click_link 'Admin Dashboard'
+    end
+    page.assert_selector('h2', :text => 'Admin Dashboard', :visible => true)
+  end
+
+  def view_admin_dashboard
+    search_term = "\"#{restricted_title}\""
+
+    within(".search-form") do
+      fill_in("q", with: search_term)
+      click_on("Go")
+    end
+    within('#documents') do
+      page.should have_content(restricted_title)
+    end
+    within('.alert.alert-info') do
+      page.should have_content("You searched for: #{search_term}")
+    end
+
+    within('#facets') do
+      # I call CSS/Dom shenannigans; I can't access 'Creator' link
+      # directly and instead must find by CSS selector, validate it
+      all('a.accordion-toggle').each do |elem|
+        if elem.text == 'Resource Type'
+          elem.click
+        end
+      end
+      click_on(initial_resource_type)
+    end
+    within('.alert.alert-info') do
+      page.should have_content("You searched for: #{search_term}")
+    end
+    within('.alert.alert-warning') do
+      page.should have_content(initial_resource_type)
+    end
   end
 end
