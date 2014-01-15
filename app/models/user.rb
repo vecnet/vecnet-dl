@@ -62,8 +62,20 @@ class User < ActiveRecord::Base
     update_column(:agreed_to_terms_of_service, true)
   end
 
-  def agreed_to_terms_of_service?
-    true
+  #Commenting to fall back to actual value from user table. But need to verify that it is not breaking anything
+  #def agreed_to_terms_of_service?
+  #  true
+  #end
+
+  # Method added by Blacklight; Blacklight uses #to_s on your
+  # user class to get a user-displayable login/identifier for
+  # the account.
+  def to_s
+    username
+  end
+
+  def to_param
+    id
   end
 
   # Override Hydra methods that assume Devise is present
