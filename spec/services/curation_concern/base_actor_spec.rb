@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CurationConcern::BaseActor do
   let(:user) { User.new }
-  let(:curation_concern) { SeniorThesis.new }
+  let(:curation_concern) { GenericFile.new }
   let(:attributes) { {visibility: visibility} }
   let(:visibility) { nil }
   subject { CurationConcern.actor(curation_concern, user, attributes)}

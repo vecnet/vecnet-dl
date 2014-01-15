@@ -29,7 +29,6 @@ module ActiveFedora
     end
 
     def clean
-      puts "cleaning objects in registry: #{@registry.inspect}"
       WebMock.disable_net_connect!(:allow_localhost => true)
       registry.each do |pid|
         # By referencing the inner object we can skip any delete callbacks and

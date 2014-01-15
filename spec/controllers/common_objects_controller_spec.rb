@@ -7,7 +7,7 @@ describe CommonObjectsController do
   let(:another_user) { FactoryGirl.create(:user) }
   let(:visibility) { nil }
   let(:curation_concern) {
-    FactoryGirl.create_curation_concern(:senior_thesis, user, visibility: visibility)
+    FactoryGirl.create_generic_file(:collection, user, nil, visibility: visibility)
   }
   describe '#show' do
     let(:template_for_success) { 'show' }
@@ -20,14 +20,14 @@ describe CommonObjectsController do
       end
 
       it 'renders for the creator' do
-        sign_in(user)
+        warden.set_user(user)
         get :show, id: curation_concern.to_param
         response.status.should == 200
         expect(response).to render_template(template_for_success)
       end
 
       it 'renders for the another user' do
-        sign_in(another_user)
+        warden.set_user(another_user)
         get :show, id: curation_concern.to_param
         response.status.should == 200
         expect(response).to render_template(template_for_success)
@@ -43,14 +43,14 @@ describe CommonObjectsController do
       end
 
       it 'renders for the creator' do
-        sign_in(user)
+        warden.set_user(user)
         get :show, id: curation_concern.to_param
         response.status.should == 200
         expect(response).to render_template(template_for_success)
       end
 
       it 'renders for the creator' do
-        sign_in(another_user)
+        warden.set_user(another_user)
         get :show, id: curation_concern.to_param
         response.status.should == 302
         expect(response).to redirect_to(common_object_stub_information_path(curation_concern))
@@ -65,14 +65,14 @@ describe CommonObjectsController do
       end
 
       it 'renders for the creator' do
-        sign_in(user)
+        warden.set_user(user)
         get :show, id: curation_concern.to_param
         response.status.should == 200
         expect(response).to render_template(template_for_success)
       end
 
       it 'renders for the creator' do
-        sign_in(another_user)
+        warden.set_user(another_user)
         get :show, id: curation_concern.to_param
         response.status.should == 200
         expect(response).to render_template(template_for_success)

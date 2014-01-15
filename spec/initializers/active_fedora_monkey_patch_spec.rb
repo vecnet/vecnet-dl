@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'active fedora monkey patches' do
   let(:user) { FactoryGirl.create(:user) }
-  let(:generic_file) { FactoryGirl.create_generic_file(user) }
+  let(:generic_file) { FactoryGirl.create_generic_file(:collection,user) }
   it 'cannot delete' do
     generic_file_pid = generic_file.pid
 
@@ -19,7 +19,6 @@ describe 'active fedora monkey patches' do
       GenericFile.find(generic_file_pid)
     }.to raise_error(ActiveFedora::ActiveObjectNotFoundError)
 
-    expect(ActiveFedora::Base.exists?(senior_thesis_pid)).to eq(true)
     expect(ActiveFedora::Base.exists?(generic_file_pid)).to eq(true)
   end
 

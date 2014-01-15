@@ -7,9 +7,9 @@ describe CurationConcern do
   end
 
   describe '.actor' do
-    it 'finds an actor by for a SeniorThesis' do
-      subject.actor(SeniorThesis.new, User.new, {}).should(
-        be_kind_of(CurationConcern::SeniorThesisActor)
+    it 'finds an actor by for a GenericFile' do
+      subject.actor(GenericFile.new, User.new, {}).should(
+        be_kind_of(CurationConcern::GenericFileActor)
       )
     end
 
@@ -24,7 +24,7 @@ describe CurationConcern do
     let(:file) { Rack::Test::UploadedFile.new(__FILE__, 'text/plain', false) }
     let(:user) { FactoryGirl.create(:user) }
     let(:generic_file) { GenericFile.new }
-    let(:curation_concern) { FactoryGirl.create_curation_concern(:senior_thesis, user)}
+    let(:curation_concern) { FactoryGirl.create_curation_concern(:collection, user)}
     it 'works with a string' do
       actor = CurationConcern.actor(generic_file, user, {batch_id: curation_concern.pid, file: file})
       actor.create!

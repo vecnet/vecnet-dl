@@ -8,11 +8,11 @@ describe 'inflections' do
     "theses".singularize.should == 'thesis'
   end
 
-  it '"senior_thesis" should classify to SeniorThesis' do
-    "senior_thesis".classify.should == "SeniorThesis"
+  it '"generic_file" should classify to GenericFile' do
+    "generic_file".classify.should == "GenericFile"
   end
 
-  it '"senior_theses" should classify to SeniorThesis' do
-    "senior_theses".classify.should == "SeniorThesis"
+  it '"generic_files" should classify to GenericFile' do
+    "generic_files".classify.should == "GenericFile"
   end
 end

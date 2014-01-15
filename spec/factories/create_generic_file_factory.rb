@@ -11,7 +11,6 @@ def FactoryGirl.create_generic_file(container_factory_name_or_object, user, file
   file ||= Rack::Test::UploadedFile.new(__FILE__, 'text/plain', false)
 
   attributes = override_attributes.reverse_merge({file:file})
-   puts "Attributes :#{attributes.inspect}"
   actor = CurationConcern::GenericFileActor.new(
     generic_file,
     user,

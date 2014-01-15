@@ -39,7 +39,7 @@ describe DashboardController do
       User.any_instance.should_receive(:populate_attributes).once
       @strategy.should be_valid
       @strategy.authenticate!.should == :success
-      sign_in @user
+      warden.set_user @user
       get :index
     end
     xit "should not populate LDAP attrs if user is not new" do
@@ -49,14 +49,14 @@ describe DashboardController do
       User.any_instance.should_receive(:populate_attributes).never
       @strategy.should be_valid
       @strategy.authenticate!.should == :success
-      sign_in @user
+      warden.set_user @user
       get :index
     end
   end
   describe "logged in user" do
     before (:each) do
       @user = FactoryGirl.find_or_create(:archivist)
-      sign_in @user
+      warden.set_user @user
       controller.stub(:clear_session_user) ## Don't clear out the authenticated session
       User.any_instance.stub(:groups).and_return([])
     end
