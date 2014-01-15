@@ -1,8 +1,8 @@
+require "active_record/connection_adapters/postgresql_adapter"
 if Rails::VERSION::MAJOR < 4
   #Fix fixtures with foreign keys, fixed in Rails4
   class ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
     def disable_referential_integrity #:nodoc:
-      begin
         if supports_disable_referential_integrity? then
           execute(tables.collect { |name| "ALTER TABLE #{quote_table_name(name)} DISABLE TRIGGER USER" }.join(";"))
         end
@@ -13,7 +13,6 @@ if Rails::VERSION::MAJOR < 4
         if supports_disable_referential_integrity? then
           execute(tables.collect { |name| "ALTER TABLE #{quote_table_name(name)} ENABLE TRIGGER USER" }.join(";"))
         end
-      end
     end
   end
 end
