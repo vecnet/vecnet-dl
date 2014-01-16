@@ -1,4 +1,5 @@
 require Curate::Engine.root.join('app/repository_models/curation_concern/with_full_text.rb')
+
 class CitationFile < ActiveFedora::Base
 
   include Sufia::GenericFile
@@ -56,10 +57,6 @@ class CitationFile < ActiveFedora::Base
 
   def to_param
     noid
-  end
-
-  def to_s
-    title
   end
 
   def update_visibility_as_authenticated

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'stringio'
 
-describe "NCBI species terms" do
+describe "NCBI species term" do
   it "imports from a file" do
     source = <<EOS
 1|root|no rank|1
@@ -16,7 +16,7 @@ describe "NCBI species terms" do
 16|Methylophilus|genus|1.131567.2.1224.28216.206350.32011.16
 EOS
     File.stub(:open).with("dummy").and_yield(StringIO.new(source))
-    NcbiSpeciesTerms.load_from_tree_file("dummy")
+    NcbiSpeciesTerm.load_from_tree_file("dummy")
     t = NcbiSpeciesTerms.find("10")
     t.species_taxon_id.should == "10"
     t.term.should == "Cellvibrio"

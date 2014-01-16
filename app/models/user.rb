@@ -67,13 +67,6 @@ class User < ActiveRecord::Base
   #  true
   #end
 
-  # Method added by Blacklight; Blacklight uses #to_s on your
-  # user class to get a user-displayable login/identifier for
-  # the account.
-  def to_s
-    username
-  end
-
   def to_param
     id
   end

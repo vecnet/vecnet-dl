@@ -33,16 +33,12 @@ class EndNote
     text = []
     text << "%0 #{type}"
     end_note_format.each do |endnote_key, mapping|
-      puts "Key:#{endnote_key}, Mapping:#{mapping}, #{mapping.class}"
       if mapping.is_a? String
         values = [mapping]
       else
         values = @object.send(mapping[0]) if @object.respond_to? mapping[0]
-        puts "1: #{values}"
         values = mapping[1].call(values) if mapping.length == 2
-        puts "2: #{values}"
         values = [values] unless values.is_a? Array
-        puts "3: #{values}"
       end
       next if values.empty? or values.first.nil?
       spaced_values = values.join("; ")
