@@ -10,8 +10,8 @@ describe User do
     user.agreed_to_terms_of_service?.should == true
   end
 
-  it 'has a #to_s that is #username' do
-    User.new(username: 'hello').to_s.should == 'hello'
+  it 'has a #name that is #uid.titleize' do
+    User.new(uid: 'hello').name.should == 'Hello'
   end
 
   describe '.batchuser' do

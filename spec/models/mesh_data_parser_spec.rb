@@ -30,7 +30,7 @@ EOS
     records = mesh.all_records
     records.length.should == 2
     records[0].should == {'A'=>['45'],'B'=>['a = b = c = d']}
-    records[1].should == {'A'=>['another field']}
+    records[1].should == {'A'=>['another field'], 'print entry'=>['test']}
   end
 
   it 'ignores bad input' do
@@ -49,7 +49,7 @@ EOS
   end
 
   it 'parses a sample mesh file' do
-    mesh = MeshDataParser.new(File.new(Rails.root + 'spec/fixtures/mesh.txt'))
+    mesh = MeshDataParser.new(File.new(Rails.root + 'spec/sample-mesh.txt'))
     records = mesh.all_records
     records.length.should == 2
     records[0].should == {

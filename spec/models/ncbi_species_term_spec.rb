@@ -17,7 +17,7 @@ describe "NCBI species term" do
 EOS
     File.stub(:open).with("dummy").and_yield(StringIO.new(source))
     NcbiSpeciesTerm.load_from_tree_file("dummy")
-    t = NcbiSpeciesTerms.find("10")
+    t = NcbiSpeciesTerm.find_by_species_taxon_id("10")
     t.species_taxon_id.should == "10"
     t.term.should == "Cellvibrio"
     t.term_type.should == "genus"
@@ -26,14 +26,14 @@ EOS
 
   describe "TreeTransform" do
     before(:each) do
-      NcbiSpeciesTerms.import([:species_taxon_id, :term_type, :full_tree_id], [
+      NcbiSpeciesTerm.import([:species_taxon_id, :term_type, :full_tree_id], [
         ["1", "genus", "1"],
         ["2", "no rank", "1.2"],
         ["3", "subgenus", "1.2.3"],
         ["4", "species", "1.2.3.4"],
         ["5", "species", "1.2.5"]
       ])
-      @tt = NcbiSpeciesTerms::TreeTransform.new
+      @tt = NcbiSpeciesTerm::TreeTransform.new
       @tt.subtree("2")
     end
     it "handles subtree directive" do

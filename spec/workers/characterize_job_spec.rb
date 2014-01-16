@@ -7,15 +7,15 @@ describe CharacterizeJob do
   # push to a queue, so it is the worker that should choke.
   describe '#run' do
     let(:user) { FactoryGirl.create(:user) }
-    let(:senior_thesis) {
-      FactoryGirl.create_curation_concern(:senior_thesis, user)
+    let(:collection) {
+      FactoryGirl.create_curation_concern(:collection, user)
     }
-    it 'deletes the generic file when I upload a virus' do
+    it 'will not deletes the generic file when I upload a virus since vecnet not use CLAMAV' do
       EnvironmentOverride.with_anti_virus_scanner(false) do
         expect {
-          FactoryGirl.create_generic_file(senior_thesis, user)
+          FactoryGirl.create_generic_file(collection, user)
         }.to raise_error(AntiVirusScanner::VirusDetected)
-        expect(senior_thesis.generic_files.count).to eq(0)
+        expect(collection.generic_files.count).to eq(1)
       end
     end
   end

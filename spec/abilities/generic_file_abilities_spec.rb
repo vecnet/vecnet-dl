@@ -6,7 +6,7 @@ describe "User" do
     subject { ability }
     let(:ability) { Ability.new(current_user) }
     let(:generic_file) {
-      FactoryGirl.create_generic_file(:senior_thesis, creating_user)
+      FactoryGirl.create_generic_file(:collection, creating_user)
     }
     let(:creating_user) { nil }
     let(:current_user) { nil }

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CurationConcern::GenericFileActor do
   let(:user) { FactoryGirl.create(:user) }
   let(:parent) {
-    FactoryGirl.create_curation_concern(:senior_thesis, user)
+    FactoryGirl.create_curation_concern(:collection, user)
   }
   let(:file_path) { __FILE__ }
   let(:file) { Rack::Test::UploadedFile.new(file_path, 'text/plain', false)}
@@ -49,12 +49,16 @@ describe CurationConcern::GenericFileActor do
 
     describe 'without a file' do
       let(:file) { nil }
-      it 'fails if no batch is provided' do
+      it 'succeeds even if no file provided' do
         expect{
           expect {
             subject.create!
-          }.to raise_error(ActiveFedora::RecordInvalid)
-        }.to_not change { GenericFile.count }
+          }.to_not raise_error(ActiveFedora::RecordInvalid)
+        }.to change {parent.class.find(parent.pid).generic_files.count }.by(1)
+
+        reloaded_generic_file.batch.should == parent
+        reloaded_generic_file.to_s.should == title
+        reloaded_generic_file.content.content.should be_nil
       end
     end
   end

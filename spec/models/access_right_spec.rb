@@ -1,47 +1,57 @@
 require 'spec_helper'
 
 describe AccessRight do
-  let(:permissionable) {
-    double('permissionable', permissions: permissions, visibility: visibility)
-  }
-  let(:permissions) { [{access: :edit, name: permission_name}] }
-  let(:permission_name) { nil }
-  let(:visibility) { nil }
-  subject { AccessRight.new(permissionable) }
+  [
+      [false, AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,        nil,                                              nil,             true, false, false, false],
+      [false, AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED, nil,                                              nil,             true, false, false, false],
+      [false, nil,                                              nil,                                              nil,             true, false, false, false],
+      [false, nil,                                              nil,                                              2.days.from_now, false, false, false, true],
+      [false, nil,                                              nil,                                              2.days.ago,      false, false, false, true],
+      [false, nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,        nil,             true, false, false, false],
+      [false, nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, nil,             false, true, false, false],
+      [false, nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,       nil,             false, false, true, false],
+      [false, nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO,       nil,             false, false, false, true],
+      [true,  AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,        nil,                                              nil,             true, false, false, false],
+      [true,  AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,        nil,                                              2.days.from_now, false, false, false, true],
+      [true,  AccessRight::PERMISSION_TEXT_VALUE_PUBLIC,        nil,                                              2.days.ago,      false, false, false, true],
+      [true,  AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED, nil,                                              nil,             false, true, false, false],
+      [true,  nil,                                              nil,                                              nil,             false, false, true, false],
+      [true,  nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,        nil,             true, false, false, false],
+      [true,  nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED, nil,             false, true, false, false],
+      [true,  nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,       nil,             false, false, true, false],
+      [true,  nil,                                              AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO,       nil,             false, false, false, true],
+  ].each do |given_persisted, givin_permission, given_visibility, given_embargo_release_date, expected_open_access, expected_authentication_only, expected_private, expected_open_access_with_embargo_release_date|
+    spec_text = <<-TEXT
 
-  describe 'with #visibility not set' do
-    let(:visibility) { nil }
-    describe 'open_access?' do
-      let(:permission_name) { AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
-      it { expect(subject).to be_open_access }
-    end
+    GIVEN: {
+      persisted: #{given_persisted.inspect},
+      permission: #{givin_permission.inspect},
+      visibility: #{given_visibility.inspect},
+      embargo_release_date: #{given_embargo_release_date}
+    },
+    EXPECTED: {
+      open_access: #{expected_open_access.inspect},
+      restricted: #{expected_authentication_only.inspect},
+      private: #{expected_private.inspect},
+      open_access_with_embargo_release_date: #{expected_open_access_with_embargo_release_date}
+    },
+    TEXT
 
-    describe 'authenticated_only?' do
-      let(:permission_name) { AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
-      it { expect(subject).to be_authenticated_only }
-    end
+    it spec_text do
+      permissions = [{access: :edit, name: givin_permission}]
+      permissionable = double(
+          'permissionable',
+          permissions: permissions,
+          visibility: given_visibility,
+          persisted?: given_persisted,
+          embargo_release_date: given_embargo_release_date
+      )
+      access_right = AccessRight.new(permissionable)
 
-    describe 'private?' do
-      let(:permission_name) { nil }
-      it { expect(subject).to be_private }
-    end
-  end
-
-  describe 'with #visibility set' do
-    let(:permission_name) { nil }
-    describe 'open_access?' do
-      let(:visibility) { AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
-      it { expect(subject).to be_open_access }
-    end
-
-    describe 'authenticated_only?' do
-      let(:visibility) { AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
-      it { expect(subject).to be_authenticated_only }
-    end
-
-    describe 'private?' do
-      let(:visibility) { AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
-      it { expect(subject).to be_private }
+      expect(access_right.open_access?).to eq(expected_open_access)
+      expect(access_right.authenticated_only?).to eq(expected_authentication_only)
+      expect(access_right.private?).to eq(expected_private)
+      expect(access_right.open_access_with_embargo_release_date?).to eq(expected_open_access_with_embargo_release_date)
     end
   end
 end

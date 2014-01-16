@@ -23,9 +23,9 @@ describe EndNote do
   let(:description) { 'My description' }
   let(:language) { 'My language' }
   let(:resource_type) { 'My resource_type' }
-  let(:create_date) { DateTime.new(2000,-11,-26,-20,-55,-54,'+7') }
-  let(:date_uploaded) { DateTime.new(2001,-11,-26,-20,-55,-54,'+7') }
-  let(:modified_date) { DateTime.new(2002,-11,-26,-20,-55,-54,'+7') }
+  let(:create_date) { DateTime.new(2000,-11,-26,-20,-55,-54,'7') }
+  let(:date_uploaded) { DateTime.new(2001,-11,-26,-20,-55,-54,'7') }
+  let(:modified_date) { DateTime.new(2002,-11,-26,-20,-55,-54,'7') }
   let(:fedora_object) {
     OpenStruct.new(
        {
@@ -50,9 +50,15 @@ describe EndNote do
     )
   }
 
-  it 'to_s' do
-    puts "title:#{fedora_object.title}"
-    subject.to_endnote.should == ''
+
+  it 'to_endnote prints endnote format of attributes' do
+    subject.to_endnote.should == "%0 OpenStruct\n%T My Title\n%Q \n%A My creator\n%C My publication_place\n%D 2000-02-04T04:05:06+00:00\n%8 2001-02-03T04:05:06+00:00\n%E My contributor\n%I My publisher\n%J My series_title\n%@ My isbn\n%U My related_url\n%7 My edition_statement\n%R My persistent_url\n%X My description\n%G My language\n%[ 2002-02-03T04:05:06+00:00\n%9 My resource_type\n%~ VecNet Digital Library\n%W TBD"
+  end
+  context "with no attributes" do
+    let(:fedora_object){{}}
+    it 'to_endnote is empty when there is no attributes' do
+      subject.to_endnote.should == "%0 Hash\n%Q \n%~ VecNet Digital Library\n%W TBD"
+    end
   end
 
 end
