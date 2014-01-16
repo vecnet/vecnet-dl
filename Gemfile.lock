@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/banurekha/curate.git
-  revision: af920f6c2c29a2a2fc4745c343881994b7152371
+  revision: f7a7276ebb9afbc352040b3098bb6b7b550e8b65
   branch: vecnet
   specs:
     curate (0.3.0)
