@@ -1,39 +1,4 @@
 GIT
-  remote: git://github.com/banurekha/blacklight-hierarchy.git
-  revision: 8b4d6436640783de30f7fffc46661a0aa9ddd461
-  specs:
-    blacklight-hierarchy (0.0.3)
-      blacklight (~> 4.0.0)
-      jquery-rails
-      rails (~> 3.2.0)
-      rsolr
-      rsolr-ext
-
-GIT
-  remote: git://github.com/banurekha/curate.git
-  revision: f7a7276ebb9afbc352040b3098bb6b7b550e8b65
-  branch: vecnet
-  specs:
-    curate (0.3.0)
-      active-fedora (~> 5.6.2)
-      active_attr
-      bootstrap-datepicker-rails
-      breadcrumbs_on_rails
-      browser
-      devise
-      devise
-      devise-guests (~> 0.3)
-      hydra-head (~> 5.4.0)
-      method_decorators
-      mini_magick
-      morphine
-      rails (= 3.2.11)
-      roboto
-      simple_form
-      solrizer (~> 2)
-      sufia
-
-GIT
   remote: git://github.com/banurekha/mods.git
   revision: 66df62ae3c3170d3d1b5abbc302e572127b62505
   specs:
@@ -50,136 +15,96 @@ GIT
     rsolr (1.0.8)
       builder (>= 2.1.2)
 
-GIT
-  remote: git://github.com/ndlib/common_repository_model
-  revision: b6a648a6ce6ff4b06d4106f09fd5f2d4a46752e7
-  specs:
-    common_repository_model (0.1.0)
-      active-fedora (~> 5.6.1)
-      active_model_serializers
-      activemodel (~> 3.2.11)
-      activesupport (~> 3.2.11)
-      builder (~> 3.0)
-      equivalent-xml
-      morphine (~> 0.1.1)
-
-GIT
-  remote: git://github.com/ndlib/sufia.git
-  revision: 3f0e459b9a4c81a5652215b92780a8abe5750c20
-  branch: sufia-for-curate-nd
-  specs:
-    sufia (0.1.0)
-      active-fedora (>= 5.5)
-      activerecord-import
-      acts_as_follower (= 0.1.1)
-      blacklight (~> 4.0.0)
-      blacklight_advanced_search
-      daemons (= 1.1.9)
-      devise
-      font-awesome-sass-rails (~> 2.0)
-      hydra-batch-edit (~> 0.1.0)
-      hydra-head (>= 5.4)
-      mail_form
-      mailboxer (= 0.8.0)
-      mini_magick
-      nest (= 1.1.1)
-      noid (= 0.5.5)
-      paperclip (= 3.3.0)
-      rack (~> 1.4.5)
-      rails (~> 3.2.11)
-      rails_autolink (= 1.0.9)
-      rainbow (= 1.1.4)
-      resque (~> 1.23.0)
-      resque-pool (= 0.3.0)
-      sitemap (= 0.3.2)
-      yaml_db (= 0.2.3)
-      zipruby (= 0.3.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
-    RedCloth (4.2.9)
-    actionmailer (3.2.11)
-      actionpack (= 3.2.11)
-      mail (~> 2.4.4)
-    actionpack (3.2.11)
-      activemodel (= 3.2.11)
-      activesupport (= 3.2.11)
-      builder (~> 3.0.0)
+    actionmailer (4.0.2)
+      actionpack (= 4.0.2)
+      mail (~> 2.5.4)
+    actionpack (4.0.2)
+      activesupport (= 4.0.2)
+      builder (~> 3.1.0)
       erubis (~> 2.7.0)
-      journey (~> 1.0.4)
-      rack (~> 1.4.0)
-      rack-cache (~> 1.2)
-      rack-test (~> 0.6.1)
-      sprockets (~> 2.2.1)
-    active-fedora (5.6.3)
-      activeresource (>= 3.0.0)
+      rack (~> 1.5.2)
+      rack-test (~> 0.6.2)
+    active-fedora (6.7.3)
       activesupport (>= 3.0.0)
-      builder (~> 3.0.0)
       deprecation
       mediashelf-loggable
       nom-xml (>= 0.5.1)
-      om (~> 1.8.0)
+      om (~> 3.0.0)
       rdf
-      rdf-rdfxml (~> 0.3.8)
+      rdf-rdfxml (= 1.0.1)
       rsolr
-      rubydora (~> 1.3)
-      solrizer (~> 2.1)
+      rubydora (~> 1.6, >= 1.6.5)
     active_attr (0.8.2)
       activemodel (>= 3.0.2, < 4.1)
       activesupport (>= 3.0.2, < 4.1)
-    active_model_serializers (0.8.1)
-      activemodel (>= 3.0)
-    activemodel (3.2.11)
-      activesupport (= 3.2.11)
-      builder (~> 3.0.0)
-    activerecord (3.2.11)
-      activemodel (= 3.2.11)
-      activesupport (= 3.2.11)
-      arel (~> 3.0.2)
-      tzinfo (~> 0.3.29)
+    active_fedora-registered_attributes (0.2.1)
+      active-fedora (>= 6.7.0)
+      active_attr (~> 0.8.2)
+    activemodel (4.0.2)
+      activesupport (= 4.0.2)
+      builder (~> 3.1.0)
+    activerecord (4.0.2)
+      activemodel (= 4.0.2)
+      activerecord-deprecated_finders (~> 1.0.2)
+      activesupport (= 4.0.2)
+      arel (~> 4.0.0)
+    activerecord-deprecated_finders (1.0.3)
     activerecord-import (0.4.1)
       activerecord (>= 3.0)
-    activeresource (3.2.11)
-      activemodel (= 3.2.11)
-      activesupport (= 3.2.11)
-    activesupport (3.2.11)
-      i18n (~> 0.6)
-      multi_json (~> 1.0)
-    acts_as_follower (0.1.1)
+    activeresource (4.0.0)
+      activemodel (~> 4.0)
+      activesupport (~> 4.0)
+      rails-observers (~> 0.1.1)
+    activesupport (4.0.2)
+      i18n (~> 0.6, >= 0.6.4)
+      minitest (~> 4.2)
+      multi_json (~> 1.3)
+      thread_safe (~> 0.1)
+      tzinfo (~> 0.3.37)
+    acts_as_follower (0.2.1)
     addressable (2.3.5)
-    arel (3.0.3)
+    arel (4.0.1)
     atomic (1.1.14)
     awesome_print (1.2.0)
-    backports (3.3.5)
+    axiom-types (0.0.5)
+      descendants_tracker (~> 0.0.1)
+      ice_nine (~> 0.9)
+    backports (3.4.0)
     bcrypt-ruby (3.1.2)
-    blacklight (4.0.1)
-      bootstrap-sass (~> 2.2.0)
+    better_errors (1.1.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    blacklight (4.5.0)
+      bootstrap-sass (>= 2.2.0, < 2.4)
       kaminari (~> 0.13)
       marc (>= 0.4.3, < 1.1)
-      nokogiri (~> 1.5)
-      rails (~> 3.2)
+      nokogiri (~> 1.6)
+      rails (>= 3.2.6, < 5)
       rsolr (~> 1.0.6)
       sass-rails
-    blacklight_advanced_search (2.1.1)
-      blacklight (~> 4.0)
-      parslet
-    blankslate (2.1.2.4)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
     bootstrap-datepicker-rails (1.1.1.11)
       railties (>= 3.0)
-    bootstrap-sass (2.2.2.0)
+    bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
+    breach-mitigation-rails (0.0.4)
     breadcrumbs_on_rails (2.3.0)
     browser (0.3.2)
-    builder (3.0.4)
+    builder (3.1.4)
     cancan (1.6.10)
-    capistrano (3.0.1)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (>= 0.0.23)
-    capybara (2.2.0)
+    capistrano (2.15.5)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
+    capybara (2.2.1)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -189,20 +114,24 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
-    celluloid (0.15.2)
-      timers (~> 1.1.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
     chunky_png (1.2.9)
     clamav (0.4.1)
-    cocaine (0.4.2)
-    code_analyzer (0.4.3)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cliver (0.3.2)
+    cocaine (0.5.3)
+      climate_control (>= 0.0.3, < 1.0)
+    code_analyzer (0.4.4)
       sexp_processor
     coderay (1.1.0)
-    coffee-rails (3.2.2)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
+    coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
-      railties (~> 3.2.0)
+      railties (>= 4.0.0, < 5.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -213,21 +142,44 @@ GEM
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
-    compass-rails (1.1.2)
+    compass-rails (1.1.3)
       compass (>= 0.12.2)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
+    curate (0.6.3)
+      active_attr
+      active_fedora-registered_attributes (~> 0.2.0)
+      bootstrap-datepicker-rails
+      breach-mitigation-rails
+      breadcrumbs_on_rails
+      browser
+      chronic (>= 0.10.2)
+      devise
+      devise-guests (~> 0.3)
+      hydra-batch-edit (~> 1.1.1)
+      hydra-collections (~> 1.3.0)
+      hydra-derivatives (>= 0.0.7)
+      hydra-file_characterization (>= 0.2.3)
+      hydra-remote_identifier (~> 0.6)
+      mini_magick
+      morphine
+      rails (~> 4.0.2)
+      simple_form (~> 3.0.1)
+      sufia-models (~> 3.4.0)
+      virtus
     daemons (1.1.9)
     database_cleaner (1.2.0)
-    debugger (1.6.3)
+    debug_inspector (0.0.2)
+    debugger (1.6.5)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.4)
+      debugger-ruby_core_source (~> 1.3.1)
     debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.4)
+    debugger-ruby_core_source (1.3.1)
     decent_exposure (2.3.0)
     deprecation (0.0.5)
       activesupport
+    descendants_tracker (0.0.3)
     devise (3.2.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -237,8 +189,9 @@ GEM
     devise-guests (0.3.2)
       devise
     diff-lcs (1.2.5)
-    docile (1.1.1)
+    docile (1.1.2)
     ensure_valid_encoding (0.5.3)
+    equalizer (0.0.9)
     equivalent-xml (0.4.0)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -250,59 +203,49 @@ GEM
       railties (>= 3.0.0)
     fastercsv (1.5.5)
     ffi (1.9.3)
-    font-awesome-sass-rails (2.0.0.0)
-      railties (>= 3.1.1)
-      sass-rails (>= 3.1.1)
-    foreigner (1.6.0)
+    foreigner (1.6.1)
       activerecord (>= 3.0.0)
-    formatador (0.2.4)
     fssm (0.2.10)
-    guard (2.2.5)
-      formatador (>= 0.2.4)
-      listen (~> 2.1)
-      lumberjack (~> 1.0)
-      pry (>= 0.9.12)
-      thor (>= 0.18.1)
-    guard-rails_best_practices (0.1.3)
-      activesupport
-      guard (>= 0.9)
-      rails_best_practices (>= 1.1.0)
-    guard-rspec (4.2.0)
-      guard (>= 2.1.1)
-      rspec (>= 2.14, < 4.0)
-    guard-spork (1.5.1)
-      childprocess (>= 0.2.3)
-      guard (>= 1.1)
-      spork (>= 0.8.4)
+    highline (1.6.20)
     hike (1.2.3)
     hooks (0.3.3)
-    hydra-access-controls (5.4.0)
-      active-fedora
+    hydra-access-controls (6.4.1)
+      active-fedora (~> 6.6)
       activesupport
-      blacklight
+      blacklight (~> 4.0)
       cancan
       deprecation
-    hydra-batch-edit (0.1.0)
+    hydra-batch-edit (1.1.1)
       blacklight
-    hydra-core (5.4.0)
-      RedCloth (= 4.2.9)
-      active-fedora (~> 5.3)
+      hydra-collections
+    hydra-collections (1.3.2)
+      active-fedora (>= 6.7.0)
+      blacklight
+      hydra-head (~> 6.4.0)
+    hydra-core (6.4.1)
+      active-fedora
       blacklight (~> 4.0)
       block_helpers
       deprecation (>= 0.0.5)
-      devise
-      hydra-access-controls (= 5.4.0)
-      hydra-mods (>= 0.0.6)
-      jquery-rails
-      rails (~> 3.2.3)
-      sanitize
-    hydra-head (5.4.0)
-      hydra-access-controls (= 5.4.0)
-      hydra-core (= 5.4.0)
+      hydra-access-controls (= 6.4.1)
+      jettywrapper (>= 1.4.1)
+      rails (>= 3.2.3, < 5)
+    hydra-derivatives (0.0.7)
+      active-fedora
+      activesupport (>= 3.2.13, < 5.0)
+      hydra-file_characterization
+      mini_magick
+    hydra-file_characterization (0.3.1)
+      activesupport (>= 3.0.0)
+    hydra-head (6.4.1)
+      hydra-access-controls (= 6.4.1)
+      hydra-core (= 6.4.1)
       rails (>= 3.2.6)
-    hydra-mods (0.0.6)
-      active-fedora (> 4.1)
+    hydra-remote_identifier (0.6.2)
+      activesupport (>= 3.2.13, < 5.0)
+      rest-client (~> 1.6.7)
     i18n (0.6.9)
+    ice_nine (0.11.0)
     iso-639 (0.2.4)
     jettywrapper (1.5.0)
       activesupport (>= 3.0.0)
@@ -310,32 +253,20 @@ GEM
       i18n
       logger
       mediashelf-loggable
-    journey (1.0.4)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
-    kaminari (0.15.0)
+    kaminari (0.15.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.8.1)
-    launchy (2.4.2)
-      addressable (~> 2.3)
     libv8 (3.16.14.3)
-    listen (2.4.0)
-      celluloid (>= 0.15.2)
-      rb-fsevent (>= 0.9.3)
-      rb-inotify (>= 0.9)
     logger (1.2.8)
-    lumberjack (1.0.4)
-    mail (2.4.4)
-      i18n (>= 0.4.0)
+    mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mail_form (1.5.0)
-      actionmailer (>= 3.2, < 5)
-      activemodel (>= 3.2, < 5)
-    mailboxer (0.8.0)
+    mailboxer (0.11.0)
       carrierwave (>= 0.5.8)
       foreigner (>= 0.9.1)
       rails (> 3.0.0)
@@ -345,19 +276,24 @@ GEM
     mediashelf-loggable (0.4.9)
     method_decorators (0.9.3)
     method_locator (0.0.4)
-    method_source (0.8.2)
     mime-types (1.25.1)
     mini_magick (3.7.0)
       subexec (~> 0.2.1)
     mini_portile (0.5.2)
+    minitest (4.7.5)
+    mono_logger (1.1.0)
     morphine (0.1.1)
     multi_json (1.8.4)
-    nest (1.1.1)
+    nest (1.1.2)
       redis
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
+    net-sftp (2.1.2)
+      net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
-    noid (0.5.5)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
+    noid (0.6.6)
       backports
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
@@ -365,48 +301,46 @@ GEM
       activesupport
       i18n
       nokogiri
-    om (1.8.0)
+    om (3.0.4)
       activemodel
       activesupport
       deprecation
       mediashelf-loggable
       nokogiri (>= 1.4.2)
+      solrizer (~> 3.1.0)
     orm_adapter (0.5.0)
-    paperclip (3.3.0)
+    paperclip (3.4.2)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-      cocaine (~> 0.4.0)
+      cocaine (~> 0.5.0)
       mime-types
-    parslet (1.5.0)
-      blankslate (~> 2.0)
-    pg (0.17.0)
+    pg (0.17.1)
+    poltergeist (1.5.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     polyglot (0.3.3)
-    pry (0.9.12.4)
-      coderay (~> 1.0)
-      method_source (~> 0.8)
-      slop (~> 3.4)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rabl (0.9.3)
       activesupport (>= 2.3.14)
-    rack (1.4.5)
-    rack-cache (1.2)
-      rack (>= 0.4)
-    rack-protection (1.5.1)
-      rack
-    rack-ssl (1.3.3)
+    rack (1.5.2)
+    rack-protection (1.5.2)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.11)
-      actionmailer (= 3.2.11)
-      actionpack (= 3.2.11)
-      activerecord (= 3.2.11)
-      activeresource (= 3.2.11)
-      activesupport (= 3.2.11)
-      bundler (~> 1.0)
-      railties (= 3.2.11)
-    rails_autolink (1.0.9)
-      rails (~> 3.1)
+    rails (4.0.2)
+      actionmailer (= 4.0.2)
+      actionpack (= 4.0.2)
+      activerecord (= 4.0.2)
+      activesupport (= 4.0.2)
+      bundler (>= 1.3.0, < 2.0)
+      railties (= 4.0.2)
+      sprockets-rails (~> 2.0.0)
+    rails-observers (0.1.2)
+      activemodel (~> 4.0)
     rails_best_practices (1.14.4)
       activesupport
       awesome_print
@@ -416,37 +350,30 @@ GEM
       i18n
       require_all
       ruby-progressbar
-    railties (3.2.11)
-      actionpack (= 3.2.11)
-      activesupport (= 3.2.11)
-      rack-ssl (~> 1.3.2)
+    railties (4.0.2)
+      actionpack (= 4.0.2)
+      activesupport (= 4.0.2)
       rake (>= 0.8.7)
-      rdoc (~> 3.4)
-      thor (>= 0.14.6, < 2.0)
-    rainbow (1.1.4)
+      thor (>= 0.18.1, < 2.0)
     raindrops (0.12.0)
-    rake (10.1.0)
-    rb-fsevent (0.9.3)
-    rb-inotify (0.9.3)
-      ffi (>= 0.5.0)
+    rake (10.1.1)
     rdf (1.0.10.2)
       addressable (>= 2.3)
-    rdf-rdfxml (0.3.9)
-      rdf (>= 0.3.11)
-      rdf-xsd (>= 0.3.8)
+    rdf-rdfxml (1.0.1)
+      rdf (>= 1.0)
+      rdf-xsd (>= 1.0)
     rdf-xsd (1.0.2.1)
       nokogiri (>= 1.5.0)
       rdf (>= 0.3.4)
-    rdoc (3.12.2)
-      json (~> 1.4)
     redis (3.0.6)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
     ref (1.0.5)
     require_all (1.3.2)
-    resque (1.23.1)
+    resque (1.25.1)
+      mono_logger (~> 1.0)
       multi_json (~> 1.0)
-      redis-namespace (~> 1.0)
+      redis-namespace (~> 1.2)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
     resque-pool (0.3.0)
@@ -455,11 +382,6 @@ GEM
       trollop (~> 1.16)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    roboto (0.2.0)
-      actionpack (>= 3.0.0)
-      rails (>= 3.1.0)
-    rsolr-ext (1.0.3)
-      rsolr (>= 1.0.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -467,19 +389,19 @@ GEM
     rspec-core (2.14.7)
     rspec-expectations (2.14.4)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-html-matchers (0.4.3)
-      nokogiri (>= 1.4.4)
-      rspec (>= 2.0.0)
+    rspec-html-matchers (0.4.4)
+      nokogiri (~> 1)
+      rspec (~> 2, >= 2.11.0)
     rspec-mocks (2.14.4)
-    rspec-rails (2.14.0)
+    rspec-rails (2.14.1)
       actionpack (>= 3.0)
+      activemodel (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
-    ruby-progressbar (1.3.2)
-    ruby_gntp (0.3.4)
+    ruby-progressbar (1.4.0)
     rubydora (1.6.5)
       activemodel
       activesupport
@@ -490,26 +412,16 @@ GEM
       mime-types
       nokogiri
       rest-client
-    rubyzip (0.9.9)
     safe_yaml (0.9.7)
-    sanitize (2.0.6)
-      nokogiri (>= 1.4.4)
-    sass (3.2.12)
-    sass-rails (3.2.6)
-      railties (~> 3.2.0)
+    sass (3.2.13)
+    sass-rails (4.0.1)
+      railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
-      tilt (~> 1.3)
-    selenium-webdriver (2.35.1)
-      childprocess (>= 0.2.5)
-      multi_json (~> 1.0)
-      rubyzip (< 1.0.0)
-      websocket (~> 1.0.4)
+      sprockets-rails (~> 2.0.0)
     sexp_processor (4.4.1)
-    sextant (0.2.4)
-      rails (>= 3.2)
-    simple_form (2.1.1)
-      actionpack (~> 3.0)
-      activemodel (~> 3.0)
+    simple_form (3.0.1)
+      actionpack (>= 4.0.0, < 4.1)
+      activemodel (>= 4.0.0, < 4.1)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -519,33 +431,41 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    sitemap (0.3.2)
-    slop (3.4.7)
-    solrizer (2.2.0)
+    solrizer (3.1.1)
       activesupport
       daemons
       mediashelf-loggable (~> 0.4.7)
       nokogiri
-      om (>= 1.5.0)
       stomp
       xml-simple
-    solrizer-fedora (2.3.1)
-      active-fedora
-    spork (1.0.0rc4)
-    sprockets (2.2.2)
+    sprockets (2.10.1)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.8)
-    sshkit (1.2.0)
-      net-scp (>= 1.1.2)
-      net-ssh
-      term-ansicolor
+    sprockets-rails (2.0.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      sprockets (~> 2.8)
     stomp (1.3.2)
     subexec (0.2.3)
-    term-ansicolor (1.2.2)
-      tins (~> 0.8)
+    sufia-models (3.4.0)
+      active-fedora (~> 6.7.0)
+      activerecord-import
+      activeresource
+      acts_as_follower (>= 0.1.1, < 0.3)
+      blacklight (~> 4.5.0)
+      hydra-derivatives (~> 0.0.5)
+      hydra-head (~> 6.4.0)
+      mailboxer (~> 0.11.0)
+      nest (~> 1.1.1)
+      noid (~> 0.6.6)
+      paperclip (~> 3.4.0)
+      rails (>= 3.2.13, < 5.0)
+      resque (~> 1.23)
+      resque-pool (= 0.3.0)
+      zipruby (= 0.3.6)
+    test_after_commit (0.2.2)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
@@ -553,37 +473,40 @@ GEM
     thread_safe (0.1.3)
       atomic
     tilt (1.4.1)
-    timecop (0.7.0)
-    timers (1.1.0)
-    tins (0.13.1)
+    timecop (0.7.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     trollop (1.16.2)
     tzinfo (0.3.38)
-    uglifier (2.3.3)
+    uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unf (0.1.3)
       unf_ext
     unf_ext (0.0.6)
     unicode (0.4.4)
-    unicorn (4.7.0)
+    unicorn (4.8.0)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    vcr (2.8.0)
     vegas (0.1.11)
       rack (>= 1.0.0)
+    virtus (1.0.1)
+      axiom-types (~> 0.0.5)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
     warden (1.2.3)
       rack (>= 1.0)
-    webmock (1.16.1)
+    webmock (1.17.1)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
-    websocket (1.0.7)
-    xml-simple (1.1.2)
+    websocket-driver (0.3.2)
+    xml-simple (1.1.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
-    yaml_db (0.2.3)
     zipruby (0.3.6)
 
 PLATFORMS
@@ -591,60 +514,48 @@ PLATFORMS
 
 DEPENDENCIES
   active_attr
-  blacklight-hierarchy!
-  bootstrap-sass (~> 2.2.0)
+  addressable (~> 2.3.5)
+  better_errors
+  binding_of_caller
   browser
-  capistrano
-  capybara
+  capistrano (~> 2.15)
+  capybara (~> 2.1)
   chronic
   clamav
-  coffee-rails (~> 3.2.1)
-  common_repository_model!
+  coffee-rails (~> 4.0)
   compass-rails
-  curate!
+  curate (~> 0.6.1)
   database_cleaner
   debugger (>= 1.4)
   decent_exposure
   factory_girl_rails
-  font-awesome-sass-rails (~> 2.0.0.0)
-  guard
-  guard-rails_best_practices
-  guard-rspec
-  guard-spork
   jettywrapper
   jquery-rails
-  launchy
   method_decorators
   method_locator
   mods!
   morphine
+  nokogiri (~> 1.6.0)
   pg
+  poltergeist
+  quiet_assets
   rabl
-  rails (= 3.2.11)
   rails_best_practices
   rake
-  rdf (~> 1.0.6)
+  rdf (>= 1.0.10.1, < 1.1)
   resque-pool
-  roboto
   rsolr!
   rspec-html-matchers
   rspec-rails
-  ruby_gntp
   rubydora (~> 1.6.4)
-  sass-rails (~> 3.2.3)
-  selenium-webdriver (= 2.35.1)
-  sextant
-  simple_form
+  sass-rails (~> 4.0)
   simplecov
-  solrizer
-  solrizer-fedora
-  spork (~> 1.0rc)
-  sqlite3
-  sufia!
+  test_after_commit
   therubyracer
   timecop
   uglifier (>= 1.0.3)
   unicode
-  unicorn
+  unicorn (~> 4.0)
+  vcr
   warden (~> 1.2.3)
   webmock

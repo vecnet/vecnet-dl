@@ -3,15 +3,15 @@ source 'https://rubygems.org'
 # This should be everything except :deploy; And by default, we mean any of
 # the environments that are not used to execute the deploy scripts
 group :default do
-  gem 'rails', '3.2.11'
+  #gem 'rails', '3.2.11'
   gem 'pg'
-  gem 'unicorn'
-  gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
-  gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
-  gem 'curate', git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
-  gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
-  gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
-  gem 'solrizer-fedora' # just to get resolrizer task
+  gem 'unicorn', '~> 4.0'
+  #gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
+  #gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
+  gem 'curate', '~> 0.6.1' #git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
+  #gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
+  #gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
+  #gem 'solrizer-fedora' # just to get resolrizer task
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
   gem 'jettywrapper'
   gem 'jquery-rails'
@@ -21,13 +21,14 @@ group :default do
   gem 'morphine'
   gem "unicode", :platforms => [:mri_18, :mri_19]
   gem 'warden', '~> 1.2.3'
-  gem 'simple_form'
-  gem 'roboto'
+  #gem 'simple_form'
+  #gem 'roboto'
   gem 'active_attr'
   gem 'browser'
   gem 'rubydora', "~>1.6.4"
   gem 'mods', git: 'git://github.com/banurekha/mods.git'
-  gem 'rdf', '~> 1.0.6'
+  gem 'rdf', '>= 1.0.10.1', '< 1.1'
+  gem 'nokogiri', "~>1.6.0"
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -35,6 +36,13 @@ group :default do
   gem 'method_decorators'
   gem 'rabl'
   gem 'chronic'
+
+  # Hack to work around some bundler strangeness
+  #
+  # This gem was appearing in the lock file, but was not
+  # being listed in a `bundle list` command on the staging machine.
+  # Explicitly require it here.
+  gem 'addressable', '~> 2.3.5'
 end
 
 group :headless do
@@ -44,41 +52,41 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'bootstrap-sass', '~> 2.2.0'
-  gem 'coffee-rails', '~> 3.2.1'
+
+  gem 'coffee-rails', '~> 4.0'
   gem 'compass-rails'
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails', '~> 4.0'
   gem 'uglifier', '>= 1.0.3'
-  gem 'font-awesome-sass-rails', '~> 2.0.0.0'
+
+  #gem 'bootstrap-sass', '~> 2.2.0'
+  #gem 'font-awesome-sass-rails', '~> 2.0.0.0'
 end
 
 group :test do
-  gem 'capybara'
+  gem 'capybara', "~> 2.1"
   gem 'database_cleaner'
   gem 'factory_girl_rails', :require => false
   gem 'rspec-html-matchers'
   gem 'rspec-rails'
+  gem 'vcr'
   gem 'webmock'
   gem 'timecop'
-  gem 'selenium-webdriver', '2.35.1'
+  gem 'poltergeist'
+  gem 'test_after_commit'
+  #gem 'selenium-webdriver', '2.35.1'
 end
 
-group :test, :development do
+group :debug do
+  gem 'quiet_assets'
+  gem 'better_errors'
+  gem 'binding_of_caller', :platforms => [:mri_19, :mri_20, :rbx]
   gem 'debugger', ">= 1.4"
   gem 'rails_best_practices'
-  gem 'guard', :require => false
-  gem 'guard-rails_best_practices'
-  gem 'guard-rspec', :require => false
-  gem 'guard-spork'
-  gem 'sextant'
+  #gem 'sextant'
   gem 'simplecov'
   gem 'method_locator'
-  gem 'spork', '~> 1.0rc'
-  gem 'ruby_gntp'
-  gem 'sqlite3'
-  gem 'launchy'
 end
 
 group :deploy do
-  gem 'capistrano'
+  gem 'capistrano', '~> 2.15'
 end
