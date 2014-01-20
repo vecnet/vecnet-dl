@@ -1,3 +1,3 @@
-Curate.config do |config|
-  config.theme = 'vecnet'
-end
+#Curate.config do |config|
+#  config.theme = 'vecnet'
+#end

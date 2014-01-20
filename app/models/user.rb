@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   include Blacklight::User
   # Connects this user object to Sufia behaviors.
   include Sufia::User
+  include Curate::UserBehavior
+
 
   delegate :can?, :cannot?, :to => :ability
 

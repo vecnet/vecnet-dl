@@ -1,1 +1,1 @@
-require File.expand_path('../../../app/models/local_authority', __FILE__)
+#require File.expand_path('../../../app/models/local_authority', __FILE__)

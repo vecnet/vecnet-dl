@@ -3,15 +3,12 @@ source 'https://rubygems.org'
 # This should be everything except :deploy; And by default, we mean any of
 # the environments that are not used to execute the deploy scripts
 group :default do
-  #gem 'rails', '3.2.11'
   gem 'pg'
   gem 'unicorn', '~> 4.0'
   #gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   #gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
-  gem 'curate', '~> 0.6.1' #git: 'git://github.com/banurekha/curate.git', branch: 'vecnet'
+  gem 'curate', path:'/Users/blakshmi/projects/hydra_curate/curate' #'~> 0.6.1'
   #gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
-  #gem 'solrizer'#, git: 'git://github.com/ndlib/solrizer.git'
-  #gem 'solrizer-fedora' # just to get resolrizer task
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
   gem 'jettywrapper'
   gem 'jquery-rails'
@@ -21,14 +18,14 @@ group :default do
   gem 'morphine'
   gem "unicode", :platforms => [:mri_18, :mri_19]
   gem 'warden', '~> 1.2.3'
-  #gem 'simple_form'
-  #gem 'roboto'
   gem 'active_attr'
   gem 'browser'
   gem 'rubydora', "~>1.6.4"
   gem 'mods', git: 'git://github.com/banurekha/mods.git'
   gem 'rdf', '>= 1.0.10.1', '< 1.1'
   gem 'nokogiri', "~>1.6.0"
+  #Rails 4 upgrade gem
+  gem 'protected_attributes'
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes

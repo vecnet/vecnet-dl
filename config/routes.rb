@@ -29,26 +29,26 @@ Vecnet::Application.routes.draw do
   end
 
   # User profile & follows
-  match 'users' => 'users#index', :as => :profiles, :via => :get
-  match 'users/:uid' => 'users#show', :as => :profile, :via => :get
-  match 'users/:uid/edit' => 'users#edit', :as => :edit_profile, :via => :get
-  match 'users/:uid/update' => 'users#update', :as => :update_profile, :via => :put
+  get 'users' => 'users#index', :as => :profiles
+  get 'users/:uid' => 'users#show', :as => :profile
+  get 'users/:uid/edit' => 'users#edit', :as => :edit_profile
+  put 'users/:uid/update' => 'users#update', :as => :update_profile
 
-  match "catalog/recent" => "catalog#recent", :as => :catalog_recent
+  get "catalog/recent" => "catalog#recent", :as => :catalog_recent
 
-  match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
-  match "catalog/location/facet" => "catalog#location_facet", :as => :catalog_location_facet
-  match "catalog/species/facet" => "catalog#species_facet", :as => :catalog_species_facet
+  get "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
+  get "catalog/location/facet" => "catalog#location_facet", :as => :catalog_location_facet
+  get "catalog/species/facet" => "catalog#species_facet", :as => :catalog_species_facet
 
-  match "files/:id/(:version)" => "curation_concern/generic_files#show", via: :get, as: "files"
+  get "files/:id/(:version)" => "curation_concern/generic_files#show",  as: "files"
 
-  match "citations/:id" => "curation_concern/citations#show", via: :get, as: "citations"
+  get "citations/:id" => "curation_concern/citations#show",  as: "citations"
 
-  match "downloads/:id/(:version)" => "downloads#show", via: :get, as: "download"
+  get "downloads/:id/(:version)" => "downloads#show",  as: "download"
 
   # Authority vocabulary queries route
-  match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
-  root to: 'catalog#index'
+  get 'authorities/:model/:term' => 'authorities#query', :as=>'authority_query'
+  root 'catalog#index'
 
   # The resque monitor
   namespace :admin do
@@ -59,10 +59,10 @@ Vecnet::Application.routes.draw do
 
   # since there is no pubtkt login for development
   if Rails.env.development?
-    match 'development_sessions/log_in' => "development_sessions#new", :via => :get
-    # morally the next should be a delete action, but is a get to match how the
+    get 'development_sessions/log_in' => "development_sessions#new"
+    # morally the next should be a delete action, but is a get to get how the
     # single sign on works in production
-    match 'development_sessions/log_out' => "development_sessions#invalidate", :via => :get
+    get 'development_sessions/log_out' => "development_sessions#invalidate"
     resources :development_sessions
   end
 end

@@ -1,5 +1,7 @@
 class Ability
   include Hydra::Ability
+  include Curate::Ability
+
   def custom_permissions
     if current_user.admin?
       can [:edit, :update, :destroy], String

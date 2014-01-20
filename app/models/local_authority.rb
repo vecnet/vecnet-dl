@@ -1,4 +1,4 @@
-require Sufia::Engine.root.join('app/models/local_authority.rb')
+require Sufia::Models::Engine.root.join('app/models/local_authority.rb')
 
 class LocalAuthority
   def self.harvest_mesh_ascii(name, sources, opts = {})
