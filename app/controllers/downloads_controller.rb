@@ -1,4 +1,4 @@
-require 'sufia/noid'
+require 'sufia/models/noid'
 require Curate::Engine.root.join('app/controllers/downloads_controller')
 
 class DownloadsController < ApplicationController

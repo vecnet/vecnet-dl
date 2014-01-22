@@ -1,7 +1,28 @@
-require Curate::Engine.root.join('app/controllers/application_controller')
+#require Curate::Engine.root.join('app/controllers/application_controller')
 class ApplicationController < ActionController::Base
 
+  include CurateController
+
   before_filter :decode_user_if_pubtkt_present
+
+  layout 'hydra-head'
+
+  protect_from_forgery
+
+  def show_action_bar?
+    true
+  end
+  helper_method :show_action_bar?
+
+  def show_breadcrumbs?
+    false
+  end
+  helper_method :show_breadcrumbs?
+
+  def show_site_search?
+    true
+  end
+  helper_method :show_site_search?
 
   helper_method :current_user, :user_signed_in?, :user_login_url, :user_logout_url
 
