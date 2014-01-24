@@ -16,6 +16,16 @@ GIT
       builder (>= 2.1.2)
 
 PATH
+  remote: /Users/blakshmi/projects/blacklight-hierarchy
+  specs:
+    blacklight-hierarchy (0.0.3)
+      blacklight (~> 4.0)
+      jquery-rails
+      rails
+      rsolr
+      rsolr-ext
+
+PATH
   remote: /Users/blakshmi/projects/hydra_curate/curate
   specs:
     curate (0.6.3)
@@ -211,6 +221,9 @@ GEM
       railties (>= 3.0.0)
     fastercsv (1.5.5)
     ffi (1.9.3)
+    font-awesome-sass-rails (2.0.0.0)
+      railties (>= 3.1.1)
+      sass-rails (>= 3.1.1)
     foreigner (1.6.1)
       activerecord (>= 3.0.0)
     fssm (0.2.10)
@@ -394,6 +407,8 @@ GEM
       trollop (~> 1.16)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rsolr-ext (1.0.3)
+      rsolr (>= 1.0.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -536,7 +551,9 @@ DEPENDENCIES
   addressable (~> 2.3.5)
   better_errors
   binding_of_caller
+  blacklight-hierarchy!
   blacklight_advanced_search (~> 2.1.0)
+  bootstrap-sass (~> 2.3.0)
   browser
   capistrano (~> 2.15)
   capybara (~> 2.1)
@@ -551,6 +568,7 @@ DEPENDENCIES
   devise
   devise-guests (~> 0.3)
   factory_girl_rails
+  font-awesome-sass-rails (~> 2.0.0.0)
   hydra-batch-edit (>= 1.1.1, < 2.0.0)
   jettywrapper
   jquery-rails

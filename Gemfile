@@ -8,7 +8,7 @@ group :default do
   #gem 'common_repository_model', git: 'git://github.com/ndlib/common_repository_model'
   #gem 'sufia', git: 'git://github.com/ndlib/sufia.git', branch: 'sufia-for-curate-nd'
   gem 'curate', path:'/Users/blakshmi/projects/hydra_curate/curate' #'~> 0.6.1'
-  #gem 'blacklight-hierarchy', git: 'git://github.com/banurekha/blacklight-hierarchy.git'
+  gem 'blacklight-hierarchy', path: '/Users/blakshmi/projects/blacklight-hierarchy'
   gem 'rsolr', git: 'git://github.com/jeremyf/rsolr.git', branch: 'adding-connection-information-to-error-handling'
   gem 'jettywrapper'
   gem 'jquery-rails'
@@ -60,8 +60,8 @@ group :assets do
   gem 'sass-rails', '~> 4.0'
   gem 'uglifier', '>= 1.0.3'
 
-  #gem 'bootstrap-sass', '~> 2.2.0'
-  #gem 'font-awesome-sass-rails', '~> 2.0.0.0'
+  gem 'bootstrap-sass', '~> 2.3.0'
+  gem 'font-awesome-sass-rails', '~> 2.0.0.0'
 end
 
 group :test do

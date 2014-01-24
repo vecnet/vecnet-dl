@@ -1,9 +1,12 @@
 #require Curate::Engine.root.join('app/controllers/application_controller')
 class ApplicationController < ActionController::Base
 
+  include Blacklight::Controller
   include CurateController
 
   before_filter :decode_user_if_pubtkt_present
+
+  self.theme = 'vecnet'
 
   layout 'hydra-head'
 
@@ -58,9 +61,9 @@ class ApplicationController < ActionController::Base
   def user_login_url(back=nil)
     back = root_path unless back
     redirect_params = { back: back }
-    logger.debug("######User login url: #{Rails.configuration.inspect}, Rails Config class:#{Rails.configuration.class}######")
+    #logger.debug("######User login url: #{Rails.configuration.inspect}, Rails Config class:#{Rails.configuration.class}######")
     if Rails.configuration.respond_to?(:pubtkt_login_url)
-      logger.debug "#######returns #{Rails.configuration.pubtkt_login_url}#######"
+    #  logger.debug "#######returns #{Rails.configuration.pubtkt_login_url}#######"
       return Rails.configuration.pubtkt_login_url
     end
     nil
