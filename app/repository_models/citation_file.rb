@@ -1,9 +1,7 @@
-require Curate::Engine.root.join('app/repository_models/curation_concern/with_full_text.rb')
-
 class CitationFile < ActiveFedora::Base
 
   include Sufia::GenericFile
-  include CurationConcern::WithAccessRight
+  #include CurationConcern::WithAccessRights
   include CurationConcern::WithFullText
   include CurationConcern::Embargoable
   include CurationConcern::ModelMethods

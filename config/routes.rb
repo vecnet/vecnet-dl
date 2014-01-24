@@ -1,5 +1,12 @@
 Vecnet::Application.routes.draw do
 
+  Blacklight.add_routes(self)
+  HydraHead.add_routes(self)
+
+  curate_for containers: [:citations, :documents]
+
+  root 'catalog#index'
+
   resources 'role_dashboard', :only=>:index do
     collection do
       get 'page/:page', :action => :index
@@ -14,25 +21,20 @@ Vecnet::Application.routes.draw do
     end
   end
 
-  namespace :curation_concern, path: :concern do
-    resources :collections
-    resources :citations
-    resources(
-        :citation_files,
-        only: [:new, :create],
-        path: 'container/:parent_id/citation_files'
-    )
-    resources(
-        :citation_files,
-        only: [:show, :edit, :update, :destroy]
-    )
-  end
+  #namespace :curation_concern, path: :concern do
+  #  resources :collections
+  #  resources :citations
+  #  resources(
+  #      :citation_files,
+  #      only: [:new, :create],
+  #      path: 'container/:parent_id/citation_files'
+  #  )
+  #  resources(
+  #      :citation_files,
+  #      only: [:show, :edit, :update, :destroy]
+  #  )
+  #end
 
-  # User profile & follows
-  get 'users' => 'users#index', :as => :profiles
-  get 'users/:uid' => 'users#show', :as => :profile
-  get 'users/:uid/edit' => 'users#edit', :as => :edit_profile
-  put 'users/:uid/update' => 'users#update', :as => :update_profile
 
   get "catalog/recent" => "catalog#recent", :as => :catalog_recent
 
@@ -44,11 +46,8 @@ Vecnet::Application.routes.draw do
 
   get "citations/:id" => "curation_concern/citations#show",  as: "citations"
 
-  get "downloads/:id/(:version)" => "downloads#show",  as: "download"
-
   # Authority vocabulary queries route
   get 'authorities/:model/:term' => 'authorities#query', :as=>'authority_query'
-  root 'catalog#index'
 
   # The resque monitor
   namespace :admin do

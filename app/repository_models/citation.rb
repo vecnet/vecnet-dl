@@ -2,7 +2,7 @@ require 'curation_concern/model'
 class Citation < ActiveFedora::Base
   include CurationConcern::Model
   include CurationConcern::WithCitationFiles
-  include CurationConcern::WithAccessRight
+  #include CurationConcern::WithAccessRights
   include CurationConcern::ModelMethods
   include CurationConcern::Embargoable
   include SpatialCoverage

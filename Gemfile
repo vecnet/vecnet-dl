@@ -26,6 +26,11 @@ group :default do
   gem 'nokogiri', "~>1.6.0"
   #Rails 4 upgrade gem
   gem 'protected_attributes'
+  gem 'blacklight_advanced_search', '~> 2.1.0'
+  gem 'hydra-batch-edit', '>= 1.1.1', '< 2.0.0'
+  gem "devise"
+  gem "devise-guests", "~> 0.3"
+
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -70,7 +75,7 @@ group :test do
   gem 'timecop'
   gem 'poltergeist'
   gem 'test_after_commit'
-  #gem 'selenium-webdriver', '2.35.1'
+  gem 'selenium-webdriver', '2.35.1'
 end
 
 group :debug do

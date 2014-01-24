@@ -112,6 +112,10 @@ GEM
       rails (>= 3.2.6, < 5)
       rsolr (~> 1.0.6)
       sass-rails
+    blacklight_advanced_search (2.1.1)
+      blacklight (~> 4.0)
+      parslet
+    blankslate (2.1.2.4)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
     bootstrap-datepicker-rails (1.1.1.11)
@@ -319,6 +323,8 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (~> 0.5.0)
       mime-types
+    parslet (1.5.0)
+      blankslate (~> 2.0)
     pg (0.17.1)
     poltergeist (1.5.0)
       capybara (~> 2.1)
@@ -418,12 +424,18 @@ GEM
       mime-types
       nokogiri
       rest-client
+    rubyzip (0.9.9)
     safe_yaml (0.9.7)
     sass (3.2.13)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
       sprockets-rails (~> 2.0.0)
+    selenium-webdriver (2.35.1)
+      childprocess (>= 0.2.5)
+      multi_json (~> 1.0)
+      rubyzip (< 1.0.0)
+      websocket (~> 1.0.4)
     sexp_processor (4.4.1)
     simple_form (3.0.1)
       actionpack (>= 4.0.0, < 4.1)
@@ -509,6 +521,7 @@ GEM
     webmock (1.17.1)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
+    websocket (1.0.7)
     websocket-driver (0.3.2)
     xml-simple (1.1.3)
     xpath (2.0.0)
@@ -523,6 +536,7 @@ DEPENDENCIES
   addressable (~> 2.3.5)
   better_errors
   binding_of_caller
+  blacklight_advanced_search (~> 2.1.0)
   browser
   capistrano (~> 2.15)
   capybara (~> 2.1)
@@ -534,7 +548,10 @@ DEPENDENCIES
   database_cleaner
   debugger (>= 1.4)
   decent_exposure
+  devise
+  devise-guests (~> 0.3)
   factory_girl_rails
+  hydra-batch-edit (>= 1.1.1, < 2.0.0)
   jettywrapper
   jquery-rails
   method_decorators
@@ -556,6 +573,7 @@ DEPENDENCIES
   rspec-rails
   rubydora (~> 1.6.4)
   sass-rails (~> 4.0)
+  selenium-webdriver (= 2.35.1)
   simplecov
   test_after_commit
   therubyracer
