@@ -1,7 +1,7 @@
 require Curate::Engine.root.join('app/controllers/curation_concern/base_controller')
 require Curate::Engine.root.join('app/services/curation_concern')
 class CurationConcern::CitationsController < CurationConcern::BaseController
-  respond_to(:html,:endnote)
+  respond_to(:html,:json,:endnote)
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path
