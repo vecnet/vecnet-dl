@@ -224,7 +224,6 @@ task :qa do
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
   after 'deploy', 'deploy:cleanup'
-  after 'deploy', 'deploy:restart'
   after 'deploy', 'vecnet:restart_workers'
 end
 
@@ -248,7 +247,6 @@ task :production do
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
   after 'deploy', 'deploy:cleanup'
-  after 'deploy', 'deploy:restart'
   after 'deploy', 'vecnet:restart_workers'
 end
 
