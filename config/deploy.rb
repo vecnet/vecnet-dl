@@ -205,21 +205,18 @@ set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 #  Environments
 #############################################################
 
-desc "Setup for the QA environment"
-task :qa do
+# all the items which are common between environments
+def common_setup
   set :shared_directories, %w(log data)
   set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
   set :branch,      fetch(:branch, 'master')
-  set :rails_env,   'qa'
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
 
   set :user,        'app'
-  set :domain,      'dl-vecnet-qa.crc.nd.edu'
   set :without_bundle_environments, 'headless development test'
 
   default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :db, :work, :primary => true
 
   after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
   after 'deploy:update_code', 'vecnet:write_env_vars'
@@ -227,26 +224,22 @@ task :qa do
   after 'deploy', 'vecnet:restart_workers'
 end
 
+desc "Setup for the QA environment"
+task :qa do
+  common_setup
+
+  set :rails_env,   'qa'
+
+  server "dl-vecnet-qa.crc.nd.edu", :app, :web, :db, :work, :primary => true
+end
+
 desc "Setup for the Production environment"
 task :production do
-  set :shared_directories, %w(log data)
-  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
-  set :branch,      fetch(:branch, 'master')
+  common_setup
+
   set :rails_env,   'production'
-  set :deploy_to,   '/home/app/vecnet'
-  set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
 
-  set :user,        'app'
-  set :domain,      'dl-vecnet.crc.nd.edu'
-  set :without_bundle_environments, 'headless development test'
-
-  default_environment['PATH'] = "#{ruby_bin}:$PATH"
-  server "#{user}@#{domain}", :app, :web, :db, :primary => true
-  server "#{user}@dl-vecnet-w1.crc.nd.edu", :work
-
-  after 'deploy:update_code', 'und:write_build_identifier', 'deploy:symlink_update', 'deploy:migrate', 'deploy:precompile'
-  after 'deploy:update_code', 'vecnet:write_env_vars'
-  after 'deploy', 'deploy:cleanup'
-  after 'deploy', 'vecnet:restart_workers'
+  server "dl-vecnet.crc.nd.edu", :app, :web, :db, :primary => true
+  server "dl-vecnet-w1.crc.nd.edu", :work
 end
 
