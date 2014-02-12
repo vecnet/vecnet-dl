@@ -21,7 +21,7 @@ class AuthoritiesController < ApplicationController
     s = params.fetch("q", "")
     if (params[:term]=="location")
       hits = GeoNamesResource.find_location(s)
-    elsif (params[:term]="species")
+    elsif (params[:term]=="species")
       hits = LocalAuthority.entries_by_species(params[:term], s) #rescue []
     else
       hits = LocalAuthority.entries_by_subject_mesh_term(params[:model], params[:term], s) #rescue []
