@@ -54,10 +54,10 @@
               <i class="caret" title="click for additional menu options"></i>
             </a>
             <ul class="dropdown-menu user-menu">
-              <%= bootstrap_navigation_element 'My Dashboard',     dashboard_index_path -%>
-              <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
-              <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
-              <%# bootstrap_navigation_element 'Profile', profile_path(current_user)%>
+              <%= link_to 'My Dashboard',     dashboard_index_path, class: 'my-dashboard',       role: 'menuitem' -%>
+              <%= link_to 'Upload a file', new_classify_concern_path, class: 'upload',       role: 'menuitem' -%>
+              <%= link_to 'Search',        catalog_index_path, class: 'search_link',       role: 'menuitem'   -%>
+              <%# link_to 'Profile', profile_path(current_user)%>
               <%= render :partial => 'admin_dashboard/admin' %>
               <li class="divider"></li>
               <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>

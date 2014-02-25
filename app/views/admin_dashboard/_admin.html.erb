@@ -1,2 +1,2 @@
 
-<%= bootstrap_navigation_element "Admin Dashboard", admin_dashboard_index_path if current_user.admin?-%>
+<%= link_to "Admin Dashboard", admin_dashboard_index_path, class: 'admin-board',       role: 'menuitem' if current_user.admin?-%>

@@ -7,7 +7,7 @@ Vecnet::Application.routes.draw do
 
   root 'catalog#index'
 
-  resources 'role_dashboard', :only=>:index do
+  resources 'dashboard', :only=>:index do
     collection do
       get 'page/:page', :action => :index
       get 'facet/:id',  :action => :facet, :as => :roles_facet

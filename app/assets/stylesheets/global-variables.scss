@@ -45,8 +45,8 @@ $textColor:             $grayDark !default;
 
 // Links
 // -------------------------
-//$linkColor:             $teal !default;
-//$linkColorHover:    $tealDark !default;
+$linkColor:             $teal !default;
+$linkColorHover:    $tealDark !default;
 
 
 // Typography
@@ -96,7 +96,7 @@ $btnBackground:                     $white !default;
 $btnBackgroundHighlight:            darken($white, 10%) !default;
 $btnBorder:                         #bbb !default;
 
-$btnPrimaryBackground:              #5bc0de; // Trying to match brand bar
+$btnPrimaryBackground:              #5bc0de !default; ; // Trying to match brand bar
 $btnPrimaryBackgroundHighlight:     #2f96b4 !default;
 
 $btnInfoBackground:                 #5bc0de !default;
