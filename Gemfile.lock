@@ -10,30 +10,6 @@ GIT
       rsolr-ext
 
 GIT
-  remote: git://github.com/banurekha/curate.git
-  revision: af920f6c2c29a2a2fc4745c343881994b7152371
-  branch: vecnet
-  specs:
-    curate (0.3.0)
-      active-fedora (~> 5.6.2)
-      active_attr
-      bootstrap-datepicker-rails
-      breadcrumbs_on_rails
-      browser
-      devise
-      devise
-      devise-guests (~> 0.3)
-      hydra-head (~> 5.4.0)
-      method_decorators
-      mini_magick
-      morphine
-      rails (= 3.2.11)
-      roboto
-      simple_form
-      solrizer (~> 2)
-      sufia
-
-GIT
   remote: git://github.com/banurekha/mods.git
   revision: 66df62ae3c3170d3d1b5abbc302e572127b62505
   specs:
@@ -94,6 +70,30 @@ GIT
       sitemap (= 0.3.2)
       yaml_db (= 0.2.3)
       zipruby (= 0.3.6)
+
+GIT
+  remote: git://github.com/vecnet/curate.git
+  revision: f7a7276ebb9afbc352040b3098bb6b7b550e8b65
+  branch: vecnet
+  specs:
+    curate (0.3.0)
+      active-fedora (~> 5.6.2)
+      active_attr
+      bootstrap-datepicker-rails
+      breadcrumbs_on_rails
+      browser
+      devise
+      devise
+      devise-guests (~> 0.3)
+      hydra-head (~> 5.4.0)
+      method_decorators
+      mini_magick
+      morphine
+      rails (= 3.2.11)
+      roboto
+      simple_form
+      solrizer (~> 2)
+      sufia
 
 GEM
   remote: https://rubygems.org/
@@ -166,7 +166,7 @@ GEM
     blankslate (2.1.2.4)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
-    bootstrap-datepicker-rails (1.1.1.10)
+    bootstrap-datepicker-rails (1.3.0.1)
       railties (>= 3.0)
     bootstrap-sass (2.2.2.0)
       sass (~> 3.2)
@@ -231,7 +231,7 @@ GEM
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
-    devise-guests (0.3.2)
+    devise-guests (0.3.3)
       devise
     diff-lcs (1.2.4)
     equivalent-xml (0.3.0)
