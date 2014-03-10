@@ -1,4 +1,13 @@
 #
+# Decode and Summarize a set of log files for the VecNet Project.
+#
+# This is designed to be run as a batch task on a local machine having
+# copies of the server's rails log files. The "right way" to do this is
+# to have the task run on the server, on some periodic basis. For starters,
+# it will make the code for retreiving the item information form the server
+# simpler. Right now this script can only report on the the public entries
+# since it is not using any kind of auth keys to view the private items.
+#
 # We track, on a monthly basis
 #  * total page hits, by user or anonymous
 #  * item views
@@ -20,7 +29,7 @@ class VecnetUsage
     @searches = {}    # hash of string => count
     @ips = {}         # hash of ipaddr => count
     @error_count = 0  # count of 500 statuses
-    @hit_count = 0    # total number of accesses...including spam and other crap
+    @hit_count = 0    # total number of accesses...including spam
     @valid_count = 0  # total number of non spam accesses
     @item_info = {}   # cache for getting item titles, subjects, etc.
     @subjects = {}    # hash of string => count

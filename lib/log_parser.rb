@@ -1,7 +1,6 @@
 require 'zlib'
 
-# Given a rails log file, turn it into a sequence of hashes
-# each with the keys:
+# Given a rails log file, create a sequence of hashes, each having the keys
 # :path :method :ip :user :date :status :duration
 class LogParser
 
@@ -22,8 +21,8 @@ class LogParser
     end
   end
 
-  # reads each line from f, extracting request information into a hash
-  # hashes are passed to the block as they are read
+  # reads f and extracts each request into a hash, which is then yielded.
+  # Hashes are passed to the block as they are created
   def scan(f, &block)
     start_line    = /^Started (?<method>\w+) "(?<path>[^"]+)" for (?<ip>\S+) at (?<date>.*?)$/
     pubtkt_line   = /^Pubtkt:.*?User: (?<user>\w+),/
