@@ -1,0 +1,23 @@
+
+# Description of the VecNet Digital Library System Diagram
+
+The users interact with a Ruby on Rails application. The application mediates
+all interaction between users and the data. It handles searching, browsing,
+downloading the repository contents as well as the web based file ingest.
+
+Solr is used for indexing the repository contents. We index item identifiers,
+metadata, facet groupings, and, for the citation articles, full text. We are
+indexing location names, but are not indexing geographic coordinates. Time
+periods are not being indexed.
+
+The Fedora Commons repository software  maintains the actual disk storage of
+the repository contents. It is always accessed through the application.
+
+A PostgreSQL database server supports the application and the Fedora repository
+software. The application uses the database to store the MeSH subject
+vocabulary terms, the NCBI species terms, and the geonames place name
+hierarchy.
+
+The application workers handle the background processing, such as unzipping
+files, performing file characterization, and doing batch ingests.
+
