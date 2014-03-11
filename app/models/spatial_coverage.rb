@@ -20,23 +20,23 @@ module SpatialCoverage
   end
 
   def format_spatials_from_lat_long
-    temp=[]
+    temp = []
     if valid_spatial_data?
       latitude.each_with_index do |lat, i|
-        temp<< Spatial.new(lat, longitude[i]).encode_dcsv
+        temp << Spatial.new(lat, longitude[i]).to_dcsv
       end
     end
-    self.spatials=temp
+    self.spatials = temp
   end
 
   def format_temporals_from_start_end_time
-    temp=[]
+    temp = []
     if valid_temporal_data?
       start_time.each_with_index do |start_time, i|
-        temp<< Temporal.new(start_time, end_time[i]).encode_dcsv
+        temp << Temporal.new(start_time, end_time[i]).to_dcsv
       end
     end
-    self.temporals=temp
+    self.temporals = temp
   end
 
 end
