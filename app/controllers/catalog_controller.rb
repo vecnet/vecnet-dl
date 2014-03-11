@@ -411,6 +411,11 @@ class CatalogController < ApplicationController
     return solr_parameters
   end
 
+  # overrides the janky restriction to only discover "editable" items in
+  # sufia and curate
+  def discovery_permissions
+    super
+  end
 
 
   private
