@@ -14,6 +14,8 @@ class Dcsv
       label.gsub!(/\\=/, '=')
       rest.gsub!(/\\=/, '=') if rest
       if rest
+        # label is trimmed of whitespace, by spec rest is not trimmed.
+        label.strip!
         result[label] = rest
       else
         result[unlabeled_count] = label
@@ -35,7 +37,7 @@ class Dcsv
           result << "#{encode(k)}=#{encode(v)}"
         end
       end
-      result.join("; ")
+      result.join(";")
     else
       input.to_s.gsub(/([=;])/) { "\\#{$1}" }
     end

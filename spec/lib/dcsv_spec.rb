@@ -27,11 +27,11 @@ describe Dcsv do
     end
     it "converts hashes recursively" do
       output = Dcsv.encode({"a" => "b", "c=d" => ";"})
-      output.should == "a=b; c\\=d=\\;"
+      output.should == "a=b;c\\=d=\\;"
     end
     it "notices array indexing and encodes that" do
       output = Dcsv.encode({0 => "a=b", 1 => ";", 2 => "asdf", "123" => "+345"})
-      output.should == "a\\=b; \\;; asdf; 123=+345"
+      output.should == "a\\=b;\\;;asdf;123=+345"
     end
   end
 end
