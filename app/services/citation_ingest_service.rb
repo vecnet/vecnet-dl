@@ -38,7 +38,7 @@ class CitationIngestService
     end
 
     def citation
-      "Journal:#{@journal}, Volume:#{volume}, issue:#{issue}, publis_date:#{dt}, start_page:#{start_page}, end_page:#{end_page}"
+      "Journal:#{@journal}, Volume:#{volume}, issue:#{issue}, publish_date:#{dt}, start_page:#{start_page}, end_page:#{end_page}"
     end
 
     def format_volume
@@ -96,7 +96,7 @@ class CitationIngestService
   end
 
   def find_citation
-     if Citation.where(:desc_metadata__references_t=>mint_a_cite_id).nil?
+     if Citation.where(:desc_metadata__references_t=>mint_a_citation_id).nil?
       return nil
     else
       return Citation.where(:desc_metadata__references_t=>get_identifiers).first
