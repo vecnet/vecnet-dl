@@ -121,9 +121,10 @@ namespace :vecnet do
       FileUtils.mkdir_p temp_path
       error_list = []
       timed_action "endnote_conversion" do
-        current_number = 1
+        current_number = 0
         EndnoteConversionService.each_record(ENV['ENDNOTE_FILE']) do |record|
           begin
+            current_number += 1
             logger.info "#{current_number}) Ingesting"
             end_filename = "#{temp_path}/#{current_number}.end"
             mods_filename = "#{temp_path}/#{current_number}.mods"
@@ -133,7 +134,6 @@ namespace :vecnet do
             service = CitationIngestService.new(mods_filename, pdf_paths)
             noid = service.ingest_citation
             logger.info "Ingested as #{noid}"
-            current_number += 1
           rescue => e
             message = "#{e.class}: #{e.message}"
             logger.error "Error Occurred: #{message}"
