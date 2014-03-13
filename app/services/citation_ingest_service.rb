@@ -84,8 +84,9 @@ class CitationIngestService
 
   def ingest_citation
     #this is place to check if citation already exists in fedora
-    unless find_citation.nil?
-      logger.error "Atleast one Citation is exists in Fedora with id #{citation.id}. Not ingested."
+    citation = find_citation
+    unless citation.nil?
+      logger.error "Atleast one Citation is exists in Fedora with id #{citation.first.id}. Not ingested."
       return
     end
     actor.create!
