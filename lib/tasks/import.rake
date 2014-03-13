@@ -125,18 +125,17 @@ namespace :vecnet do
         EndnoteConversionService.each_record(ENV['ENDNOTE_FILE']) do |record|
           begin
             logger.info "#{current_number}) Ingesting"
-            logger.info("#{current_number} Ingesting")
             end_filename = "#{temp_path}/#{current_number}.end"
             mods_filename = "#{temp_path}/#{current_number}.mods"
             File.open(end_filename, 'w') { |f| f.write(record) }
             endnote_conversion = EndnoteConversionService.new(end_filename, mods_filename)
             endnote_conversion.convert_to_mods
-            File.open(end_filename, 'w') { |f| f.write(record) }
             service = CitationIngestService.new(mods_filename, pdf_paths)
-            noid=service.ingest_citation
-            current_number+=1
+            noid = service.ingest_citation
+            logger.info "Ingested as #{noid}"
+            current_number += 1
           rescue => e
-            message= "#{e.class}: #{e.message}"
+            message = "#{e.class}: #{e.message}"
             logger.error "Error Occurred: #{message}"
             e.backtrace.each{|error|
               logger.error error.inspect

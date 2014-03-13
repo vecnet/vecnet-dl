@@ -2,23 +2,21 @@ require 'mods'
 require 'ostruct'
 class CitationIngestService
   class PartExtractor
-    attr_reader :unit, :count, :dt,:details, :start_page, :end_page, :part, :journal, :space, :dash, :dot, :comma
+
+    attr_reader :unit, :count, :dt,:details, :start_page, :end_page, :part, :journal
+
     def initialize(part_node,title)
       @journal=title
       @part=part_node
       @count = 0
-      @space=' '
-      @comma=','
-      @dot='.'
-      @dash='-'
       extract_part
     end
 
     def extract_part
-      @dt= self.part.date.text
-      part_detail={}
+      @dt = self.part.date.text
+      part_detail = {}
       self.part.detail.map{|n| part_detail[n.type_at.to_sym] = n.text}
-      @details=OpenStruct.new(part_detail)
+      @details = OpenStruct.new(part_detail)
       unless self.part.extent.nil?
         extract_extent(@part.extent)
       end
@@ -42,35 +40,38 @@ class CitationIngestService
     end
 
     def format_volume
-      if volume && issue
-        return "#{space}#{volume}(#{issue})"
-      elsif volume
-        return "#{space}#{volume}"
-      elsif issue
-        return "#{space}(#{issue})"
+      if volume || issue
+        s = " #{volume}"
+        s += "(#{issue})" if issue
+        return s
       end
       return ''
     end
 
     def format_publish_date
       return '' if dt.blank?
-      "#{space}(#{dt})"
+      " (#{dt})"
     end
 
     def format_pages
-      if start_page && end_page
-        return "#{comma}#{space}#{start_page}#{dash}#{end_page}"
-      elsif start_page
-        "#{comma}#{space}#{start_page}"
-      elsif end_page
-        "#{comma}#{space}#{end_page}"
+      case
+      when start_page && end_page
+        "#{start_page}-#{end_page}"
+      when start_page
+        "#{start_page}"
+      when end_page
+        "#{end_page}"
+      else
+        ''
       end
-      return ''
     end
 
     def format_citation
-      first_part="#{@journal}#{format_volume}#{format_pages}"
-      return first_part.blank? ? format_publish_date : "#{first_part}#{dot}#{format_publish_date}"
+      s = "#{@journal}#{format_volume}"
+      s += ", #{format_pages}" unless format_pages.blank?
+      s += "." unless s.blank?
+      s += format_publish_date
+      return s
     end
   end
 
@@ -83,24 +84,22 @@ class CitationIngestService
 
   def ingest_citation
     #this is place to check if citation already exists in fedora
-    citation= find_citation
-    unless citation.nil?
+    unless find_citation.nil?
       logger.error "Atleast one Citation is exists in Fedora with id #{citation.id}. Not ingested."
       return
     end
     actor.create!
     logger.info "Created Citation with id: #{@curation_concern.pid}"
+    @curation_concern.assign_species_from_subject
+    @curation_concern.save!
     return  @curation_concern.noid
   rescue ActiveFedora::RecordInvalid=>e
     logger.error "Error occured during creation: #{e.inspect}"
   end
 
+  # see if this citation is already in fedora...
   def find_citation
-     if Citation.where(:desc_metadata__references_t=>mint_a_citation_id).nil?
-      return nil
-    else
-      return Citation.where(:desc_metadata__references_t=>get_identifiers).first
-    end
+    return Citation.where(desc_metadata__references_t: mint_a_citation_id)
   end
 
   def create_citation
@@ -113,24 +112,24 @@ class CitationIngestService
   end
 
   def extract_metadata
-    metadata=
-    {
-      files:find_files_to_attach,
-      title:get_title,
-      creator: parsed_mods.plain_name.display_value,
-      identifier: get_curated_id, #identifier
+    metadata = {
+      files:        find_files_to_attach,
+      title:        get_title,
+      creator:      parsed_mods.plain_name.display_value,
+      identifier:   get_curated_id,
       #genre:parsed_mods.genre.text ,
       #note:parsed_mods.note.text ,
-      description:parsed_mods.abstract.text, #description
-      subject:get_subjects,
-      language:get_languages,   #language
-      resource_type:'Article',
-      source:get_journal_title,
-      references:mint_a_citation_id,#mapped to dc type
-      bibliographic_citation:get_bibliographic_citation,
-      visibility:AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      related_url:get_related_urls,
-      date_created:get_pub_date
+      description:  parsed_mods.abstract.text,
+      subject:      get_subjects,
+      species:      get_species,
+      language:     get_languages,
+      resource_type:  'Article',
+      source:       get_journal_title,
+      references:   mint_a_citation_id, # mapped to dc type
+      bibliographic_citation: get_bibliographic_citation,
+      visibility:   AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      related_url:  get_related_urls,
+      date_created: get_pub_date
     }
     #based_near:parsed_mods.get_location,   #based_near
     #parsed_mods.temporal,              #Mapped to dc temporal
@@ -165,30 +164,35 @@ class CitationIngestService
   end
 
   def get_curated_id
-    (parsed_mods.identifier - get_cite_key).map{|i| i.text.gsub("\n","").strip}.compact
+    (parsed_mods.identifier - get_cite_key).map { |i| remove_newlines(i.text) }.compact
   end
 
   def get_identifiers
-    (parsed_mods.identifier.map {|i| i.text.gsub("\n","").strip}).compact
+    parsed_mods.identifier.map {|i| remove_newlines(i.text) }.compact
   end
 
   def get_subjects
-    parsed_mods.subject.map{|sub|
+    parsed_mods.subject.map do |sub|
       sub.text.gsub(/\n|\*/,"").strip
-    }
+    end
+  end
+
+  def get_species
+    NcbiSpeciesTerm.get_species_term(get_subjects).map(&:term).compact
   end
 
   def get_languages
-    parsed_mods.language.map{|lang| lang.text_term.text.gsub("\n","").strip}
+    parsed_mods.language.map { |lang| remove_newlines(lang.text_term.text) }
   end
 
   def get_urls
-    parsed_mods.location.url.map {|loc| loc.text.gsub("\n","").strip}
+    parsed_mods.location.url.map { |loc| remove_newlines(loc.text) }
   end
 
   def get_related_urls
     get_urls.reject{|url| url.start_with?('internal-pdf:', 'C:/')}.compact
   end
+
   def find_files_to_attach
     related_url = get_urls
     related_url.map do |url|
@@ -199,10 +203,10 @@ class CitationIngestService
   end
 
   def get_journal_title
-    title=[]
+    title = []
     parsed_mods.related_item.each do |node|
       if node.type_at == "host"
-        title<<node.titleInfo.text.gsub("\n","").strip
+        title << remove_newlines(node.titleInfo.text)
       end
     end
     title
@@ -225,7 +229,7 @@ class CitationIngestService
       s = File.join(path, fname)
       return s if ::File.exists?(s)
     end
-    logger.error "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
+    raise "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
     nil
   end
 
