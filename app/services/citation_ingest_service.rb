@@ -85,22 +85,37 @@ class CitationIngestService
   def ingest_citation
     #this is place to check if citation already exists in fedora
     citation = find_citation
-    unless citation.nil?
-      logger.error "Atleast one Citation is exists in Fedora with id #{citation.first.id}. Not ingested."
-      return
+    if citation.nil?
+      actor = CurationConcern.actor(create_citation, job_user, extract_metadata)
+      actor.create!
+      logger.info "Created Citation with id: #{@curation_concern.noid}"
+    else
+      @curation_concern = citation
+      actor = CurationConcern.actor(citation, job_user, extract_metadata)
+      actor.update!
+      logger.info "Updated Citation with id: #{@curation_concern.noid}"
     end
-    actor.create!
-    logger.info "Created Citation with id: #{@curation_concern.pid}"
-    @curation_concern.assign_species_from_subject
-    @curation_concern.save!
-    return  @curation_concern.noid
+    @curation_concern.noid
   rescue ActiveFedora::RecordInvalid=>e
     logger.error "Error occured during creation: #{e.inspect}"
   end
 
   # see if this citation is already in fedora...
+  # We first check our self-assigned id.
+  # If there is more than one result we look for one with the exact same title.
+  # Returns the Citation object if item is in fedora, otherwise returns nil
   def find_citation
-    return Citation.where(desc_metadata__references_t: mint_a_citation_id)
+    matches = Citation.where(desc_metadata__references_t: mint_a_citation_id).to_a
+    case matches.length
+    when 0
+      return nil
+    when 1
+      return matches.first
+    end
+    matches.each do |r|
+      return r if r.title == get_title
+    end
+    nil
   end
 
   def create_citation
@@ -139,11 +154,6 @@ class CitationIngestService
     #date_created, date_modified, date_uploaded
     #puts metadata.inspect
     return metadata
-  end
-
-  include Morphine
-  register :actor do
-    CurationConcern.actor(create_citation, job_user, extract_metadata)
   end
 
   protected
