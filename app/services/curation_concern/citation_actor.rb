@@ -17,7 +17,9 @@ module CurationConcern
     end
 
     def update!
-      super
+      curation_concern.apply_depositor_metadata(user.user_key)
+      save
+      update_files
     end
 
     protected
@@ -37,6 +39,31 @@ module CurationConcern
       end
     end
 
+    def update_files
+      files.each do |file|
+        raise "#{file} file does not exist" unless File.exist?(file)
+        # see if a file with this name and size is already attached
+        gf = find_attached(file)
+        if gf.nil?
+          create_citation_file(file)
+        else
+          # Assume file size is different if and only if file is different.
+          # This assumption is probably wrong. What is a better check?
+          if gf.file_size.first.to_i != File.size(file)
+            update_citation_file(gf, file)
+          end
+        end
+      end
+    end
+
+    def find_attached(fname)
+      size = File.size(fname)
+      curation_concern.generic_files.each do |gf|
+        return gf if gf.filename == fname
+      end
+      nil
+    end
+
     def create_citation_file(file)
       raise "#{file} file does not exist" unless File.exist?(file)
       cf=File.new(file)
@@ -50,6 +77,13 @@ module CurationConcern
       citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
       attach_citation_file(citation_file, user, cf, File.basename(file))
       cf.close
+    end
+
+    def update_citation_file(gf, file)
+      File.open(file) do |cf|
+        gf.file = cf
+        attach_citation_file(gf, user, cf, File.basename(file))
+      end
     end
 
     def attach_citation_file(citation_file, user, file_to_attach, label)

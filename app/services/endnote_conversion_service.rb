@@ -23,7 +23,7 @@ class EndnoteConversionService
     end
   end
 
-  # converts endnote text "%0 ..." into a hash
+  # converts endnote text "%0 ..." into a hash and returns it
   def self.parse_single_record(record)
     result = {}
     tag = nil
@@ -43,7 +43,6 @@ class EndnoteConversionService
   # I think the newer endnote (v9?) uses multiletter tags
   # see http://endnote.com/sites/en/files/support/endnotex6machelp.pdf
   # page 122
-  private
   def self.endnote_tags
     @tags ||= {
       '%A' => :author,
