@@ -48,7 +48,7 @@ module CurationConcern
           create_citation_file(file)
         else
           # Assume file size is different if and only if file is different.
-          # This assumption is probably wrong. What is a better check?
+          # This assumption is probably wrong. What is a better check? a hash?
           if gf.file_size.first.to_i != File.size(file)
             update_citation_file(gf, file)
           end
