@@ -105,14 +105,23 @@ class CitationIngestService
     end
     def curated_id
       return @ids if @ids
-      @ids = @endnote[:doi].map { |doi| doi[/10\.\d+\/\S+/] }.compact.map { |doi| "doi:#{doi}" }
-      @ids += @endnote[:isbn].map { |issn| "issn:#{issn}" }
-      @ids += @endnote[:accession_number].map { |s| s[/\A\d+\Z/] }
+      @ids = []
+      if @endnote[:doi]
+        @ids += @endnote[:doi].map { |doi| doi[/10\.\d+\/\S+/] }.compact.map { |doi| "doi:#{doi}" }
+      end
+      if @endnote[:isbn]
+        @ids += @endnote[:isbn].map { |issn| "issn:#{issn}" }
+      end
+      if @endnote[:accession_number]
+        @ids += @endnote[:accession_number].map { |s| s[/\A\d+\Z/] }
+      end
+      @ids
     end
     def subjects
       @endnote[:keywords]
     end
     def species
+      return nil if self.subjects.nil?
       NcbiSpeciesTerm.get_species_term(self.subjects).map(&:term).compact
     end
     def language
@@ -129,7 +138,8 @@ class CitationIngestService
       @endnote[:title_alternate] || @endnote[:journal]
     end
     def pub_date
-      @endnote[:publish_year]
+      s = @endnote[:publish_year]
+      s.nil? ? "" : s.first
     end
     def notes
       @endnote[:research_notes]
@@ -155,9 +165,9 @@ class CitationIngestService
 
   def initialize(mods_input_file=nil, pdf_paths = [], endnote_record=nil)
     if mods_input_file
-      @record = ModsExtractor(mods_input_file)
+      @record = ModsExtractor.new(mods_input_file)
     elsif endnote_record
-      @record = EndnoteExtractor(endnote_record)
+      @record = EndnoteExtractor.new(endnote_record)
     else
       throw "Record Source Required"
     end
@@ -215,7 +225,7 @@ class CitationIngestService
       description:  @record.description,
       subject:      @record.subjects,
       species:      @record.species,
-      language:     @record.languages,
+      language:     @record.language,
       resource_type:  'Article',
       source:       @record.journal_title,
       references:   mint_a_citation_id, # mapped to dc type
@@ -239,30 +249,40 @@ class CitationIngestService
   end
 
   def find_files_to_attach
-    possible_files = @record.urls
-    possible_files += @record.notes if @record.notes
+    possible_files = []
+    possible_files += @record.urls if @record.urls
     result = []
     possible_files.each do |s|
-      # the order of the when clauses is IMPORTANT
       case
-      # "DONE - pdf 1254/4004"
-      when s[/pdf (?<first>\d+)\/(?<second>\d\d+)/]
-        result << $~["first"] + ".pdf"
-        result << $~["second"] + ".pdf"
-      # "no data - pdf 3246/7"
-      when s[/pdf (?<first>\d+)\/(?<second>\d)/]
-        n = $~["first"]
-        result << n + ".pdf"
-        result << n[0..-2] + $~["second"] + ".pdf"
-      # "DONE - pdf 5810 CMa"
-      when s[/pdf (?<fname>\d+)/]
-        result << $~["fname"] + ".pdf"
       # "C:/MAP/PDF/505.pdf"
       # "internal-pdf://a-file.pdf"
       when s[/^internal-pdf:\/\/(?<fname>.+)/], s[/^C:\/\/MAP\/PDF\/(?<fname>.+)/]
         result << $~["fname"]
       end
     end
+    # only scan notes if we don't find a file in the url.
+    if result.empty? && @record.notes
+      @record.notes.each do |s|
+      # the order of the when clauses is IMPORTANT
+        case
+        # "DONE - pdf 1254/4004"
+        when s[/pdf (?<first>\d+)\/(?<second>\d\d+)/]
+          result << $~["first"] + ".pdf"
+          result << $~["second"] + ".pdf"
+        # "no data - pdf 3246/7"
+        when s[/pdf (?<first>\d+)\/(?<second>\d)/]
+          n = $~["first"]
+          result << n + ".pdf"
+          result << n[0..-2] + $~["second"] + ".pdf"
+        # "DONE - pdf 5810 CMa"
+        when s[/pdf (?<fname>\d+)/]
+          result << $~["fname"] + ".pdf"
+        end
+      end
+    end
+    log.info "Record refers to PDF files #{result}"
+    result = result.map { |fname| resolve_pdf_path(fname) }
+    log.info "Found PDF files #{result}"
     return result
   end
 
@@ -273,7 +293,7 @@ class CitationIngestService
       s = File.join(path, fname)
       return s if ::File.exists?(s)
     end
-    raise "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
+    log.info "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
     nil
   end
 end
