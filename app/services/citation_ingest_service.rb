@@ -18,7 +18,7 @@ class CitationIngestService
       @mods.cite_key
     end
     def curated_id
-      @mods.identifier - self.cite_key).map { |i| remove_newlines(i.text) }.compact
+      (@mods.identifier - self.cite_key).map { |i| remove_newlines(i.text) }.compact
     end
     def identifiers
       @mods.identifier.map {|i| remove_newlines(i.text) }.compact
@@ -49,6 +49,9 @@ class CitationIngestService
     end
     def pub_date
       @mods.part.date.text
+    end
+    def notes
+      nil
     end
     def bibliographic_citation
       journal = self.journal_title.first || ''
@@ -86,21 +89,92 @@ class CitationIngestService
     end
   end
 
+  class EndnoteExtractor
+    attr_reader :endnote
+    def initialize(endnote_hash)
+      @endnote = endnote_hash
+    end
+    def creator
+      @endnote[:author]
+    end
+    def description
+      @endnote[:abstract]
+    end
+    def title
+      @endnote[:title]
+    end
+    def curated_id
+      return @ids if @ids
+      @ids = @endnote[:doi].map { |doi| doi[/10\.\d+\/\S+/] }.compact.map { |doi| "doi:#{doi}" }
+      @ids += @endnote[:isbn].map { |issn| "issn:#{issn}" }
+      @ids += @endnote[:accession_number].map { |s| s[/\A\d+\Z/] }
+    end
+    def subjects
+      @endnote[:keywords]
+    end
+    def species
+      NcbiSpeciesTerm.get_species_term(self.subjects).map(&:term).compact
+    end
+    def language
+      @endnote[:language]
+    end
+    def urls
+      @endnote[:url]
+    end
+    def related_urls
+      result = self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
+      result.map{|u| u.gsub("/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=","/pubmed/")}
+    end
+    def journal_title
+      @endnote[:title_alternate] || @endnote[:journal]
+    end
+    def pub_date
+      @endnote[:publish_year]
+    end
+    def notes
+      @endnote[:research_notes]
+    end
+    def bibliographic_citation
+      s = format_if_present("{}", @endnote[:journal])
+      s += format_if_present(" {}", @endnote[:volume])
+      s += format_if_present("({})", @endnote[:issue])
+      s += format_if_present(", {}", @endnote[:pages])
+      s += format_if_present(". ({})", @endnote[:date] || @endnote[:publish_year])
+      return s
+    end
+
+    private
+      def format_if_present(format, v)
+        return "" if v.nil?
+        v = v.first if v.respond_to?(:first)
+        format.gsub("{}",v)
+      end
+  end
+
   attr_accessor :metadata_file, :curation_concern, :pdf_paths
 
-  def initialize(mods_input_file, pdf_paths = [])
-    @mods = ModsExtractor(mods_input_file)
+  def initialize(mods_input_file=nil, pdf_paths = [], endnote_record=nil)
+    if mods_input_file
+      @record = ModsExtractor(mods_input_file)
+    elsif endnote_record
+      @record = EndnoteExtractor(endnote_record)
+    else
+      throw "Record Source Required"
+    end
     @pdf_paths = pdf_paths
   end
 
   def ingest_citation
+    logger.info "Looking up citation key #{mint_a_citation_id}"
     #this is place to check if citation already exists in fedora
     citation = find_citation
     if citation.nil?
+      logger.info "No citation found in fedora"
       actor = CurationConcern.actor(create_citation, job_user, extract_metadata)
       actor.create!
       logger.info "Created Citation with id: #{@curation_concern.noid}"
     else
+      logger.info "Matching citation found in fedora: #{citation.noid}"
       @curation_concern = citation
       actor = CurationConcern.actor(citation, job_user, extract_metadata)
       actor.update!
@@ -122,7 +196,7 @@ class CitationIngestService
     when 1 then matches.first
     else
       matches.each do |r|
-        return r if r.title == @mods.title
+        return r if r.title == @record.title
       end
       nil
     end
@@ -135,20 +209,20 @@ class CitationIngestService
   def extract_metadata
     metadata = {
       files:        find_files_to_attach,
-      title:        @mods.title,
-      creator:      @mods.creator,
-      identifier:   @mods.curated_id,
-      description:  @mods.description,
-      subject:      @mods.subjects,
-      species:      @mods.species,
-      language:     @mods.languages,
+      title:        @record.title,
+      creator:      @record.creator,
+      identifier:   @record.curated_id,
+      description:  @record.description,
+      subject:      @record.subjects,
+      species:      @record.species,
+      language:     @record.languages,
       resource_type:  'Article',
-      source:       @mods.journal_title,
+      source:       @record.journal_title,
       references:   mint_a_citation_id, # mapped to dc type
-      bibliographic_citation: @mods.bibliographic_citation,
+      bibliographic_citation: @record.bibliographic_citation,
       visibility:   AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-      related_url:  @mods.related_urls,
-      date_created: @mods.pub_date
+      related_url:  @record.related_urls,
+      date_created: @record.pub_date
     }
     #puts metadata.inspect
     return metadata
@@ -157,7 +231,7 @@ class CitationIngestService
   protected
 
   def mint_a_citation_id
-    return @mods.title.sort.first[0..5] + @mods.pub_date
+    return @record.title.sort.first[0..5] + @record.pub_date
   end
 
   def job_user
@@ -165,12 +239,31 @@ class CitationIngestService
   end
 
   def find_files_to_attach
-    related_url = @mods.urls
-    related_url.map do |url|
-      if url.start_with?('internal-pdf:', 'C:/')
-        resolve_pdf_path(url.sub(/internal-pdf:\/\/|C:\//, ''))
+    possible_files = @record.urls
+    possible_files += @record.notes if @record.notes
+    result = []
+    possible_files.each do |s|
+      # the order of the when clauses is IMPORTANT
+      case
+      # "DONE - pdf 1254/4004"
+      when s[/pdf (?<first>\d+)\/(?<second>\d\d+)/]
+        result << $~["first"] + ".pdf"
+        result << $~["second"] + ".pdf"
+      # "no data - pdf 3246/7"
+      when s[/pdf (?<first>\d+)\/(?<second>\d)/]
+        n = $~["first"]
+        result << n + ".pdf"
+        result << n[0..-2] + $~["second"] + ".pdf"
+      # "DONE - pdf 5810 CMa"
+      when s[/pdf (?<fname>\d+)/]
+        result << $~["fname"] + ".pdf"
+      # "C:/MAP/PDF/505.pdf"
+      # "internal-pdf://a-file.pdf"
+      when s[/^internal-pdf:\/\/(?<fname>.+)/], s[/^C:\/\/MAP\/PDF\/(?<fname>.+)/]
+        result << $~["fname"]
       end
-    end.compact
+    end
+    return result
   end
 
   private

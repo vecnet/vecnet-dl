@@ -126,14 +126,17 @@ namespace :vecnet do
           begin
             current_number += 1
             logger.info "#{current_number}) Ingesting"
-            end_filename = "#{temp_path}/#{current_number}.end"
-            mods_filename = "#{temp_path}/#{current_number}.mods"
-            File.open(end_filename, 'w') { |f| f.write(record) }
-            endnote_conversion = EndnoteConversionService.new(end_filename, mods_filename)
-            endnote_conversion.convert_to_mods
-            service = CitationIngestService.new(mods_filename, pdf_paths)
+            #end_filename = "#{temp_path}/#{current_number}.end"
+            #mods_filename = "#{temp_path}/#{current_number}.mods"
+            #File.open(end_filename, 'w') { |f| f.write(record) }
+            #endnote_conversion = EndnoteConversionService.new(end_filename, mods_filename)
+            #endnote_conversion.convert_to_mods
+            #service = CitationIngestService.new(mods_filename, pdf_paths)
+            endnote_record = EndnoteConversionService.parse_single_record(record)
+            logger.info "Record title: #{endnote_record[:title].first}"
+            service = CitationIngestService.new(nil, pdf_paths, endnote_record)
             noid = service.ingest_citation
-            logger.info "Ingested as #{noid}"
+            logger.info "Finished #{noid}"
           rescue => e
             message = "#{e.class}: #{e.message}"
             logger.error "Error Occurred: #{message}"
