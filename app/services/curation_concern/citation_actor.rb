@@ -17,6 +17,8 @@ module CurationConcern
     end
 
     def update!
+      @files = [attributes[:files]].flatten.compact
+      attributes[:files] = nil
       curation_concern.apply_depositor_metadata(user.user_key)
       save
       update_files
@@ -57,7 +59,6 @@ module CurationConcern
     end
 
     def find_attached(fname)
-      size = File.size(fname)
       curation_concern.generic_files.each do |gf|
         return gf if gf.filename == fname
       end

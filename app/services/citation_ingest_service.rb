@@ -107,15 +107,16 @@ class CitationIngestService
       return @ids if @ids
       @ids = []
       if @endnote[:doi]
+        # not everything in the doi field is a doi.
         @ids += @endnote[:doi].map { |doi| doi[/10\.\d+\/\S+/] }.compact.map { |doi| "doi:#{doi}" }
       end
       if @endnote[:isbn]
         @ids += @endnote[:isbn].map { |issn| "issn:#{issn}" }
       end
       if @endnote[:accession_number]
-        @ids += @endnote[:accession_number].map { |s| s[/\A\d+\Z/] }
+        @ids += @endnote[:accession_number]
       end
-      @ids
+      @ids = @ids.compact
     end
     def subjects
       @endnote[:keywords]
@@ -131,6 +132,7 @@ class CitationIngestService
       @endnote[:url]
     end
     def related_urls
+      return [] if self.urls.nil?
       result = self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
       result.map{|u| u.gsub("/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=","/pubmed/")}
     end
@@ -147,9 +149,9 @@ class CitationIngestService
     def bibliographic_citation
       s = format_if_present("{}", @endnote[:journal])
       s += format_if_present(" {}", @endnote[:volume])
-      s += format_if_present("({})", @endnote[:issue])
+      s += format_if_present("({})", @endnote[:issue_number])
       s += format_if_present(", {}", @endnote[:pages])
-      s += format_if_present(". ({})", @endnote[:date] || @endnote[:publish_year])
+      s += format_if_present(". ({})", [@endnote[:date], @endnote[:publish_year]].join(' '))
       return s
     end
 
@@ -175,24 +177,25 @@ class CitationIngestService
   end
 
   def ingest_citation
-    logger.info "Looking up citation key #{mint_a_citation_id}"
+    output "======"
+    output "Looking up citation key #{mint_a_citation_id}"
     #this is place to check if citation already exists in fedora
     citation = find_citation
     if citation.nil?
-      logger.info "No citation found in fedora"
+      output "No citation found in fedora"
       actor = CurationConcern.actor(create_citation, job_user, extract_metadata)
       actor.create!
-      logger.info "Created Citation with id: #{@curation_concern.noid}"
+      output "Created Citation with id: #{@curation_concern.noid}"
     else
-      logger.info "Matching citation found in fedora: #{citation.noid}"
+      output "Matching citation found in fedora: #{citation.noid}"
       @curation_concern = citation
       actor = CurationConcern.actor(citation, job_user, extract_metadata)
       actor.update!
-      logger.info "Updated Citation with id: #{@curation_concern.noid}"
+      output "Updated Citation with id: #{@curation_concern.noid}"
     end
     @curation_concern.noid
   rescue ActiveFedora::RecordInvalid=>e
-    logger.error "Error occured during creation: #{e.inspect}"
+    output "Error occured during creation: #{e.inspect}"
   end
 
   # see if this citation is already in fedora...
@@ -280,9 +283,9 @@ class CitationIngestService
         end
       end
     end
-    log.info "Record refers to PDF files #{result}"
+    output "Record refers to PDF files #{result}"
     result = result.map { |fname| resolve_pdf_path(fname) }
-    log.info "Found PDF files #{result}"
+    output "Found PDF files #{result}"
     return result
   end
 
@@ -293,7 +296,12 @@ class CitationIngestService
       s = File.join(path, fname)
       return s if ::File.exists?(s)
     end
-    log.info "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
+    output "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
     nil
+  end
+
+  def output(text)
+    logger.info(text)
+    puts text
   end
 end
