@@ -7,7 +7,7 @@ class EndnoteConversionService
   # read the file name passed in.
   # yield each record in the file one-by-one
   def self.each_record(endnote_group_filename)
-    File.open(endnote_group_filename) do |f|
+    File.open(endnote_group_filename, "r:bom|utf-8") do |f|
       record = []
       f.lines do |line|
         ln = line.strip
@@ -30,11 +30,13 @@ class EndnoteConversionService
     record.lines do |line|
       next if line.blank?
       if line.start_with?("%")
-        tag_text,line = line.split(" ", 2)
+        tag_text = line[0..1]
+        line = line[2..-1]
         tag = self.endnote_tags[tag_text]
         throw "Unknown endnote tag #{tag_text}" if tag.nil?
         result[tag] ||= []
       end
+      throw "Tag is nil? line = '#{line}'" if tag.nil?
       result[tag] << line.strip
     end
     return result
