@@ -32,6 +32,7 @@ class EndnoteConversionService
       if line.start_with?("%")
         tag_text,line = line.split(" ", 2)
         tag = self.endnote_tags[tag_text]
+        throw "Unknown endnote tag #{tag_text}" if tag.nil?
         result[tag] ||= []
       end
       result[tag] << line.strip
