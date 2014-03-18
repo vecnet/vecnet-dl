@@ -151,13 +151,18 @@ class CitationIngestService
       s += format_if_present(" {}", @endnote[:volume])
       s += format_if_present("({})", @endnote[:issue_number])
       s += format_if_present(", {}", @endnote[:pages])
-      s += format_if_present(". ({})", [@endnote[:date], @endnote[:publish_year]].join(' '))
+      cite_date = @endnote[:date].first if @endnote[:date]
+      cite_year = @endnote[:publish_year].first if @endnote[:publish_year]
+      d = cite_date if cite_date
+      d += " " if cite_date && cite_year
+      d += cite_year if cite_year
+      s += format_if_present(". ({})", d)
       return s
     end
 
     private
       def format_if_present(format, v)
-        return "" if v.nil?
+        return "" if v.nil? || v.blank?
         v = v.first if v.respond_to?(:first)
         format.gsub("{}",v)
       end
@@ -204,15 +209,11 @@ class CitationIngestService
   # Returns the Citation object if item is in fedora, otherwise returns nil
   def find_citation
     matches = Citation.where(desc_metadata__references_t: mint_a_citation_id).to_a
-    case matches.length
-    when 0 then nil
-    when 1 then matches.first
-    else
-      matches.each do |r|
-        return r if r.title == @record.title
-      end
-      nil
+    return nil if matches.length == 0
+    matches.each do |r|
+      return r if r.title == @record.title.first
     end
+    nil
   end
 
   def create_citation
