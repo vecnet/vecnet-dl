@@ -42,48 +42,49 @@ module CurationConcern
     end
 
     def update_files
-      files.each do |file|
-        raise "#{file} file does not exist" unless File.exist?(file)
+      files.each do |fname|
+        raise "#{fname} file does not exist" unless File.exist?(fname)
         # see if a file with this name and size is already attached
-        gf = find_attached(file)
+        gf = find_attached(fname)
         if gf.nil?
-          create_citation_file(file)
+          create_citation_file(fname)
         else
           # Assume file size is different if and only if file is different.
           # This assumption is probably wrong. What is a better check? a hash?
-          if gf.file_size.first.to_i != File.size(file)
-            update_citation_file(gf, file)
+          if gf.file_size.first.to_i != File.size(fname)
+            update_citation_file(gf, fname)
           end
         end
       end
     end
 
     def find_attached(fname)
+      fname = File.basename(fname)
       curation_concern.generic_files.each do |gf|
         return gf if gf.filename == fname
       end
       nil
     end
 
-    def create_citation_file(file)
-      raise "#{file} file does not exist" unless File.exist?(file)
-      cf=File.new(file)
-      citation_file = CitationFile.new
-      citation_file.batch = curation_concern
-      citation_file.resource_type = "CitationFile"
-      citation_file.file = cf
-      Sufia::GenericFile::Actions.create_metadata(
-          citation_file, user, curation_concern.pid
-      )
-      citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
-      attach_citation_file(citation_file, user, cf, File.basename(file))
-      cf.close
+    def create_citation_file(fname)
+      raise "#{fname} file does not exist" unless File.exist?(fname)
+      File.open(fname, "rb") do |f|
+        citation_file = CitationFile.new
+        citation_file.batch = curation_concern
+        citation_file.resource_type = "CitationFile"
+        citation_file.file = f
+        Sufia::GenericFile::Actions.create_metadata(
+            citation_file, user, curation_concern.pid
+        )
+        citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+        attach_citation_file(citation_file, user, f, File.basename(fname))
+      end
     end
 
-    def update_citation_file(gf, file)
-      File.open(file) do |cf|
-        gf.file = cf
-        attach_citation_file(gf, user, cf, File.basename(file))
+    def update_citation_file(gf, fname)
+      File.open(fname, "rb") do |f|
+        gf.file = f
+        attach_citation_file(gf, user, f, File.basename(fname))
       end
     end
 
