@@ -151,12 +151,14 @@ class CitationIngestService
       s += format_if_present(" {}", @endnote[:volume])
       s += format_if_present("({})", @endnote[:issue_number])
       s += format_if_present(", {}", @endnote[:pages])
+      s += "."
       cite_date = @endnote[:date].first if @endnote[:date]
       cite_year = @endnote[:publish_year].first if @endnote[:publish_year]
+      d = ""
       d = cite_date if cite_date
       d += " " if cite_date && cite_year
       d += cite_year if cite_year
-      s += format_if_present(". ({})", d)
+      s += " (#{d})" unless d.blank?
       return s
     end
 
