@@ -77,8 +77,8 @@ Sufia.config do |config|
 
   # Map hostnames onto Google Analytics tracking IDs
   if Rails.env.production?
-    config.google_analytics_id = 'UA-40044476-1'
-    config.google_analytics_domain = 'vecnet.org'
+    config.google_analytics_id = 'UA-50116776-1'
+    config.google_analytics_domain = 'dl.vecnet.org'
   end
 
 end
