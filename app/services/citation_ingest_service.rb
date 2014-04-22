@@ -1,4 +1,4 @@
-require 'URI'
+require 'uri'
 require 'mods'
 class CitationIngestService
   class ModsExtractor
