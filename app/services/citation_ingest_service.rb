@@ -1,3 +1,4 @@
+require 'URI'
 require 'mods'
 class CitationIngestService
   class ModsExtractor
@@ -129,7 +130,10 @@ class CitationIngestService
       @endnote[:language]
     end
     def urls
-      @endnote[:url]
+      @urls if @urls
+      @urls = @endnote[:url] || []
+      @urls += @endnote[:files] || []
+      @urls.map! { |u| URI.unescape(u) }  # apparently the file names are uri escaped
     end
     def related_urls
       return [] if self.urls.nil?
