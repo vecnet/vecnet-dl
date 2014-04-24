@@ -140,8 +140,21 @@ class CitationIngestService
       result = self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
       result.map{|u| u.gsub("/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=","/pubmed/")}
     end
-    def journal_title
-      @endnote[:title_alternate] || @endnote[:journal]
+    def journal_title_long
+      # find longest string. sort nil as shorter than all strings
+      # remember that each item in @endnote is an array
+      [@endnote[:journal],
+       @endnote[:title_alternate]].max_by do |a|
+        a.nil? ? -1 : a.first.length
+      end
+    end
+    def journal_title_short
+      # find shortest string. sort nil as longer than all strings
+      # remember that each item in @endnote is an array
+      [@endnote[:journal],
+       @endnote[:title_alternate]].min_by do |a|
+        a.nil? ? Float::INFINITY : a.first.length
+      end
     end
     def pub_date
       s = @endnote[:publish_year]
@@ -151,7 +164,7 @@ class CitationIngestService
       @endnote[:research_notes]
     end
     def bibliographic_citation
-      s = format_if_present("{}", @endnote[:journal])
+      s = format_if_present("{}", journal_title_short)
       s += format_if_present(" {}", @endnote[:volume])
       s += format_if_present("({})", @endnote[:issue_number])
       s += format_if_present(", {}", @endnote[:pages])
@@ -176,7 +189,7 @@ class CitationIngestService
 
   attr_accessor :metadata_file, :curation_concern, :pdf_paths
 
-  def initialize(mods_input_file=nil, pdf_paths = [], endnote_record=nil)
+  def initialize(mods_input_file=nil, pdf_paths = [], endnote_record=nil, upload_files=true)
     if mods_input_file
       @record = ModsExtractor.new(mods_input_file)
     elsif endnote_record
@@ -185,6 +198,7 @@ class CitationIngestService
       throw "Record Source Required"
     end
     @pdf_paths = pdf_paths
+    @upload_files = upload_files
   end
 
   def ingest_citation
@@ -228,7 +242,6 @@ class CitationIngestService
 
   def extract_metadata
     metadata = {
-      files:        find_files_to_attach,
       title:        @record.title,
       creator:      @record.creator,
       identifier:   @record.curated_id,
@@ -237,13 +250,16 @@ class CitationIngestService
       species:      @record.species,
       language:     @record.language,
       resource_type:  'Article',
-      source:       @record.journal_title,
+      source:       @record.journal_title_long,
       references:   mint_a_citation_id, # mapped to dc type
       bibliographic_citation: @record.bibliographic_citation,
       visibility:   AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:  @record.related_urls,
       date_created: @record.pub_date
     }
+    if @upload_files
+      metadata[:files] = find_files_to_attach
+    end
     #puts metadata.inspect
     return metadata
   end

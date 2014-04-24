@@ -115,6 +115,7 @@ namespace :vecnet do
         puts "You must provide a endnote pdf path using the format 'import::endnote_conversion ENDNOTE_FILE=path/to/endnote/file ENDNOTE_PDF_PATH=path/to/find/pdf/files'."
         return
       end
+      upload_files = ENV['ENDNOTE_NOFILES'].nil?
       temp_path = "#{Rails.root}/tmp/citations"
       pdf_paths = ENV['ENDNOTE_PDF_PATH'].split(':')
       #|| ["/Users/blakshmi/projects/endnote"]
@@ -134,7 +135,7 @@ namespace :vecnet do
             #service = CitationIngestService.new(mods_filename, pdf_paths)
             endnote_record = EndnoteConversionService.parse_single_record(record)
             logger.info "Record title: #{endnote_record[:title].first}"
-            service = CitationIngestService.new(nil, pdf_paths, endnote_record)
+            service = CitationIngestService.new(nil, pdf_paths, endnote_record, upload_files)
             noid = service.ingest_citation
             logger.info "Finished #{noid}"
           rescue => e
