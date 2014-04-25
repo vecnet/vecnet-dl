@@ -76,7 +76,7 @@ Vecnet::Application.configure do
   #   }
   # end
 
-  config.fits_path = '/opt/fits-0.6.2/fits.sh'
+  config.fits_path = '/opt/fits-0.8.0/fits.sh'
 
   config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
   config.pubtkt_login_url =  'https://www.vecnet.org/index.php/sso-login'

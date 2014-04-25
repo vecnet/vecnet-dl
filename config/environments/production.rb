@@ -68,7 +68,7 @@ Vecnet::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  config.fits_path = '/opt/fits-0.6.1/fits.sh'
+  config.fits_path = '/opt/fits-0.8.0/fits.sh'
 
   # XXX: the key will need to be changed
   config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
