@@ -27,6 +27,7 @@ group :default do
   gem 'browser'
   gem 'rubydora', "~>1.6.4"
   gem 'mods', git: 'git://github.com/banurekha/mods.git'
+  gem 'newrelic_rpm'
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes

@@ -352,6 +352,7 @@ GEM
     net-ssh (2.6.7)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
+    newrelic_rpm (3.8.0.218)
     noid (0.5.5)
       backports
     nokogiri (1.5.9)
@@ -589,6 +590,7 @@ DEPENDENCIES
   method_locator
   mods!
   morphine
+  newrelic_rpm
   pg
   rabl
   rails (= 3.2.11)
