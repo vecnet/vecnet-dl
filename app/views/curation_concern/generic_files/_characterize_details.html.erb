@@ -19,17 +19,19 @@
       <%# stat= curation_concern.audit_stat(false)  %>
       <td> <%# (stat == 1 ? 'passing' : (stat == 0 ? 'failing' : stat)) %></td>
     </tr>
-    <% if can? :edit, curation_concern %>
-      <tr>
-        <th>Access Control</th>
-        <td>
-          <%= link_to_edit_permissions(curation_concern) %><br/>
-          <%= "Read Only: #{(curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe}" unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
-          <%= "<br />".html_safe unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
-          <%= "Read and Edit: #{(curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe}" unless (curation_concern.edit_users + curation_concern.edit_groups).blank?%>
-        </td>
-      </tr>
-    <% end %>
+    <tr>
+      <th>Access Control</th>
+      <td>
+        <% if can? :edit, curation_concern %>
+          <%= link_to_edit_permissions(curation_concern) %>
+        <% else %>
+          <%= permission_badge_for(curation_concern) %>
+        <% end %><br/>
+        <%= "Read Only: #{(curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe}" unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
+        <%= "<br />".html_safe unless (curation_concern.read_users + curation_concern.read_groups).blank?%>
+        <%= "Read and Edit: #{(curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe}" unless (curation_concern.edit_users + curation_concern.edit_groups).blank?%>
+      </td>
+    </tr>
       <tr>
       <th>Characterization</th>
       <td>
