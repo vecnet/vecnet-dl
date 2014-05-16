@@ -50,6 +50,7 @@ Sufia.config do |config|
       "Image" => "Image",
       "Journal" => "Journal",
       "Map or Cartographic Material" => "Map or Cartographic Material",
+      "Open Malaria Snippet" => "Open Malaria Snippet",
       "Poster" => "Poster",
       "Presentation" => "Presentation",
       "Project" => "Project",
