@@ -39,6 +39,8 @@ class CatalogController < ApplicationController
   # This filters out objects that you want to exclude from search results, like FileAssets
   CatalogController.solr_search_params_logic += [:exclude_unwanted_models]
 
+  CatalogController.solr_access_filters_logic = [:apply_role_permissions, :apply_individual_permissions]
+
   skip_before_filter :default_html_head
 
   def index
