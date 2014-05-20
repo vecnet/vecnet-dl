@@ -136,6 +136,8 @@ unzip fits-0.8.0.zip
 sudo mv fits-0.8.0 /opt
 sudo chown app:app -R /opt/fits-0.8.0/
 sudo chmod +x /opt/fits-0.8.0/fits.sh
+# in the file /opt/fits-0.8.0/xml/jhove/jhove.conf
+# comment out the edu.harvard.hul.ois.jhove.module.XmlModule module (lines 35--37)
 
 
 # ruby
