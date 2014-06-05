@@ -99,10 +99,10 @@ class CitationIngestService
       @endnote[:author]
     end
     def description
-      @endnote[:abstract]
+      [@endnote[:abstract].join(" ")]
     end
     def title
-      @endnote[:title]
+      [@endnote[:title].join(" ")]
     end
     def curated_id
       return @ids if @ids
@@ -140,21 +140,16 @@ class CitationIngestService
       result = self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
       result.map{|u| u.gsub("/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=","/pubmed/")}
     end
-    def journal_title_long
-      # find longest string. sort nil as shorter than all strings
-      # remember that each item in @endnote is an array
+    def all_journal_titles
       [@endnote[:journal],
-       @endnote[:title_alternate]].max_by do |a|
-        a.nil? ? -1 : a.first.length
-      end
+       @endnote[:title_alternate],
+       @endnote[:title_secondary]].flatten.compact
+    end
+    def journal_title_long
+      all_journal_titles.max_by &:length
     end
     def journal_title_short
-      # find shortest string. sort nil as longer than all strings
-      # remember that each item in @endnote is an array
-      [@endnote[:journal],
-       @endnote[:title_alternate]].min_by do |a|
-        a.nil? ? Float::INFINITY : a.first.length
-      end
+      all_journal_titles.min_by &:length
     end
     def pub_date
       s = @endnote[:publish_year]
@@ -164,7 +159,7 @@ class CitationIngestService
       @endnote[:research_notes]
     end
     def bibliographic_citation
-      s = format_if_present("{}", journal_title_short)
+      s = format_if_present("{}", [journal_title_short])
       s += format_if_present(" {}", @endnote[:volume])
       s += format_if_present("({})", @endnote[:issue_number])
       s += format_if_present(", {}", @endnote[:pages])
