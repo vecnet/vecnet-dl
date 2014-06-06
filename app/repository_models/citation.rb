@@ -15,10 +15,11 @@ class Citation < ActiveFedora::Base
 
   #delegate_to :properties, [:relative_path, :depositor], :unique => true
   delegate_to :descMetadata, [:date_uploaded, :date_modified, :title, :description], :unique => true
-  delegate_to :descMetadata, [ :related_url, :based_near, :part_of, :creator,
+  delegate_to :descMetadata, [:related_url, :based_near, :part_of, :creator,
                               :contributor, :tag, :rights,
                               :publisher, :date_created, :subject,
-                              :resource_type, :identifier, :language, :bibliographic_citation, :archived_object_type, :references, :source, :alternative]
+                              :resource_type, :identifier, :language, :bibliographic_citation,
+                              :archived_object_type, :references, :source, :alternative, :conforms_to]
 
   attr_accessor :files
 
