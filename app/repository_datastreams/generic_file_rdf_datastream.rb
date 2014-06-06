@@ -7,5 +7,8 @@ class GenericFileRdfDatastream
     map.species(:to => "scientificName", :in => RDF::DWC) do |index|
       index.as :searchable, :facetable, :displayable
     end
+    map.conforms_to(to: "conformsTo", in: RDF::DC) do |index|
+      index.as :searchable, :displayable
+    end
   end
 end

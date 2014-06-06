@@ -49,6 +49,12 @@
             as: :multi_value,
             input_html: {class: 'input-xlarge'} %>
 
+<%= f.input :conforms_to,
+            label: get_label(:conforms_to),
+            hint: help_icon('conforms_to'),
+            as: :multi_value,
+            input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
+
 <%= f.input :identifier,
             hint: help_icon('identifier'),
             label: get_label(:identifier),
