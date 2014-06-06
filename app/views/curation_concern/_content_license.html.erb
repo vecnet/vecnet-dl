@@ -1,8 +1,6 @@
 <fieldset>
-  <legend>Choose a License for your Content
-    <small>
-      What do you want others to be able to do with your work?
-    </small>
+  <legend>
+    License for this Item
     <%=render :partial => "curation_concern/rights_modal"%>
   </legend>
 
@@ -12,7 +10,6 @@
     input_html: {  :size=>7, :multiple => true, :class=>'input-xxlarge'},
     hint: help_icon('rights'),
     selected:Sufia::Engine::config.cc_licenses["All rights reserved"]
-
   %>
 
 </fieldset>

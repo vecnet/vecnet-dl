@@ -25,6 +25,7 @@ en:
       temporals:         "Time period(s) of Content"
       source:            "Journal Title"
       conforms_to:       "Required Schema Version"
+      bibliographic_citation: "Bibliographic Citation"
 
     metadata_help:
       resource_type: 'Pre-defined categories to describe the type of file content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected.'
@@ -43,7 +44,8 @@ en:
       rights: "Licensing and distribution information governing access to the file. Select from the provided drop-down list."
       spatials: "A point location specified by geographic coordinates in decimal degrees."
       temporals: "Time period(s) for which the data set corresponds. Use the YYYY-MM-DD format.If the full date is unknown, month and year (YYYY-MM) or just year (YYYY) may be used"
-      source: "Journal Title that article published in."
+      source: "Title of journal where the article is published"
+      bibliographic_citation: "The bibliographic citation for this article"
       conforms_to: "For Open Malaria snippets, the version(s) of the Open Malaria schema this snippet requires"
     access_label:
       public: "Global Access"
