@@ -1,35 +1,17 @@
-<%#
-Copyright © 2012 The Pennsylvania State University
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-%>
-
-<!-- scholarsphere over ride -->
-<!-- the sub on ':' is b.c. jQuery has trouble with '.' or ':'
-on element ids -->
-<% if document.has_key?(:noid_s) %>
-<% noid = document[:noid_s].first %>
-<tr id="document_<%= noid.gsub(":", "_") %>" class="<%= cycle("","zebra") %>">
-  <% gf = ActiveFedora::Base.find(document.id, cast: true) %>
+<%# scholarsphere override %>
+<%# the sub on ':' is b.c. jQuery has trouble with '.' or ':' on element ids %>
+<% if document.has_key?(:noid_s) -%>
+  <% noid = document[:noid_s].first -%>
+  <% noid_safe = noid.gsub(":", "_") -%>
+<tr id="document_<%= noid_safe %>" class="<%= cycle("","zebra") %>">
+  <% gf = ActiveFedora::Base.find(document.id, cast: true) -%>
   <td>
-     <a href="" title="Click for more details"><i id="expand_<%= noid.gsub(":", "_") %>" class="icon-plus icon-large fleft show-details"></i></a>&nbsp;
+     <a href="" title="Click for more details"><i id="expand_<%= noid_safe %>" class="icon-plus icon-large fleft show-details"></i></a>&nbsp;
      <span class="center"><%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}" %> <br /></span>
   </td>
   <td class="inline-item-actions"><%= gf.human_readable_type %></td>
   <td><%= document.fetch(:desc_metadata__date_uploaded_dt,'').to_time.strftime("%m/%d/%Y") unless document.fetch(:desc_metadata__date_uploaded_dt,'').blank? %> </td>
-  <td>
-    <%= link_to_edit_permissions(gf, document)%>
-  </td>
+  <td><%= link_to_edit_permissions(gf, document)%></td>
   <% if current_user -%>
     <td width="23%" class="inline-item-actions">
       <ul class="nav nav-pills pull-right">
@@ -45,7 +27,7 @@ on element ids -->
         <li>
           <%= link_to(
                       raw('<i class="icon-download-alt icon-large"></i>'),
-                      download_path(gf.id),
+                      download_path(noid),
                       :class=> 'itemicon itemdownload',
                       :title => %(Download #{gf.to_s.inspect})
               )%>
@@ -62,9 +44,9 @@ on element ids -->
         </li>
       </ul>
     </td>
-  <% end %>
+  <% end -%>
 </tr>
-<tr class="hide" id="detail_<%= noid.gsub(":", "_") %>"> <!--  document detail"> -->
+<tr class="hide" id="detail_<%= noid_safe %>"> <!--  document detail"> -->
   <td colspan="6">
     <dl class="expanded-details">
       <% index_fields.each do |solr_fname, field| -%>
@@ -73,7 +55,6 @@ on element ids -->
           <dd class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_value :document=>document, :field => solr_fname %></dd>
         <% end -%>
       <% end -%>
-
     </dl>
   </td>
 </tr>

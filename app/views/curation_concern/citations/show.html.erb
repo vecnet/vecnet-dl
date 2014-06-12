@@ -3,10 +3,10 @@
     <h2><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h2>
 <% end %>
 <p>
-  <% if can? :edit, curation_concern %>
+  <% if can? :edit, curation_concern -%>
       <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
-      <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this citation'), new_curation_concern_citation_file_path(curation_concern.id), class: 'btn' %>
-  <% end %>
+      <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this citation'), new_curation_concern_citation_file_path(curation_concern.noid), class: 'btn' %>
+  <% end -%>
   <%= render '/curation_concern/media_display', curation_concern: curation_concern if can?(:read, curation_concern)%>
  <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
 </p>
