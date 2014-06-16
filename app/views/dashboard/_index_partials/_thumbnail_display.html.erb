@@ -2,6 +2,6 @@
 <%- width = 36 if width.blank? -%>
 <%- doc_noid = document[:noid_s].first -%>
 <%- doc_mimetypes = document['mime_type_t'] -%>
-<% if !(doc_mimetypes & ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/jpg', 'application/pdf']).empty? -%>
+<% if doc_mimetypes && !(doc_mimetypes & ['image/jpeg', 'image/png', 'image/bmp', 'image/gif', 'image/jpg', 'application/pdf']).empty? -%>
   <%= link_to image_tag(download_path(doc_noid, {:datastream_id => 'thumbnail'}), {:width=>width, :height=>height, alt: "thumbnail"}), files_path(doc_noid) %>
 <% end -%>
