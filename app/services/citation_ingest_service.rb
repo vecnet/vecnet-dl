@@ -99,6 +99,7 @@ class CitationIngestService
       @endnote[:author]
     end
     def description
+      return [] if @endnote[:abstract].nil?
       [@endnote[:abstract].join(" ")]
     end
     def title
@@ -159,6 +160,7 @@ class CitationIngestService
       @endnote[:research_notes]
     end
     def bibliographic_citation
+      return nil if journal_title_short.nil?
       s = format_if_present("{}", [journal_title_short])
       s += format_if_present(" {}", @endnote[:volume])
       s += format_if_present("({})", @endnote[:issue_number])
