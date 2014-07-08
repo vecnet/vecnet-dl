@@ -5,4 +5,5 @@ server {
     location / {
         proxy_pass http://localhost:8081;
     }
+    access_log  /var/log/nginx/access_tomcat.log  main;
 }
