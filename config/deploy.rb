@@ -179,6 +179,15 @@ namespace :vecnet do
       "echo RAILS_ROOT=#{current_path} >> #{release_path}/env-vars"
     ].join(" && ")
   end
+
+  # this task is not run by default. it must be specifically invoked
+  desc "Update the application nginx config"
+  task :update_nginx_config, :roles => :app do
+    deploy_from_template("/etc/nginx/nginx.conf")
+    deploy_from_template("/etc/nginx/conf.d/vecnet.conf")
+    deploy_from_template("/etc/nginx/conf.d/tomcat.conf")
+    run "#{sudo} service nginx reload"
+  end
 end
 
 namespace :und do
@@ -186,6 +195,17 @@ namespace :und do
     run "cd #{release_path} && echo '#{build_identifier}' > config/bundle-identifier.txt"
   end
 end
+
+# takes the file from "devops/$file.erb"
+# runs erb on it and then uploads it to the server as "$file"
+def deploy_from_template(file)
+  # from https://gist.github.com/dnagir/978737#file-deploy-rb-L59
+  require 'erb'
+  template = File.read(File.join(File.dirname(__FILE__), "..", "devops", "#{file}.erb"))
+  result = ERB.new(template).result(binding)
+  put result, file
+end
+
 
 #############################################################
 #  Callbacks
@@ -208,7 +228,14 @@ set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 # all the items which are common between environments
 def common_setup
   set :shared_directories, %w(log data)
-  set :shared_files, %w(config/database.yml config/fedora.yml config/solr.yml config/redis.yml config/pubtkt-qa.pem)
+  set :shared_files, %w(
+    config/database.yml
+    config/newrelic.yml
+    config/fedora.yml
+    config/solr.yml
+    config/redis.yml
+    config/pubtkt-qa.pem
+  )
   set :branch,      fetch(:branch, 'master')
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
@@ -229,6 +256,7 @@ task :qa do
   common_setup
 
   set :rails_env,   'qa'
+  set :domain,      'dl-dev.vecnet.org'
 
   server "dl-vecnet-qa.crc.nd.edu", :app, :web, :db, :work, :primary => true
 end
@@ -238,6 +266,7 @@ task :production do
   common_setup
 
   set :rails_env,   'production'
+  set :domain,      'dl.vecnet.org'
 
   server "dl-vecnet.crc.nd.edu", :app, :web, :db, :primary => true
   server "dl-vecnet-w1.crc.nd.edu", :work

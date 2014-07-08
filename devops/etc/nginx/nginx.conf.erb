@@ -1,0 +1,52 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user              nginx nginx;
+worker_processes  2;
+
+error_log  /var/log/nginx/error.log;
+#error_log  /var/log/nginx/error.log  notice;
+#error_log  /var/log/nginx/error.log  info;
+
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+    use epoll;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+    server_tokens off;
+
+    log_format  main  '$remote_addr|$remote_user|$time_local|$request|'
+                      '$status|$body_bytes_sent|$http_referer|'
+                      '$http_user_agent|$http_x_forwarded_for|'
+                      '$request_time|$upstream_response_time|$cookie_auth_pubtkt';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+
+    <% if rails_env == "qa" %>
+    # restrict access to vpn
+    allow 10.0.0.0/8;
+    allow 172.17.0.0/17;
+    allow 129.74.0.0/16;
+    allow 128.182.0.0/16;
+    deny all;
+    <% end %>
+
+    # Load config files from the /etc/nginx/conf.d directory
+    # The default server is in conf.d/default.conf
+    include /etc/nginx/conf.d/*.conf;
+}

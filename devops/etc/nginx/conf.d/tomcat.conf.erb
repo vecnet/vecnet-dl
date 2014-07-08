@@ -1,0 +1,8 @@
+# open up tomcat port for debugging
+server {
+    listen 8983 default_server;
+    server_name _;
+    location / {
+        proxy_pass http://localhost:8081;
+    }
+}

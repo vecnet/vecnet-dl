@@ -5,22 +5,22 @@ upstream app_server {
     server unix:/tmp/vecnet.sock.0;
 }
 server {
-    listen 80;
-    server_name dl.dev.vecnet.org;
+    listen 80 default_server;
+    server_name <%= domain %>;
     location / {
-        return 301 https://dl.dev.vecnet.org$request_uri;
+        return 301 https://<%= domain %>$request_uri;
     }
 }
 server {
     listen 443 ssl default_server deferred;
-    server_name dl.dev.vecnet.org;
-    ssl_certificate      /etc/nginx/20130718.dl.dev.vecnet.org.crt;
-    ssl_certificate_key  /etc/nginx/dl.dev.vecnet.org.key;
+    server_name <%= domain %>;
+    ssl_certificate      /etc/nginx/20140403.vecnet.org.crt;
+    ssl_certificate_key  /etc/nginx/20140403.vecnet.org.key;
     ssl_session_cache shared:SSL:1m;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+
     client_max_body_size 4G;
     root /home/app/vecnet/current/public;
-
     location ^~ /assets/ {
         # compress things on-the-fly
         gzip on;
@@ -32,7 +32,18 @@ server {
         break;
     }
 
-    #try_files /system/maintenance.html $uri @app;
+    location ^~ /downloads/ {
+        proxy_intercept_errors on;
+        error_page 401 404 = @app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+        proxy_redirect off;
+        proxy_buffering off;
+        proxy_pass http://127.0.0.1:4000/;
+    }
+
     try_files $uri @app;
 
     location @app {

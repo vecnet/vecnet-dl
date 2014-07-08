@@ -23,9 +23,13 @@ To deploy to Production:
 
     cap production deploy
 
-To Deploy from branch
+To deploy from branch
 
     cap <environment> deploy -S branch=<branch name>
+
+To deploy new nginx config. This will reload nginx.
+
+    cap <environment> vecnet:update_nginx_config
 
 ## Other server admin tasks
 
