@@ -188,6 +188,14 @@ namespace :vecnet do
     deploy_from_template("/etc/nginx/conf.d/tomcat.conf")
     run "#{sudo} service nginx reload"
   end
+
+  desc "Update the disadis application"
+  task :update_disadis, :roles => :app do
+    run "GOPATH=/home/app/gocode go get -u github.com/dbrower/disadis"
+    deploy_from_template("/home/app/sv/disadis/run", mode: "+x")
+    deploy_from_template("/home/app/sv/disadis/settings.ini")
+    run "#{sudo} /sbin/sv restart disadis"
+  end
 end
 
 namespace :und do
@@ -198,12 +206,13 @@ end
 
 # takes the file from "devops/$file.erb"
 # runs erb on it and then uploads it to the server as "$file"
-def deploy_from_template(file)
+def deploy_from_template(file, options={})
   # from https://gist.github.com/dnagir/978737#file-deploy-rb-L59
   require 'erb'
+  raise "file must be absolute path" unless file[0] == '/'
   template = File.read(File.join(File.dirname(__FILE__), "..", "devops", "#{file}.erb"))
   result = ERB.new(template).result(binding)
-  put result, file
+  put(result, file, options)
 end
 
 

@@ -1,0 +1,20 @@
+[General]
+fedora-addr = http://fedoraAdmin:fedoraAdmin@localhost:8081/fedora/
+log-filename = /home/app/sv/disadis/disadis.log
+admin = dl_librarian
+
+[Pubtkt]
+key-file = pubtkt-qa.pem
+
+[Handler "dl"]
+port        = 4000
+prefix      = vecnet:
+datastream  = content
+auth        = true
+versioned   = true
+
+[Handler "thumb"]
+port            = 4000
+prefix          = vecnet:
+datastream      = thumbnail
+datastream-id   = thumbnail
