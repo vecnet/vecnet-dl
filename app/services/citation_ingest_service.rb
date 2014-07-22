@@ -123,6 +123,9 @@ class CitationIngestService
     def subjects
       @endnote[:keywords]
     end
+    def keywords
+      @endnote[:label]
+    end
     def species
       return nil if self.subjects.nil?
       NcbiSpeciesTerm.get_species_term(self.subjects).map(&:term).compact
@@ -244,6 +247,7 @@ class CitationIngestService
       identifier:   @record.curated_id,
       description:  @record.description,
       subject:      @record.subjects,
+      tag:          @record.keywords,
       species:      @record.species,
       language:     @record.language,
       resource_type:  'Article',
