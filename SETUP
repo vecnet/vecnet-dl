@@ -241,5 +241,16 @@ go get github.com/dbrower/disadis
 
 # make service directory
 mkdir -p ~/sv/disadis
+(copy in the run and settings files)
+sudo ln -s ~app/sv/disadis /etc/service/disadis
+
+# install noids
+go get github.com/dbrower/noids
+sudo mkdir -p /opt/noids/pools
+sudo chown app:app -R /opt/noids
+mkdir -p ~/sv/noids
+(copy in the run and settings files)
+sudo ln -s ~app/sv/noids /etc/service/noids
+
 
 

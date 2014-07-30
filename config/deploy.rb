@@ -196,6 +196,14 @@ namespace :vecnet do
     deploy_from_template("/home/app/sv/disadis/settings.ini")
     run "#{sudo} /sbin/sv restart disadis"
   end
+
+  desc "Update the noids application"
+  task :update_noids, :roles => :app do
+    run "GOPATH=/home/app/gocode go get -u github.com/dbrower/noids"
+    deploy_from_template("/home/app/sv/noids/run", mode: "+x")
+    deploy_from_template("/home/app/sv/noids/settings.ini")
+    run "#{sudo} /sbin/sv restart noids"
+  end
 end
 
 namespace :und do
