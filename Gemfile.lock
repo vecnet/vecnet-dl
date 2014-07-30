@@ -40,6 +40,14 @@ GIT
       morphine (~> 0.1.1)
 
 GIT
+  remote: git://github.com/ndlib/noids_client
+  revision: 7081fab70968d7c47ca3d1db8a74553082517507
+  specs:
+    noids_client (0.0.1)
+      json (~> 1.8)
+      rest-client (~> 1.6)
+
+GIT
   remote: git://github.com/ndlib/sufia.git
   revision: ff669a17004e223eef8a1e5c34ffed58754e6a84
   branch: sufia-for-curate-nd
@@ -591,6 +599,7 @@ DEPENDENCIES
   mods!
   morphine
   newrelic_rpm
+  noids_client!
   pg
   rabl
   rails (= 3.2.11)

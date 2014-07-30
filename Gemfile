@@ -28,6 +28,7 @@ group :default do
   gem 'rubydora', "~>1.6.4"
   gem 'mods', git: 'git://github.com/banurekha/mods.git'
   gem 'newrelic_rpm'
+  gem 'noids_client', git: 'git://github.com/ndlib/noids_client'
 
   # Need rubyracer to run integration tests.....really?!?
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
