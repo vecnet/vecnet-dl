@@ -251,6 +251,10 @@ sudo chown app:app -R /opt/noids
 mkdir -p ~/sv/noids
 (copy in the run and settings files)
 sudo ln -s ~app/sv/noids /etc/service/noids
+curl localhost:13001/pools -F name=vecnet -F template=.reeddeeddk
+# do this next step if there is already a fedora repo containing minted ids.
+# otherwise, feel free to ignore.
+curl localhost:13001/pools/vecnet/advancePast -F id=(determine id using method in noids repo)
 
 
 
