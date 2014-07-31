@@ -255,6 +255,8 @@ curl localhost:13001/pools -F name=vecnet -F template=.reeddeeddk
 # do this next step if there is already a fedora repo containing minted ids.
 # otherwise, feel free to ignore.
 curl localhost:13001/pools/vecnet/advancePast -F id=(determine id using method in noids repo)
-
+# for production machine only, make hole in fw for noids server
+sudo iptables -I INPUT -p tcp --dport 13001 --source 129.74.246.0/24 -m state --state NEW  -j ACCEPT
+sudo /sbin/service iptables save
 
 

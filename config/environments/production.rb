@@ -75,6 +75,6 @@ Vecnet::Application.configure do
   config.pubtkt_login_url =  'https://www.vecnet.org/index.php/sso-login'
   config.pubtkt_logout_url = 'https://www.vecnet.org/index.php/log-out'
 
-  config.noid_server = 'localhost:13001'
+  config.noid_server = 'dl-vecnet.crc.nd.edu:13001'
   config.noid_pool = 'vecnet'
 end
