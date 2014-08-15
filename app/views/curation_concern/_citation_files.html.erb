@@ -12,16 +12,30 @@
     </tr>
   </thead>
   <tbody>
-    <% curation_concern.generic_files.each do |generic_file| %>
-      <tr class="<%= dom_class(generic_file) %> attributes">
-        <td class="attribute title"><%= generic_file %></td>
-        <td class="attribute filename"><%= generic_file.filename %></td>
-        <td class="attribute date_uploaded"><%= generic_file.date_uploaded %></td>
-        <td class="attribute permission"><%= permission_badge_for(generic_file) %></td>
+    <% curation_concern.generic_files.each do |gf| %>
+      <tr class="<%= dom_class(gf) %> attributes">
+        <td class="attribute title"><%= gf %></td>
+        <td class="attribute filename"><%= gf.filename %></td>
+        <td class="attribute date_uploaded"><%= gf.date_uploaded %></td>
+        <td class="attribute permission"><%= permission_badge_for(gf) %></td>
         <td>
-          <%- if can?(:read, generic_file) -%>
-            <%= render '/curation_concern/media_display', generic_file: generic_file %>
+          <%- if can?(:read, gf) -%>
+            <%= render '/curation_concern/media_display', gf: gf %>
           <%- end -%>
+          <% if can?(:edit, gf) -%>
+            <%= link_to raw('<i class="icon-pencil icon-large"></i> Edit'),
+              edit_polymorphic_path([:curation_concern, gf]),
+              {class: 'btn',
+               title: "Edit #{gf.to_s.inspect}"} %>
+          <% end -%>
+          <% if can?(:destroy, gf) -%>
+            <%= link_to raw('<i class="icon-trash icon-large"></i> Delete'),
+                        polymorphic_path([:curation_concern, gf]),
+                        {class: 'btn',
+                         title: %(Delete #{gf.to_s.inspect}),
+                         method: :delete,
+                         confirm: "Deleting #{gf.to_s.inspect} from #{t('sufia.product_name')} is permanent. Click OK to delete this from #{t('sufia.product_name')}, or Cancel to cancel this operation"} %>
+          <% end -%>
         </td>
       </tr>
     <% end %>
