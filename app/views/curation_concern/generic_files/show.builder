@@ -1,7 +1,7 @@
 xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
              "xmlns:dcterms" => "http://purl.org/dc/terms/",
-             "xmlns:dwc" => "http://rs.tdwg.org/dwc/terms/scientificName",
-             "xmlns:vn" => "https://dl.vecnet.org") do
+             "xmlns:dwc" => "http://rs.tdwg.org/dwc/terms/",
+             "xmlns:vn" => "https://dl.vecnet.org/") do
 
   xml.tag!("vn:identifier", curation_concern.noid)
   xml.tag!("dc:identifier", curation_concern.persistent_url)
