@@ -31,7 +31,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:source", curation_concern.source)
   tag_each(xml, "dc:BibliographicCitation", curation_concern.bibliographic_citation)
 
-  if ! curation_concern.files.nil?
-    tag_each(xml, "vn:related_files", curation_concern.files.map { |gf| gf.noid })
+  if ! curation_concern.generic_files.nil?
+    tag_each(xml, "vn:related_files", curation_concern.generic_files.map { |gf| gf.noid })
   end
 end

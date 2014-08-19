@@ -32,5 +32,5 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
 
-  tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.persistent_url })
+  tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.noid })
 end
