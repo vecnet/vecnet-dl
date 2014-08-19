@@ -1,7 +1,8 @@
 ###
 # Setup base VM to functioning vecnet VM
 #
-# date: 2013-5-10
+# date: 19.08.2014
+# OS : Centos 6.5
 #
 ###
 # as root user
