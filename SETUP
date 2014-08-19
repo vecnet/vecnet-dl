@@ -13,6 +13,7 @@ passwd blakshmi
 usermod -a -G wheel dbrower
 usermod -a -G wheel blakshmi
 usermod -a -G wheel dladmin
+(user 'dladmin' does not exist?)
 # enable sudo access to wheel group
 visudo
 uncomment line:  %wheel  ALL=(ALL)       ALL
