@@ -55,4 +55,15 @@ module ApplicationHelper
     end
   end
 
+  def tag_each(xml, fieldname, values)
+    return if values.nil?
+    if ! values.respond_to?(:each)
+      xml.tag!(fieldname, values)
+      return
+    end
+    values.each do |v|
+      xml.tag!(fieldname, v)
+    end
+  end
+
 end

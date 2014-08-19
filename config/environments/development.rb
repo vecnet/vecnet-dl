@@ -80,6 +80,7 @@ Vecnet::Application.configure do
   # private_key only needed by DevelopmentSessionsController
   config.pubtkt_private_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-private-development.pem')))
 
+  config.noid_server = nil
   #config.noid_server = 'localhost:13001'
   #config.noid_pool = 'zxc'
 end
