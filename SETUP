@@ -21,7 +21,10 @@ uncomment line:  %wheel  ALL=(ALL)       ALL
 
 # now as normal user
 wget http://mirrors.nebo.edu/public/epel/6/i386/epel-release-6-8.noarch.rpm
+(Connection times out - replaced with https://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm)
 sudo rpm -i epel-release-6-8.noarch.rpm
+(Duplicate command?)
+(package epel-release-6-8.noarch is already installed)
 sudo rpm -i epel-release-6-8.noarch.rpm
 sudo yum update
 sudo yum install htop
@@ -73,6 +76,7 @@ sudo vim /etc/tomcat6/tomcat6.conf
 # add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
 # uncomment line 51, change 8080 -> 8081
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
+(should be sudo cp /etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost)
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
 # make hole in firewall (optional)
