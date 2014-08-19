@@ -76,7 +76,7 @@ sudo vim /etc/tomcat6/tomcat6.conf
 # add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
 # uncomment line 51, change 8080 -> 8081
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
-(should be sudo cp /etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost)
+(Don't have access to this file?)
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
 # make hole in firewall (optional)
