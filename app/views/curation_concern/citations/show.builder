@@ -4,18 +4,15 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
              "xmlns:vn" => "https://dl.vecnet.org") do
 
   xml.tag!("vn:identifier", curation_concern.noid)
-  xml.tag!("dc:identifier", curation_concern.persistent_url)
-  tag_each(xml, "dc:identifier", curation_concern.identifier)
   xml.tag!("vn:content_version", curation_concern.current_version_just_id)
+  tag_each(xml, "dc:identifier", curation_concern.identifier)
 
-  xml.tag!("dc:title", curation_concern.title)
   xml.tag!("vn:depositor", curation_concern.depositor)
-
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
   xml.tag!("dc:date_modified", curation_concern.date_modified)
 
-  tag_each(xml, "dc:format", curation_concern.mime_type)
-  xml.tag!("vn:filename", curation_concern.filename)
+  xml.tag!("dc:title", curation_concern.title)
+
   tag_each(xml, "dc:description", curation_concern.description)
   tag_each(xml, "dc:coverage", curation_concern.based_near)
   tag_each(xml, "dc:creator", curation_concern.creator)
@@ -31,6 +28,10 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:temporal", curation_concern.temporals)
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
+  tag_each(xml, "dc:source", curation_concern.source)
+  tag_each(xml, "dc:BibliographicCitation", curation_concern.bibliographic_citation)
 
-  tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.persistent_url })
+  if ! curation_concern.files.nil?
+    tag_each(xml, "vn:related_files", curation_concern.files.map { |gf| gf.noid })
+  end
 end

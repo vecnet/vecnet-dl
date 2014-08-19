@@ -1,6 +1,6 @@
 class CurationConcern::CitationFilesController < CurationConcern::BaseController
 
-  respond_to(:html, :json, :endnote)
+  respond_to(:html, :xml, :json, :endnote)
 
   def attach_action_breadcrumb
     add_breadcrumb 'Home', root_path

@@ -48,6 +48,10 @@ class Citation < ActiveFedora::Base
     return self.title.is_a?(Array) ? self.title.join(',') : self.title
   end
 
+  def current_version_just_id
+    descMetadata.versions.last.versionID.split(".").last
+  end
+
   def endnote_export
     EndNote.new(self).to_endnote
   end
