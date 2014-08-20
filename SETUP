@@ -88,7 +88,9 @@ sudo /sbin/service iptables save
 # fedora
 sudo mkdir -p /opt/fedora
 wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar/download?use_mirror=superb-dca3
+(results in Saving to: `download?use_mirror=superb-dca3.1' so perhaps remove /download...)
 (should we do a .sig or hash check here?)
+
 sudo java -jar fcrepo-installer-3.6.2.jar
 # enter at the prompts:
 # custom
