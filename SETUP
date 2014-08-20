@@ -106,7 +106,7 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # [8005] default
 # postgresql (database to use)
 
-(here got this prompt instead : 
+# here got this prompt instead : 
 
 Postgresql JDBC driver
 ----------------------
@@ -117,7 +117,7 @@ Enter 'included' to use the included JDBC driver, or, enter the location
 
 Enter a value [default is included] ==>)
 
-so the answer should be : # [included] (jdbc driver)
+# so the answer should be : # [included] (jdbc driver)
 
 
 # fedora (user)
@@ -137,6 +137,10 @@ sudo chown tomcat:tomcat -R /opt/fedora
 # solr
 sudo yum install log4j
 wget http://mirrors.gigenet.com/apache/lucene/solr/4.3.0/solr-4.3.0.zip
+# 404 on this URL
+wget https://archive.apache.org/dist/lucene/solr/4.3.0/solr-4.3.0.tgz
+tar xvf solr-4.3.0.tgz
+
 unzip solr-4.3.0.zip
 # this step doesn't quite do it.
 #
@@ -152,7 +156,7 @@ sudo cp -r solr-4.3.0/example/lib/ext/* /usr/share/tomcat6/lib
 sudo chown tomcat:tomcat -R /opt/solr-4.3.0
 # edit /etc/tomcat6/catalina.properties
 # line 47 to read
-# common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar,/opt/solr-4.3.0/lib/ext/*.jar,/opt/solr-4.    3.0/lib/contrib/extraction/lib/*.jar
+# common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar,/opt/solr-4.3.0/lib/ext/*.jar,/opt/solr-4.3.0/lib/contrib/extraction/lib/*.jar
 
 # fits
 wget http://projects.iq.harvard.edu/files/fits/files/fits-0.8.0.zip
