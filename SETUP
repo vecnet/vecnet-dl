@@ -106,7 +106,9 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # [8005] default
 # postgresql (database to use)
 
-(here got this prompt instead of credentials as expected: Postgresql JDBC driver
+(here got this prompt instead : 
+
+Postgresql JDBC driver
 ----------------------
 You may either use the included JDBC driver or your own copy.              
 Enter 'included' to use the included JDBC driver, or, enter the location   
@@ -114,6 +116,9 @@ Enter 'included' to use the included JDBC driver, or, enter the location
 
 
 Enter a value [default is included] ==>)
+
+so the answer should be : # [included] (jdbc driver)
+
 
 # fedora (user)
 # fedora (pass)
