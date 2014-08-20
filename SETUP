@@ -105,6 +105,16 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # 8081 (tomcat port)
 # [8005] default
 # postgresql (database to use)
+
+(here got this prompt instead of credentials as expected: Postgresql JDBC driver
+----------------------
+You may either use the included JDBC driver or your own copy.              
+Enter 'included' to use the included JDBC driver, or, enter the location   
+(full path) of the driver.
+
+
+Enter a value [default is included] ==>)
+
 # fedora (user)
 # fedora (pass)
 # jbdc:postgresql://localhost/fedora   (jdbc url)
