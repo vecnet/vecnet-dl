@@ -76,7 +76,7 @@ sudo vim /etc/tomcat6/tomcat6.conf
 # add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
 # uncomment line 51, change 8080 -> 8081
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
-(Don't have access to this file?)
+(devops directory in root dir of repo)
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
 # make hole in firewall (optional)
@@ -88,6 +88,7 @@ sudo /sbin/service iptables save
 # fedora
 sudo mkdir -p /opt/fedora
 wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar/download?use_mirror=superb-dca3
+(should we do a .sig or hash check here?)
 sudo java -jar fcrepo-installer-3.6.2.jar
 # enter at the prompts:
 # custom
