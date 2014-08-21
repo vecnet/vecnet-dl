@@ -179,7 +179,10 @@ tar -xzvf chruby-0.3.4.tar.gz
 cd chruby-0.3.4/
 sudo make install
 sudo /usr/local/bin/ruby-build 2.0.0-p353 /opt/rubies/2.0.0-p353
-# execute next command as root
+
+(ran into dependency errors here - needed : sudo yum install gcc-c++ glibc-headers glibc-devel openssl-devel readline libyaml-devel readline-devel zlib zlib-devel)
+
+# execute next command as root (sudo su - and then use sudo? this or command below can't both be correct)
 sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
 
 # nginx
@@ -189,6 +192,7 @@ sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
 # since .erb files are template files, may need to fiddle with file after copy
 # to remove all "<% %>" tags
+# (replaced <% domain %> takes with 130.56.248.39 )
 sudo cp devops/etc/nginx/conf.d/vecnet.conf.erb /etc/nginx/conf.d
 sudo rm /etc/nginx/conf.d/default.conf
 sudo chown :app /etc/nginx/nginx.conf /etc/nginx/conf.d
@@ -220,7 +224,7 @@ sudo /sbin/service iptables save
 sudo yum install clamav clamav-devel clamav-db
 
 # bibutils >= 5.0
-wget http://sourceforge.net/projects/bibutils/files/bibutils_5.0_src.tgz/download
+wget http://sourceforge.net/projects/bibutils/files/bibutils_5.0_src.tgz
 tar xvfz bibutils_5.0_src.tgz
 cd bibutils_5.0
 ./configure && make
