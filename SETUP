@@ -206,7 +206,7 @@ sudo make install
  gem install bundler
  cd vecnet
  bundle install
-git clone git://github.com/banurekha/vecnet.git
+git clone git://github.com/vecnet/vecnet-dl.git
 
 #Setup worker Machine
 Follow all the setup procedure described about
