@@ -233,6 +233,25 @@ sudo make install
 # setup application
 #Copy public key into app folder who ever is going to deploy to that machine
 #Run cap ENV deploy:setup in dev machine
+
+#(e.g. added 
+
+#JCU attempt at Capistrano
+
+desc "Setup for the JCU QA environment"
+task :jcu_qa do
+  common_setup
+
+  set :rails_env,   'qa'
+  set :domain,      'dl-dev.vecnet.org'
+
+  server "130.56.248.39", :app, :web, :db, :work, :primary => true
+end
+
+to config/deploy.rb above the other tasks)
+
+# (then ran cap jcu_qa setup:deploy)
+
 #Install bundler manually in that host machine
  chruby 2.0.0-p353
  gem install bundler
