@@ -252,12 +252,15 @@ to config/deploy.rb above the other tasks)
 
 # (then ran cap jcu_qa setup:deploy)
 
-#Install bundler manually in that host machine
+#Install bundler manually in that host("primary" VM) machine
  chruby 2.0.0-p353
  gem install bundler
+ git clone git://github.com/banurekha/vecnet.git
+ (git clone git://github.com/vecnet/vecnet-dl.git)
+(had to move capistrano 'vecnet' dir temporarily to allow git to clone)
  cd vecnet
  bundle install
-git clone git://github.com/banurekha/vecnet.git
+(au-m.rubygems.org timed out for solrizer-fedora.gem so wget bb-m.rubygems to get the .gem file and gem install first.)
 
 #Setup worker Machine
 Follow all the setup procedure described about
