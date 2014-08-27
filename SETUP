@@ -1,7 +1,7 @@
 ###
-# Setup base VM to functioning vecnet VM
+# Setup base VM to functioning VecNet VM
 #
-# date: 19.08.2014
+# date: 27.08.2014
 # OS : Centos 6.5
 #
 ###
@@ -11,10 +11,11 @@ useradd blakshmi
 useradd app
 passwd dbrower
 passwd blakshmi
+passwd app
 usermod -a -G wheel dbrower
 usermod -a -G wheel blakshmi
-usermod -a -G wheel dladmin
-(user 'dladmin' does not exist?)
+usermod -a -G wheel app
+
 # enable sudo access to wheel group
 visudo
 uncomment line:  %wheel  ALL=(ALL)       ALL
@@ -22,9 +23,6 @@ uncomment line:  %wheel  ALL=(ALL)       ALL
 # now as normal user
 wget http://mirrors.nebo.edu/public/epel/6/i386/epel-release-6-8.noarch.rpm
 (Connection times out - replaced with https://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm)
-sudo rpm -i epel-release-6-8.noarch.rpm
-(Duplicate command?)
-(package epel-release-6-8.noarch is already installed)
 sudo rpm -i epel-release-6-8.noarch.rpm
 sudo yum update
 sudo yum install htop
@@ -87,11 +85,9 @@ sudo /sbin/service iptables save
 
 # fedora
 sudo mkdir -p /opt/fedora
-wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar/download?use_mirror=superb-dca3
-(results in Saving to: `download?use_mirror=superb-dca3.1' so perhaps remove /download...)
-(should we do a .sig or hash check here?)
-
+wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar
 sudo java -jar fcrepo-installer-3.6.2.jar
+
 # enter at the prompts:
 # custom
 # /opt/fedora
@@ -106,12 +102,12 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # [8005] default
 # postgresql (database to use)
 
-# here got this prompt instead : 
+# here got this prompt instead :
 
 Postgresql JDBC driver
 ----------------------
-You may either use the included JDBC driver or your own copy.              
-Enter 'included' to use the included JDBC driver, or, enter the location   
+You may either use the included JDBC driver or your own copy.
+Enter 'included' to use the included JDBC driver, or, enter the location
 (full path) of the driver.
 
 
@@ -136,8 +132,6 @@ sudo chown tomcat:tomcat -R /opt/fedora
 
 # solr
 sudo yum install log4j
-wget http://mirrors.gigenet.com/apache/lucene/solr/4.3.0/solr-4.3.0.zip
-# 404 on this URL
 wget https://archive.apache.org/dist/lucene/solr/4.3.0/solr-4.3.0.tgz
 tar xvf solr-4.3.0.tgz
 
@@ -180,10 +174,10 @@ cd chruby-0.3.4/
 sudo make install
 sudo /usr/local/bin/ruby-build 2.0.0-p353 /opt/rubies/2.0.0-p353
 
-(ran into dependency errors here - needed : sudo yum install gcc-c++ glibc-headers glibc-devel openssl-devel readline libyaml-devel readline-devel zlib zlib-devel)
+(may run into dependency errors here - needed : sudo yum install gcc-c++ glibc-headers glibc-devel openssl-devel readline libyaml-devel readline-devel zlib zlib-devel)
 
-# execute next command as root (sudo su - and then use sudo? this or command below can't both be correct)
-sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
+# execute next command as root
+cp devops/etc/profile.d/chruby.sh /etc/profile.d
 
 # nginx
 sudo cp devops/etc/yum.repos.d/nginx.repo /etc/yum.repos.d
@@ -192,7 +186,7 @@ sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
 # since .erb files are template files, may need to fiddle with file after copy
 # to remove all "<% %>" tags
-# (replaced <% domain %> takes with 130.56.248.39 )
+# (replaced <% domain %> tags with <current VM IP> = e.g.(130.56.248.39) )
 sudo cp devops/etc/nginx/conf.d/vecnet.conf.erb /etc/nginx/conf.d
 sudo rm /etc/nginx/conf.d/default.conf
 sudo chown :app /etc/nginx/nginx.conf /etc/nginx/conf.d
@@ -231,10 +225,10 @@ cd bibutils_5.0
 sudo make install
 
 # setup application
-#Copy public key into app folder who ever is going to deploy to that machine
+#Copy public key into app user .ssh folder of whoever is going to deploy to that machine
 #Run cap ENV deploy:setup in dev machine
 
-#(e.g. added 
+#(e.g. added
 
 #JCU attempt at Capistrano
 
