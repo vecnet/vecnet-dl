@@ -135,7 +135,6 @@ sudo yum install log4j
 wget https://archive.apache.org/dist/lucene/solr/4.3.0/solr-4.3.0.tgz
 tar xvf solr-4.3.0.tgz
 
-unzip solr-4.3.0.zip
 # this step doesn't quite do it.
 #
 #sudo cp solr-4.3.0/dist/ /opt/solr-4.3.0
