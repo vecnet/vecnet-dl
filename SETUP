@@ -293,7 +293,7 @@ mkdir -p ~/sv/disadis
 sudo ln -s ~app/sv/disadis /etc/service/disadis
 
 # install noids
-go get github.com/dbrower/noids
+go get github.com/ndlib/noids
 sudo mkdir -p /opt/noids/pools
 sudo chown app:app -R /opt/noids
 mkdir -p ~/sv/noids
