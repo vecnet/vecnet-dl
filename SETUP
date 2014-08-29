@@ -1,7 +1,8 @@
 ###
-# Setup base VM to functioning vecnet VM
+# Setup base VM to functioning VecNet VM
 #
-# date: 2013-5-10
+# date: 27.08.2014
+# OS : Centos 6.5
 #
 ###
 # as root user
@@ -10,16 +11,18 @@ useradd blakshmi
 useradd app
 passwd dbrower
 passwd blakshmi
+passwd app
 usermod -a -G wheel dbrower
 usermod -a -G wheel blakshmi
-usermod -a -G wheel dladmin
+usermod -a -G wheel app
+
 # enable sudo access to wheel group
 visudo
 uncomment line:  %wheel  ALL=(ALL)       ALL
 
 # now as normal user
 wget http://mirrors.nebo.edu/public/epel/6/i386/epel-release-6-8.noarch.rpm
-sudo rpm -i epel-release-6-8.noarch.rpm
+(Connection times out - replaced with https://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm)
 sudo rpm -i epel-release-6-8.noarch.rpm
 sudo yum update
 sudo yum install htop
@@ -71,6 +74,7 @@ sudo vim /etc/tomcat6/tomcat6.conf
 # add line 22: JAVA_OPTS="-Xmx2G -Xms2G -Xmn512m"
 # uncomment line 51, change 8080 -> 8081
 sudo cp devops/etc/tomcat6/Catalina/localhost/* /etc/tomcat6/Catalina/localhost
+(devops directory in root dir of repo)
 sudo chkconfig tomcat6 on
 sudo service tomcat6 start
 # make hole in firewall (optional)
@@ -81,8 +85,9 @@ sudo /sbin/service iptables save
 
 # fedora
 sudo mkdir -p /opt/fedora
-wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar/download?use_mirror=superb-dca3
+wget http://sourceforge.net/projects/fedora-commons/files/fedora/3.6.2/fcrepo-installer-3.6.2.jar
 sudo java -jar fcrepo-installer-3.6.2.jar
+
 # enter at the prompts:
 # custom
 # /opt/fedora
@@ -96,6 +101,21 @@ sudo java -jar fcrepo-installer-3.6.2.jar
 # 8081 (tomcat port)
 # [8005] default
 # postgresql (database to use)
+
+# here got this prompt instead :
+
+Postgresql JDBC driver
+----------------------
+You may either use the included JDBC driver or your own copy.
+Enter 'included' to use the included JDBC driver, or, enter the location
+(full path) of the driver.
+
+
+Enter a value [default is included] ==>)
+
+# so the answer should be : # [included] (jdbc driver)
+
+
 # fedora (user)
 # fedora (pass)
 # jbdc:postgresql://localhost/fedora   (jdbc url)
@@ -112,8 +132,9 @@ sudo chown tomcat:tomcat -R /opt/fedora
 
 # solr
 sudo yum install log4j
-wget http://mirrors.gigenet.com/apache/lucene/solr/4.3.0/solr-4.3.0.zip
-unzip solr-4.3.0.zip
+wget https://archive.apache.org/dist/lucene/solr/4.3.0/solr-4.3.0.tgz
+tar xvf solr-4.3.0.tgz
+
 # this step doesn't quite do it.
 #
 #sudo cp solr-4.3.0/dist/ /opt/solr-4.3.0
@@ -128,7 +149,7 @@ sudo cp -r solr-4.3.0/example/lib/ext/* /usr/share/tomcat6/lib
 sudo chown tomcat:tomcat -R /opt/solr-4.3.0
 # edit /etc/tomcat6/catalina.properties
 # line 47 to read
-# common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar,/opt/solr-4.3.0/lib/ext/*.jar,/opt/solr-4.    3.0/lib/contrib/extraction/lib/*.jar
+# common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,${catalina.home}/lib,${catalina.home}/lib/*.jar,/opt/solr-4.3.0/lib/ext/*.jar,/opt/solr-4.3.0/lib/contrib/extraction/lib/*.jar
 
 # fits
 wget http://projects.iq.harvard.edu/files/fits/files/fits-0.8.0.zip
@@ -151,8 +172,11 @@ tar -xzvf chruby-0.3.4.tar.gz
 cd chruby-0.3.4/
 sudo make install
 sudo /usr/local/bin/ruby-build 2.0.0-p353 /opt/rubies/2.0.0-p353
+
+(may run into dependency errors here - needed : sudo yum install gcc-c++ glibc-headers glibc-devel openssl-devel readline libyaml-devel readline-devel zlib zlib-devel)
+
 # execute next command as root
-sudo cp devops/etc/profile.d/chruby.sh /etc/profile.d
+cp devops/etc/profile.d/chruby.sh /etc/profile.d
 
 # nginx
 sudo cp devops/etc/yum.repos.d/nginx.repo /etc/yum.repos.d
@@ -161,6 +185,7 @@ sudo usermod -a -G app nginx
 sudo chmod g+r /home/app
 # since .erb files are template files, may need to fiddle with file after copy
 # to remove all "<% %>" tags
+# (replaced <% domain %> tags with <current VM IP> = e.g.(130.56.248.39) )
 sudo cp devops/etc/nginx/conf.d/vecnet.conf.erb /etc/nginx/conf.d
 sudo rm /etc/nginx/conf.d/default.conf
 sudo chown :app /etc/nginx/nginx.conf /etc/nginx/conf.d
@@ -192,21 +217,44 @@ sudo /sbin/service iptables save
 sudo yum install clamav clamav-devel clamav-db
 
 # bibutils >= 5.0
-wget http://sourceforge.net/projects/bibutils/files/bibutils_5.0_src.tgz/download
+wget http://sourceforge.net/projects/bibutils/files/bibutils_5.0_src.tgz
 tar xvfz bibutils_5.0_src.tgz
 cd bibutils_5.0
 ./configure && make
 sudo make install
 
 # setup application
-#Copy public key into app folder who ever is going to deploy to that machine
+#Copy public key into app user .ssh folder of whoever is going to deploy to that machine
 #Run cap ENV deploy:setup in dev machine
-#Install bundler manually in that host machine
+
+#(e.g. added
+
+#JCU attempt at Capistrano
+
+desc "Setup for the JCU QA environment"
+task :jcu_qa do
+  common_setup
+
+  set :rails_env,   'qa'
+  set :domain,      'dl-dev.vecnet.org'
+
+  server "130.56.248.39", :app, :web, :db, :work, :primary => true
+end
+
+to config/deploy.rb above the other tasks)
+
+# (then ran cap jcu_qa setup:deploy)
+
+#Install bundler manually in that host("primary" VM) machine
  chruby 2.0.0-p353
  gem install bundler
+ git clone git://github.com/banurekha/vecnet.git
+ (git clone git://github.com/vecnet/vecnet-dl.git)
+(had to move capistrano 'vecnet' dir temporarily to allow git to clone)
  cd vecnet
  bundle install
 git clone git://github.com/vecnet/vecnet-dl.git
+(au-m.rubygems.org timed out for solrizer-fedora.gem so wget bb-m.rubygems to get the .gem file and gem install first.)
 
 #Setup worker Machine
 Follow all the setup procedure described about
