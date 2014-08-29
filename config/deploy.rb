@@ -268,6 +268,20 @@ def common_setup
   after 'deploy', 'vecnet:restart_workers'
 end
 
+
+
+#JCU attempt at Capistrano
+
+desc "Setup for the JCU QA environment"
+task :jcu_qa do
+  common_setup
+
+  set :rails_env,   'qa'
+  set :domain,      'dl-dev.vecnet.org'
+
+  server "130.56.248.39", :app, :web, :db, :work, :primary => true
+end
+
 desc "Setup for the QA environment"
 task :qa do
   common_setup
