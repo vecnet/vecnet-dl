@@ -1,9 +1,7 @@
 <% content_for :page_title, "#{application_name} Search Results" %>
 
 <% content_for :sidebar do %>
-  <% if current_user -%>
-    <%= link_to raw('<i class="icon-file icon-large"></i> Upload a File'), new_classify_concern_path, :class => "btn btn-default" %>
-  <% end -%>
+  <%= render 'shared/action_buttons' %>
   <%= render 'facets' %>
 <% end %>
 <div class="span6">
