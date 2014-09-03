@@ -199,7 +199,7 @@ namespace :vecnet do
 
   desc "Update the noids application"
   task :update_noids, :roles => :app do
-    run "GOPATH=/home/app/gocode go get -u github.com/dbrower/noids"
+    run "GOPATH=/home/app/gocode go get -u github.com/ndlib/noids"
     deploy_from_template("/home/app/sv/noids/run", mode: "+x")
     deploy_from_template("/home/app/sv/noids/settings.ini")
     run "#{sudo} /sbin/sv restart noids"
