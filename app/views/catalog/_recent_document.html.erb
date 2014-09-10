@@ -4,32 +4,29 @@
 <%- title = filename if title.empty? -%>
 <%- short_title = truncate(title, :length => 28, :separator => ' ') -%>
 <%- depositor = get_depositor_from_document(recent_document) -%>
-<% noid = recent_document[:noid_s].first %>
-<% gf = ActiveFedora::Base.find(recent_document.id, cast: true) %>
+<% noid = recent_document[:noid_s].first -%>
+<% gf = ActiveFedora::Base.find(recent_document.id, cast: true) -%>
 <tr>
-  <% if display_thumbs %>
+  <% if display_thumbs -%>
     <td>
-      <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>recent_document, :height=>60, :width=>45} %> </td>
-  <% end %>
+      <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>recent_document, :height=>60, :width=>45} %>
+    </td>
+  <% end -%>
   <td>
     <h3>
       <%= link_to short_title, polymorphic_path([:curation_concern, gf]), :title => title  %>
-      <% if display_access %>
-        <% if !recent_document[:read_access_group_t].blank? and recent_document[:read_access_group_t].include?('registered') %>
+      <% if display_access -%>
+        <% if !recent_document[:read_access_group_t].blank? and recent_document[:read_access_group_t].include?('registered') -%>
           <span class="label label-info" title="<%=t('sufia.institution_name') %>"><%=t('sufia.access_label.registered') %></span>
-        <% elsif recent_document[:read_access_group_t].nil? or (recent_document[:read_access_group_t] & ['public']).empty? %>
+        <% elsif recent_document[:read_access_group_t].nil? or (recent_document[:read_access_group_t] & ['public']).empty? -%>
           <span class="label label-important"><%= t('sufia.access_label.private') %></span>
-        <% else %>
+        <% else -%>
           <span class="label label-success"><%= t('sufia.access_label.public') %></span>
-        <% end %>
-      <% end %>
+        <% end -%>
+      <% end -%>
     </h3>
     <p>
-      <% if filename.length > 25 %>
-        <%= link_to "#{filename[0..24]}...", polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}", :title => filename %><br />
-      <% else %>
-        <%= link_to filename, polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}", :title => filename %><br />
-      <% end %>
+      <%= link_to truncate(filename, length: 25), polymorphic_path([:curation_concern, gf]), :id => "src_copy_link#{noid}", :title => filename %><br />
       <%= keywords.html_safe %>
     </p>
   </td>

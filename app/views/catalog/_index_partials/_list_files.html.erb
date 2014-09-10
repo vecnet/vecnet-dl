@@ -1,4 +1,4 @@
-<% if document.has_key?(:noid_s) %>
+<% if document.has_key?(:noid_s) -%>
 <li>
   <h4>
     <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), construct_show_path(document) %>
@@ -9,15 +9,17 @@
   </div>
   <dl class="thumbnail-content list">
     <% index_fields.each do |solr_fname, field| -%>
-      <% if should_render_index_field? document, field %>
+      <% if should_render_index_field? document, field -%>
         <%= raw "#{render_index_field_value :document => document, :field => solr_fname};" %>
       <% end -%>
     <% end -%>
-    <% if document.has_key?(:desc_metadata__date_created_display) && !document.has_key?(:desc_metadata__bibliographic_citation_display)%>
+    <% if document.has_key?(:desc_metadata__date_created_display) && !document.has_key?(:desc_metadata__bibliographic_citation_display) -%>
       <%= "(#{render_index_field_value :document => document, :field => "desc_metadata__date_created_display"})" %>
-    <% end %>
-    <br>
-    <%= raw(truncate((render_index_field_value :document => document, :field => "desc_metadata__description_display"), :length => 80, :omission => "...#{link_to '[more]', construct_show_path(document)}")) if document.has_key?(:desc_metadata__description_display)%>
+    <% end -%>
+    <% if document.has_key?(:desc_metadata__description_display) -%>
+      <br/>
+      <b><%= truncate((render_index_field_value :document => document, :field => "desc_metadata__description_display"), :length => 300, separator: ' ') %></b>
+    <% end -%>
   </dl>
 </li>
-<% end %>
+<% end -%>

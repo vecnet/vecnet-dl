@@ -1,17 +1,18 @@
 <footer id="footer" class="footer container">
   <hr>
-  <%=image_tag "vecnet_logo_footer.jpg"%>
-  <% if Rails.env == 'production' %>
-    <p> <a href="https://vecnet.org/index.php/about-vecnet/contact-vecnet">Contact us</a> | <a href="https://vecnet.org/index.php/about-vecnet/faq">FAQ</a> | <a href="https://vecnet.org/index.php/user-privacy-policy">User Privacy Policy</a> | <a href="https://vecnet.org/index.php/terms-of-use">Terms of Use</a></p>
-    <p class="fine-print"> Copyright &copy; 2013 <a href="https://vecnet.org/">Vector-Borne Diseases Network (VecNet)</a></p>
-  <% else %>
-    <p> <a href="https://dev.vecnet.org/index.php/about-vecnet/contact-vecnet">Contact us</a> | <a href="https://dev.vecnet.org/index.php/about-vecnet/faq">FAQ</a> | <a href="https://dev.vecnet.org/index.php/user-privacy-policy">User Privacy Policy</a> | <a href="https://dev.vecnet.org/index.php/terms-of-use">Terms of Use</a></p>
-    <p class="fine-print"> Copyright &copy; 2013 <a href="https://dev.vecnet.org/">Vector-Borne Diseases Network (VecNet)</a></p>
-  <% end %>
-
+  <%= image_tag "vecnet_logo_footer.jpg" %>
+  <% vecnet_host = Rails.env == 'production' ? 'https://vecnet.org' : 'https://dev.vecnet.org' -%>
   <p>
-    Powered by <a href="https://github.com/projecthydra/sufia">Sufia</a>, a <a href="http://projecthydra.org">Hydra</a> project.
+     <%= link_to "Contact us", "#{vecnet_host}/index.php/about-vecnet/contact-vecnet" %>
+   | <%= link_to "FAQ", "#{vecnet_host}/index.php/about-vecnet/faq" %>
+   | <%= link_to "User Privacy Policy", "#{vecnet_host}/index.php/user-privacy-policy" %>
+   | <%= link_to "Terms of Use", "#{vecnet_host}/index.php/terms-of-use" %>
+  <br/>
+  <span class="fine-print">Copyright &copy; 2014 <%= link_to "Vector-Borne Diseases Network (VecNet)", "#{vecnet_host}/" %></span>
+  <br/>
+  Powered by <%= link_to "Sufia", "https://github.com/projecthydra/sufia" %>,
+  a <%= link_to "Hydra", "http://projecthydra.org" %>
+  <br/>
+  Build: <%= Rails.configuration.build_identifier %>
   </p>
-  <p>Build: <%= Rails.configuration.build_identifier %></p>
-
 </footer>

@@ -1,15 +1,16 @@
-<% content_for :page_title, "#{application_name} Search Results" %>
+<% content_for :page_title, "#{application_name} Search Results" -%>
 
-<% content_for :sidebar do %>
+<% content_for :sidebar do -%>
   <%= render 'shared/action_buttons' %>
   <%= render 'facets' %>
-<% end %>
+<% end -%>
+
 <div class="span6">
-  <%=render 'shared/site_search' %>
+  <%= render 'shared/site_search' %>
   <%= render 'search_page' %>
 </div>
 
-<% if has_search_parameters? %>
+<% if has_search_parameters? -%>
   <div class="row">
     <div class="span6"> <h3>Search Results</h3> </div>
   </div>
@@ -23,13 +24,10 @@
   <%= render 'document_list' %>
 
   <%= render 'results_pagination' %>
-
-<% else %>
-    <div class="row">
-      <div class="span6">
-        <%= render 'home' %>
-      </div>
+<% else -%>
+  <div class="row">
+    <div class="span6">
+      <%= render 'home' %>
     </div>
-
-
-<% end %>
+  </div>
+<% end -%>
