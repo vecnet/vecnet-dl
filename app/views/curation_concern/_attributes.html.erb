@@ -16,6 +16,7 @@
   <%= curation_concern_attribute_to_html(curation_concern, :locations, 'Location Name', include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :spatials , "Lat Long(x,y dd)", include_empty: true) %>
   <%= curation_concern_attribute_to_html(curation_concern, :rights, "Rights", include_empty: true) %>
-  <%= curation_concern_attribute_to_html(curation_concern, :source , "Journal Title", include_empty: true) %>
-  <%= curation_concern_attribute_to_html(curation_concern, :bibliographic_citation , "Bibliographic Citation", include_empty: true) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :source , "Journal Title", include_empty: false) %>
+  <%= curation_concern_attribute_to_html(curation_concern, :bibliographic_citation , "Bibliographic Citation", include_empty: false) %>
+  <%= render "curation_concern/custom_fields", curation_concern: curation_concern %>
 </table>

@@ -1,0 +1,16 @@
+<% is_citation = curation_concern.is_a?(Citation) -%>
+<% if can? :edit, curation_concern -%>
+  <p>
+  <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
+  <% if is_citation -%>
+    <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this citation'), new_curation_concern_citation_file_path(curation_concern.noid), class: 'btn' %>
+  <% else -%>
+    <%= link_to(
+                raw('<i class="icon-undo"></i> Rollback'),
+                versions_curation_concern_generic_file_path(curation_concern),
+                { class: 'btn', title: "Rollback to previous version" }
+        ) %>
+    <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this collection'), new_curation_concern_generic_file_path(curation_concern.batch.noid), class: 'btn' %>
+  <% end -%>
+  </p>
+<% end -%>

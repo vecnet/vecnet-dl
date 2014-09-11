@@ -1,17 +1,17 @@
-<% content_for :layout_name, 'vecnet, ' %>
-<% content_for :body do %>
+<% content_for :layout_name, 'vecnet, ' -%>
+<% content_for :body do -%>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="nav-inner">
       <div class="container">
         <div class="row">
           <div class="span6">
-            <% if Rails.env=='qa' %>
+            <% if Rails.env=='qa' -%>
               <a class="brand" href="https://www.dev.vecnet.org">VecNet</a>
-            <% else %>
+            <% else -%>
               <a class="brand" href="https://www.vecnet.org">VecNet</a>
-            <% end %>
+            <% end -%>
           </div>
-          <div class="span6"> <%= render :partial => 'shared/user_util_links', :formats => [:html] %> </div>
+          <div class="span6"> <%= render partial: 'shared/user_util_links', :formats => [:html] %> </div>
         </div>
       </div>
     </div>
@@ -22,12 +22,12 @@
         <div class="container">
           <div id="title-bar" class="row">
             <div id="site-title" class="span6">
-              <h1><%= link_to 'Digital Library', root_path%></h1>
-              <p class="lead"><%=t('sufia.tagline')%></p>
+              <h1><%= link_to 'Digital Library', root_path %></h1>
+              <p class="lead"><%= t('sufia.tagline') %></p>
             </div>
             <div id="site-search" class="span6">
               <%= image_tag "icon_dl.jpg", :class=>'img' %>
-              <%= render 'shared/site_search' if show_site_search?%>
+              <%= render 'shared/site_search' if show_site_search? %>
               <%= yield(:search_bar) %>
             </div>
           </div>
@@ -53,6 +53,6 @@
 
   <%= render '/footer' %>
 
-<% end %>
+<% end -%>
 
 <%= render :template => 'layouts/boilerplate' %>
