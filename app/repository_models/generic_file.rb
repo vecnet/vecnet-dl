@@ -11,7 +11,7 @@ class GenericFile
   has_metadata :name => "comments", :type => CommentDatastream, :control_group => 'M'
 
   delegate_to :descMetadata, [:description], :unique => true
-  delegate_to :descMetadata, [:conforms_to]
+  delegate_to :descMetadata, [:conforms_to, :source, :bibliographic_citation]
 
 
   def spatials
