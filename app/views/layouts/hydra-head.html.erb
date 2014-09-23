@@ -5,7 +5,7 @@
         <div class="container">
           <div class="row">
             <div class="span6">
-              <% if Rails.env=='qa' %>
+              <% if ['qa','jcu_qa'].include?(Rails.env) %>
                   <a class="brand" href="http://www.dev.vecnet.org">VecNet</a>
               <% else %>
                   <a class="brand" href="http://www.vecnet.org">VecNet</a>

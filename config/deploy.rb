@@ -276,8 +276,8 @@ desc "Setup for the JCU QA environment"
 task :jcu_qa do
   common_setup
 
-  set :rails_env,   'qa'
-  set :domain,      'dl-dev.vecnet.org'
+  set :rails_env,   'jcu_qa'
+  set :domain,      '130.56.248.39'
 
   server "130.56.248.39", :app, :web, :db, :work, :primary => true
 end
