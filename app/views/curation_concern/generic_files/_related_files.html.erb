@@ -1,4 +1,7 @@
 <table class="table table-striped <%= dom_class(curation_concern) %> related_files">
+  <caption class="table-heading">
+    <h2>Related Files</h2>
+  </caption>
   <thead>
   <tr>
     <th>Related File</th>
@@ -8,13 +11,15 @@
   </tr>
   </thead>
   <tbody>
-  <% curation_concern.related_files.each do |related_file| %>
+  <% curation_concern.related_files.each do |related_file| -%>
     <tr class="<%= dom_class(related_file) %> attributes">
-      <% if can?(:read, related_file) %>
-        <td class="attribute title"><%= link_to related_file, polymorphic_path([:curation_concern, related_file]) %></td>
+      <td class="attribute title">
+      <% if can?(:read, related_file) -%>
+        <%= link_to related_file, polymorphic_path([:curation_concern, related_file]) %>
       <% else %>
-        <td class="attribute title"><%= related_file %></td>
+        <%= related_file %>
       <% end %>
+      </td>
       <td class="attribute date_uploaded"><%= related_file.date_uploaded %></td>
       <td class="attribute permission"><%= link_to_edit_permissions(related_file) %></td>
       <td>
@@ -23,6 +28,6 @@
         <%= render '/curation_concern/media_display', curation_concern: related_file if can?(:read, related_file)%>
       </td>
     </tr>
-  <% end %>
+  <% end -%>
   </tbody>
 </table>

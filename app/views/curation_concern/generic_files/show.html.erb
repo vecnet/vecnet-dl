@@ -1,37 +1,28 @@
-<% content_for :page_title, curation_concern_page_title(curation_concern) %>
-<% content_for :page_header do %>
+<% content_for :page_title, curation_concern_page_title(curation_concern) -%>
+<% content_for :page_header do -%>
   <h2><%= curation_concern %></h2>
-<% end %>
+<% end -%>
+
+<%= render partial: "curation_concern/edit_links", locals: {curation_concern: curation_concern} %>
+
 <p>
-  <% if can? :edit, curation_concern -%>
-    <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
-    <%= link_to(
-                raw('<i class="icon-undo"></i> Rollback'),
-                versions_curation_concern_generic_file_path(curation_concern),
-                { class: 'btn', title: "Rollback to previous version" }
-        ) %>
-    <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this collection'), new_curation_concern_generic_file_path(curation_concern.batch.noid), class: 'btn' %>
-  <% end -%>
   <% if can?(:read, curation_concern) -%>
-    <%= render '/curation_concern/media_display', generic_file: curation_concern %>
-    <%= render '/curation_concern/export_actions', generic_file: curation_concern %>
+    <%= render '/curation_concern/media_display', curation_concern: curation_concern %>
+    <%= render '/curation_concern/export_actions', curation_concern: curation_concern %>
   <% end -%>
 </p>
 <div class="row">
   <div class="span3">
-    <%= render :partial => '/curation_concern/thumbnail_display' %>
+    <%= render partial: 'curation_concern/thumbnail_display', curation_concern: curation_concern %>
   </div>
   <div class="span9">
-    <%= render :partial => '/curation_concern/version_check', curation_concern: curation_concern %>
-    <%= render "attributes", curation_concern: curation_concern %>
-    <%= render "characterize_details", curation_concern: curation_concern %>
+    <%= render partial: 'curation_concern/version_check', locals: {curation_concern: curation_concern} %>
+    <%= render partial: "curation_concern/attributes", locals: {curation_concern: curation_concern} %>
+    <%= render partial: "characterize_details", locals: {curation_concern: curation_concern} %>
   </div>
 </div>
 
 <% unless curation_concern.related_files.empty? -%>
-  <caption class="table-heading">
-    <h2>Related Files</h2>
-  </caption>
   <%= render "related_files", curation_concern: curation_concern %>
 <% end -%>
 

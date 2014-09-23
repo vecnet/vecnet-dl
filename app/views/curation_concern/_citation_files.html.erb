@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <% curation_concern.generic_files.each do |gf| %>
+    <% curation_concern.generic_files.each do |gf| -%>
       <tr class="<%= dom_class(gf) %> attributes">
         <td class="attribute title"><%= gf %></td>
         <td class="attribute filename"><%= gf.filename %></td>
@@ -38,6 +38,6 @@
           <% end -%>
         </td>
       </tr>
-    <% end %>
+    <% end -%>
   </tbody>
 </table>

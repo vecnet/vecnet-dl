@@ -1,4 +1,4 @@
-<%= simple_form_for [:curation_concern, curation_concern] do |f| %>
+<%= simple_form_for [:curation_concern, curation_concern] do |f| -%>
     <% if f.error_notification -%>
         <div class="alert alert-error fade in">
           There was a problem with your submission. Please review the errors below:
@@ -12,12 +12,12 @@
     </fieldset>
 
     <fieldset>
-      <% if curation_concern.persisted? %>
+      <% if curation_concern.persisted? -%>
           <legend>
             Upload New Version
             <small>Upload a new version from your computer.</small>
           </legend>
-      <% end %>
+      <% end -%>
      <%= f.input :file,
                   as: :file,
                   label: "Upload Files",
@@ -36,6 +36,6 @@
         <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
       </div>
     </div>
-<% end %>
+<% end -%>
 
 

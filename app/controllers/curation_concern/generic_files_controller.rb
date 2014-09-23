@@ -81,7 +81,7 @@ class CurationConcern::GenericFilesController < CurationConcern::BaseController
 
   def update
     actor.update!
-    redirect_to edit_curation_concern_generic_file_path(curation_concern)
+    redirect_to curation_concern_generic_file_path(curation_concern)
   rescue ActiveFedora::RecordInvalid
     respond_with([:curation_concern, curation_concern]) { |wants|
       wants.html { render 'edit', status: :unprocessable_entity }

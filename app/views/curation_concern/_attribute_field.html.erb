@@ -90,6 +90,18 @@
             label: get_label(:publisher),
             hint: help_icon('publisher')%>
 
+<%= f.input :source,
+            as: :multi_value,
+            input_html: {class: 'input-xlarge', multiple: 'multiple'},
+            label: get_label(:source),
+            hint:  help_icon('source') %>
+            
+<%= f.input :bibliographic_citation,
+            as: :multi_value,
+            input_html: {class: 'input-xlarge', multiple: 'multiple'},
+            label: get_label(:bibliographic_citation),
+            hint:  help_icon('bibliographic_citation') %>
+            
 <%= f.input :based_near,
             hint: help_icon('based_near'),
             label: get_label(:based_near),

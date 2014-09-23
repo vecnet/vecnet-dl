@@ -1,73 +1,54 @@
 
     <ul class="nav pull-right">
-      <% if Rails.env=='production' %>
+      <% if Rails.env=='production' -%>
+        <% vecnet_domain = 'https://www.vecnet.org' -%>
+        <% ci_domain = 'https://ci.vecnet.org' -%>
+      <% else -%>
+        <% vecnet_domain = 'https://www.dev.vecnet.org' -%>
+        <% ci_domain = 'https://vecnet-qa.crc.nd.edu' -%>
+      <% end -%>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet">About VecNet</a></li>
+          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/partner-sites">Partner Sites</a></li>
+          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/faq">FAQ</a></li>
+          <li><a href="<%= vecnet_domain %>/index.php/contact-us">Contact Us</a></li>
+          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/vecnet-how-to">VecNet How To</a></li>
+          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/quick-start-guide">Quick Start Guide</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="/">Digital Library</a></li>
+          <li><a href="<%= ci_domain %>/datawarehouse/">Data Warehouse Browser</a></li>
+          <li><a href="<%= ci_domain %>/ts/">Transmission Simulator</a></li>
+          <li><a href="<%= ci_domain %>/risk_mapper/">Risk Mapper</a></li>
+          <li><a href="<%= ci_domain %>/pie/">PIE</a></li>
+          <li><a href="<%= ci_domain %>/cifer/">CIFER</a></li>
+        </ul>
+      </li>
+      <% if current_user -%>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+          <a href=# class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-user">&nbsp;</i><%= current_user.name %>
+            <i class="caret" title="click for additional menu options"></i>
+          </a>
           <ul class="dropdown-menu">
-            <li><a href="https://www.vecnet.org/index.php/about-vecnet">About VecNet</a></li>
-            <li><a href="https://www.vecnet.org/index.php/about-vecnet/partner-sites">Partner Sites</a></li>
-            <li><a href="https://www.vecnet.org/index.php/about-vecnet/faq">FAQ</a></li>
-            <li><a href="https://www.vecnet.org/index.php/contact-us">Contact Us</a></li>
-            <li><a href="https://www.vecnet.org/index.php/about-vecnet/vecnet-how-to">VecNet How To</a></li>
-            <li><a href="https://www.vecnet.org/index.php/about-vecnet/quick-start-guide">Quick Start Guide</a></li>
+            <%= bootstrap_navigation_element 'My Dashboard',  dashboard_index_path -%>
+            <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
+            <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
+            <%= render :partial => 'admin_dashboard/admin' %>
+            <li class="divider"></li>
+            <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="https://ci.vecnet.org/ts/">Transmission Simulator</a></li>
-            <li><a href="https://ci.vecnet.org/risk_mapper/">Risk Mapper</a></li>
-            <li><a href="https://ci.vecnet.org/pie/">PIE</a></li>
-            <li><a href="https://ci.vecnet.org/cifer/">CIFER</a></li>
-            <li><a href="https://dl.vecnet.org">Digital Library</a></li>
-            <li><a href="https://ci.vecnet.org/datawarehouse/">Data Warehouse Browser</a></li>
-          </ul>
-          </li>
-      <% else %>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/about-vecnet">About VecNet</a></li>
-            <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/partner-sites">Partner Sites</a></li>
-            <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/faq">FAQ</a></li>
-            <li><a href="https://www.dev.vecnet.org/index.php/contact-us">Contact Us</a></li>
-            <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/vecnet-how-to">VecNet How To</a></li>
-            <li><a href="https://www.dev.vecnet.org/index.php/about-vecnet/quick-start-guide">Quick Start Guide</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://vecnet-qa.crc.nd.edu/ts/">Transmission Simulator</a></li>
-            <li><a href="http://vecnet-qa.crc.nd.edu/risk_mapper/">Risk Mapper</a></li>
-            <li><a href="http://vecnet-qa.crc.nd.edu/expert_openmalaria/">PIE</a></li>
-            <li><a href="https://ci.dev.vecnet.org/cifer/">CIFER</a></li>
-            <li><a href="http://dl-vecnet.crc.nd.edu">Digital Library</a></li>
-            <li><a href="http://vecnet-qa.crc.nd.edu/datawarehouse/">Data Warehouse Browser</a></li>
-          </ul>
-        </li>
-      <% end %>
-        <% if current_user %>
-          <li class="dropdown">
-            <a href=# class="dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-user">&nbsp;</i><%= current_user.name %>
-              <i class="caret" title="click for additional menu options"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <%= bootstrap_navigation_element 'My Dashboard',     dashboard_index_path -%>
-              <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
-              <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
-              <%# bootstrap_navigation_element 'Profile', profile_path(current_user)%>
-              <%= render :partial => 'admin_dashboard/admin' %>
-              <li class="divider"></li>
-              <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>
-            </ul>
-          </li>
-        <% else %>
+      <% else -%>
         <li>
           <%= link_to raw('<i class="icon-signin"></i> Login'), user_login_url(request.original_url), :class => "btn btn-small" %>
         </li>
-        <% end %>
+      <% end -%>
     </ul><!-- /.nav /.pull-right -->
 
 

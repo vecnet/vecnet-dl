@@ -28,14 +28,6 @@ Vecnet::Application.routes.draw do
     )
   end
 
-  # User profile & follows
-  match 'users' => 'users#index', :as => :profiles, :via => :get
-  match 'users/:uid' => 'users#show', :as => :profile, :via => :get
-  match 'users/:uid/edit' => 'users#edit', :as => :edit_profile, :via => :get
-  match 'users/:uid/update' => 'users#update', :as => :update_profile, :via => :put
-
-  match "catalog/recent" => "catalog#recent", :as => :catalog_recent
-
   match "catalog/subject/facet" => "catalog#subject_facet", :as => :catalog_subject_facet
   match "catalog/location/facet" => "catalog#location_facet", :as => :catalog_location_facet
   match "catalog/species/facet" => "catalog#species_facet", :as => :catalog_species_facet

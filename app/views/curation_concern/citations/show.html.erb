@@ -1,23 +1,19 @@
-<% content_for :page_title, curation_concern_page_title(curation_concern) %>
-<% content_for :page_header do %>
-    <h2><%= curation_concern %> <span class="human_readable_type">(<%= curation_concern.human_readable_type %>)</span></h2>
-<% end %>
-<p>
-  <% if can? :edit, curation_concern -%>
-      <%= link_to raw('<i class="icon-edit"></i> Edit'), edit_polymorphic_path([:curation_concern, curation_concern]), class: 'btn btn-primary'  %>
-      <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this citation'), new_curation_concern_citation_file_path(curation_concern.noid), class: 'btn' %>
-  <% end -%>
-  <%= render '/curation_concern/media_display', curation_concern: curation_concern if can?(:read, curation_concern)%>
- <%= render '/curation_concern/export_actions', generic_file: curation_concern if can?(:read, curation_concern)%>
-</p>
+<% content_for :page_title, curation_concern_page_title(curation_concern) -%>
+<% content_for :page_header do -%>
+  <h2><%= curation_concern %></h2>
+<% end -%>
+
+<%= render partial: "curation_concern/edit_links", locals: {curation_concern: curation_concern} %>
+
 <div class="row">
   <div class="span3">
-    <%= render :partial => '/curation_concern/thumbnail_display', concern: curation_concern  %>
+    <%= render :partial => 'curation_concern/thumbnail_display', locals: {curation_concern: curation_concern}  %>
   </div>
   <div class="span9">
-    <%= render "attributes", curation_concern: curation_concern %>
+    <%= render "curation_concern/attributes", curation_concern: curation_concern %>
   </div>
 </div>
-<%= render '/curation_concern/citation_files', curation_concern: curation_concern %>
+
+<%= render 'curation_concern/citation_files', curation_concern: curation_concern %>
 
 

@@ -1,10 +1,10 @@
-<% content_for :page_header do %>
+<% content_for :page_header do -%>
   <h1>Object Not Available</h1>
-<% end %>
-<% if curation_concern.identifier %>
+<% end -%>
+<% if curation_concern.identifier -%>
   <p><%= curation_concern %> is presently not available.</p>
   <p>Digital Object Identifier (DOI): <%= curation_concern.identifier %></p>
-<% else %>
+<% else -%>
   <p>This object is presently not available.</p>
 <%- end -%>
 

@@ -19,16 +19,15 @@
 
 <% extra_head_content << render_opensearch_response_metadata.html_safe %>
 
+<%= render 'did_you_mean' %>
+
 <% if params.has_key?("q") -%>
   <div class="alert alert-info">
     <i class="icon-search icon-large"></i> You searched for: <strong><%= params[:q] %></strong>
   </div>
 <% end -%>
 
-<%= render 'did_you_mean' %>
 <%= render 'facet_selected' %>
-
-<%= render 'constraints', :localized_params=>params %>
 
 <%= render_pagination_info @response, :entry_name=>'item' %>
 
