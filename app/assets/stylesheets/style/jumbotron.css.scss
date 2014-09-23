@@ -12,13 +12,7 @@
   padding: 15px 0;
   color: #fff;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
-  /* IE; docs say this should go first (or better, placed in separate IE-only stylesheet): */
-  @include filter-gradient(#01485f, #0093ad);
-  /* Fallback: */
-  background: #0093ad;
-  @include background(linear-gradient(top, rgb(1,72,95), rgb(0,147,173)) repeat scroll 0 0 transparent);
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+  background: #00a3bb;
   margin-bottom: 40px;
 }
 .jumbotron h1 {
