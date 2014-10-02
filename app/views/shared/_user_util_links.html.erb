@@ -1,11 +1,11 @@
     <ul class="nav pull-right">
-      <% if Rails.env=='production' -%>
-        <% vecnet_domain = 'https://www.vecnet.org' -%>
-        <% ci_domain = 'https://ci.vecnet.org' -%>
-      <% else -%>
-        <% vecnet_domain = 'https://www.dev.vecnet.org' -%>
-        <% ci_domain = 'https://vecnet-qa.crc.nd.edu' -%>
-      <% end -%>
+      <% if Rails.env == 'production'
+        vecnet_domain = 'https://www.vecnet.org'
+        ci_domain = 'https://ci.vecnet.org'
+      else
+        vecnet_domain = 'https://www.dev.vecnet.org'
+        ci_domain = 'https://vecnet-qa.crc.nd.edu'
+      end -%>
       <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Our Work<b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -24,8 +24,10 @@
           <li><a href="<%= ci_domain %>/ts/">Transmission Simulator</a></li>
           <% if current_user -%>
             <li class="divider"></li>
-            <%= bootstrap_navigation_element 'My Items',  dashboard_index_path -%>
-            <%= render :partial => 'admin_dashboard/admin' %>
+            <li><%= link_to "My Uploads", dashboard_index_path %></li>
+            <% if current_user.admin? -%>
+              <li><%= link_to "Admin Dashboard", admin_dashboard_index_path -%>
+            <% end -%>
           <% end -%>
         </ul>
       </li>
@@ -36,5 +38,3 @@
         <li><%= link_to "Login", user_login_url(request.original_url) %></li>
       <% end -%>
     </ul><!-- /.nav /.pull-right -->
-
-

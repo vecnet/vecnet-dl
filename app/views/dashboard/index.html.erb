@@ -3,7 +3,7 @@
 <% content_for :page_header do -%>
   <div class="row">
     <div class="span8">
-      <h2>My Dashboard</h2>
+      <h2>My Uploads</h2>
     </div>
   </div>
 <% end -%>
@@ -17,7 +17,7 @@
   <%= render 'facets' %>
 <% end -%>
 
-<% extra_head_content << render_opensearch_response_metadata.html_safe %>
+<% extra_head_content << render_opensearch_response_metadata.html_safe -%>
 
 <% if params.has_key?("q") -%>
   <div class="alert alert-info">
