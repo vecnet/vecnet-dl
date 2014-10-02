@@ -22,28 +22,18 @@
           <li><a href="<%= ci_domain %>/datawarehouse/">Data Warehouse Browser</a></li>
           <li><a href="/">Digital Library</a></li>
           <li><a href="<%= ci_domain %>/ts/">Transmission Simulator</a></li>
+          <% if current_user -%>
+            <li class="divider"></li>
+            <%= bootstrap_navigation_element 'My Items',  dashboard_index_path -%>
+            <%= render :partial => 'admin_dashboard/admin' %>
+          <% end -%>
         </ul>
       </li>
       <li><a href="<%= vecnet_domain %>/index.php/contact-us">Contact Us</a></li>
       <% if current_user -%>
-        <li class="dropdown">
-          <a href=# class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-user">&nbsp;</i><%= current_user.name %>
-            <i class="caret" title="click for additional menu options"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <%= bootstrap_navigation_element 'My Dashboard',  dashboard_index_path -%>
-            <%= bootstrap_navigation_element 'Upload a file', new_classify_concern_path -%>
-            <%= bootstrap_navigation_element 'Search',        catalog_index_path   -%>
-            <%= render :partial => 'admin_dashboard/admin' %>
-            <li class="divider"></li>
-            <li><%= link_to raw('<i class="icon-signout"></i> Logout'), user_logout_url, :id => 'logout_nav_link' %></li>
-          </ul>
-        </li>
+        <li><%= link_to "Logout (#{current_user.name})", user_logout_url %></li>
       <% else -%>
-        <li>
-          <%= link_to raw('<i class="icon-signin"></i> Login'), user_login_url(request.original_url), :class => "btn btn-small" %>
-        </li>
+        <li><%= link_to "Login", user_login_url(request.original_url) %></li>
       <% end -%>
     </ul><!-- /.nav /.pull-right -->
 
