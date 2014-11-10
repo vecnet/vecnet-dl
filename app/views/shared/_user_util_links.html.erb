@@ -7,31 +7,31 @@
         ci_domain = 'https://vecnet-qa.crc.nd.edu'
       end -%>
       <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Our Work<b class="caret"></b></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Our Work<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet">About VecNet</a></li>
-          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/information-sharing">Information Sharing</a></li>
-          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/collaborations">Collaborations</a></li>
-          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/faq">FAQ</a></li>
-          <li><a href="<%= vecnet_domain %>/index.php/about-vecnet/vecnet-how-to">VecNet How To</a></li>
+          <li><%= link_to "About VecNet", "#{vecnet_domain}/index.php/about-vecnet" %></li>
+          <li><%= link_to "Information Sharing", "#{vecnet_domain}/index.php/about-vecnet/information-sharing" %></li>
+          <li><%= link_to "Collaborations", "#{vecnet_domain}/index.php/about-vecnet/collaborations" %></li>
+          <li><%= link_to "FAQ", "#{vecnet_domain}/index.php/about-vecnet/faq" %></li>
+          <li><%= link_to "VecNet How To", "#{vecnet_domain}/index.php/about-vecnet/vecnet-how-to" %></li>
         </ul>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="<%= ci_domain %>/datawarehouse/">Data Warehouse Browser</a></li>
-          <li><a href="/">Digital Library</a></li>
-          <li><a href="<%= ci_domain %>/ts/">Transmission Simulator</a></li>
+          <li><%= link_to "Data Warehouse Browser", "#{ci_domain}/datawarehouse/" %></li>
+          <li><%= link_to "Digital Library", root_path %></li>
+          <li><%= link_to "Transmission Simulator", "#{ci_domain}/ts/" %></li>
           <% if current_user -%>
             <li class="divider"></li>
             <li><%= link_to "My Uploads", dashboard_index_path %></li>
             <% if current_user.admin? -%>
-              <li><%= link_to "Admin Dashboard", admin_dashboard_index_path -%>
+              <li><%= link_to "Admin Dashboard", admin_dashboard_index_path %></li>
             <% end -%>
           <% end -%>
         </ul>
       </li>
-      <li><a href="<%= vecnet_domain %>/index.php/contact-us">Contact Us</a></li>
+      <li><%= link_to "Contact Us", "#{vecnet_domain}/index.php/contact-us" %></li>
       <% if current_user -%>
         <li><%= link_to "Logout (#{current_user.name})", user_logout_url %></li>
       <% else -%>
