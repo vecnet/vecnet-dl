@@ -7,22 +7,23 @@
     <% end -%>
 
     <fieldset>
-      <legend>All information is optional, but helpful for others looking to find your work.</legend>
-        <%= render "/curation_concern/attribute_field", curation_concern: curation_concern, f: f %>
-    </fieldset>
-
-    <fieldset>
       <% if curation_concern.persisted? -%>
-          <legend>
-            Upload New Version
-            <small>Upload a new version from your computer.</small>
-          </legend>
+        <legend>
+          Upload New Version
+          <small>Optinally upload a new version of this file.</small>
+        </legend>
       <% end -%>
      <%= f.input :file,
                   as: :file,
                   label: "Upload Files",
                   hint: help_icon("You can roll back to an older version on the item's info page")
       %>
+    </fieldset>
+
+    <fieldset>
+      <legend>Metadata
+        <small>Descriptive Metadata for this item.</legend>
+        <%= render "/curation_concern/attribute_field", curation_concern: curation_concern, f: f %>
     </fieldset>
 
     <%= render '/curation_concern/content_license', f: f %>
