@@ -21,6 +21,10 @@
         <td>
           <%- if can?(:read, gf) -%>
             <%= render '/curation_concern/media_display', gf: gf %>
+          <% elsif !current_user -%>
+            <%= link_to "Log in", user_login_url(request.original_url), {class: 'btn'} %>
+            or
+            <%= link_to "Request an Account", "https://www.vecnet.org/index.php/request-an-account", {class: 'btn'} %>
           <%- end -%>
           <% if can?(:edit, gf) -%>
             <%= link_to raw('<i class="icon-pencil icon-large"></i> Edit'),
