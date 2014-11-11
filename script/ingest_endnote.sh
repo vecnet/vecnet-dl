@@ -5,14 +5,14 @@
 # second argmuent is the path to the endnote export file
 # third argument is the path to the data PDF files
 
-if $(($# != 3)); then
+if [ $# -ne 3 ]; then
     echo "usage: $0  name  export_file  pdf_directory"
     exit 1
 fi
 
 import_name=$1
 export ENDNOTE_FILE="$2"
-export ENDNOTE_PDF="$3"
+export ENDNOTE_PDF_PATH="$3"
 
 source /etc/profile.d/chruby.sh
 chruby 2.0.0-p353
