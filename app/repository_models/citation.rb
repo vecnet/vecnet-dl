@@ -81,47 +81,6 @@ class Citation < ActiveFedora::Base
     return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
   end
 
-=begin
-  def get_formated_date_created
-    return nil if self.date_created.blank?
-    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.nil?
-    pub_date=self.date_created.first
-    if self.date_created.size>1
-      logger.error "#{self.pid} has more than one pub date, #{self.date_created.inspect}, but will only use #{pub_date} for sorting"
-    end
-    pub_date_replace=pub_date.gsub(/-|\/|,|\s/, '.')
-    @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
-    puts "Pid: #{pid.inspect} with date created as #{self.date_created.inspect} has Pub date to sort: #{@pub_date_sort.inspect}"
-    return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
-  end
-
-  def get_subject_parents
-    subjects=self.subject
-    all_trees_arr=[]
-    subjects.each do |sub|
-      mesh_subject= SubjectMeshEntry.find_by_term(sub)
-      if mesh_subject
-        all_trees_arr<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
-      end
-    end
-
-
-    return all_trees_arr.uniq
-  end
-
-  def get_hierarchical_faceting_on_subject
-    subjects=self.subject
-    all_trees=[]
-    subjects.each do |sub|
-      mesh_subject= SubjectMeshEntry.find_by_term(sub)
-      if mesh_subject
-        all_trees<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
-      end
-    end
-    return all_trees.flatten
-  end
-=end
-
   #one time conversion for converting bib data, not need anymore
   def reformat_bibliographic_citation
     return '' if self.bibliographic_citation.blank? || self.bibliographic_citation.first.gsub(/[,():\/s]/,'').blank?
