@@ -4,16 +4,20 @@
 and reports on entomology, epidemiology, demography and interventions to
 support malaria eradication.
 </p>
+
+<p><%= link_to "Guide", "https://www.vecnet.org/media/tutorials/Digital%20Library.pdf" %> for searching the Digital Library.
+</p>
+
 <p>
 To improve the availability of publications and datasets VecNet users are
 encouraged to upload documents to the Digital Library. The access level is
-nonimated during the upload process as
+nominated during the upload process as
 <ul>
   <li>Global Access &mdash; Open Access,</li>
   <li>VecNet Users Only &mdash; Available to those with a VecNet login, or</li>
   <li>Private Access &mdash; The depositor assigns access to named users.</li>
 </ul>
-  
+
 <%= link_to "Upload a document", current_user ? new_classify_concern_path : user_login_url(new_classify_concern_url) %>,
 <!-- Guide to upload here, -->
 or feel free to
