@@ -67,12 +67,12 @@ namespace :vecnet do
     end
 
     def citation_metadata_csv
-      citations = Citation.find_with_conditions({},{:sort=>'pub_date desc', :rows=>500, :fl=>'id,  desc_metadata__title_display, desc_metadata__bibliographic_citation_t, desc_metadata__species_t'})
+      citations = Citation.find_with_conditions({},{:sort=>'pub_date desc', :rows=>5000, :fl=>'id,  desc_metadata__title_display, desc_metadata__bibliographic_citation_t, desc_metadata__species_t, desc_metadata__source_t'})
       puts "Total records found: #{citations.count}"
       @filename = "citation.csv"
       CSV.open("#{Rails.root.to_s}/tmp/#{@filename}", "wb") do |csv| #creates a tempfile csv
          citations.each do |c|
-          csv << [c['id'],c['desc_metadata__bibliographic_citation_t']].flatten
+          csv << [c['id'],c['desc_metadata__source_t'],c['desc_metadata__bibliographic_citation_t']].flatten
         end
       end
       puts "Now find all id that have more than one title"
