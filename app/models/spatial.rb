@@ -20,17 +20,17 @@ class Spatial
 
   def self.parse_spatial(spatial_rdf)
     temp = Dcsv.decode(spatial_rdf)
-    return Spatial.new(temp['north'],temp['east'])
+    Spatial.new(temp['north'],temp['east'])
   end
 
 
   def to_s
     if latitude.present? && longitude.present?
-      return "(#{latitude}, #{longitude})"
+      "(#{latitude}, #{longitude})"
     elsif latitude.present?
-      return latitude
+      latitude
     elsif longitude.present?
-      return longitude
+      longitude
     end
   end
 end

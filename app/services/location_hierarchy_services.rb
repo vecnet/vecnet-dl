@@ -2,24 +2,20 @@ class LocationHierarchyServices
   attr_accessor :file, :earth
   def initialize(file="/Users/blakshmi/projects/vecnet/lib/geoname_tree.txt")
     @file = file
-    @earth='6295630'
+    @earth = '6295630'
   end
 
   def process_all_geoname_hierachy
     File.open(@file) do |f|
       f.each_line do |line|
-        tree_with_geoid=line.strip.split('|')
+        tree_with_geoid = line.strip.split('|')
         begin
-          geoname_id=tree_with_geoid.first
-          trees=tree_with_geoid-[geoname_id]
-          trees.each { |tree|
-            if tree.split('.').include?(@earth)
-              GeonameHierarchy.find_or_create(geoname_id,tree)
-
-            else
-              GeonameHierarchy.find_or_create(geoname_id,nil)
-            end
-          }
+          geoname_id = tree_with_geoid.first
+          trees = tree_with_geoid - [geoname_id]
+          trees.each do |tree|
+            tree = tree.split.include?(@earth) ? tree : nil
+            GeonameHierarchy.find_or_create(geoname_id, tree)
+          end
         rescue Exception => e
           logger.error("#{e.inspect}")
           puts e.inspect
@@ -49,11 +45,10 @@ class LocationHierarchyServices
     #puts "tree: #{tree_id}, Names:#{tree_names}"
     GeonameHierarchy.find_or_create(geo_name_id,tree_id)
     return tree_id, tree_names
-
   end
 
   def self.get_geoname_ids(locations)
-    geonames_ids={}
+    geonames_ids = {}
     unless locations.blank?
       locations.each do |location|
         id = self.location_to_geonameid(location)
@@ -65,10 +60,10 @@ class LocationHierarchyServices
 
   def self.geoname_location_format(location)
     location_memo = CacheGeonameSearch.find_by_geo_location(location)
-    if  location_memo
+    if location_memo
       return location_memo.geo_location
     end
-    q=location.split(",").first
+    q = location.split(",").first
     hits = GeonameWebServices::Search.search(q)
     hits.each do |result|
       result_place = result[:label].split(",").first
@@ -106,20 +101,18 @@ class LocationHierarchyServices
         return result[:value]
       end
     end
-    return nil
+    nil
   end
 
+  # returns the given tree string as well as all parent tree strings for it
   def self.get_solr_hierarchy_from_tree(tree)
-    hierarchies = [];
-    depth = tree.split(":").count-1
+    hierarchies = []
     current_hierarchy = tree;
     loop do
-      #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
       hierarchies << "#{current_hierarchy}"
       current_hierarchy = current_hierarchy.rpartition(':').first
-      depth= depth.to_i-1
       break if current_hierarchy.empty?
     end
-    return hierarchies.reverse;
+    hierarchies.reverse
   end
 end

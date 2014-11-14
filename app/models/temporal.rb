@@ -22,16 +22,16 @@ class Temporal
 
   def self.parse_temporal(temporal_rdf)
     temp = Dcsv.decode(temporal_rdf)
-    return Temporal.new(temp['start'],temp['end'])
+    Temporal.new(temp['start'], temp['end'])
   end
 
   def to_s
     if start_time.present? && end_time.present?
-      return "#{start_time} - #{end_time}"
+      "#{start_time} - #{end_time}"
     elsif start_time.present?
-      return start_time
+      start_time
     elsif end_time.present?
-      return end_time
+      end_time
     end
   end
 

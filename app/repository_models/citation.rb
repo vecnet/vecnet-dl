@@ -82,13 +82,9 @@ class Citation < ActiveFedora::Base
   end
 
   #one time conversion for converting bib data, not need anymore
+  #XXX(dbrower): this makes my head hurt
   def reformat_bibliographic_citation
     return '' if self.bibliographic_citation.blank? || self.bibliographic_citation.first.gsub(/[,():\/s]/,'').blank?
-    space=' '
-    comma=','
-    dot='.'
-    formatted_volume=''
-    formated_pages=''
     citation=self.bibliographic_citation.first
     journal=self.source.blank? ? '' : self.source.first
     pubdate= self.date_created.blank? ? '' : self.date_created.first
@@ -97,15 +93,14 @@ class Citation < ActiveFedora::Base
     unless issue_details.blank?
       volume=issue_details.first
       issue=issue_details.last
-      formatted_volume=issue_details.count==2 ? "#{space}#{volume}(#{issue})" : "#{space}#{issue_details.join(' ')}"
+      formatted_volume = issue_details.count == 2 ? " #{volume}(#{issue})" : " #{issue_details.join(' ')}"
     end
     pages= citation_arr.last.gsub('page','').gsub(/[\s]/,'')
-    #volume=issue_details.strip.split(',').count==2 ? "#{space}#{issue_details}" : "#{space}#{issue_details.gsub(/[,\/s]/,'')}"
-    #formatted_volume=volume.blank? ? '': "#{space}#{volume}"
-    formated_pages=pages.split('-').count==2 ? "#{comma}#{space}#{pages.strip}" : "#{comma}#{space}#{pages.gsub(/[-]/,'')}"unless pages.gsub(/[-]/,'').blank?
-    format_publish_date=pubdate.blank? ? '' : "#{space}(#{pubdate})"
-    first_part="#{journal}#{formatted_volume}#{formated_pages}"
-    return first_part.blank? ? format_publish_date : "#{first_part}#{dot}#{format_publish_date}"
+    formated_pages = ''
+    formated_pages = pages.split('-').count == 2 ? ", #{pages.strip}" : ", #{pages.gsub(/[-]/,'')}" unless pages.gsub(/[-]/,'').blank?
+    format_publish_date = pubdate.blank? ? '' : " (#{pubdate})"
+    first_part = "#{journal}#{formatted_volume}#{formated_pages}"
+    first_part.blank? ? format_publish_date : "#{first_part}.#{format_publish_date}"
   end
 
   def update_bibliographic_citation

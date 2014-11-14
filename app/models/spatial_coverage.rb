@@ -12,11 +12,11 @@ module SpatialCoverage
   end
 
   def valid_spatial_data?
-    return !latitude.blank? && !longitude.blank? && self.valid?
+    !latitude.blank? && !longitude.blank? && self.valid?
   end
 
   def valid_temporal_data?
-    return !start_time.nil? && !end_time.nil? && self.valid?
+    !start_time.nil? && !end_time.nil? && self.valid?
   end
 
   def format_spatials_from_lat_long
