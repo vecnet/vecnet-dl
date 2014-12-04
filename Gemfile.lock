@@ -324,6 +324,7 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.8.0)
+    libcdb-ruby (0.1.1)
     libv8 (3.11.8.17)
     listen (1.1.4)
       rb-fsevent (>= 0.9.3)
@@ -594,6 +595,7 @@ DEPENDENCIES
   guard-spork
   jettywrapper
   jquery-rails
+  libcdb-ruby (~> 0.1.1)
   method_decorators
   method_locator
   mods!

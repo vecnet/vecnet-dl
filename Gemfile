@@ -36,6 +36,7 @@ group :default do
   gem 'method_decorators'
   gem 'rabl'
   gem 'chronic'
+  gem 'libcdb-ruby', '~> 0.1.1'
 end
 
 group :headless do

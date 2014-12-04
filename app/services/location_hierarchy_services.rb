@@ -5,6 +5,7 @@ class LocationHierarchyServices
     @earth = '6295630'
   end
 
+  # used
   def process_all_geoname_hierachy
     File.open(@file) do |f|
       f.each_line do |line|
@@ -40,6 +41,7 @@ class LocationHierarchyServices
   #
   #end
 
+  # used
   def self.find_hierarchy(geo_name_id)
     tree_id, tree_names= GeonameWebServices::Hierarchy.hierarchy(geo_name_id)
     #puts "tree: #{tree_id}, Names:#{tree_names}"
@@ -47,6 +49,7 @@ class LocationHierarchyServices
     return tree_id, tree_names
   end
 
+  # used
   def self.get_geoname_ids(locations)
     geonames_ids = {}
     unless locations.blank?
@@ -58,6 +61,21 @@ class LocationHierarchyServices
     return geonames_ids
   end
 
+  # new
+  def self.name_to_solr_hierarchy(location)
+    id = self.location_to_geonameid(location)
+    return [] unless id
+    h = GeonameHierarchy.find_by_geoname_id(id)
+    return [] unless h
+    h_with_earth = h.hierarchy_tree_name
+    if h_with_earth.nil?
+      _, h_with_earth = self.find_hierarchy(id)
+    end
+    tree = h_with_earth.gsub(';', ':').gsub('Earth:', '')
+    self.get_solr_hierarchy_from_tree(tree)
+  end
+
+  # used
   def self.geoname_location_format(location)
     location_memo = CacheGeonameSearch.find_by_geo_location(location)
     if location_memo
@@ -105,6 +123,8 @@ class LocationHierarchyServices
   end
 
   # returns the given tree string as well as all parent tree strings for it
+  #
+  # used
   def self.get_solr_hierarchy_from_tree(tree)
     hierarchies = []
     current_hierarchy = tree;

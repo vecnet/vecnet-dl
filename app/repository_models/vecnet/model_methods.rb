@@ -1,39 +1,14 @@
 module Vecnet
   module ModelMethods
     extend ActiveSupport::Concern
-=begin
-    def locations(locations=nil)
-      locations=locations
-      new_locations=locations.map{|loc| refactor_location(loc) }
-      new_locations
-    end
 
-    def refactor_location(location)
-      return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
-    end
-=end
-
+    # convert a list of location names into a list of tree fragments used by solr to facet
+    # index the place names
     def get_hierarchy_on_location(locations=nil)
-      unless locations.blank?
-        geoname_id_hash= LocationHierarchyServices.get_geoname_ids(locations)
-        location_trees=[]
-        location_tree_to_solrize=[]
-        geoname_id_hash.each do |location,geoname_id|
-          hierarchy= GeonameHierarchy.find_by_geoname_id(geoname_id)
-          hierarchy_with_earth=''
-          if hierarchy && hierarchy.hierarchy_tree_name.present?
-            hierarchy_with_earth= hierarchy.hierarchy_tree_name.gsub(';',':')
-          else
-            tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
-            hierarchy_with_earth=tree_name.gsub(';',':')
-          end
-          hierarchy_without_earth=hierarchy_with_earth.gsub('Earth:','')
-          location_tree_to_solrize<<hierarchy_without_earth
-        end
-        location_trees<<location_tree_to_solrize.collect{|tree| LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)}.flatten
-        return location_trees.flatten
-      end
-      return nil
+      return [] if locations.blank?
+      locations.map do |location|
+        LocationHierarchyServices.name_to_solr_hierarchy(location)
+      end.flatten
     end
 
     def get_formated_date_created(create_date=nil)
@@ -61,15 +36,15 @@ module Vecnet
     end
 
     def get_hierarchical_faceting_on_subject(subjects)
-      subjects=subjects
-      all_trees=[]
-      subjects.each do |sub|
-        mesh_subject= SubjectMeshEntry.find_by_term(sub)
+      all_trees = subjects.map do |sub|
+        mesh_subject = SubjectMeshEntry.find_by_term(sub)
         if mesh_subject
-          all_trees<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+          mesh_subject.mesh_tree_structures.map do |tree|
+            tree.get_solr_hierarchy_from_tree
+          end.flatten
         end
       end
-      return all_trees.flatten
+      all_trees.compact.flatten
     end
   end
 end
