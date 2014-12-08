@@ -18,8 +18,8 @@ nominated during the upload process as
   <li>Private Access &mdash; The depositor assigns access to named users.</li>
 </ul>
 
-<%= link_to "Upload a document", current_user ? new_classify_concern_path : user_login_url(new_classify_concern_url) %>,
-<!-- Guide to upload here, -->
+Read the <%= link_to "guide to upload", root_path+"Guide_to_upload_dl.pdf" %> documents to the Digital Library,
+<%= link_to "upload a document", current_user ? new_classify_concern_path : user_login_url(new_classify_concern_url) %>,
 or feel free to
     <%= link_to "contact us", "https://vecnet.org/index.php/about-vecnet/contact-vecnet" %>.
 </p>
