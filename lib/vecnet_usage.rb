@@ -149,7 +149,8 @@ class VecnetUsage
      resource_type: info["metadata"]["resource_type"],
      subject:       info["metadata"]["subject"]
     }
-  rescue RestClient::Exception, JSON::ParserError
+  rescue RestClient::Exception, JSON::ParserError => e
+    puts "Query for #{pid} had error #{e.inspect}"
     {}
   end
 
