@@ -1,14 +1,16 @@
 
 require 'libcdb-ruby'
 require 'csv'
-require 'json'
+require 'msgpack'
+#require 'json'
 
 def source_file
-  #"data/KE.txt"
-  "data/1000000Countries.txt"
+  "data/KE.txt"
+  #"data/1000000Countries.txt"
 end
 def output_base
-  ",,1m"
+  ",,ke"
+  #",,1m"
 end
 
 # first pass: parse file and create a (cc,admin1) -> geoid mapping
@@ -94,15 +96,15 @@ def make_lists(name_list, level=0, query="", &block)
     next if letter.nil?
     if values.length == 1
       # This is a single word.
-      yield query + letter, [values.first.value]
+      #yield query + letter, [values.first.value]
       # Also add all intermediate prefixes for this word
-      #word = values.first.name
-      #list = [values.first.value]
-      #i = query.length
-      #while i < word.length
-      #  yield word[0..i], list
-      #  i += 1
-      #end
+      word = values.first.name
+      list = [values.first.value]
+      i = query.length
+      while i < word.length
+        yield word[0..i], list
+        i += 1
+      end
     else
       make_lists(values, level+1, query + letter, &block)
     end
@@ -177,7 +179,7 @@ def parse_tsv
 
   LibCDB::CDB.open(output_base + '.cdb', 'w') do |db|
     new_records.each do |id, v|
-      db[id] = JSON.fast_generate(v)
+      db[id] = MessagePack.pack(v)
       db["@" + v[:name]] = id
     end
   end
@@ -189,7 +191,7 @@ def parse_tsv
 
   LibCDB::CDB.open(output_base + '-typeahead.cdb', 'w') do |db|
     make_lists(names) do |s, v|
-      db[s] = v
+      db[s] = v.join("|")
     end
   end
 end

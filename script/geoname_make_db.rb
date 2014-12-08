@@ -130,7 +130,8 @@ def parse_tsv(source_file, output_base)
   # the dump files do not use quoting, so set the quote character to something
   # that can never appear.
   CSV.foreach(source_file, quote_char: "\x00", col_sep: "\t") do |line|
-    # we only care about extracting the administration entries
+    # we only care about extracting the administration entries (some, such as
+    # regions and contentents, appear as 'L')
     next unless line[6] == 'A' || line[6] == 'L'
     fcode = line[7]
     next if fcode.nil?
