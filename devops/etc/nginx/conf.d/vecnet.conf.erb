@@ -33,6 +33,15 @@ server {
         break;
     }
 
+    <% if rails_env == "production" -%>
+    # open up image path
+    location ^~ /i/ {
+      alias       /opt/img/;
+      access_log  /var/log/nginx/access_img.log  main;
+      break;
+    }
+    <% end -%>
+
     location ^~ /downloads/ {
         proxy_intercept_errors on;
         error_page 401 403 404 500 = @app;
