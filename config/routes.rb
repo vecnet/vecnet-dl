@@ -42,6 +42,8 @@ Vecnet::Application.routes.draw do
   match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
   root to: 'catalog#index'
 
+  match 'upload_guide' => 'static#upload_guide'
+
   # The resque monitor
   namespace :admin do
     constraints Vecnet::AdminConstraint do
