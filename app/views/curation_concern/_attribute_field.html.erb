@@ -25,6 +25,7 @@
 <%= f.input :date_created,
             hint: help_icon('date_created'),
             label: get_label(:date_created),
+            placeholder: "YYYY-MM-DD or YYY-MM or YYYY",
             as: :multi_value,
             input_html: {class: 'input-xlarge'} %>
 
@@ -34,6 +35,7 @@
             as: :multi_value,
             input_html: {class: 'input-xlarge subject_with_autocomplete', multiple: 'multiple'},
             label: get_label(:subject),
+            placeholder: "MeSH Terms",
             hint: help_icon('subject')
 %>
 
@@ -41,29 +43,34 @@
             hint: help_icon('species'),
             label: get_label(:species),
             as: :multi_value,
+            placeholder: "NCBI species taxonomy",
             input_html: {class: 'input-xlarge species_with_autocomplete', multiple: 'multiple'} %>
 
 <%= f.input :tag,
             label: get_label(:tag),
             hint: help_icon('tag'),
+            placeholder: "words or phrases, not necessarily MeSH",
             as: :multi_value,
             input_html: {class: 'input-xlarge'} %>
 
 <%= f.input :conforms_to,
             label: get_label(:conforms_to),
             hint: help_icon('conforms_to'),
+            placeholder: "Open Malaria snippet version",
             as: :multi_value,
             input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
 
 <%= f.input :identifier,
             hint: help_icon('identifier'),
             label: get_label(:identifier),
+            placeholder: "DOI (article) or ISBN (book)",
             as: :multi_value,
             input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
 
 <%= f.input :related_url,
             hint: help_icon('related_url'),
             label: get_label(:related_url),
+            placeholder: "link to PDF or website",
             as: :multi_value,
             input_html: {class: 'input-xlarge', multiple: 'multiple'} %>
 
@@ -95,16 +102,17 @@
             input_html: {class: 'input-xlarge', multiple: 'multiple'},
             label: get_label(:source),
             hint:  help_icon('source') %>
-            
+
 <%= f.input :bibliographic_citation,
             as: :multi_value,
             input_html: {class: 'input-xlarge', multiple: 'multiple'},
             label: get_label(:bibliographic_citation),
             hint:  help_icon('bibliographic_citation') %>
-            
+
 <%= f.input :based_near,
             hint: help_icon('based_near'),
             label: get_label(:based_near),
+            placeholder: "Geonames.org places",
             as: :multi_value,
             input_html: {class: 'input-xlarge based_near_with_autocomplete', multiple: 'multiple'} %>
 <%= render "/curation_concern/spatial", curation_concern: curation_concern, f: f %>
