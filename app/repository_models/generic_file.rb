@@ -83,7 +83,7 @@ class GenericFile
     [self.rights].flatten.compact.map do |right|
       if right.start_with?("http")
         license = Sufia.config.cc_licenses.key(right)
-        right = "#{license}, #{right}" unless license.nil? 
+        right = "#{license}, #{right}" unless license.nil?
       end
       right
     end

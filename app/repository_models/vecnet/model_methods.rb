@@ -1,17 +1,6 @@
 module Vecnet
   module ModelMethods
     extend ActiveSupport::Concern
-=begin
-    def locations(locations=nil)
-      locations=locations
-      new_locations=locations.map{|loc| refactor_location(loc) }
-      new_locations
-    end
-
-    def refactor_location(location)
-      return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
-    end
-=end
 
     def get_hierarchy_on_location(locations=nil)
       unless locations.blank?
@@ -48,28 +37,25 @@ module Vecnet
       return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
     end
 
+    # not sure what the difference between get_subject_parents() and
+    # get_hierarchical_faceting_on_subject() is
     def get_subject_parents(subjects)
-      subjects=subjects
-      all_trees_arr=[]
-      subjects.each do |sub|
-        mesh_subject= SubjectMeshEntry.find_by_term(sub)
-        if mesh_subject
-          all_trees_arr<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
-        end
-      end
-      return all_trees_arr.uniq
+      subject_trees(subjects).uniq
     end
 
     def get_hierarchical_faceting_on_subject(subjects)
-      subjects=subjects
-      all_trees=[]
+      subject_trees(subjects).flatten
+    end
+
+    def subject_trees(subjects)
+      all_trees = []
       subjects.each do |sub|
-        mesh_subject= SubjectMeshEntry.find_by_term(sub)
+        mesh_subject = SubjectMeshEntry.find_by_term(sub)
         if mesh_subject
-          all_trees<<mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+          all_trees << mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
         end
       end
-      return all_trees.flatten
+      all_trees
     end
   end
 end
