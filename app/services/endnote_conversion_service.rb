@@ -102,27 +102,4 @@ class EndnoteConversionService
       '%~' => :database_name,
     }
   end
-
-  attr_accessor :endnote_filename, :mods_xml_filename
-
-  def initialize(endnote_file, mods_file=nil)
-    @endnote_filename = endnote_file
-    @mods_xml_filename = mods_file
-  end
-
-  def convert_to_mods
-    # assumes end2xml is in path
-    modsxml = `end2xml #{self.endnote_filename}`
-    s = $?.exitstatus
-    if s > 0
-      puts "Error running end2xml: exit code #{s}"
-      puts modsxml
-      raise EndnoteError, "end2xml exit code #{s}"
-    end
-    if mods_xml_filename
-      puts "Mods file: #{mods_xml_filename.inspect}"
-      File.open(mods_xml_filename, 'w') { |f| f.write(modsxml) }
-    end
-  end
-
 end
