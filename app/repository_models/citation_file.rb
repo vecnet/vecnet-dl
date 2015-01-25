@@ -64,5 +64,8 @@ class CitationFile < ActiveFedora::Base
     self.save!
   end
 
+  def size
+    self.datastreams.values.map(&:size).compact.sum
+  end
 end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150402203356) do
+ActiveRecord::Schema.define(:version => 20150511180552) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -147,6 +147,8 @@ ActiveRecord::Schema.define(:version => 20150402203356) do
     t.datetime "ingest_date"
     t.datetime "modified_date"
     t.string   "access_rights"
+    t.string   "resource_type"
+    t.datetime "record_mod_date"
   end
 
   add_index "item_records", ["pid"], :name => "index_item_records_on_pid"
@@ -314,12 +316,15 @@ ActiveRecord::Schema.define(:version => 20150402203356) do
   add_index "trophies", ["user_id"], :name => "index_trophies_on_user_id"
 
   create_table "usage_events", :force => true do |t|
-    t.string   "type",       :null => false
-    t.string   "pid",        :null => false
+    t.string   "event",                    :null => false
+    t.string   "pid",                      :null => false
     t.string   "ip_address"
     t.string   "username"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.string   "parent_pid", :limit => 30
+    t.datetime "event_time"
+    t.string   "agent"
   end
 
   add_index "usage_events", ["pid"], :name => "index_usage_events_on_pid"

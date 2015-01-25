@@ -102,4 +102,8 @@ class GenericFile
   def thumbnail_noid
     self.noid
   end
+
+  def size
+    self.datastreams.values.map(&:size).compact.sum
+  end
 end

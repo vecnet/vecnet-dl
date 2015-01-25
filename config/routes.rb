@@ -48,6 +48,8 @@ Vecnet::Application.routes.draw do
   namespace :admin do
     constraints Vecnet::AdminConstraint do
       mount Resque::Server, :at => "queues"
+      match "usage" => "usage#index", via: :get, as: 'usage'
+      match "usage/details" => "usage#details", via: :get, as: 'usage_details'
     end
   end
 

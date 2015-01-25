@@ -1,0 +1,42 @@
+<% title = "Usage by Resource Type" -%>
+<% content_for :page_title, "Vecnet | " + title -%>
+<% content_for :page_header do -%>
+  <h2><%= title %></h2>
+<% end -%>
+
+<%= form_tag "", {method: "get", class: "well form-inline"} do %>
+  <fieldset>
+    <legend>Time Period</legend>
+    <%= label_tag :start, "Start Date" %>
+    <%# there is no date helper in rails 3.2.X, so make the markup ourselves %>
+    <input type="date" id="start" name="start" value="<%= @start %>" placeholder="YYYY-MM-DD" />
+    <%= label_tag :end, "End Date" %>
+    <input type="date" id="end" name="end" value="<%= @end %>" placeholder="YYYY-MM-DD" />
+    <%= submit_tag "Update" %>
+  </fieldset>
+<% end -%>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Resource Type</th>
+      <th>Views</th>
+      <th>% Views</th>
+      <th>Downloads</th>
+      <th>% Downloads</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <% @table.each do |row| -%>
+    <tr>
+      <td><%= row[0] %></td>
+      <td><%= row[1]["view"] %></td>
+      <td><%= percent(row[1]["view"], @total["view"]) %></td>
+      <td><%= row[1]["download"] %></td>
+      <td><%= percent(row[1]["download"], @total["download"]) %></td>
+    </tr>
+  <% end -%>
+  </tbody>
+</table>
+
