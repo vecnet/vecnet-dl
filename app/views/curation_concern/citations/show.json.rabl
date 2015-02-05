@@ -9,9 +9,10 @@ node(:metadata) do
   result={}
   [:description, :depositor, :related_url, :based_near, :part_of, :creator,
    :contributor, :tag, :rights, :publisher, :date_created, :subject, :resource_type,
-   :identifier, :language, :spatials, :temporal, :species,
-   :bibliographic_citation, :archived_object_type, :references, :source].each {|term|
-          result[term] = curation_concern.send(term) if curation_concern.send(term).present?
-        }
+   :identifier, :language, :spatials, :temporals, :species,
+   :bibliographic_citation, :archived_object_type, :references, :source].each do |term|
+     value = curation_concern.send(term)
+     result[term] = value if value.present?
+  end
   result
 end
