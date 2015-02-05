@@ -12,6 +12,6 @@ class CreateItemRecords < ActiveRecord::Migration
       t.datetime  :modified_date
       t.string    :access_rights
     end
-    primary_key(:item_records, :pid)
+    add_index :item_records, ["pid"]
   end
 end

@@ -8,5 +8,7 @@ class CreateUsageEvents < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :usage_events, ["pid"]
+
   end
 end

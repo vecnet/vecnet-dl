@@ -10,8 +10,8 @@ class ItemRecord < ActiveRecord::Base
     :access_rights
 
   def self.find_or_create(pid)
-    ir = ItemRecord.where(pid: pid).first
-    ir = ItemRecord.new(pid: pid) if ir.nil?
-    ir
+    result = ItemRecord.where(pid: pid).first
+    result = ItemRecord.new(pid: pid) if result.nil?
+    result
   end
 end
