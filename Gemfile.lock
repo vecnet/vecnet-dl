@@ -10,15 +10,6 @@ GIT
       rsolr-ext
 
 GIT
-  remote: git://github.com/banurekha/mods.git
-  revision: 66df62ae3c3170d3d1b5abbc302e572127b62505
-  specs:
-    mods (0.0.22)
-      iso-639
-      nokogiri
-      nom-xml
-
-GIT
   remote: git://github.com/jeremyf/rsolr.git
   revision: ab3b1f9342502154c9ca5b24187918b6658e6f34
   branch: adding-connection-information-to-error-handling
@@ -308,7 +299,6 @@ GEM
     hydra-mods (0.0.6)
       active-fedora (> 4.1)
     i18n (0.6.4)
-    iso-639 (0.1.0)
     jettywrapper (1.4.1)
       activesupport (>= 3.0.0)
       childprocess
@@ -596,7 +586,6 @@ DEPENDENCIES
   jquery-rails
   method_decorators
   method_locator
-  mods!
   morphine
   newrelic_rpm
   noids_client!

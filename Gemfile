@@ -26,7 +26,6 @@ group :default do
   gem 'active_attr'
   gem 'browser'
   gem 'rubydora', "~>1.6.4"
-  gem 'mods', git: 'git://github.com/banurekha/mods.git'
   gem 'newrelic_rpm'
   gem 'noids_client', git: 'git://github.com/ndlib/noids_client'
 
