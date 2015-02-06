@@ -19,7 +19,7 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
   end
 
   before_filter :curation_concern
-    
+
   def curation_concern
     @curation_concern ||=
     if params[:id]
@@ -57,7 +57,7 @@ class CurationConcern::CitationsController < CurationConcern::BaseController
 
   include Morphine
   register :actor do
-    CurationConcern.actor(curation_concern, current_user, params[:citation])
+    CurationConcern.actor(curation_concern, current_user, params[:generic_file].merge(params[:citation]))
   end
   private
   def show_breadcrumbs?

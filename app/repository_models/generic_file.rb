@@ -18,17 +18,22 @@ class GenericFile
      return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
   end
 
-  def temporals
-    return Array(self.datastreams["descMetadata"].temporals).collect{|temporal| Temporal.parse_temporal(temporal)}
-  end
-
   def spatials=(formated_str)
       self.datastreams["descMetadata"].spatials=formated_str
   end
 
-  def temporals=(formated_str)
-    self.datastreams["descMetadata"].temporals=formated_str
+  def time_periods
+    Array(self.datastreams["descMetadata"].temporals).map do |dscv_s|
+      Temporal.from_dcsv(dscv_s)
+    end
   end
+
+  def time_periods=(temporal_array)
+    self.datastreams["descMetadata"].temporals = temporal_array.map do |t|
+      t.to_dcsv
+    end
+  end
+
 
   def filename
     content.label

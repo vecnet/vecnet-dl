@@ -1,37 +1,23 @@
-<%temporal_data=get_temporal_data(curation_concern)%>
-<%start_time= temporal_data[:start_time]%>
-<%end_time= temporal_data[:end_time]%>
+<%# edit fields for temporal objects -%>
+<% times = get_temporal_data(curation_concern)
+   times = [""] if times.empty? -%>
 <div class="control-group multi_value optional generic_file_temporals managed">
   <%= f.label get_label(:temporals) %>
-  <%= f.hint help_icon(:temporals)%>
+  <%= f.hint help_icon(:temporals) %>
   <div class="controls">
     <ul class="listing">
-      <% start_time.each_with_index do |start,index| %>
+      <% times.each do |t| -%>
         <li class="field-wrapper input-append">
-          <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input with-right-margin", value:start,
-                           placeholder:"start_time"%>
+          <%= f.text_field :start_time,
+            name: "citation[start_time][]",
+            class: "input-xlarge input",
+            value: t,
+            placeholder: "YYYY (- YYYY)" %>
           <%= f.error :start_time %>
-
-          <%= f.text_field :end_time, name:"generic_file[end_time][]",
-                           id:"generic_file_end_time",value:end_time[index],
-                           class:"input-small", placeholder:"end_time"%>
-          <%= f.error :end_time%>
-
         </li>
-      <% end %>
-      <li class="field-wrapper input-append">
-        <%= f.text_field :start_time, name:"generic_file[start_time][]", class:"input-small input with-right-margin", value:"",
-                       placeholder:"start_time"%>
-        <%= f.error :start_time %>
-
-        <%= f.text_field :end_time, name:"generic_file[end_time][]",
-                         id:"generic_file_end_time",value:"",
-                         class:"input-small ", placeholder:"end_time"%>
-        <%= f.error :end_time%>
-      </li>
+      <% end -%>
     </ul>
     <%= f.error :temporals, :id => "temporals_error", :class=>"help-inline", :style=>"color:#B94A48" %>
   </div>
 </div>
-
 

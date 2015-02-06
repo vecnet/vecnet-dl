@@ -20,18 +20,74 @@ class Temporal
     Dcsv.encode(hash)
   end
 
-  def self.parse_temporal(temporal_rdf)
+  def self.from_dcsv(temporal_rdf)
     temp = Dcsv.decode(temporal_rdf)
     Temporal.new(temp['start'], temp['end'])
   end
 
   def to_s
     if start_time.present? && end_time.present?
-      "#{start_time} - #{end_time}"
+      if start_time == end_time
+        "#{start_time}"
+      else
+        "#{start_time} -- #{end_time}"
+      end
     elsif start_time.present?
-      start_time
+      "#{start_time}--"
     elsif end_time.present?
-      end_time
+      "--#{end_time}"
+    end
+  end
+
+  # if s has the form
+  # YYYY(MM(DD)?)? (- (YYYY(MM(DD)?)?)?)?
+  # or
+  # - YYYY(MM(DD)?)?
+  # returns a Temporal
+  # otherwise returns nil
+  #
+  # This does not check that any months given are in the range 01-12
+  # nor that any days are in the range 01-31.
+  # But it could do those checks. I don't think it will be an issue?
+  # Maybe if we wish to admit geoname ids as allowable locations.
+  def self.from_s(s)
+    m = /\A\s*
+      (\d{4}  # start year
+        (-?\d{2})? # month
+        (-?\d{2})? # day
+      )\s*
+      (--?\s*
+        (\d{4} # end year
+          (-?\d{2})? # month
+          (-?\d{2})? # day
+        )?
+      )?/x.match(s)
+    if m.nil?
+      m = /\A\s*--?\s*
+        (\d{4} # end year
+          (-?\d{2})? # month
+          (-?\d{2})? # day
+        )/x.match(s)
+      return nil if m.nil?
+      start_time = nil
+      end_time = m[1]
+    else
+      start_time = m[1]
+      hyphen = m[4]
+      end_time = m[5]
+    end
+    if start_time.nil?
+      # only a hyphen and an end time
+      Temporal.new(nil, end_time)
+    elsif hyphen.nil?
+      # only a start time. interpret as a single year or month or date
+      Temporal.new(start_time, start_time)
+    elsif end_time.nil?
+      # a hyphen but no end time
+      Temporal.new(start_time, nil)
+    else
+      # a start and end time
+      Temporal.new(start_time, end_time)
     end
   end
 

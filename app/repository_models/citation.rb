@@ -27,17 +27,22 @@ class Citation < ActiveFedora::Base
     return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
   end
 
-  def temporals
-    return Array(self.datastreams["descMetadata"].temporals).collect{|temporal| Temporal.parse_temporal(temporal)}
-  end
-
   def spatials=(formated_str)
     self.datastreams["descMetadata"].spatials=formated_str
   end
 
-  def temporals=(formated_str)
-    self.datastreams["descMetadata"].temporals=formated_str
+  def time_periods
+    Array(self.datastreams["descMetadata"].temporals).map do |dscv_s|
+      Temporal.from_dcsv(dscv_s)
+    end
   end
+
+  def time_periods=(temporal_array)
+    self.datastreams["descMetadata"].temporals = temporal_array.map do |t|
+      t.to_dcsv
+    end
+  end
+
 
   def human_readable_type
     self.class.to_s.demodulize.titleize
@@ -72,13 +77,19 @@ class Citation < ActiveFedora::Base
   end
 
   def locations
-    locations=self.based_near
-    new_locations=locations.map{|loc| refactor_location(loc) }
+    locations = self.based_near
+    new_locations = locations.map{|loc| refactor_location(loc) }
     new_locations
   end
 
+  # this is a low-effort attempt at cleaning up location data
+  # Is it even necessary??
   def refactor_location(location)
-    return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
+    result = []
+    location.split(',').each do |name|
+      result << name.strip unless name.to_s.strip.empty?
+    end
+    result.uniq.join(',')
   end
 
   #one time conversion for converting bib data, not need anymore

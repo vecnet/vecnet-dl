@@ -72,6 +72,12 @@ class CitationIngestService
     def notes
       @endnote[:research_notes]
     end
+    def locations
+      @locations ||= @endnote[:call_number].select { |item| parse_time(item).nil? }
+    end
+    def time_periods
+      @time_periods ||= @endnote[:call_number].map { |item| parse_time(item) }.compact
+    end
     def bibliographic_citation
       return nil if journal_title_short.nil?
       s = format_if_present("{}", [journal_title_short])
@@ -94,6 +100,17 @@ class CitationIngestService
         return "" if v.nil? || v.blank?
         v = v.first if v.respond_to?(:first)
         format.gsub("{}",v)
+      end
+
+      # if s has the form
+      # YYYY(MM(DD)?)? (- (YYYY(MM(DD)?)?)?)?
+      # or
+      # - YYYY(MM(DD)?)?
+      # returns a dcsv encoded string
+      # otherwise returns nil
+      def parse_time(s)
+        t = Temporal.from_s(s)
+        t.nil? ? nil : t.to_dcsv
       end
   end
 
@@ -158,6 +175,8 @@ class CitationIngestService
       tag:          @record.keywords,
       species:      @record.species,
       language:     @record.language,
+      based_near:   @record.locations,
+      temporals:    @record.time_periods,
       resource_type:  'Article',
       source:       @record.journal_title_long,
       references:   mint_a_citation_id, # mapped to dc type
