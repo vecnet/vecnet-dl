@@ -73,9 +73,11 @@ class CitationIngestService
       @endnote[:research_notes]
     end
     def locations
+      return [] if @endnote[:call_number].nil?
       @locations ||= @endnote[:call_number].select { |item| parse_time(item).nil? }
     end
     def time_periods
+      return [] if @endnote[:call_number].nil?
       @time_periods ||= @endnote[:call_number].map { |item| parse_time(item) }.compact
     end
     def bibliographic_citation
@@ -97,7 +99,10 @@ class CitationIngestService
     def open_access?
       f = @endnote[:research_notes]
       return false if f.nil?
-      f.any { |s| /(global|open)\s+access/i.match(s) }
+      f.each do |s|
+        return true if /(global|open)\s+access/i.match(s)
+      end
+      false
     end
 
     private
@@ -107,19 +112,13 @@ class CitationIngestService
         format.gsub("{}",v)
       end
 
-      # if s has the form
-      # YYYY(MM(DD)?)? (- (YYYY(MM(DD)?)?)?)?
-      # or
-      # - YYYY(MM(DD)?)?
-      # returns a dcsv encoded string
-      # otherwise returns nil
       def parse_time(s)
         t = Temporal.from_s(s)
-        t.nil? ? nil : t.to_dcsv
+        t.nil? ? nil : t.to_s
       end
   end
 
-  attr_accessor :metadata_file, :curation_concern, :pdf_paths
+  attr_accessor :curation_concern, :pdf_paths
 
   def initialize(pdf_paths = [], endnote_record=nil, upload_files=true)
     if endnote_record
@@ -181,7 +180,7 @@ class CitationIngestService
       species:      @record.species,
       language:     @record.language,
       based_near:   @record.locations,
-      temporals:    @record.time_periods,
+      start_time:   @record.time_periods,
       resource_type:  'Article',
       source:       @record.journal_title_long,
       references:   mint_a_citation_id, # mapped to dc type
@@ -243,7 +242,7 @@ class CitationIngestService
     output "Record refers to PDF files #{result}"
     result = result.map { |fname| resolve_pdf_path(fname) }
     output "Found PDF files #{result}"
-    return result
+    return result.compact
   end
 
   private

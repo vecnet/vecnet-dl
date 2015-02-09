@@ -3,6 +3,7 @@ require Curate::Engine.root.join('app/repository_models/generic_file')
 class GenericFile
   include CurationConcern::ModelMethods
   include SpatialCoverage
+  include TemporalMixin
   include Vecnet::ModelMethods
   include CurationConcern::WithSpecies
 
@@ -20,18 +21,6 @@ class GenericFile
 
   def spatials=(formated_str)
       self.datastreams["descMetadata"].spatials=formated_str
-  end
-
-  def time_periods
-    Array(self.datastreams["descMetadata"].temporals).map do |dscv_s|
-      Temporal.from_dcsv(dscv_s)
-    end
-  end
-
-  def time_periods=(temporal_array)
-    self.datastreams["descMetadata"].temporals = temporal_array.map do |t|
-      t.to_dcsv
-    end
   end
 
 

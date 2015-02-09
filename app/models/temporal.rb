@@ -33,9 +33,11 @@ class Temporal
         "#{start_time} -- #{end_time}"
       end
     elsif start_time.present?
-      "#{start_time}--"
+      "#{start_time} --"
     elsif end_time.present?
-      "--#{end_time}"
+      "-- #{end_time}"
+    else
+      ""
     end
   end
 
@@ -49,25 +51,29 @@ class Temporal
   # This does not check that any months given are in the range 01-12
   # nor that any days are in the range 01-31.
   # But it could do those checks. I don't think it will be an issue?
-  # Maybe if we wish to admit geoname ids as allowable locations.
+  # Maybe if we wish to admit geoname ids as allowable locations for
+  # the endnote ingest.
+  #
+  # Subtle. ensure the string 2010-2011 is not matched as the 11th
+  # of the 20th month of 2010.
   def self.from_s(s)
     m = /\A\s*
       (\d{4}  # start year
-        (-?\d{2})? # month
-        (-?\d{2})? # day
+        (-\d{2})? # month
+        (-\d{2})? # day
       )\s*
       (--?\s*
         (\d{4} # end year
-          (-?\d{2})? # month
-          (-?\d{2})? # day
+          (-\d{2})? # month
+          (-\d{2})? # day
         )?
-      )?/x.match(s)
+      )?\Z/x.match(s)
     if m.nil?
       m = /\A\s*--?\s*
         (\d{4} # end year
-          (-?\d{2})? # month
-          (-?\d{2})? # day
-        )/x.match(s)
+          (-\d{2})? # month
+          (-\d{2})? # day
+        )\Z/x.match(s)
       return nil if m.nil?
       start_time = nil
       end_time = m[1]

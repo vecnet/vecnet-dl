@@ -6,10 +6,11 @@ class Citation < ActiveFedora::Base
   include CurationConcern::ModelMethods
   include CurationConcern::Embargoable
   include SpatialCoverage
+  include TemporalMixin
   include Vecnet::ModelMethods
   include CurationConcern::WithSpecies
 
-  self.human_readable_short_description = "Citation from Endnote"
+  self.human_readable_short_description = "Citation"
 
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
 
@@ -29,18 +30,6 @@ class Citation < ActiveFedora::Base
 
   def spatials=(formated_str)
     self.datastreams["descMetadata"].spatials=formated_str
-  end
-
-  def time_periods
-    Array(self.datastreams["descMetadata"].temporals).map do |dscv_s|
-      Temporal.from_dcsv(dscv_s)
-    end
-  end
-
-  def time_periods=(temporal_array)
-    self.datastreams["descMetadata"].temporals = temporal_array.map do |t|
-      t.to_dcsv
-    end
   end
 
 

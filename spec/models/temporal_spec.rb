@@ -14,11 +14,15 @@ describe Temporal do
     expect(t.start_time).to eq("1955")
     expect(t.end_time).to be_nil
 
-    t = Temporal.from_s(" 195505 - 1960")
-    expect(t.start_time).to eq("195505")
+    t = Temporal.from_s(" 1955-05 - 1960")
+    expect(t.start_time).to eq("1955-05")
     expect(t.end_time).to eq("1960")
 
-    t = Temporal.from_s(" 1955-05 - 1960")
+    t = Temporal.from_s("2010-2011")
+    expect(t.start_time).to eq("2010")
+    expect(t.end_time).to eq("2011")
+
+    t = Temporal.from_s(" 1955-05-1960")
     expect(t.start_time).to eq("1955-05")
     expect(t.end_time).to eq("1960")
 
@@ -26,15 +30,15 @@ describe Temporal do
     expect(t.start_time).to eq("1955-05")
     expect(t.end_time).to eq("1960")
 
-    t = Temporal.from_s(" - 19601225")
-    expect(t.start_time).to be_nil
-    expect(t.end_time).to eq("19601225")
-
     t = Temporal.from_s(" - 1960-12-25")
     expect(t.start_time).to be_nil
     expect(t.end_time).to eq("1960-12-25")
 
-    t = Temporal.from_s(" -- 1960-12-25")
+    t = Temporal.from_s("-1960-12-25")
+    expect(t.start_time).to be_nil
+    expect(t.end_time).to eq("1960-12-25")
+
+    t = Temporal.from_s("--1960-12-25")
     expect(t.start_time).to be_nil
     expect(t.end_time).to eq("1960-12-25")
   end
