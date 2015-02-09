@@ -9,7 +9,7 @@ module CurationConcern
     end
 
     def after_destroy_cleanup
-      puts "cleaning up generic files now"
+      puts "deleting child generic files now"
       generic_files.each(&:destroy)
     end
 

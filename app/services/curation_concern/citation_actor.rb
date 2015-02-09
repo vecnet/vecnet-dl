@@ -77,7 +77,6 @@ module CurationConcern
         Sufia::GenericFile::Actions.create_metadata(
             citation_file, user, curation_concern.pid
         )
-        citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         attach_citation_file(citation_file, user, f, File.basename(fname))
       end
     end
@@ -90,6 +89,11 @@ module CurationConcern
     end
 
     def attach_citation_file(citation_file, user, file_to_attach, label)
+      if attributes[:open_access]
+        citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+      else
+        citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+      end
       Sufia::GenericFile::Actions.create_content(
           citation_file,
           file_to_attach,

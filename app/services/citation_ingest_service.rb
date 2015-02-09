@@ -94,6 +94,11 @@ class CitationIngestService
       s += " (#{d})" unless d.blank?
       return s
     end
+    def open_access?
+      f = @endnote[:research_notes]
+      return false if f.nil?
+      f.any { |s| /(global|open)\s+access/i.match(s) }
+    end
 
     private
       def format_if_present(format, v)
@@ -183,7 +188,8 @@ class CitationIngestService
       bibliographic_citation: @record.bibliographic_citation,
       visibility:   AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:  @record.related_urls,
-      date_created: @record.pub_date
+      date_created: @record.pub_date,
+      open_access:  @record.open_access?
     }
     if @upload_files
       metadata[:files] = find_files_to_attach
