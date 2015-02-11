@@ -1,95 +1,5 @@
 require 'uri'
-require 'mods'
 class CitationIngestService
-  class ModsExtractor
-    attr_reader :mods
-    def initialize(mods_fname)
-      @mods = Mods::Record.new.from_str(File.read(mods_fname))
-    end
-    def creator
-      @mods.plain_name.display_value
-    end
-    def description
-      @mods.abstract.text
-    end
-    def title
-      @mods.title_info.full_title
-    end
-    def cite_key
-      @mods.cite_key
-    end
-    def curated_id
-      (@mods.identifier - self.cite_key).map { |i| remove_newlines(i.text) }.compact
-    end
-    def identifiers
-      @mods.identifier.map {|i| remove_newlines(i.text) }.compact
-    end
-    def subjects
-      @mods.subject.map do |sub|
-        sub.text.gsub(/\n|\*/,"").strip
-      end
-    end
-    def species
-      NcbiSpeciesTerm.get_species_term(self.subjects).map(&:term).compact
-    end
-    def language
-      @mods.language.map { |lang| remove_newlines(lang.text_term.text) }
-    end
-    def urls
-      @mods.location.url.map { |loc| remove_newlines(loc.text) }
-    end
-    def related_urls
-      self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
-    end
-    def journal_title
-      @mods.related_item.map do |node|
-        if node.type_at == "host"
-          remove_newlines(node.titleInfo.text)
-        end
-      end.compact
-    end
-    def pub_date
-      @mods.part.date.text
-    end
-    def notes
-      nil
-    end
-    def bibliographic_citation
-      journal = self.journal_title.first || ''
-      part_detail = {}
-      @mods.part.detail.each { |n| part_detail[n.type_at.to_sym] = n.text }
-      volume = part_detail[:volume]
-      issue = part_detail[:issue]
-      format_volume = "#{volume}"
-      format_volume += "(#{issue})" if issue
-      start_page = end_page = nil
-      unless self.part.extent.nil?
-        start_page = @mods.part.extent.search(:start).text
-        start_page = nil if start_page.blank?
-        end_page = @mods.part.extent.search(:end).text
-        end_page = nil if end_page.blank?
-      end
-      format_pages = case
-                     when start_page && end_page then "#{start_page}-#{end_page}"
-                     when start_page then "#{start_page}"
-                     when end_page then "#{end_page}"
-                     else ''
-                     end
-      date_text = @mods.part.date.text
-      s = "#{journal}"
-      s += " #{format_volume}" unless format_volume.blank?
-      s += ", #{format_pages}" unless format_pages.blank?
-      s += "." unless s.blank?
-      s += " (#{date_text})" unless date_text.blank?
-      s
-    end
-
-    private
-    def remove_newlines(s)
-      s.gsub("\n","").strip
-    end
-  end
-
   class EndnoteExtractor
     attr_reader :endnote
     def initialize(endnote_hash)
@@ -162,6 +72,14 @@ class CitationIngestService
     def notes
       @endnote[:research_notes]
     end
+    def locations
+      return [] if @endnote[:call_number].nil?
+      @locations ||= @endnote[:call_number].select { |item| parse_time(item).nil? }
+    end
+    def time_periods
+      return [] if @endnote[:call_number].nil?
+      @time_periods ||= @endnote[:call_number].map { |item| parse_time(item) }.compact
+    end
     def bibliographic_citation
       return nil if journal_title_short.nil?
       s = format_if_present("{}", [journal_title_short])
@@ -178,6 +96,14 @@ class CitationIngestService
       s += " (#{d})" unless d.blank?
       return s
     end
+    def open_access?
+      f = @endnote[:research_notes]
+      return false if f.nil?
+      f.each do |s|
+        return true if /(global|open)\s+access/i.match(s)
+      end
+      false
+    end
 
     private
       def format_if_present(format, v)
@@ -185,14 +111,17 @@ class CitationIngestService
         v = v.first if v.respond_to?(:first)
         format.gsub("{}",v)
       end
+
+      def parse_time(s)
+        t = Temporal.from_s(s)
+        t.nil? ? nil : t.to_s
+      end
   end
 
-  attr_accessor :metadata_file, :curation_concern, :pdf_paths
+  attr_accessor :curation_concern, :pdf_paths
 
-  def initialize(mods_input_file=nil, pdf_paths = [], endnote_record=nil, upload_files=true)
-    if mods_input_file
-      @record = ModsExtractor.new(mods_input_file)
-    elsif endnote_record
+  def initialize(pdf_paths = [], endnote_record=nil, upload_files=true)
+    if endnote_record
       @record = EndnoteExtractor.new(endnote_record)
     else
       throw "Record Source Required"
@@ -250,13 +179,16 @@ class CitationIngestService
       tag:          @record.keywords,
       species:      @record.species,
       language:     @record.language,
+      based_near:   @record.locations,
+      start_time:   @record.time_periods,
       resource_type:  'Article',
       source:       @record.journal_title_long,
       references:   mint_a_citation_id, # mapped to dc type
       bibliographic_citation: @record.bibliographic_citation,
       visibility:   AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
       related_url:  @record.related_urls,
-      date_created: @record.pub_date
+      date_created: @record.pub_date,
+      open_access:  @record.open_access?
     }
     if @upload_files
       metadata[:files] = find_files_to_attach
@@ -310,7 +242,7 @@ class CitationIngestService
     output "Record refers to PDF files #{result}"
     result = result.map { |fname| resolve_pdf_path(fname) }
     output "Found PDF files #{result}"
-    return result
+    return result.compact
   end
 
   private

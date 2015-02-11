@@ -6,10 +6,11 @@ class Citation < ActiveFedora::Base
   include CurationConcern::ModelMethods
   include CurationConcern::Embargoable
   include SpatialCoverage
+  include TemporalMixin
   include Vecnet::ModelMethods
   include CurationConcern::WithSpecies
 
-  self.human_readable_short_description = "Citation from Endnote"
+  self.human_readable_short_description = "Citation"
 
   has_metadata name: "descMetadata", type: CitationRdfDatastream, control_group: 'M'
 
@@ -27,17 +28,10 @@ class Citation < ActiveFedora::Base
     return Array(self.datastreams["descMetadata"].spatials).collect{|spatial| Spatial.parse_spatial(spatial)}
   end
 
-  def temporals
-    return Array(self.datastreams["descMetadata"].temporals).collect{|temporal| Temporal.parse_temporal(temporal)}
-  end
-
   def spatials=(formated_str)
     self.datastreams["descMetadata"].spatials=formated_str
   end
 
-  def temporals=(formated_str)
-    self.datastreams["descMetadata"].temporals=formated_str
-  end
 
   def human_readable_type
     self.class.to_s.demodulize.titleize
@@ -72,13 +66,19 @@ class Citation < ActiveFedora::Base
   end
 
   def locations
-    locations=self.based_near
-    new_locations=locations.map{|loc| refactor_location(loc) }
+    locations = self.based_near
+    new_locations = locations.map{|loc| refactor_location(loc) }
     new_locations
   end
 
+  # this is a low-effort attempt at cleaning up location data
+  # Is it even necessary??
   def refactor_location(location)
-    return location.split(',').each_with_object([]) {|name, a| a<< name.strip unless name.to_s.strip.empty?}.uniq.join(',')
+    result = []
+    location.split(',').each do |name|
+      result << name.strip unless name.to_s.strip.empty?
+    end
+    result.uniq.join(',')
   end
 
   #one time conversion for converting bib data, not need anymore
