@@ -25,7 +25,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:related", curation_concern.related_url)
   tag_each(xml, "dc:language", curation_concern.language)
   tag_each(xml, "dc:spatial", curation_concern.spatials)
-  tag_each(xml, "dc:temporal", curation_concern.temporals)
+  tag_each(xml, "dc:temporal", curation_concern.temporal)
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
   tag_each(xml, "dc:source", curation_concern.source)
