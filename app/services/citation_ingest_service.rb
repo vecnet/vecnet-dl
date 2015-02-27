@@ -150,6 +150,7 @@ class CitationIngestService
     @curation_concern.noid
   rescue ActiveFedora::RecordInvalid=>e
     output "Error occured during creation: #{e.inspect}"
+    output e.backtrace
   end
 
   # see if this citation is already in fedora...

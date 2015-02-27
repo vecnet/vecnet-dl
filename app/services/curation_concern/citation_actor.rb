@@ -75,16 +75,15 @@ module CurationConcern
     def update_citation_file(gf, fname)
       File.open(fname, "rb") do |f|
         gf.file = f
-        attach_citation_file(gf, user, f, File.basename(fname))
         if @open_access
-          citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
+          gf.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC)
         else
-          citation_file.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
+          gf.set_visibility(AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         end
         Sufia::GenericFile::Actions.create_content(
-            citation_file,
-            file_to_attach,
-            label,
+            gf,
+            f,
+            File.basename(fname),
             'content',
             user
         )

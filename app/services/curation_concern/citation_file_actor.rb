@@ -4,6 +4,7 @@ module CurationConcern
       super
       add_user_roles
       update_file
+      curation_concern.save
     end
 
     def update!
@@ -18,7 +19,6 @@ module CurationConcern
     protected
     def add_user_roles
       curation_concern.apply_depositor_roles(user)
-      curation_concern.save
     end
 
     def update_file

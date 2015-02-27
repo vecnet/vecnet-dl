@@ -9,9 +9,6 @@ class CitationFile < ActiveFedora::Base
 
   belongs_to :batch, property: :is_part_of, class_name: 'ActiveFedora::Base'
 
-  validates :batch, presence: true
-  validates :file, presence: true, on: :create
-
   attr_accessor :file, :version
 
   class_attribute :human_readable_short_description
