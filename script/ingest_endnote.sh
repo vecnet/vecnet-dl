@@ -14,9 +14,11 @@ import_name=$1
 export ENDNOTE_FILE="$2"
 export ENDNOTE_PDF_PATH="$3"
 
+app_root=$(cd $(dirname $0)/.. && pwd)
+
 source /etc/profile.d/chruby.sh
 chruby 2.0.0-p353
 
-source /home/app/vecnet/current/script/get-env.sh
+source $app_root/script/get-env.sh
 cd $RAILS_ROOT
 bundle exec rake vecnet:import:endnote_conversion | tee "log/${import_name}.txt"
