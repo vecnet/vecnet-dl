@@ -78,7 +78,9 @@ Vecnet::Application.configure do
 
   config.fits_path = '/opt/fits-0.8.0/fits.sh'
 
-  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
-  config.pubtkt_login_url =  'https://www.vecnet.org/index.php/sso-login'
-  config.pubtkt_logout_url = 'https://www.vecnet.org/index.php/log-out'
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-development.pem')))
+  # these will resolve to the discovery application....
+  config.pubtkt_login_url = '/development_sessions/log_in'
+  config.pubtkt_logout_url = '/development_sessions/log_out'
+  # and a private key is not needed
 end

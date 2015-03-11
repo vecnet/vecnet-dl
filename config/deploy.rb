@@ -273,10 +273,10 @@ end
 #JCU attempt at Capistrano
 
 desc "Setup for the JCU QA environment"
-task :jcu_qa do
+task :jcu do
   common_setup
 
-  set :rails_env,   'jcu_qa'
+  set :rails_env,   'jcu'
   set :domain,      '130.56.248.39'
 
   server "130.56.248.39", :app, :web, :db, :work, :primary => true
