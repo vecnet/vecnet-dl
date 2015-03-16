@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: git://github.com/ndlib/sufia.git
-  revision: ff669a17004e223eef8a1e5c34ffed58754e6a84
+  revision: dc9b009b6713e1cbbc58d7f3a70f8654db1c111c
   branch: sufia-for-curate-nd
   specs:
     sufia (0.1.0)
