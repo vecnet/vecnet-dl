@@ -5,6 +5,8 @@ namespace :vecnet do
     task :remove_bogus_urls => :environment do
       timed_action "remove bogus urls" do
         Citation.find_each do |c|
+          # c.related_url is a TermProxy and not an array,
+          # so it doesn't have #reject.
           new_urls = c.related_url.map do |url|
             url.match(/<go to isi>/i) ? nil : url
           end

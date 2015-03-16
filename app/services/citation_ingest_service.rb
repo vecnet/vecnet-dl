@@ -52,6 +52,7 @@ class CitationIngestService
     def related_urls
       return [] if self.urls.nil?
       result = self.urls.reject{|u| u.start_with?('internal-pdf:', 'C:/')}.compact
+      result.reject! { |u| u.match(/<go to isi>/i) }
       result.map{|u| u.gsub("/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=","/pubmed/")}
     end
     def all_journal_titles
