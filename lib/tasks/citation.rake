@@ -4,10 +4,11 @@ namespace :vecnet do
     desc "remove bogus url entries, e.g. <Go to ISI>://"
     task :remove_bogus_urls => :environment do
       timed_action "remove bogus urls" do
-        Citation.find(:all).each do |c|
-          new_urls = c.related_url.reject do |url|
-            url.match(/<go to isi>/i)
+        Citation.find_each do |c|
+          new_urls = c.related_url.map do |url|
+            url.match(/<go to isi>/i) ? nil : url
           end
+          new_urls.compact!
           if new_urls != c.related_url
             puts "Fixing #{c.noid}"
             c.related_url = new_urls
