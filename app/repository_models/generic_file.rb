@@ -101,4 +101,8 @@ class GenericFile
       generic_file.save!
     end
   end
+
+  def thumbnail_noid
+    self.noid
+  end
 end

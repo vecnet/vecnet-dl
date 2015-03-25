@@ -6,10 +6,13 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   xml.tag!("vn:identifier", curation_concern.noid)
   xml.tag!("vn:content_version", curation_concern.current_version_just_id)
   tag_each(xml, "dc:identifier", curation_concern.identifier)
+  xml.tag!("vn:model", curation_concern.class)
+  xml.tag!("vn:purl", polymorphic_path([:curation_concern, curation_concern]))
 
   xml.tag!("vn:depositor", curation_concern.depositor)
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
   xml.tag!("dc:date_modified", curation_concern.date_modified)
+  xml.tag!("vn:thumbnail", curation_concern.thumbnail_noid) if curation_concern.thumbnail_noid
 
   xml.tag!("dc:title", curation_concern.title)
 
@@ -17,7 +20,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:coverage", curation_concern.based_near)
   tag_each(xml, "dc:creator", curation_concern.creator)
   tag_each(xml, "dc:contributor", curation_concern.contributor)
-  tag_each(xml, "dc:subject", curation_concern.tag)
+  tag_each(xml, "dc:relation", curation_concern.tag)
   tag_each(xml, "dc:subject", curation_concern.subject)
   tag_each(xml, "dc:rights", curation_concern.rights)
   tag_each(xml, "dc:publisher", curation_concern.publisher)
@@ -31,7 +34,12 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:source", curation_concern.source)
   tag_each(xml, "dc:BibliographicCitation", curation_concern.bibliographic_citation)
 
+  tag_each(xml, "dc:access.read.group", curation_concern.read_groups)
+  tag_each(xml, "dc:access.read.person", curation_concern.read_users)
+  tag_each(xml, "dc:access.edit.group", curation_concern.edit_groups)
+  tag_each(xml, "dc:access.edit.person", curation_concern.edit_users)
+
   if ! curation_concern.generic_files.nil?
-    tag_each(xml, "vn:related_files", curation_concern.generic_files.map { |gf| gf.noid })
+    tag_each(xml, "vn:child_records", curation_concern.generic_files.map { |gf| gf.noid })
   end
 end

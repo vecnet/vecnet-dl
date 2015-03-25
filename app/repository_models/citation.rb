@@ -114,4 +114,9 @@ class Citation < ActiveFedora::Base
     self.save!
   end
 
+  def thumbnail_noid
+    gf = self.generic_files.first
+    gf.nil? ? nil : gf.noid
+  end
+
 end
