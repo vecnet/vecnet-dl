@@ -1,3 +1,5 @@
+require 'csv'
+
 namespace :vecnet do
   namespace :citation do
 
@@ -17,6 +19,37 @@ namespace :vecnet do
             c.save
           end
         end
+      end
+    end
+
+    desc "Export Article Visibility to TSV."
+    task :export_to_tsv => :environment do
+      count = 0
+      CSV.open("article-export.tsv", "w", {col_sep: "\t"}) do |csv|
+        csv << ["vecnet_id", "title", "journal", "year", "bib_citation", "child_id", "access"]
+        Citation.find_each do |citation|
+          citation.generic_files.each do |gf|
+            count += 1
+            puts "#{count}) #{citation.noid} / #{gf.noid}"
+            access = "Private"
+            if gf.read_groups.include?("public")
+              access = "Open Access"
+            elsif gf.read_groups.include?("registered")
+              access = "VecNet Only"
+            end
+            csv << [citation.noid,
+                    citation.title,
+                    citation.source.first,
+                    citation.date_created.first,
+                    citation.bibliographic_citation.first,
+                    gf.noid,
+                    access]
+          end
+        end
+      end
+
+
+      Citation.find_each do |c|
       end
     end
 

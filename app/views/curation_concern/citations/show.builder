@@ -7,7 +7,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   xml.tag!("vn:content_version", curation_concern.current_version_just_id)
   tag_each(xml, "dc:identifier", curation_concern.identifier)
   xml.tag!("vn:model", curation_concern.class)
-  xml.tag!("vn:purl", polymorphic_path([:curation_concern, curation_concern]))
+  xml.tag!("vn:purl", polymorphic_url([:curation_concern, curation_concern]))
 
   xml.tag!("vn:depositor", curation_concern.depositor)
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
