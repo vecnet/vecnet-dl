@@ -57,6 +57,12 @@ class GenericFile
     return self.title.is_a?(Array) ? self.title.join(',') : self.title
   end
 
+  def get_full_text
+    # Trying to unify GenericFile and CitationFile interfaces
+    return nil unless self.datastreams.has_key?("full_text")
+    self.datastreams["full_text"].content
+  end
+
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
     solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject(self.subject)

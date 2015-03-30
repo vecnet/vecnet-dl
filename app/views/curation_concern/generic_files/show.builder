@@ -40,4 +40,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 
   tag_each(xml, "dc:format", curation_concern.mime_type)
   xml.tag!("vn:filename", curation_concern.filename)
+
+  full_text = curation_concern.get_full_text
+  xml.tag!("full_text", full_text) if full_text
 end

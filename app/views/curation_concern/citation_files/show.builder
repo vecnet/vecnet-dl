@@ -41,4 +41,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:access.edit.person", curation_concern.edit_users)
 
   tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.persistent_url })
+
+  full_text = curation_concern.get_full_text
+  xml.tag!("full_text", full_text) if full_text
 end
