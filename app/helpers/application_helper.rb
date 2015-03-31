@@ -1,8 +1,8 @@
 module ApplicationHelper
   include GenericFileHelper
   def construct_show_path(solr_document, options = {})
-    object_type=solr_document.has?('has_model_s') ? solr_document['has_model_s'].first.gsub("info:fedora/afmodel:",'') : ""
-    if object_type.eql?("Citation")
+    object_type = solr_document.fetch('has_model_s', [""]).first
+    if object_type.end_with?("info:fedora/afmodel:Citation")
       return citations_path(solr_document[:noid_s].first)
     else
       return files_path(solr_document[:noid_s].first)

@@ -2,7 +2,9 @@
 <li>
   <h4>
     <%= link_to render_document_show_field_value(:document=>document, :field=>document.title_or_label), construct_show_path(document) %>
-    <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' unless document.has?(:desc_metadata__resource_type_t, 'Article')%></small>
+    <% unless document.has?(:desc_metadata__resource_type_t, 'Article') -%>
+      <small><%= link_to raw('<i class="icon-download-alt"></i>'), download_path(document[:noid_s].first), :target => '_new' %></small>
+    <% end -%>
   </h4>
   <div class="thumbnail-container">
     <%= render :partial => 'dashboard/_index_partials/thumbnail_display', :locals => {:document=>document, :height=>200, :width=>150} %>
@@ -14,7 +16,7 @@
       <% end -%>
     <% end -%>
     <% if document.has_key?(:desc_metadata__date_created_display) && !document.has_key?(:desc_metadata__bibliographic_citation_display) -%>
-      <%= "(#{render_index_field_value :document => document, :field => "desc_metadata__date_created_display"})" %>
+      (<%= render_index_field_value :document => document, :field => "desc_metadata__date_created_display" %>)
     <% end -%>
     <% if document.has_key?(:desc_metadata__description_display) -%>
       <br/>
