@@ -9,8 +9,10 @@ Warden::Strategies.add(:apikey) do
   def authenticate!
     u = nil
     key = env['HTTP_API_KEY']
-    u = User.find_from_apikey(key)
-    logger.debug "Found user #{u} API KEY #{ticket}"
+    if key && key.length > 0
+      logger.debug "Found API KEY"
+      u = User.find_by_api_key(key)
+    end
     u.nil? ? fail!("Invalid API Key") : success!(u)
   end
 

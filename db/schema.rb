@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131108172049) do
+ActiveRecord::Schema.define(:version => 20150402203356) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -136,6 +136,21 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
   add_index "help_requests", ["created_at"], :name => "index_help_requests_on_created_at"
   add_index "help_requests", ["user_id"], :name => "index_help_requests_on_user_id"
 
+  create_table "item_records", :force => true do |t|
+    t.string   "pid",             :null => false
+    t.string   "af_model"
+    t.string   "owner"
+    t.integer  "bytes"
+    t.string   "mimetype"
+    t.string   "parent"
+    t.string   "aggregation_key"
+    t.datetime "ingest_date"
+    t.datetime "modified_date"
+    t.string   "access_rights"
+  end
+
+  add_index "item_records", ["pid"], :name => "index_item_records_on_pid"
+
   create_table "local_authorities", :force => true do |t|
     t.string "name"
   end
@@ -243,13 +258,13 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
     t.datetime "updated_at",  :null => false
   end
 
-  create_table "species_taxon_entries", :force => true do |t|
+  create_table "species_taxon_entries", :id => false, :force => true do |t|
     t.string   "species_taxon_id"
     t.string   "term"
     t.string   "term_type"
-    t.text     "full_tree_id"
-    t.text     "facet_tree_id"
-    t.text     "facet_tree_term"
+    t.string   "full_tree_id"
+    t.string   "facet_tree_id"
+    t.string   "facet_tree_term"
     t.text     "term_synonyms"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
@@ -258,7 +273,6 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
   add_index "species_taxon_entries", ["species_taxon_id", "facet_tree_term"], :name => "entries_by_id_and_tree_term", :unique => true
   add_index "species_taxon_entries", ["species_taxon_id", "term"], :name => "entries_by_species_id_and_term", :unique => true
   add_index "species_taxon_entries", ["species_taxon_id", "term_synonyms"], :name => "entries_by_species_id_and_synonyms", :unique => true
-  add_index "species_taxon_entries", ["species_taxon_id"], :name => "entries_by_species_id", :unique => true
 
   create_table "subject_local_authority_entries", :force => true do |t|
     t.string   "label"
@@ -271,7 +285,7 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
   add_index "subject_local_authority_entries", ["lower_label"], :name => "entries_by_lower_label"
 
   create_table "subject_mesh_entries", :id => false, :force => true do |t|
-    t.string   "subject_mesh_term_id", :null => false
+    t.string   "subject_mesh_term_id"
     t.string   "term"
     t.text     "subject_description"
     t.datetime "created_at",           :null => false
@@ -299,6 +313,17 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
 
   add_index "trophies", ["user_id"], :name => "index_trophies_on_user_id"
 
+  create_table "usage_events", :force => true do |t|
+    t.string   "type",       :null => false
+    t.string   "pid",        :null => false
+    t.string   "ip_address"
+    t.string   "username"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "usage_events", ["pid"], :name => "index_usage_events_on_pid"
+
   create_table "users", :force => true do |t|
     t.string   "email",                      :default => "",    :null => false
     t.string   "encrypted_password",         :default => "",    :null => false
@@ -319,8 +344,10 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
     t.boolean  "agreed_to_terms_of_service", :default => false
     t.boolean  "admin",                      :default => false
     t.string   "uid"
+    t.string   "api_key"
   end
 
+  add_index "users", ["api_key"], :name => "index_users_on_api_key"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["uid"], :name => "index_users_on_uid", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username"
@@ -333,9 +360,5 @@ ActiveRecord::Schema.define(:version => 20131108172049) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
-
-  add_foreign_key "notifications", "conversations", :name => "notifications_on_conversation_id"
-
-  add_foreign_key "receipts", "notifications", :name => "receipts_on_notification_id"
 
 end

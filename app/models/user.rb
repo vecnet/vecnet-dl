@@ -12,6 +12,11 @@ class User < ActiveRecord::Base
   #attr_accessible :email, :remember_me, :username#, :password
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
   attr_accessible :uid
+  attr_accessible :api_key
+
+  def self.find_by_api_key(key)
+    User.where(api_key: key).limit(1).first
+  end
 
   def self.find_by_uid(uid)
     User.where(uid: uid).limit(1).first
