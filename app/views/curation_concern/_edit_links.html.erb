@@ -10,7 +10,9 @@
                 versions_curation_concern_generic_file_path(curation_concern),
                 { class: 'btn', title: "Rollback to previous version" }
         ) %>
-    <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this collection'), new_curation_concern_generic_file_path(curation_concern.batch.noid), class: 'btn' %>
+    <% unless curation_concern.batch.nil? -%>
+      <%= link_to raw('<i class="icon-plus-sign"></i> Add file to this collection'), new_curation_concern_generic_file_path(curation_concern.batch.noid), class: 'btn' %>
+    <% end -%>
   <% end -%>
   </p>
 <% end -%>

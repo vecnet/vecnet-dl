@@ -32,7 +32,6 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
 
-  tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.noid })
   tag_each(xml, "dc:access.read.group", curation_concern.read_groups)
   tag_each(xml, "dc:access.read.person", curation_concern.read_users)
   tag_each(xml, "dc:access.edit.group", curation_concern.edit_groups)
@@ -40,6 +39,8 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 
   tag_each(xml, "dc:format", curation_concern.mime_type)
   xml.tag!("vn:filename", curation_concern.filename)
+
+  tag_each(xml, "vn:related_files", curation_concern.related_files.map { |gf| gf.noid })
 
   full_text = curation_concern.get_full_text
   xml.tag!("full_text", full_text) if full_text
