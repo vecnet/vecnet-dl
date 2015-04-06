@@ -254,6 +254,13 @@ class CitationIngestService
       s = File.join(path, fname)
       return s if ::File.exists?(s)
     end
+    # sometimes the files have a colon in the name ':', but the
+    # filename in the record has the colon double escaped, so
+    # after the first unescaping it is still '%3A'
+    if fname =~ /%3A/
+      alternate_fname = fname.gsub('%3A', ':')
+      return resolve_pdf_path(alternate_fname)
+    end
     output "Could not locate file #{fname} in paths #{pdf_paths.inspect}"
     nil
   end
