@@ -1,11 +1,22 @@
 module ApplicationHelper
   include GenericFileHelper
-  def construct_show_path(solr_document, options = {})
+  def construct_show_path(solr_document, options={})
+    noid = solr_document["noid_s"].first
     object_type = solr_document.fetch('has_model_s', [""]).first
     if object_type.end_with?("info:fedora/afmodel:Citation")
-      return citations_path(solr_document[:noid_s].first)
+      citations_path(noid)
     else
-      return files_path(solr_document[:noid_s].first)
+      files_path(noid)
+    end
+  end
+
+  def construct_show_url(solr_document, options={})
+    noid = solr_document["noid_s"].first
+    object_type = solr_document.fetch('has_model_s', [""]).first
+    if object_type.end_with?("info:fedora/afmodel:Citation")
+      citations_url(noid)
+    else
+      files_url(noid)
     end
   end
 
@@ -49,9 +60,9 @@ module ApplicationHelper
 
   def check_version?(curation_concern)
     if params.has_key?(:version)
-      return curation_concern.current_version_just_id == params[:version] ? true : false
+      curation_concern.current_version_just_id == params[:version]
     else
-      return true
+      true
     end
   end
 
