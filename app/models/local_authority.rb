@@ -107,44 +107,20 @@ class LocalAuthority
     end
   end
 
-  def self.entries_by_subject_mesh_term(model, term, query)
-    return if query.empty?
-    lowQuery = query.downcase
-    hits = []
-    logger.debug("Find by term: #{term.inspect}, model:#{model.inspect}")
-    puts"Find by term: #{term.inspect}, model:#{model.inspect}"
-# move lc_subject into it's own table since being part of the usual structure caused it to be too slow.
-# When/if we move to having multiple dictionaries for subject we will need to also do a check for the appropriate dictionary.
-    if (term == 'subject' && model == 'generic_files') # and local_authoritiy = lc_subject
-      logger.debug("Matched subject")
-      sql = SubjectMeshEntry.where("lower(term) like ?", "#{lowQuery}%").select("term, subject_mesh_term_id").limit(25).to_sql
-      SubjectMeshEntry.find_by_sql(sql).each do |hit|
-        hits << {:uri => hit.subject_mesh_term_id, :label => hit.term}
-      end
-    else
-      logger.debug("Else part --------- Find by term: #{term.inspect}, model:#{model.inspect}")
-      puts "---------ERROR-------"
-      dterm = DomainTerm.where(:model => model, :term => term).first
-      if dterm
-        authorities = dterm.local_authorities.collect(&:id).uniq
-        sql = LocalAuthorityEntry.where("local_authority_id in (?)", authorities).where("lower(label) like ?", "#{lowQuery}%").select("label, uri").limit(25).to_sql
-        LocalAuthorityEntry.find_by_sql(sql).each do |hit|
-          hits << {:uri => hit.uri, :label => hit.label}
-        end
-      end
+  def self.entries_by_subject_mesh_term(query)
+    return [] if query.empty?
+    sql = SubjectMeshEntry.where("lower(term) like ?", "#{query.downcase}%").select("term, subject_mesh_term_id").limit(25).to_sql
+    SubjectMeshEntry.find_by_sql(sql).map do |hit|
+      {:uri => hit.subject_mesh_term_id, :label => hit.term}
     end
-    return hits
   end
 
-  def self.entries_by_species(term, query)
-    return if query.empty?
-    term_types=["species", "species group", "species subgroup", "subspecies"]
-    lowQuery = query.downcase
-    hits = []
-    sql = NcbiSpeciesTerm.where("term_type in (?) and lower(term) like ?", term_types, "#{lowQuery}%").select("term, species_taxon_id").limit(25).to_sql
-    NcbiSpeciesTerm.find_by_sql(sql).each do |hit|
-      hits << {:uri => hit.species_taxon_id, :label => hit.term}
+  def self.entries_by_species(query)
+    return [] if query.empty?
+    term_types = ["species", "species group", "species subgroup", "subspecies"]
+    sql = NcbiSpeciesTerm.where("term_type in (?) and lower(term) like ?", term_types, "#{query.downcase}%").select("term, species_taxon_id").limit(25).to_sql
+    NcbiSpeciesTerm.find_by_sql(sql).map do |hit|
+      {:uri => hit.species_taxon_id, :label => hit.term}
     end
-    return hits
   end
 end

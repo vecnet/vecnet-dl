@@ -32,7 +32,6 @@
 //= require manage_repeating_fields
 //= require toggle_details
 //= require help_modal
-//= require auto_complete
 //= require icon_toggle
 //= require permissions
 //= require blacklight/hierarchy/hierarchy

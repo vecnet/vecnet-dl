@@ -9,12 +9,12 @@ class AuthoritiesController < ApplicationController
     when "location"
       hits = GeoNamesResource.find_location(s)
     when "species"
-      hits = LocalAuthority.entries_by_species(params[:term], s) #rescue []
+      hits = LocalAuthority.entries_by_species(s)
     when "subject"
-      hits = LocalAuthority.entries_by_subject_mesh_term(params[:model], params[:term], s) #rescue []
+      hits = LocalAuthority.entries_by_subject_mesh_term(s)
     else
       hits = []
     end
-    render :json=>hits
+    render json: hits
   end
 end

@@ -30,7 +30,7 @@ Vecnet.get_autocomplete_opts=function(field) {
 	var autocomplete_opts = {
 		minLength: 2,
 		source: function( request, response ) {
-			$.getJSON( "/authorities/generic_files/" + field, {
+			$.getJSON( "/authorities/" + field, {
 				q: request.term
 			}, response );
 		},
