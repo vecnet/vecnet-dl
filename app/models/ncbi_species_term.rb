@@ -22,6 +22,14 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     NcbiSpeciesTerm.where("term_type in (?) and lower(term) in ( ?)", term_types, terms.collect{|term|term.downcase}).all
   end
 
+  def self.get_species_faceting(terms)
+    ncbi_species = self.get_species_term(terms)
+    all_trees = ncbi_species.map do |s|
+      s.get_solr_hierarchy_from_tree.flatten
+    end
+    all_trees.flatten
+  end
+
 
   def self.load_from_tree_file(tree_filename)
     entries = []
@@ -73,18 +81,18 @@ class NcbiSpeciesTerm < ActiveRecord::Base
   end
 
   def get_solr_hierarchy_from_tree
-    hierarchies = [];
-    depth = facet_tree_term.count-1
+    hierarchies = []
+    depth = facet_tree_term.count - 1
     tree_to_solrize = facet_tree_term
-    current_hierarchy = tree_to_solrize.join(':');
+    current_hierarchy = tree_to_solrize.join(':')
     loop do
       #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
       hierarchies << "#{current_hierarchy}"
       current_hierarchy = current_hierarchy.rpartition(':').first
-      depth= depth.to_i-1
+      depth = depth.to_i - 1
       break if current_hierarchy.empty?
     end
-    return hierarchies.reverse;
+    hierarchies.reverse
   end
 
   class TreeTransform

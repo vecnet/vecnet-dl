@@ -123,4 +123,41 @@ class LocalAuthority
       {:uri => hit.species_taxon_id, :label => hit.term}
     end
   end
+
+  def self.geonames_hierarchical_faceting(locations)
+    # TODO: please make this better
+    return nil if locations.blank?
+    geoname_id_hash = LocationHierarchyServices.get_geoname_ids(locations)
+    location_tree_to_solrize = geoname_id_hash.each do |location, geoname_id|
+      hierarchy = GeonameHierarchy.find_by_geoname_id(geoname_id)
+      hierarchy_with_earth = ''
+      if hierarchy && hierarchy.hierarchy_tree_name.present?
+        hierarchy_with_earth = hierarchy.hierarchy_tree_name
+      else
+        tree_id, tree_name = LocationHierarchyServices.find_hierarchy(geoname_id)
+        hierarchy_with_earth = tree_name
+      end
+      hierarchy_with_earth.gsub(';', ':').gsub('Earth:', '')
+    end
+    location_tree_to_solrize.collect do |tree|
+      LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)
+    end.flatten
+  end
+
+  def self.mesh_hierarchical_faceting(terms)
+    self.mesh_trees(terms).flatten
+  end
+
+  private
+
+  def self.mesh_trees(subjects)
+    all_trees = []
+    subjects.each do |sub|
+      mesh_subject = SubjectMeshEntry.find_by_term(sub)
+      if mesh_subject
+        all_trees << mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+      end
+    end
+    all_trees
+  end
 end

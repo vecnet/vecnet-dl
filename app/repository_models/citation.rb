@@ -52,13 +52,14 @@ class Citation < ActiveFedora::Base
 
   def to_solr(solr_doc={}, opts={})
     super(solr_doc, opts)
-    solr_doc["hierarchy_facet"] = get_hierarchical_faceting_on_subject(self.subject)
-    solr_doc["species_hierarchy_facet"] = get_hierarchical_faceting_on_species
-    solr_doc["subject_parents_t"] = get_subject_parents(self.subject)
+    solr_doc["hierarchy_facet"] = LocalAuthority.mesh_hierarchical_faceting(self.subject)
+    solr_doc["species_hierarchy_facet"] = NcbiSpeciesTerm.get_species_faceting((species.to_a + (subject || [])).uniq)
+    # is this field needed?
+    # solr_doc["subject_parents_t"] = XXXXXX get_subject_parents(self.subject)
     solr_doc["pub_dt"] = get_formated_date_created(self.date_created)
     solr_doc["pub_date"] = get_formated_date_created(self.date_created)
     solr_doc["title_alpha_sort"] = concat_title
-    solr_doc["location_hierarchy_facet"] = get_hierarchy_on_location(self.based_near)
+    solr_doc["location_hierarchy_facet"] = LocalAuthority.geonames_hierarchical_faceting(self.based_near)
     #Temp solr fields for location until we fix geoname autocomplete
     solr_doc["location_facet"] = locations
     solr_doc["location_display"] = locations
