@@ -39,7 +39,7 @@ Vecnet::Application.routes.draw do
   match "downloads/:id/(:version)" => "downloads#show", via: :get, as: "download"
 
   # Authority vocabulary queries route
-  match 'authorities/:model/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
+  match 'authorities/:term' => 'authorities#query', :via=> :get, :as=>'authority_query'
   root to: 'catalog#index'
 
   match "harvest" => "harvest#show"
