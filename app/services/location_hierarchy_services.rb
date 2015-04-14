@@ -5,6 +5,7 @@ class LocationHierarchyServices
     @earth = '6295630'
   end
 
+  # import a geoname hierarchy file into our database
   def process_all_geoname_hierachy
     File.open(@file) do |f|
       f.each_line do |line|
@@ -24,10 +25,12 @@ class LocationHierarchyServices
     end
   end
 
+  # convert a tree notation (e.g. "123.345.677") into place names
+  # (e.g. "Earth;Asia;Japan")
   def eval_tree(tree)
-    geoname_ids=tree.split('.')
-    geonames = geoname_ids.map{|id| Geoname.find(id).name}
-    return geonames.join(';')
+    geoname_ids = tree.split('.')
+    geonames = geoname_ids.map { |id| Geoname.find(id).name }
+    geonames.join(';')
   end
 
   #Yet to create this service
@@ -47,15 +50,16 @@ class LocationHierarchyServices
     return tree_id, tree_names
   end
 
+  # convert a list of location names into a hash
+  # mapping location name to geoname id
   def self.get_geoname_ids(locations)
+    return {} if locations.blank?
     geonames_ids = {}
-    unless locations.blank?
-      locations.each do |location|
-        id = self.location_to_geonameid(location)
-        geonames_ids[location] = id if id
-      end
+    locations.each do |location|
+      id = self.location_to_geonameid(location)
+      geonames_ids[location] = id if id
     end
-    return geonames_ids
+    geonames_ids
   end
 
   def self.geoname_location_format(location)
@@ -90,10 +94,13 @@ class LocationHierarchyServices
         CacheGeonameSearch.find_or_create(location, result[:value])
         return result[:value]
       end
+      # what is the point of this return?!? why use a loop if we only
+      # ever look at the first item in `hits`?
       return nil
     end
     # now look for something with the same place name
     # This does not try to find the most specific place with the name, though
+    # if we are here then hits is empty list. (otherwise we would have returned above
     hits.each do |result|
       result_place = result[:label].split(",").first
       if result_place == q

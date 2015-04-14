@@ -16,6 +16,18 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     end
   end
 
+  def self.get_term_info(term)
+    terms = get_species_term([term])
+    return {} if terms.empty? || terms.length > 1
+    t = terms.first
+    {
+      id: t.species_taxon_id,
+      term: t.term,
+      tree: t.full_tree_id,
+      hierarchy: t.get_solr_hierarchy_from_tree.flatten,
+    }
+  end
+
   def self.get_species_term(terms)
     #ignore case
     term_types=["species", "species group", "species subgroup", "subspecies"]
@@ -55,6 +67,8 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     NcbiSpeciesTerm.import [:species_taxon_id, :term, :term_type, :full_tree_id], entries
   end
 
+  # the block sets parameters on `tt` describing which subtrees we want
+  # to keep, which to prune, and which levels to collapse
   def self.generate_facet_treenumbers(&block)
     tt = TreeTransform.new
     yield tt
@@ -81,18 +95,11 @@ class NcbiSpeciesTerm < ActiveRecord::Base
   end
 
   def get_solr_hierarchy_from_tree
-    hierarchies = []
-    depth = facet_tree_term.count - 1
     tree_to_solrize = facet_tree_term
-    current_hierarchy = tree_to_solrize.join(':')
-    loop do
-      #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
-      hierarchies << "#{current_hierarchy}"
-      current_hierarchy = current_hierarchy.rpartition(':').first
-      depth = depth.to_i - 1
-      break if current_hierarchy.empty?
+    hierarchies = tree_to_solrize.each_with_index.map do |_, i|
+      tree_to_solrize[0..i].join(':')
     end
-    hierarchies.reverse
+    hierarchies
   end
 
   class TreeTransform

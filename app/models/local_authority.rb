@@ -128,7 +128,7 @@ class LocalAuthority
     # TODO: please make this better
     return nil if locations.blank?
     geoname_id_hash = LocationHierarchyServices.get_geoname_ids(locations)
-    location_tree_to_solrize = geoname_id_hash.each do |location, geoname_id|
+    location_tree_to_solrize = geoname_id_hash.map do |location, geoname_id|
       hierarchy = GeonameHierarchy.find_by_geoname_id(geoname_id)
       hierarchy_with_earth = ''
       if hierarchy && hierarchy.hierarchy_tree_name.present?
@@ -139,9 +139,20 @@ class LocalAuthority
       end
       hierarchy_with_earth.gsub(';', ':').gsub('Earth:', '')
     end
-    location_tree_to_solrize.collect do |tree|
+    location_tree_to_solrize.map do |tree|
       LocationHierarchyServices.get_solr_hierarchy_from_tree(tree)
     end.flatten
+  end
+
+  def self.mesh_term_info(term)
+    subject = SubjectMeshEntry.find_by_term(term)
+    return {} if subject.nil?
+    {
+      id: subject.subject_mesh_term_id,
+      term: subject.term,
+      tree: subject.mesh_tree_structures,
+      hierarchy: mesh_subject.mesh_tree_structures.map(&:get_solr_hierarchy_from_tree).flatten
+    }
   end
 
   def self.mesh_hierarchical_faceting(terms)
@@ -155,7 +166,7 @@ class LocalAuthority
     subjects.each do |sub|
       mesh_subject = SubjectMeshEntry.find_by_term(sub)
       if mesh_subject
-        all_trees << mesh_subject.mesh_tree_structures.collect{|tree| tree.get_solr_hierarchy_from_tree}.flatten
+        all_trees << mesh_subject.mesh_tree_structures.map(&:get_solr_hierarchy_from_tree).flatten
       end
     end
     all_trees

@@ -3,7 +3,7 @@ class MeshTreeStructure < ActiveRecord::Base
   attr_accessible :subject_mesh_term_id, :tree_structure, :eval_tree_path
 
   serialize :eval_tree_path
-  
+
   def self.get_term(mesh_tree)
     SubjectMeshEntry.where(:subject_mesh_term_id=> 
                                             MeshTreeStructure.where('mesh_tree_structures.tree_structure' => mesh_tree).map(&:subject_mesh_term_id)
@@ -45,26 +45,19 @@ class MeshTreeStructure < ActiveRecord::Base
   end
 
   def classify_tree!
-    unless classify_tree.empty?
-      tree_path=classify_tree.join('|')
-      puts "After Join #{tree_path.inspect}"
-      update_attribute(:eval_tree_path, tree_path)
-    end
+    return if classify_tree.empty?
+    tree_path = classify_tree.join('|')
+    update_attribute(:eval_tree_path, tree_path)
   end
 
   def get_solr_hierarchy_from_tree
-    hierarchies = [];
-    depth = eval_tree_path.count-1
-    tree_to_solrize = eval_tree_path.count>3 ? eval_tree_path[2..-1] : eval_tree_path
-    current_hierarchy = tree_to_solrize.join(':');
-    loop do
-      #puts "Depth: #{depth.inspect}, Push: #{current_hierarchy.inspect}"
-      hierarchies << "#{current_hierarchy}"
-      current_hierarchy = current_hierarchy.rpartition(':').first
-      depth= depth.to_i-1
-      break if current_hierarchy.empty?
+    tree_to_solrize = eval_tree_path
+    # if tree is too deep, just use the tail
+    tree_to_solrize = tree_to_solrize[2..-1] if tree_to_solrize.count > 3
+    hierarchies = tree_to_solrize.each_with_index.map do |_, i|
+      tree_to_solrize[0..i].join(':')
     end
-    return hierarchies.reverse;
+    hierarchies
   end
 
   #private
