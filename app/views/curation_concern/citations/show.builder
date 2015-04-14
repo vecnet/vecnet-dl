@@ -7,12 +7,12 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   xml.tag!("vn:content_version", curation_concern.current_version_just_id)
   tag_each(xml, "dc:identifier", curation_concern.identifier)
   xml.tag!("vn:model", curation_concern.class)
-  xml.tag!("vn:purl", polymorphic_url([:curation_concern, curation_concern]))
+  xml.tag!("vn:purl", citations_url(curation_concern.noid))
 
   xml.tag!("vn:depositor", curation_concern.depositor)
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
   xml.tag!("dc:date_modified", curation_concern.date_modified)
-  xml.tag!("vn:thumbnail", curation_concern.thumbnail_noid) if curation_concern.thumbnail_noid
+  xml.tag!("vn:thumbnail", download_url(curation_concern.thumbnail_noid, {datastream_id: 'thumbnail'})) if curation_concern.thumbnail_noid
 
   xml.tag!("dc:title", curation_concern.title)
 
@@ -32,7 +32,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
   tag_each(xml, "dc:source", curation_concern.source)
-  tag_each(xml, "dc:BibliographicCitation", curation_concern.bibliographic_citation)
+  tag_each(xml, "dc:bibliographicCitation", curation_concern.bibliographic_citation)
 
   tag_each(xml, "dc:access.read.group", curation_concern.read_groups)
   tag_each(xml, "dc:access.read.person", curation_concern.read_users)

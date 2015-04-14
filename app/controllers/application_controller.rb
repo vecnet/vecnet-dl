@@ -5,6 +5,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :user_signed_in?, :user_login_url, :user_logout_url
 
+  unless Rails.env.development?
+    def default_url_options(options={})
+      { protocol: 'https' }
+    end
+  end
+
   def decode_user_if_pubtkt_present
     # use authenticate instead of authenticate! since we
     # do not raise an error if there is a problem with the pubtkt.

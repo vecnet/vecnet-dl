@@ -23,7 +23,6 @@ class NcbiSpeciesTerm < ActiveRecord::Base
     {
       id: t.species_taxon_id,
       term: t.term,
-      tree: t.full_tree_id,
       hierarchy: t.get_solr_hierarchy_from_tree.flatten,
     }
   end

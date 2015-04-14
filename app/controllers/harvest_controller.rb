@@ -7,6 +7,10 @@ class HarvestController < ApplicationController
     # Could (Should?) export more items such as CitationFiles, Collections,
     # etc.
     #
+    # We are using `desc_metadata__date_modified_dt` instead of
+    # `system_modified_dt` since the latter changes if we reindex solr, but we
+    # really only care if the underlying record is changed.
+    #
     # BUG: we are not filtering by the user's groups
     since = params[:since]
     fq = []
@@ -37,6 +41,7 @@ class HarvestController < ApplicationController
     end
 
     result = docs.map do |doc|
+      next if doc["noid_s"].nil?
       { "url" => construct_show_url(doc),
         "last_modified" => doc["desc_metadata__date_modified_dt"]
       }

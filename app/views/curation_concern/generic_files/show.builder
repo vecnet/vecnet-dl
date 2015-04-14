@@ -12,7 +12,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   xml.tag!("vn:depositor", curation_concern.depositor)
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
   xml.tag!("dc:date_modified", curation_concern.date_modified)
-  xml.tag!("vn:thumbnail", curation_concern.thumbnail_noid)
+  xml.tag!("vn:thumbnail", download_url(curation_concern.thumbnail_noid, {datastream_id: 'thumbnail'})) if curation_concern.thumbnail_noid
 
   xml.tag!("dc:title", curation_concern.title)
 
@@ -31,6 +31,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   tag_each(xml, "dc:temporal", curation_concern.temporal)
   tag_each(xml, "dc:type", curation_concern.resource_type)
   tag_each(xml, "dwc:scientificName", curation_concern.species)
+  tag_each(xml, "vn:schema_version", curation_concern.conforms_to)
 
   tag_each(xml, "dc:access.read.group", curation_concern.read_groups)
   tag_each(xml, "dc:access.read.person", curation_concern.read_users)
