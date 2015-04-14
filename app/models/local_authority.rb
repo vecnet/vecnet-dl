@@ -151,7 +151,7 @@ class LocalAuthority
       id: subject.subject_mesh_term_id,
       term: subject.term,
       tree: subject.mesh_tree_structures,
-      hierarchy: mesh_subject.mesh_tree_structures.map(&:get_solr_hierarchy_from_tree).flatten
+      hierarchy: subject.mesh_tree_structures.map(&:get_solr_hierarchy_from_tree).flatten
     }
   end
 
