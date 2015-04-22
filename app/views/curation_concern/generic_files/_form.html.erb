@@ -1,7 +1,7 @@
 <%= simple_form_for [:curation_concern, curation_concern] do |f| -%>
     <% if f.error_notification -%>
         <div class="alert alert-error fade in">
-          There was a problem with your submission. Please review the errors below:
+          There was a problem with your submission. Please review the errors below.
           <a class="close" data-dismiss="alert" href="#">&times;</a>
         </div>
     <% end -%>
@@ -10,10 +10,10 @@
       <% if curation_concern.persisted? -%>
         <legend>
           Upload New Version
-          <small>Optinally upload a new version of this file.</small>
+          <small>Optionally upload a new version of this file.</small>
         </legend>
       <% end -%>
-     <%= f.input :file,
+      <%= f.input :file,
                   as: :file,
                   label: "Upload Files",
                   hint: help_icon("You can roll back to an older version on the item's info page")
@@ -22,8 +22,9 @@
 
     <fieldset>
       <legend>Metadata
-        <small>Descriptive Metadata for this item.</legend>
-        <%= render "/curation_concern/attribute_field", curation_concern: curation_concern, f: f %>
+        <small>Descriptive Metadata for this item.</small>
+      </legend>
+      <%= render "/curation_concern/attribute_field", curation_concern: curation_concern, f: f %>
     </fieldset>
 
     <%= render '/curation_concern/content_license', curation_concern: curation_concern, f: f %>
@@ -33,7 +34,7 @@
       <div class="span12 form-actions">
         <%= button_tag(type: 'submit', class: "btn btn-primary") do %>
             <i class="icon-save"></i> Save
-        <% end %>
+        <% end -%>
         <%= link_to 'Cancel', dashboard_index_path, class: 'btn btn-link' %>
       </div>
     </div>
