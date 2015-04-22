@@ -235,7 +235,7 @@ before 'deploy', 'env:set_paths'
 #############################################################
 
 set :application, 'vecnet-dl'
-set :repository,  "git://github.com/vecnet/vecnet-dl.git"
+set :repository,  "git@github.com:vecnet/vecnet-dl.git"
 set :build_identifier, Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
 #############################################################
