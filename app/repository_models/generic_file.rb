@@ -80,16 +80,6 @@ class GenericFile
     return solr_doc
   end
 
-  def rights_english
-    [self.rights].flatten.compact.map do |right|
-      if right.start_with?("http")
-        license = Sufia.config.cc_licenses.key(right)
-        right = "#{license}, #{right}" unless license.nil?
-      end
-      right
-    end
-  end
-
   def locations
     locations = self.based_near
     locations.map{ |loc| refactor_location(loc) }

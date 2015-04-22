@@ -9,7 +9,6 @@
     collection: Sufia::Engine::config.cc_licenses,
     input_html: {  :size=>7, :multiple => true, :class=>'input-xxlarge'},
     hint: help_icon('rights'),
-    selected:Sufia::Engine::config.cc_licenses["All rights reserved"]
+    selected: curation_concern.rights
   %>
-
 </fieldset>

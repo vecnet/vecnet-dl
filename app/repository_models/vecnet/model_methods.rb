@@ -13,5 +13,17 @@ module Vecnet
       @pub_date_sort=pub_date_replace.split('.').size> 1? Chronic.parse(pub_date) : Date.strptime(pub_date,'%Y')
       return @pub_date_sort.to_time.utc.iso8601 unless @pub_date_sort.blank?
     end
+
+
+    def rights_english
+      [self.rights].flatten.compact.map do |right|
+        if right.start_with?("http")
+          license_name = Sufia.config.cc_licenses.key(right)
+          right = "#{license_name} [#{right}]" unless license_name.nil?
+        end
+        right
+      end
+    end
+
   end
 end
