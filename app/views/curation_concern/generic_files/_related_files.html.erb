@@ -16,9 +16,9 @@
       <td class="attribute title">
       <% if can?(:read, related_file) -%>
         <%= link_to related_file, polymorphic_path([:curation_concern, related_file]) %>
-      <% else %>
+      <% else -%>
         <%= related_file %>
-      <% end %>
+      <% end -%>
       </td>
       <td class="attribute date_uploaded"><%= related_file.date_uploaded %></td>
       <td class="attribute permission"><%= link_to_edit_permissions(related_file) %></td>

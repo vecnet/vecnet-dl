@@ -3,19 +3,6 @@
   <tbody>
     <%= curation_concern_attribute_to_html(curation_concern, :depositor, "Depositor") %>
     <tr>
-      <th>Date Uploaded</th>
-      <td><%= curation_concern.date_uploaded %></td>
-    </tr>
-    <tr>
-      <th>Date Modified</th>
-      <td><%= curation_concern.date_modified %></td>
-    </tr>
-    <tr>
-      <th>Audit Status</th>
-      <%# stat= curation_concern.audit_stat(false)  -%>
-      <td> <%# (stat == 1 ? 'passing' : (stat == 0 ? 'failing' : stat)) %></td>
-    </tr>
-    <tr>
       <th>Access Control</th>
       <td>
         <% if can? :edit, curation_concern -%>
@@ -24,9 +11,9 @@
           <%= permission_badge_for(curation_concern) %>
         <% end -%>
         <br/>
-        <%= "Read Only: #{(curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe}" %>
+        Read Only: <%= (curation_concern.read_users + curation_concern.read_groups).sort.join(", ").html_safe %>
         <br />
-        <%= "Read and Edit: #{(curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe}" %>
+        Read and Edit: <%= (curation_concern.edit_users + curation_concern.edit_groups).sort.join(", ").html_safe %>
       </td>
     </tr>
     <tr>

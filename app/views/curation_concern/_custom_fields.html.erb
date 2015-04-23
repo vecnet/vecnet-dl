@@ -1,3 +1,5 @@
 <%= curation_concern_attribute_to_html(curation_concern, :conforms_to, 'Required Schema Version', include_empty: false) %>
 <%= curation_concern_attribute_to_html(curation_concern, :noid, 'ID', include_empty: true) %>
 <%= custom_value_to_html(curation_concern, 'ID With Version', include_empty: true) %>
+<%= curation_concern_attribute_to_html(curation_concern, :date_uploaded, 'Record Created', include_empty: true) %>
+<%= curation_concern_attribute_to_html(curation_concern, :date_modified, 'Record Modifed', include_empty: true) %>
