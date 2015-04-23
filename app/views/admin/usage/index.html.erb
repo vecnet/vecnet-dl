@@ -1,0 +1,25 @@
+<table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>PID</th>
+      <th>Parent PID</th>
+      <th>User</th>
+      <th>IP</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <% @events.each do |event| -%>
+    <tr>
+      <td><%= event.event %></td>
+      <td><%= event.pid %></td>
+      <td><%= event.parent_pid %></td>
+      <td><%= event.username %></td>
+      <td><%= event.ip_address %></td>
+      <td><%= event.event_time %></td>
+    </tr>
+  <% end -%>
+  </tbody>
+</table>
