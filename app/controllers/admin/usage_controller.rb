@@ -2,7 +2,7 @@ module Admin
   class UsageController < ApplicationController
 
     def index
-      @events = UsageEvent.order("event_time").limit(20)
+      @events = UsageEvent.order("event_time DESC").limit(20)
     end
 
   end
