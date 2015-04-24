@@ -3,7 +3,6 @@ class UsageEvent < ActiveRecord::Base
   # The event field is a free-for-all. These events are currently defined.
   #
   #  `view`     for an html view of an item show page
-  #  `api`      for a xml or json view of an item show page
   #  `download` for a download of an item's content. Does not include
   #             thumbnail downloads.
   #
