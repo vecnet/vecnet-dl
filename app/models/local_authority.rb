@@ -124,8 +124,19 @@ class LocalAuthority
     end
   end
 
+  def self.geonames_term_info(location)
+    geoid = LocationHierarchyServices.location_to_geonameid(location)
+    return {} if geoid.nil?
+    hier = self.geonames_hierarchical_faceting([location])
+    {
+      id: geoid,
+      term: location,
+      hierarchy: hier
+    }
+  end
+
   def self.geonames_hierarchical_faceting(locations)
-    # TODO: please make this better
+    # TODO: please make this better. I have no idea what is happening
     return nil if locations.blank?
     geoname_id_hash = LocationHierarchyServices.get_geoname_ids(locations)
     location_tree_to_solrize = geoname_id_hash.map do |location, geoname_id|

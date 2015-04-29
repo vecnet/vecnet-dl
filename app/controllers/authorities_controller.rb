@@ -17,7 +17,7 @@ class AuthoritiesController < ApplicationController
     when "species-info"
       hits = NcbiSpeciesTerm.get_term_info(s)
     when "location-info"
-      hits = LocalAuthority.geonames_hierarchical_faceting([s])
+      hits = LocalAuthority.geonames_term_info(s)
     else
       hits = []
     end
