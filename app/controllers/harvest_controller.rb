@@ -1,21 +1,37 @@
 class HarvestController < ApplicationController
   include ApplicationHelper
 
+  # these need to be ordered from longest to shortest (see logic below)
+  DATE_FORMATS = ['%Y-%m-%dT%H:%M:%S',
+                  '%Y-%m-%dT%H:%M',
+                  '%Y-%m-%dT%H',
+                  '%Y-%m-%d',
+                  '%Y-%m',
+                  '%Y'].freeze
+
   def show
     # Generate a complete list of resources, based on who the user is
     # For now only exports Citations and GenericFiles.
     # Could (Should?) export more items such as CitationFiles, Collections,
     # etc.
     #
-    # We are using `desc_metadata__date_modified_dt` instead of
-    # `system_modified_dt` since the latter changes if we reindex solr, but we
-    # really only care if the underlying record is changed.
+    # We would use `desc_metadata__date_modified_dt` but it only has date
+    # grainularity. Instead we use `system_modified_dt`, which is the time
+    # the _solr_ record was last updated.
     #
     # BUG: we are not filtering by the user's groups
     since = params[:since]
+    dt = nil
+    unless since.nil?
+      DATE_FORMATS.each do |format|
+        dt = try_parse_time(since, format)
+        break unless dt.nil?
+      end
+    end
+
     fq = []
-    if since =~ /\A\d{4}-\d{2}-\d{2}\Z/
-      fq << "desc_metadata__date_modified_dt:[#{since}T00:00:00Z TO NOW]"
+    unless dt.nil?
+      fq << "system_modified_dt:[" + dt.strftime('%Y-%m-%dT%H:%M:%S') + "Z TO NOW]"
     end
     fq << "-has_model_s:\"info:fedora/afmodel:Collection\""
     fq << "-has_model_s:\"info:fedora/afmodel:Batch\""
@@ -29,9 +45,9 @@ class HarvestController < ApplicationController
         #raw: true,
         rows: 1000,
         start: start,
-        fl: 'id,noid_s,desc_metadata__date_modified_dt,has_model_s',
+        fl: 'id,noid_s,system_modified_dt,has_model_s',
         fq: fq.join(" "),
-        sort: 'desc_metadata__date_modified_dt asc'
+        sort: 'system_modified_dt asc'
       }
       start += 1000
 
@@ -43,10 +59,16 @@ class HarvestController < ApplicationController
     result = docs.map do |doc|
       next if doc["noid_s"].nil?
       { "url" => construct_show_url(doc),
-        "last_modified" => doc["desc_metadata__date_modified_dt"]
+        "last_modified" => doc["system_modified_dt"]
       }
     end
 
     render json: result
+  end
+
+  def try_parse_time(input, format)
+    DateTime.strptime(input, format)
+  rescue ArgumentError
+    nil
   end
 end
