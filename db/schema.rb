@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150423161001) do
+ActiveRecord::Schema.define(:version => 20150428202149) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -147,6 +147,8 @@ ActiveRecord::Schema.define(:version => 20150423161001) do
     t.datetime "ingest_date"
     t.datetime "modified_date"
     t.string   "access_rights"
+    t.string   "resource_type"
+    t.datetime "record_mod_date"
   end
 
   add_index "item_records", ["pid"], :name => "index_item_records_on_pid"

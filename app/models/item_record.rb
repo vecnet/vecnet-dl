@@ -7,7 +7,10 @@ class ItemRecord < ActiveRecord::Base
     :parent,
     :aggregation_key,
     :ingest_date,
-    :access_rights
+    :access_rights,
+    :record_mod_date,
+    :resource_type
+
 
   def self.find_or_create(pid)
     result = ItemRecord.where(pid: pid).first
