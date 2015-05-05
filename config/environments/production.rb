@@ -70,8 +70,8 @@ Vecnet::Application.configure do
 
   config.fits_path = '/opt/fits-0.8.0/fits.sh'
 
-  # XXX: the key will need to be changed
-  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(Rails.root.join('config/pubtkt-qa.pem')))
+  pubtkt_key_file = "this/will/be/replaced.pem"
+  config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(pubtkt_key_file))
   config.pubtkt_login_url =  'https://www.vecnet.org/index.php/sso-login'
   config.pubtkt_logout_url = 'https://www.vecnet.org/index.php/log-out'
 
