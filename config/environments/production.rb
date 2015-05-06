@@ -68,7 +68,7 @@ Vecnet::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  config.fits_path = '/opt/fits-0.8.0/fits.sh'
+  config.fits_path = '/opt/fits/fits.sh'
 
   pubtkt_key_file = "this/will/be/replaced.pem"
   config.pubtkt_public_key = OpenSSL::PKey.read(IO.read(pubtkt_key_file))
