@@ -3,13 +3,9 @@ require 'dcsv'
 class Temporal
   attr_reader :start_time, :end_time
   def initialize(start_time, end_time)
-    @start_time=start_time
-    @end_time=end_time
+    @start_time = start_time
+    @end_time = end_time
   end
-
-  #def encode(input)
-  #  input.to_s.gsub(/([=;])/) { "\\#{$1}" }
-  #end
 
   # takes an input hash or string and converts it
   # into the DCSV format. Returns a string.
@@ -42,9 +38,9 @@ class Temporal
   end
 
   # if s has the form
-  # YYYY(MM(DD)?)? (- (YYYY(MM(DD)?)?)?)?
+  # YYYY(-MM(-DD)?)? (--? (YYYY(-MM(-DD)?)?)?)?
   # or
-  # - YYYY(MM(DD)?)?
+  # - YYYY(-MM(-DD)?)?
   # returns a Temporal
   # otherwise returns nil
   #
@@ -54,25 +50,25 @@ class Temporal
   # Maybe if we wish to admit geoname ids as allowable locations for
   # the endnote ingest.
   #
-  # Subtle. ensure the string 2010-2011 is not matched as the 11th
+  # Subtle. Ensure the string 2010-2011 is not matched as the 11th
   # of the 20th month of 2010.
   def self.from_s(s)
     m = /\A\s*
       (\d{4}  # start year
-        (-\d{2})? # month
-        (-\d{2})? # day
+        (-\d{1,2})? # month
+        (-\d{1,2})? # day
       )\s*
       (--?\s*
         (\d{4} # end year
-          (-\d{2})? # month
-          (-\d{2})? # day
+          (-\d{1,2})? # month
+          (-\d{1,2})? # day
         )?
       )?\Z/x.match(s)
     if m.nil?
       m = /\A\s*--?\s*
         (\d{4} # end year
-          (-\d{2})? # month
-          (-\d{2})? # day
+          (-\d{1,2})? # month
+          (-\d{1,2})? # day
         )\Z/x.match(s)
       return nil if m.nil?
       start_time = nil
