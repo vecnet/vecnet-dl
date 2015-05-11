@@ -5,13 +5,14 @@ class SyncItemRecords
   GOOD_CLASSES = [Citation, GenericFile, CitationFile].freeze
 
   def self.sync
-    ActiveFedora::Base.find_each do |obj|
+    ActiveFedora::Base.find_each({}, {cast: true}) do |obj|
       next unless GOOD_CLASSES.include?(obj.class)
       r = ItemRecord.find_or_create(obj.noid)
       r.pid = obj.noid
       r.af_model = obj.class.to_s
       r.owner = obj.depositor
-      r.bytes = obj.size
+      # TODO: figure out how to get the size of an object
+      #r.bytes = obj.size
       r.mimetype = obj.file_format if obj.respond_to?(:file_format)
       r.parent = self.lookup_parent(obj)
       r.ingest_date = obj.date_uploaded
@@ -23,13 +24,13 @@ class SyncItemRecords
   end
 
   def self.decode_access_rights(obj)
-    return "public" if obj.read_groups.contains?("public")
-    return "vecnet" if obj.read_groups.contains?("registered")
+    return "public" if obj.read_groups.include?("public")
+    return "vecnet" if obj.read_groups.include?("registered")
     "private"
   end
 
   def self.lookup_parent(obj)
-    return obj.batch.pid if obj.class == CitationFile
-    id
+    return obj.batch.noid if obj.class == CitationFile
+    obj.noid
   end
 end

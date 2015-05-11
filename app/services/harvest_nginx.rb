@@ -3,7 +3,7 @@ class HarvestNginx
   # utility class to help with filtering out lines
   class LineRecord
     attr_accessor :ip, :event_time, :method, :path, :status, :agent,
-      :user, :event, :pid, :pubtkt, :agent
+      :user, :event, :pid, :pubtkt
 
     # save this as a UsageEvent in the database
     def save
@@ -15,6 +15,7 @@ class HarvestNginx
       ue.username = user
       ue.pid = pid
       ue.parent_pid = lookup_parent(pid)
+      ue.agent = agent
       ue.save
     end
 
@@ -29,7 +30,7 @@ class HarvestNginx
     # returns nil if the item is not in the DL.
     def lookup_parent(id)
       obj = ActiveFedora::Base.find("vecnet:" + id)
-      return obj.batch.pid if obj.class == CitationFile
+      return obj.batch.noid if obj.class == CitationFile
       id
     rescue
       nil
@@ -40,6 +41,7 @@ class HarvestNginx
     return unless r.status == "200"
     return unless r.method == "GET"
     return if r.agent =~ /(bot|spider|yahoo)/i
+    return if r.agent =~ /ruby/i    # our solr harvester agent
 
     # since all paths are rooted, the first index is always ""
     p = r.path.split('/')
@@ -59,12 +61,16 @@ class HarvestNginx
         r.event = "view"
         id = p[3]
       end
+    when "catalog" && p.length == 3
+      r.event = "view"
+      id = p[2]
     end
     return if id.nil?
-    r.pid = id
-
     # don't record API accesses
     return if id.end_with?("xml") || id.end_with?("json")
+    # remove any prefixes (they shouldn't be there, but make sure)
+    id.gsub!('vecnet:', '')
+    r.pid = id
     r.save
   end
 
