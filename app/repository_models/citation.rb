@@ -120,4 +120,9 @@ class Citation < ActiveFedora::Base
     gf.nil? ? nil : gf.noid
   end
 
+  # just the size of the citation obj, does not include its children
+  def size
+    self.datastreams.values.map(&:size).compact.sum
+  end
+
 end

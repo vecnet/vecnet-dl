@@ -11,8 +11,7 @@ class SyncItemRecords
       r.pid = obj.noid
       r.af_model = obj.class.to_s
       r.owner = obj.depositor
-      # TODO: figure out how to get the size of an object
-      #r.bytes = obj.size
+      r.bytes = obj.size
       r.mimetype = obj.file_format if obj.respond_to?(:file_format)
       r.parent = self.lookup_parent(obj)
       r.ingest_date = obj.date_uploaded
