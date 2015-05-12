@@ -5,18 +5,10 @@ module Admin
 
     def index
       # get result and repackage it as we intend to display it
-      if params[:start]
-        @start = Date.new(params[:start][:year].to_i, params[:start][:month].to_i, params[:start][:day].to_i)
-      else
-        @start = Date.today
-      end
-      if params[:end]
-        @end = Date.new(params[:end][:year].to_i, params[:end][:month].to_i, params[:end][:day].to_i)
-      else
-        @end = Date.today
-      end
+      @start = date_from_hash(params[:start])
+      @end = date_from_hash(params[:end])
       result = UsageEvent.resource_reporting(@start, @end)
-      result = result.group_by { |r| r["resource_type"] }
+               .group_by { |r| r["resource_type"] }
       @total = {"view" => 0, "download" => 0}
       @table = result.map do |type, data|
         r = {"view" => 0, "download" => 0}
@@ -31,6 +23,14 @@ module Admin
 
     def details
       @events = UsageEvent.order("event_time DESC").limit(200)
+    end
+
+    def date_from_hash(hash, default=nil)
+      return default if hash.nil?
+      return nil if hash[:year] == ""
+      hash[:month] = 1 if hash[:month] == ""
+      hash[:day] = 1 if hash[:day] == ""
+      Date.new(hash[:year].to_i, hash[:month].to_i, hash[:day].to_i)
     end
 
   end

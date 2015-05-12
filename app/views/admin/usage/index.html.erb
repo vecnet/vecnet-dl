@@ -9,7 +9,7 @@
   <%= label_tag :start, "Start Date" %>
   <%= select_date @start, {prefix: "start", include_blank: true} %>
   <%= label_tag :end, "End Date" %>
-  <%= select_date @end, prefix: "end" %>
+  <%= select_date @end, {prefix: "end", include_blank: true} %>
   <%= submit_tag "Update" %>
 <% end -%>
 

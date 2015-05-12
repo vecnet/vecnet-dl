@@ -34,11 +34,11 @@ class UsageEvent < ActiveRecord::Base
     start = self.format_date(start)
     stop = self.format_date(stop)
     if start && stop
-      sql += " WHERE event_time BETWEEN #{start} AND #{stop}"
+      sql += " WHERE event_time BETWEEN \"#{start}\" AND \"#{stop}\""
     elsif start
-      sql += " WHERE event_time >= #{start}"
+      sql += " WHERE event_time >= \"#{start}\""
     elsif stop
-      sql += " WHERE event_time <= #{stop}"
+      sql += " WHERE event_time <= \"#{stop}\""
     end
     sql += " GROUP BY resource_type, event;"
     result = ActiveRecord::Base.connection.execute(sql)
