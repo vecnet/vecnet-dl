@@ -1,1 +1,39 @@
-<%= render 'shared/event_list', events: @events %>
+<% title = "Event List Detail" -%>
+<% content_for :page_title, title -%>
+<% content_for :page_header do -%>
+  <h2><%= title %></h2>
+<% end -%>
+
+<%= form_tag "", method: "get" do %>
+  Time Period
+  <%= label_tag :start, "Start Date" %>
+  <%= select_date @start, {prefix: "start", include_blank: true} %>
+  <%= label_tag :end, "End Date" %>
+  <%= select_date @end, prefix: "end" %>
+  <%= submit_tag "Update" %>
+<% end -%>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Resource Type</th>
+      <th>Views</th>
+      <th>% Views</th>
+      <th>Downloads</th>
+      <th>% Downloads</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <% @table.each do |row| -%>
+    <tr>
+      <td><%= row[0] %></td>
+      <td><%= row[1]["view"] %></td>
+      <td><%= percent(row[1]["view"], @total["view"]) %></td>
+      <td><%= row[1]["download"] %></td>
+      <td><%= percent(row[1]["download"], @total["download"]) %></td>
+    </tr>
+  <% end -%>
+  </tbody>
+</table>
+

@@ -25,4 +25,28 @@ class UsageEvent < ActiveRecord::Base
   # updated_at fields.
   attr_accessible :event, :pid, :parent_pid, :ip_address,
                   :username, :event_time, :agent
+
+  def self.resource_reporting(start=nil, stop=nil)
+    sql = %(
+      SELECT resource_type, event, count(*) AS count
+      FROM usage_events
+      LEFT OUTER JOIN item_records ON usage_events.parent_pid = item_records.pid)
+    start = self.format_date(start)
+    stop = self.format_date(stop)
+    if start && stop
+      sql += " WHERE event_time BETWEEN #{start} AND #{stop}"
+    elsif start
+      sql += " WHERE event_time >= #{start}"
+    elsif stop
+      sql += " WHERE event_time <= #{stop}"
+    end
+    sql += " GROUP BY resource_type, event;"
+    result = ActiveRecord::Base.connection.execute(sql)
+  end
+
+  def self.format_date(d)
+    return d.strftime("%Y-%m-%d") if d.is_a?(Date)
+    return d if d =~ /\A\d{4}-\d{1,2}-\d{1,2}\Z/
+    nil
+  end
 end

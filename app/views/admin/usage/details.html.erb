@@ -1,0 +1,7 @@
+<% content_for :page_title, "Event List" -%>
+<% content_for :page_header do -%>
+  <h2>Event List</h2>
+<% end -%>
+
+<%= render 'shared/event_list', events: @events %>
+
