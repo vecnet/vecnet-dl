@@ -22,7 +22,16 @@ module Admin
     end
 
     def details
-      @events = UsageEvent.order("event_time DESC").limit(200)
+      @start = date_from_param(params[:start])
+      @end = date_from_param(params[:end])
+      @events = UsageEvent.order("event_time DESC")
+      if @start
+        @events = @events.where("event_time >= ?", @start)
+      end
+      if @end
+        @events = @events.where("event_time <= ?", @end)
+      end
+      @events = @events.limit(200)
     end
 
     def date_from_param(hash)
