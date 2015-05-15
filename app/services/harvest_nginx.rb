@@ -112,7 +112,7 @@ class HarvestNginx
 
     if state_fname
       File.open(state_fname, "w") do |f|
-        f.write(JSON.generate(ingested_files)
+        f.write(JSON.generate(ingested_files))
       end
     end
   end
