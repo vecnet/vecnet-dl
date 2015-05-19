@@ -100,11 +100,11 @@ class HarvestNginx
     # from the state_fname file
     past_files = []
     ingested_files = []
-    if state_fname
+    if state_fname && File.exist?(state_fname)
       past_files = JSON.parse(File.read(state_fname))
     end
 
-    Dir.glob(pattern) do |fname|
+    Dir.glob(File.join(dirname,pattern)) do |fname|
       ingested_files << fname
       next if past_files.include?(fname)
       self.parse_file_gz(fname)
