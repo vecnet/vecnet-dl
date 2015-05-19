@@ -16,8 +16,6 @@ if [ -e /etc/profile.d/chruby.sh ]; then
     source $app_root/script/get-env.sh
 fi
 
-# TODO: figure out which file is the new one
 export HARVEST_DIR=/var/log/nginx
-export HARVEST_STATE=/opt/vecnet-dl/shared/tmp/nginx-ingested
-
-bundle exec rake vecnet:usage:sync_fedora
+export HARVEST_STATE=$app_root/tmp/nginx-ingested
+bundle exec rake vecnet:usage:harvest_nginx
