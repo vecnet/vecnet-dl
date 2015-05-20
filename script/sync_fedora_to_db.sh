@@ -6,7 +6,7 @@ app_root=$(cd $(dirname $0)/.. && pwd)
 # This keeps a lot of harvest processes from spawning
 # should a paricular harvest take a long time.
 # The lock is released when this shell exits.
-exec 200> "$app_root/tmp/sync-fedora-to-db"
+exec 200> "$app_root/tmp/var/sync-fedora-to-db"
 flock -e --nonblock 200 || exit 0
 
 cd $app_root
