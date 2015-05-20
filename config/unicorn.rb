@@ -5,7 +5,7 @@
 rails_root = ENV["RAILS_ROOT"]
 working_directory rails_root
 worker_processes 2
-listen "/tmp/vecnet.sock.0", backlog: 1024
+listen "127.0.0.1:6000", backlog: 128
 timeout 30
 
 pid "#{rails_root}/tmp/pids/unicorn.pid"
