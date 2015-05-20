@@ -5,7 +5,8 @@ app_root=$(cd $(dirname $0)/.. && pwd)
 pid_file="$app_root/tmp/pids/unicorn.pid"
 
 if [ ! -e $pid_file ]; then
-	exit "Cannot find unicorn.pid"
+	echo "Cannot find unicorn.pid"
+	exit
 fi
 
 PID=$(cat $pid_file)
