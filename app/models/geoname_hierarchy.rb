@@ -8,8 +8,8 @@ class GeonameHierarchy < ActiveRecord::Base
     if hierarchy.nil?
       return GeonameHierarchy.create_from_attributes(geoname_id,tree)
     elsif ! tree.blank?
-      hierarchy.update_attributes!(hierarchy_tree: tree_ids,
-                            hierarchy_tree_name:eval_tree(tree_ids))
+      hierarchy.update_attributes!(hierarchy_tree: tree,
+                            hierarchy_tree_name:eval_tree(tree))
       hierarchy.save!
     end
     hierarchy
