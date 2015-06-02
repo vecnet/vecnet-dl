@@ -253,7 +253,7 @@ def common_setup
     config/redis.yml
     config/pubtkt-qa.pem
   )
-  set :branch,      fetch(:branch, 'master')
+  set :branch,      fetch(:branch, 'old-master')
   set :deploy_to,   '/home/app/vecnet'
   set :ruby_bin,    '/opt/rubies/2.0.0-p353/bin'
 
