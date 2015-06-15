@@ -48,17 +48,14 @@ namespace :vecnet do
       raise "Set UID and APIKEY env vars"
     end
     u = User.find_by_api_key(key)
-    if u.nil?
-      u = User.find_by_uid(uid)
-      if u.nil?
-        u = User.new(uid: uid)
-      end
-    end
+    u = User.find_by_uid(uid) if u.nil?
+    u = User.new(uid: uid) if u.nil?
     if u.uid == uid
-      if u.api_key != key
-        u.api_key = key
-        u.save
+      if ENV["GROUP_LIST"]
+        u.group_list = ENV["GROUP_LIST"].split
       end
+      u.api_key = key
+      u.save
     else
       raise "Different user #{u.uid} already has the api key #{key}"
     end
@@ -83,6 +80,12 @@ namespace :vecnet do
     end
   end
 
+  desc "Solrize everything"
+  task :solrize => :environment do
+    ActiveFedora::Base.find_each do |obj|
+      obj.update_index
+    end
+  end
 
   namespace :destroy do
     desc "Remove all citations in the given environment"

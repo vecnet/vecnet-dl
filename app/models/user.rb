@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   delegate :can?, :cannot?, :to => :ability
 
+  serialize :group_list, JSON
+
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :remember_me, :username#, :password
   attr_accessible :email, :username, :password, :password_confirmation, :display_name
