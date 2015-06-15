@@ -45,4 +45,5 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 
   full_text = curation_concern.get_full_text
   xml.tag!("full_text", full_text) if full_text
+  xml.tag!("vn:download", download_url(curation_concern.noid))
 end

@@ -64,6 +64,11 @@ class CitationFile < ActiveFedora::Base
     self.save!
   end
 
+  def thumbnail_noid
+    return self.noid if self.datastreams["thumbnail"]
+    nil
+  end
+
   def size
     self.datastreams.values.map(&:size).compact.sum
   end

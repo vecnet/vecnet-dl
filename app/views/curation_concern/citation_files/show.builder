@@ -12,7 +12,7 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
   xml.tag!("vn:depositor", curation_concern.depositor)
   xml.tag!("dc:date_uploaded", curation_concern.date_uploaded)
   xml.tag!("dc:date_modified", curation_concern.date_modified)
-  xml.tag!("vn:thumbnail", curation_concern.thumbnail_noid)
+  xml.tag!("vn:thumbnail", download_url(curation_concern.thumbnail_noid, {datastream_id: 'thumbnail'})) if curation_concern.thumbnail_noid
 
   xml.tag!("dc:title", curation_concern.title)
 
@@ -44,4 +44,5 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 
   full_text = curation_concern.get_full_text
   xml.tag!("full_text", full_text) if full_text
+  xml.tag!("vn:download", download_url(curation_concern.noid))
 end

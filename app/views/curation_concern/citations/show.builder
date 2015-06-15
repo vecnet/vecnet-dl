@@ -41,5 +41,8 @@ xml.metadata("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
 
   if ! curation_concern.generic_files.nil?
     tag_each(xml, "vn:child_records", curation_concern.generic_files.map { |gf| gf.noid })
+    tag_each(xml, "vn:download", curation_concern.generic_files.map do |gf|
+      download_url(gf.noid)
+    end)
   end
 end

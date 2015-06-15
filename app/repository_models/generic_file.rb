@@ -100,7 +100,8 @@ class GenericFile
   end
 
   def thumbnail_noid
-    self.noid
+    return self.noid if self.datastreams["thumbnail"]
+    nil
   end
 
   def size
