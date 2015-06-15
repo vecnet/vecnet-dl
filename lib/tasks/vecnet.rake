@@ -40,6 +40,31 @@ namespace :vecnet do
     logger.info("\t ############ Complete #{action_name} at #{end_time}, Duration #{time_taken.inspect} ")
   end
 
+  desc "Set APIKEY key for the user UID (creating if necessary)"
+  task :set_api_key => :environment do
+    key = ENV["APIKEY"]
+    uid = ENV["UID"]
+    if uid.nil? || key.nil?
+      raise "Set UID and APIKEY env vars"
+    end
+    u = User.find_by_api_key(key)
+    if u.nil?
+      u = User.find_by_uid(uid)
+      if u.nil?
+        u = User.new(uid: uid)
+      end
+    end
+    if u.uid == uid
+      if u.api_key != key
+        u.api_key = key
+        u.save
+      end
+    else
+      raise "Different user #{u.uid} already has the api key #{key}"
+    end
+  end
+
+
   desc "Dump repository contents to file named $OUTFILE or STDOUT"
   task :dump_statistics => :environment do
     timed_action "Dumping Statistics" do
@@ -60,7 +85,7 @@ namespace :vecnet do
 
 
   namespace :destroy do
-    desc "Remove all citations in giving environment"
+    desc "Remove all citations in the given environment"
     task :citation => :environment do
       timed_action "destroy citations" do
         Citation.find(:all).each{|c| c.destroy}

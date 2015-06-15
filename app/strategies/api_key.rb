@@ -4,8 +4,6 @@ Warden::Strategies.add(:apikey) do
     env['HTTP_API_KEY']
   end
 
-  # we don't do the automatic redirects that
-  # the reference pubtkt apache module does
   def authenticate!
     u = nil
     key = env['HTTP_API_KEY']
