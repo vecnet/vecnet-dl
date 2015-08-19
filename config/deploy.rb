@@ -247,7 +247,6 @@ def common_setup
   set :shared_directories, %w(log data)
   set :shared_files, %w(
     config/database.yml
-    config/newrelic.yml
     config/fedora.yml
     config/solr.yml
     config/redis.yml
