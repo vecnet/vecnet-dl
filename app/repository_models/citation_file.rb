@@ -47,7 +47,7 @@ class CitationFile < ActiveFedora::Base
     super(solr_doc, opts)
     solr_doc["noid_s"] = noid
     solr_doc["all_text_unstem_search"] = get_full_text unless get_full_text.blank?
-    solr_doc["parent_id_s"] = self.batch.pid
+    solr_doc["parent_id_s"] = self.batch.pid unless self.batch.nil?
     return solr_doc
   end
 
