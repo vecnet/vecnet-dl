@@ -41,7 +41,9 @@ class DownloadsController < ApplicationController
     else
       ds = asset.datastreams["content"]
     end
-    raise ActionController::RoutingError.new('Not Found') if ds.nil?
+    if ds.nil? || ds.content.nil?
+      raise ActionController::RoutingError.new('Not Found')
+    end
     data = ds.content
     opts[:type] = ds.mimeType
     send_data data, opts
