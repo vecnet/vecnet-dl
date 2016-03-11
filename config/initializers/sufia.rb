@@ -17,6 +17,12 @@ Sufia.config do |config|
   config.max_days_between_audits = 7
 
   config.cc_licenses = {
+      'CC BY 4.0' => 'https://creativecommons.org/licenses/by/4.0/',
+      'CC BY-SA 4.0' => 'https://creativecommons.org/licenses/by-sa/4.0/',
+      'CC BY-ND 4.0' => 'https://creativecommons.org/licenses/by-nd/4.0/',
+      'CC BY-NC 4.0' => 'https://creativecommons.org/licenses/by-nc/4.0/',
+      'CC BY-NC-SA 4.0' => 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      'CC BY-NC-ND 4.0' => 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
       'Attribution 3.0 United States' => 'http://creativecommons.org/licenses/by/3.0/us/',
       'Attribution-ShareAlike 3.0 United States' => 'http://creativecommons.org/licenses/by-sa/3.0/us/',
       'Attribution-NonCommercial 3.0 United States' => 'http://creativecommons.org/licenses/by-nc/3.0/us/',
