@@ -31,11 +31,11 @@ class HarvestController < ApplicationController
 
     fq = []
     unless dt.nil?
-      fq << "system_modified_dt:[" + dt.strftime('%Y-%m-%dT%H:%M:%S') + "Z TO NOW]"
+      fq << "timestamp:[" + dt.strftime('%Y-%m-%dT%H:%M:%S') + "Z TO NOW]"
     end
-    fq << "-has_model_s:\"info:fedora/afmodel:Collection\""
-    fq << "-has_model_s:\"info:fedora/afmodel:Batch\""
-    fq << "-has_model_s:\"info:fedora/afmodel:CitationFile\""
+    fq << "-active_fedora_model_s:Collection"
+    fq << "-active_fedora_model_s:Batch"
+    fq << "-active_fedora_model_s:CitationFile"
 
     docs = []
     start = 0
@@ -45,7 +45,7 @@ class HarvestController < ApplicationController
         #raw: true,
         rows: 1000,
         start: start,
-        fl: 'id,noid_s,system_modified_dt,has_model_s',
+        fl: 'id,noid_s,timestamp,active_fedora_model_s',
         fq: fq.join(" "),
         sort: 'system_modified_dt asc'
       }
@@ -59,7 +59,7 @@ class HarvestController < ApplicationController
     result = docs.map do |doc|
       next if doc["noid_s"].nil?
       { "url" => construct_show_url(doc),
-        "last_modified" => doc["system_modified_dt"]
+        "last_modified" => doc["timestamp"]
       }
     end
 
